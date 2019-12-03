@@ -35,12 +35,12 @@ type Env interface {
 	GetDbStores() *migration.Stores
 	GetAuthRegistry() AuthRegistry
 	GetEnrollRegistry() EnrollmentRegistry
-	ClusterHasEdgeRouterOnline(clusterId string) bool
 	GetApiClientCsrSigner() cert.Signer
 	GetApiServerCsrSigner() cert.Signer
 	GetControlClientCsrSigner() cert.Signer
 	GetHostController() HostController
 	GetSchemas() Schemas
+	IsEdgeRouterOnline(id string) bool
 }
 
 type HostController interface {

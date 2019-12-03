@@ -17,8 +17,11 @@
 package persistence
 
 import (
+	"github.com/google/uuid"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
+	"github.com/netfoundry/ziti-foundation/util/errorz"
+	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"go.etcd.io/bbolt"
 )
 
@@ -33,6 +36,15 @@ const (
 	FieldIdentityAuthenticators   = "authenticators"
 )
 
+func NewIdentity(name string, identityTypeId string, roleAttributes ...string) *Identity {
+	return &Identity{
+		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
+		Name:               name,
+		IdentityTypeId:     identityTypeId,
+		RoleAttributes:     roleAttributes,
+	}
+}
+
 type Identity struct {
 	BaseEdgeEntityImpl
 	Name           string
@@ -41,6 +53,7 @@ type Identity struct {
 	IsAdmin        bool
 	Enrollments    []string
 	Authenticators []string
+	RoleAttributes []string
 }
 
 var identityFieldMappings = map[string]string{FieldIdentityType: "identityTypeId"}
@@ -53,6 +66,7 @@ func (entity *Identity) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket)
 	entity.IsAdmin = bucket.GetBoolWithDefault(FieldIdentityIsAdmin, false)
 	entity.Authenticators = bucket.GetStringList(FieldIdentityAuthenticators)
 	entity.Enrollments = bucket.GetStringList(FieldIdentityEnrollments)
+	entity.RoleAttributes = bucket.GetStringList(FieldRoleAttributes)
 }
 
 func (entity *Identity) SetValues(ctx *boltz.PersistContext) {
@@ -65,6 +79,7 @@ func (entity *Identity) SetValues(ctx *boltz.PersistContext) {
 	ctx.SetString(FieldIdentityType, entity.IdentityTypeId)
 	ctx.SetLinkedIds(FieldIdentityEnrollments, entity.Enrollments)
 	ctx.SetLinkedIds(FieldIdentityAuthenticators, entity.Authenticators)
+	ctx.SetStringList(FieldRoleAttributes, entity.RoleAttributes)
 }
 
 func (entity *Identity) GetEntityType() string {
@@ -89,14 +104,16 @@ func newIdentityStore(stores *stores) *identityStoreImpl {
 type identityStoreImpl struct {
 	*baseStore
 
-	indexName boltz.ReadIndex
+	indexName           boltz.ReadIndex
+	indexRoleAttributes boltz.SetReadIndex
 
-	symbolApiSessions      boltz.EntitySetSymbol
-	symbolAppwans          boltz.EntitySymbol
-	symbolEnrollments      boltz.EntitySetSymbol
-	symbolAuthenticators   boltz.EntitySetSymbol
-	symbolHostableServices boltz.EntitySymbol
-	symbolIdentityTypeId   boltz.EntitySymbol
+	symbolApiSessions        boltz.EntitySetSymbol
+	symbolAppwans            boltz.EntitySymbol
+	symbolEdgeRouterPolicies boltz.EntitySetSymbol
+	symbolEnrollments        boltz.EntitySetSymbol
+	symbolAuthenticators     boltz.EntitySetSymbol
+	symbolHostableServices   boltz.EntitySymbol
+	symbolIdentityTypeId     boltz.EntitySymbol
 }
 
 func (store *identityStoreImpl) NewStoreEntity() boltz.BaseEntity {
@@ -105,10 +122,12 @@ func (store *identityStoreImpl) NewStoreEntity() boltz.BaseEntity {
 
 func (store *identityStoreImpl) initializeLocal() {
 	store.addBaseFields()
+	store.indexRoleAttributes = store.addRoleAttributesField()
 
 	store.indexName = store.addUniqueNameField()
 	store.symbolApiSessions = store.AddFkSetSymbol(FieldIdentityApiSessions, store.stores.apiSession)
 	store.symbolAppwans = store.AddFkSetSymbol(FieldIdentityAppwans, store.stores.appwan)
+	store.symbolEdgeRouterPolicies = store.AddFkSetSymbol(EntityTypeEdgeRouterPolicies, store.stores.edgeRouterPolicy)
 	store.symbolHostableServices = store.AddFkSetSymbol(FieldIdentityHostableServices, store.stores.edgeService)
 
 	store.symbolEnrollments = store.AddFkSetSymbol(FieldIdentityEnrollments, store.stores.enrollment)
@@ -118,12 +137,21 @@ func (store *identityStoreImpl) initializeLocal() {
 
 	store.AddSymbol(FieldIdentityIsAdmin, ast.NodeTypeBool)
 	store.AddSymbol(FieldIdentityIsDefaultAdmin, ast.NodeTypeBool)
+
+	store.indexRoleAttributes.AddListener(store.RolesChanged)
+}
+
+func (store *identityStoreImpl) RolesChanged(tx *bbolt.Tx, rowId []byte, _ []boltz.FieldTypeAndValue, new []boltz.FieldTypeAndValue, holder errorz.ErrorHolder) {
+	rolesSymbol := store.stores.edgeRouterPolicy.symbolIdentityRoles
+	linkCollection := store.stores.edgeRouterPolicy.identityCollection
+	store.UpdateRelatedRoles(tx, string(rowId), rolesSymbol, linkCollection, new, holder)
 }
 
 func (store *identityStoreImpl) initializeLinked() {
 	store.AddLinkCollection(store.symbolAppwans, store.stores.appwan.symbolIdentities)
 	store.AddLinkCollection(store.symbolAuthenticators, store.stores.authenticator.symbolIdentityId)
 	store.AddLinkCollection(store.symbolEnrollments, store.stores.enrollment.symbolIdentityId)
+	store.AddLinkCollection(store.symbolEdgeRouterPolicies, store.stores.edgeRouterPolicy.symbolIdentities)
 }
 
 func (store *identityStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*Identity, error) {
@@ -166,6 +194,21 @@ func (store *identityStoreImpl) DeleteById(ctx boltz.MutateContext, id string) e
 	for _, authenticatorId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, FieldIdentityAuthenticators) {
 		if err := store.stores.authenticator.DeleteById(ctx, authenticatorId); err != nil {
 			return err
+		}
+	}
+
+	// Remove entity from IdentityRoles in edge router policies
+	for _, edgeRouterPolicyId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, EntityTypeEdgeRouterPolicies) {
+		policy, err := store.stores.edgeRouterPolicy.LoadOneById(ctx.Tx(), edgeRouterPolicyId)
+		if err != nil {
+			return err
+		}
+		if stringz.Contains(policy.IdentityRoles, id) {
+			policy.IdentityRoles = stringz.Remove(policy.IdentityRoles, id)
+			err = store.stores.edgeRouterPolicy.Update(ctx, policy, nil)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

@@ -17,9 +17,9 @@
 package model
 
 import (
+	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/edge/controller/persistence"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
-	"github.com/michaelquigley/pfxlog"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 	"reflect"
@@ -73,15 +73,12 @@ func (entity *Session) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (per
 		}
 	}
 
-	edgeRouterFound := false
-	for _, c := range service.Clusters {
-		if handler.GetEnv().ClusterHasEdgeRouterOnline(c) {
-			edgeRouterFound = true
-			break
-		}
+	maxRows := 1
+	result, err := handler.GetEnv().GetHandlers().EdgeRouter.HandleListForIdentityAndServiceWithTx(tx, apiSession.IdentityId, entity.ServiceId, &maxRows)
+	if err != nil {
+		return nil, err
 	}
-
-	if !edgeRouterFound {
+	if result.Count < 1 {
 		return nil, errors.New("no edge routers available")
 		// TODO: translate to model error
 		//return nil, &response.ApiError{

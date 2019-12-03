@@ -117,26 +117,23 @@ type SessionEdgeRouter struct {
 func getSessionEdgeRouters(ae *env.AppEnv, ns *model.Session) ([]*SessionEdgeRouter, error) {
 	var edgeRouters []*SessionEdgeRouter
 
-	service, err := ae.Handlers.Service.HandleRead(ns.ServiceId)
+	edgeRoutersForSession, err := ae.Handlers.EdgeRouter.HandleListForSession(ns.Id)
 	if err != nil {
 		return nil, err
 	}
-	for _, c := range service.Clusters {
-		gs := ae.Broker.GetOnlineEdgeRoutersByCluster(c)
 
-		for _, g := range gs {
-			c := &SessionEdgeRouter{
-				Hostname: g.Hostname,
-				Name:     &g.Name,
-				Urls:     map[string]string{},
-			}
-
-			for p, url := range g.EdgeRouterProtocols {
-				c.Urls[p] = url
-			}
-
-			edgeRouters = append(edgeRouters, c)
+	for _, edgeRouter := range edgeRoutersForSession.EdgeRouters {
+		c := &SessionEdgeRouter{
+			Hostname: edgeRouter.Hostname,
+			Name:     &edgeRouter.Name,
+			Urls:     map[string]string{},
 		}
+
+		for p, url := range edgeRouter.EdgeRouterProtocols {
+			c.Urls[p] = url
+		}
+
+		edgeRouters = append(edgeRouters, c)
 	}
 
 	return edgeRouters, nil

@@ -17,13 +17,12 @@
 package persistence
 
 import (
-	"github.com/netfoundry/ziti-fabric/controller/network"
-	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"fmt"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
+	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
-	"github.com/stretchr/testify/require"
 	"go.etcd.io/bbolt"
 	"math/rand"
 	"testing"
@@ -34,8 +33,6 @@ func Test_EdgeServiceStore(t *testing.T) {
 	ctx := NewTestContext(t)
 	defer ctx.Cleanup()
 	ctx.Init()
-	req := require.New(t)
-	req.NoError(ctx.err)
 
 	t.Run("test service parent child relationship", ctx.testServiceParentChild)
 	t.Run("test create invalid api services", ctx.testCreateInvalidServices)
@@ -229,9 +226,8 @@ func (ctx *TestContext) testLoadQueryServices(_ *testing.T) {
 		ids, _, err = ctx.stores.EdgeService.QueryIds(tx, query)
 		ctx.NoError(err)
 		ctx.EqualValues(2, len(ids))
-		strIds := stringz.ToStringSlice(ids)
-		ctx.True(stringz.Contains(strIds, entities.service1.Id))
-		ctx.True(stringz.Contains(strIds, entities.service2.Id))
+		ctx.True(stringz.Contains(ids, entities.service1.Id))
+		ctx.True(stringz.Contains(ids, entities.service2.Id))
 		return nil
 	})
 	ctx.NoError(err)

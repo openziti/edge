@@ -17,8 +17,11 @@
 package persistence
 
 import (
+	"github.com/google/uuid"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
+	"github.com/netfoundry/ziti-foundation/util/errorz"
+	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"go.etcd.io/bbolt"
 	"time"
 )
@@ -34,12 +37,22 @@ const (
 	FieldEdgeRouterEnrollmentCreatedAt = "enrollmentCreatedAt"
 	FieldEdgeRouterEnrollmentExpiresAt = "enrollmentExpiresAt"
 	FieldEdgeRouterProtocols           = "protocols"
+	FieldEdgeRouterEdgeRouterPolicies  = "edgeRouterPolicies"
+	FieldEdgeRouterServices            = "services"
 )
+
+func NewEdgeRouter(name string, roleAttributes ...string) *EdgeRouter {
+	return &EdgeRouter{
+		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
+		Name:               name,
+		RoleAttributes:     roleAttributes,
+	}
+}
 
 type EdgeRouter struct {
 	BaseEdgeEntityImpl
 	Name                string
-	ClusterId           string
+	ClusterId           *string
 	IsVerified          bool
 	Fingerprint         *string
 	CertPem             *string
@@ -49,6 +62,7 @@ type EdgeRouter struct {
 	EnrollmentCreatedAt *time.Time
 	EnrollmentExpiresAt *time.Time
 	EdgeRouterProtocols map[string]string
+	RoleAttributes      []string
 }
 
 var edgeRouterFieldMappings = map[string]string{FieldEdgeRouterCluster: "clusterId"}
@@ -58,7 +72,7 @@ func (entity *EdgeRouter) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucke
 	entity.Name = bucket.GetStringOrError(FieldName)
 	entity.Fingerprint = bucket.GetString(FieldEdgeRouterFingerprint)
 	entity.CertPem = bucket.GetString(FieldEdgeRouterCertPEM)
-	entity.ClusterId = bucket.GetStringOrError(FieldEdgeRouterCluster)
+	entity.ClusterId = bucket.GetString(FieldEdgeRouterCluster)
 	entity.IsVerified = bucket.GetBoolWithDefault(FieldEdgeRouterIsVerified, false)
 
 	entity.EnrollmentToken = bucket.GetString(FieldEdgeRouterEnrollmentToken)
@@ -67,6 +81,7 @@ func (entity *EdgeRouter) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucke
 	entity.EnrollmentCreatedAt = bucket.GetTime(FieldEdgeRouterEnrollmentCreatedAt)
 	entity.EnrollmentExpiresAt = bucket.GetTime(FieldEdgeRouterEnrollmentExpiresAt)
 	entity.EdgeRouterProtocols = toStringStringMap(bucket.GetMap(FieldEdgeRouterProtocols))
+	entity.RoleAttributes = bucket.GetStringList(FieldRoleAttributes)
 }
 
 func (entity *EdgeRouter) SetValues(ctx *boltz.PersistContext) {
@@ -76,7 +91,7 @@ func (entity *EdgeRouter) SetValues(ctx *boltz.PersistContext) {
 	ctx.SetString(FieldName, entity.Name)
 	ctx.SetStringP(FieldEdgeRouterFingerprint, entity.Fingerprint)
 	ctx.SetStringP(FieldEdgeRouterCertPEM, entity.CertPem)
-	ctx.SetString(FieldEdgeRouterCluster, entity.ClusterId)
+	ctx.SetStringP(FieldEdgeRouterCluster, entity.ClusterId)
 	ctx.SetBool(FieldEdgeRouterIsVerified, entity.IsVerified)
 	ctx.SetStringP(FieldEdgeRouterEnrollmentToken, entity.EnrollmentToken)
 	ctx.SetStringP(FieldEdgeRouterHostname, entity.Hostname)
@@ -84,6 +99,7 @@ func (entity *EdgeRouter) SetValues(ctx *boltz.PersistContext) {
 	ctx.SetTimeP(FieldEdgeRouterEnrollmentCreatedAt, entity.EnrollmentCreatedAt)
 	ctx.SetTimeP(FieldEdgeRouterEnrollmentExpiresAt, entity.EnrollmentExpiresAt)
 	ctx.SetMap(FieldEdgeRouterProtocols, toStringInterfaceMap(entity.EdgeRouterProtocols))
+	ctx.SetStringList(FieldRoleAttributes, entity.RoleAttributes)
 }
 
 func (entity *EdgeRouter) GetEntityType() string {
@@ -109,8 +125,12 @@ func newEdgeRouterStore(stores *stores) *edgeRouterStoreImpl {
 type edgeRouterStoreImpl struct {
 	*baseStore
 
-	indexName       boltz.ReadIndex
-	symbolClusterId boltz.EntitySymbol
+	indexName           boltz.ReadIndex
+	indexRoleAttributes boltz.SetReadIndex
+
+	symbolClusterId          boltz.EntitySymbol
+	symbolEdgeRouterPolicies boltz.EntitySetSymbol
+	symbolServices           boltz.EntitySetSymbol
 }
 
 func (store *edgeRouterStoreImpl) NewStoreEntity() boltz.BaseEntity {
@@ -121,17 +141,34 @@ func (store *edgeRouterStoreImpl) initializeLocal() {
 	store.addBaseFields()
 
 	store.indexName = store.addUniqueNameField()
-	store.symbolClusterId = store.AddFkSymbol(FieldEdgeRouterCluster, store.stores.cluster)
+	store.indexRoleAttributes = store.addRoleAttributesField()
 
+	store.symbolClusterId = store.AddFkSymbol(FieldEdgeRouterCluster, store.stores.cluster)
 	store.AddSymbol(FieldEdgeRouterFingerprint, ast.NodeTypeString)
 	store.AddSymbol(FieldEdgeRouterIsVerified, ast.NodeTypeBool)
 	store.AddSymbol(FieldEdgeRouterEnrollmentToken, ast.NodeTypeString)
 	store.AddSymbol(FieldEdgeRouterEnrollmentCreatedAt, ast.NodeTypeString)
 	store.AddSymbol(FieldEdgeRouterEnrollmentExpiresAt, ast.NodeTypeString)
+	store.symbolEdgeRouterPolicies = store.AddFkSetSymbol(FieldEdgeRouterEdgeRouterPolicies, store.stores.edgeRouterPolicy)
+	store.symbolServices = store.AddFkSetSymbol(FieldEdgeRouterServices, store.stores.edgeService)
+	store.indexRoleAttributes.AddListener(store.RolesChanged)
+}
+
+func (store *edgeRouterStoreImpl) RolesChanged(tx *bbolt.Tx, rowId []byte, _ []boltz.FieldTypeAndValue, new []boltz.FieldTypeAndValue, holder errorz.ErrorHolder) {
+	// Calculate edge router policy links
+	rolesSymbol := store.stores.edgeRouterPolicy.symbolEdgeRouterRoles
+	linkCollection := store.stores.edgeRouterPolicy.edgeRouterCollection
+	store.UpdateRelatedRoles(tx, string(rowId), rolesSymbol, linkCollection, new, holder)
+
+	// Calculate service roles
+	rolesSymbol = store.stores.edgeService.symbolEdgeRouters
+	linkCollection = store.stores.edgeService.edgeRouterCollection
+	store.UpdateRelatedRoles(tx, string(rowId), rolesSymbol, linkCollection, new, holder)
 }
 
 func (store *edgeRouterStoreImpl) initializeLinked() {
-	store.AddFkIndex(store.symbolClusterId, store.stores.cluster.symbolEdgeRouters)
+	store.AddNullableFkIndex(store.symbolClusterId, store.stores.cluster.symbolEdgeRouters)
+	store.AddLinkCollection(store.symbolEdgeRouterPolicies, store.stores.edgeRouterPolicy.symbolEdgeRouters)
 }
 
 func (store *edgeRouterStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*EdgeRouter, error) {
@@ -163,8 +200,27 @@ func (store *edgeRouterStoreImpl) UpdateCluster(ctx boltz.MutateContext, id stri
 	if err != nil {
 		return err
 	}
-	entity.ClusterId = clusterId
+	entity.ClusterId = &clusterId
 	return store.Update(ctx, entity, clusterIdFieldChecker{})
+}
+
+func (store *edgeRouterStoreImpl) DeleteById(ctx boltz.MutateContext, id string) error {
+	// Remove entity from EdgeRouterRoles in edge router policies
+	for _, edgeRouterPolicyId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, EntityTypeEdgeRouterPolicies) {
+		policy, err := store.stores.edgeRouterPolicy.LoadOneById(ctx.Tx(), edgeRouterPolicyId)
+		if err != nil {
+			return err
+		}
+		if stringz.Contains(policy.EdgeRouterRoles, id) {
+			policy.EdgeRouterRoles = stringz.Remove(policy.EdgeRouterRoles, id)
+			err = store.stores.edgeRouterPolicy.Update(ctx, policy, nil)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return store.baseStore.DeleteById(ctx, id)
 }
 
 type clusterIdFieldChecker struct{}

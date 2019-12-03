@@ -38,6 +38,7 @@ import (
 	"github.com/netfoundry/ziti-edge/edge/internal/cert"
 	"github.com/netfoundry/ziti-edge/edge/internal/jwt"
 	"github.com/netfoundry/ziti-edge/edge/migration"
+	"github.com/netfoundry/ziti-edge/sdk/ziti/config"
 	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-fabric/xctrl"
 	"github.com/netfoundry/ziti-fabric/xmgmt"
@@ -127,8 +128,8 @@ func (ae *AppEnv) GetEnrollRegistry() model.EnrollmentRegistry {
 	return ae.EnrollRegistry
 }
 
-func (ae *AppEnv) ClusterHasEdgeRouterOnline(clusterId string) bool {
-	return ae.Broker.ClusterHasEdgeRouterOnline(clusterId)
+func (ae *AppEnv) IsEdgeRouterOnline(id string) bool {
+	return ae.Broker.GetOnlineEdgeRouter(id) != nil
 }
 
 func (ae *AppEnv) GetApiClientCsrSigner() cert.Signer {

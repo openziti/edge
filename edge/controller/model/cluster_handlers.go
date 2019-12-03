@@ -138,10 +138,10 @@ type ClusterListResult struct {
 	QueryMetaData
 }
 
-func (result *ClusterListResult) collect(tx *bbolt.Tx, ids [][]byte, queryMetaData *QueryMetaData) error {
+func (result *ClusterListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
-		entity, err := result.handler.handleReadInTx(tx, string(key))
+		entity, err := result.handler.handleReadInTx(tx, key)
 		if err != nil {
 			return err
 		}

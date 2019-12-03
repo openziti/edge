@@ -17,13 +17,13 @@
 package routes
 
 import (
+	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/netfoundry/ziti-edge/edge/controller/env"
 	"github.com/netfoundry/ziti-edge/edge/controller/internal/permissions"
 	"github.com/netfoundry/ziti-edge/edge/controller/model"
 	"github.com/netfoundry/ziti-edge/edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/edge/controller/response"
-	"fmt"
-	"github.com/gorilla/mux"
 	"net/http"
 )
 
@@ -157,7 +157,7 @@ func (ir *ServiceRouter) Delete(ae *env.AppEnv, rc *response.RequestContext) {
 func (ir *ServiceRouter) Update(ae *env.AppEnv, rc *response.RequestContext) {
 	serviceUpdate := &ServiceApiUpdate{}
 	Update(rc, ae.Schemes.Service.Put, ir.IdType, serviceUpdate, func(id string) error {
-		return ae.Handlers.Service.HandleUpdate(id, serviceUpdate.ToModel(id))
+		return ae.Handlers.Service.HandleUpdate(serviceUpdate.ToModel(id))
 	})
 }
 
@@ -165,7 +165,7 @@ func (ir *ServiceRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 	serviceUpdate := &ServiceApiUpdate{}
 	Patch(rc, ae.Schemes.Service.Patch, ir.IdType, serviceUpdate, func(id string, fields JsonFields) error {
 		fields.ConcatNestedNames()
-		return ae.Handlers.Service.HandlePatch(id, serviceUpdate.ToModel(id), fields)
+		return ae.Handlers.Service.HandlePatch(serviceUpdate.ToModel(id), fields)
 	})
 }
 

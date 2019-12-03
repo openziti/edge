@@ -32,7 +32,7 @@ import (
 type EdgeRouter struct {
 	BaseModelEntityImpl
 	Name                string
-	ClusterId           string
+	ClusterId           *string
 	IsVerified          bool
 	Fingerprint         *string
 	CertPem             *string
@@ -47,8 +47,10 @@ type EdgeRouter struct {
 func (entity *EdgeRouter) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (persistence.BaseEdgeEntity, error) {
 	et := uuid.New().String()
 
-	if _, err := handler.GetEnv().GetStores().Cluster.LoadOneById(tx, entity.ClusterId); err != nil {
-		return nil, err
+	if entity.ClusterId != nil {
+		if _, err := handler.GetEnv().GetStores().Cluster.LoadOneById(tx, *entity.ClusterId); err != nil {
+			return nil, err
+		}
 	}
 
 	boltEntity := &persistence.EdgeRouter{
@@ -96,8 +98,10 @@ func (entity *EdgeRouter) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (
 }
 
 func (entity *EdgeRouter) ToBoltEntityForUpdate(tx *bbolt.Tx, handler Handler) (persistence.BaseEdgeEntity, error) {
-	if _, err := handler.GetEnv().GetStores().Cluster.LoadOneById(tx, entity.ClusterId); err != nil {
-		return nil, err
+	if entity.ClusterId != nil {
+		if _, err := handler.GetEnv().GetStores().Cluster.LoadOneById(tx, *entity.ClusterId); err != nil {
+			return nil, err
+		}
 	}
 
 	return &persistence.EdgeRouter{

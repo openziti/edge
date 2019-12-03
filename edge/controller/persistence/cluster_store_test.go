@@ -17,8 +17,8 @@
 package persistence
 
 import (
-	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/google/uuid"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"github.com/stretchr/testify/require"
 	"go.etcd.io/bbolt"
@@ -27,11 +27,9 @@ import (
 )
 
 func Test_ClusterStore(t *testing.T) {
-	ctx := &TestContext{ReferenceTime: time.Now()}
+	ctx := NewTestContext(t)
 	defer ctx.Cleanup()
 	ctx.Init()
-	req := require.New(t)
-	req.NoError(ctx.err)
 
 	t.Run("test create clusters", ctx.testCreateCluster)
 	t.Run("test update clusters", ctx.testUpdateCluster)
@@ -232,9 +230,8 @@ func (ctx *TestContext) testQueryCluster(t *testing.T) {
 		req.NoError(err)
 		req.Equal(int(2), int(count))
 		req.Equal(int(2), len(ids))
-		strIds := stringz.ToStringSlice(ids)
-		req.True(stringz.Contains(strIds, cluster1.Id))
-		req.True(stringz.Contains(strIds, cluster2.Id))
+		req.True(stringz.Contains(ids, cluster1.Id))
+		req.True(stringz.Contains(ids, cluster2.Id))
 		return nil
 	})
 	req.NoError(err)

@@ -17,12 +17,12 @@
 package routes
 
 import (
+	"fmt"
+	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/edge/controller/env"
 	"github.com/netfoundry/ziti-edge/edge/controller/model"
 	"github.com/netfoundry/ziti-edge/edge/controller/response"
 	"github.com/netfoundry/ziti-edge/edge/migration"
-	"fmt"
-	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"time"
 )
@@ -47,7 +47,7 @@ func (i *EdgeRouterApi) ToModel(id string) *model.EdgeRouter {
 	result := &model.EdgeRouter{}
 	result.Id = id
 	result.Name = stringz.OrEmpty(i.Name)
-	result.ClusterId = stringz.OrEmpty(i.ClusterId)
+	result.ClusterId = i.ClusterId
 	if i.Tags != nil {
 		result.Tags = *i.Tags
 	}
@@ -117,14 +117,18 @@ func MapEdgeRouterToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e mode
 }
 
 func MapEdgeRouterToApiList(ae *env.AppEnv, i *model.EdgeRouter) (*EdgeRouterApiList, error) {
-	cluster, err := ae.Handlers.Cluster.HandleRead(i.ClusterId)
-	if err != nil {
-		return nil, err
-	}
-	c, err := MapClusterToApiEntity(nil, nil, cluster)
+	var clusterApiRef *EntityApiRef
+	if i.ClusterId != nil {
+		cluster, err := ae.Handlers.Cluster.HandleRead(*i.ClusterId)
+		if err != nil {
+			return nil, err
+		}
+		c, err := MapClusterToApiEntity(nil, nil, cluster)
 
-	if err != nil {
-		return nil, err
+		if err != nil {
+			return nil, err
+		}
+		clusterApiRef = c.ToEntityApiRef()
 	}
 
 	hostname := ""
@@ -142,7 +146,7 @@ func MapEdgeRouterToApiList(ae *env.AppEnv, i *model.EdgeRouter) (*EdgeRouterApi
 	ret := &EdgeRouterApiList{
 		BaseApi:             env.FromBaseModelEntity(i),
 		Name:                &i.Name,
-		Cluster:             c.ToEntityApiRef(),
+		Cluster:             clusterApiRef,
 		EnrollmentToken:     i.EnrollmentToken,
 		EnrollmentCreatedAt: i.EnrollmentCreatedAt,
 		EnrollmentExpiresAt: i.EnrollmentExpiresAt,

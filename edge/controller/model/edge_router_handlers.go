@@ -17,12 +17,14 @@
 package model
 
 import (
+	"fmt"
 	"github.com/netfoundry/ziti-edge/edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/edge/controller/util"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
-	"fmt"
+	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"go.etcd.io/bbolt"
+	"strconv"
 )
 
 func NewEdgeRouterHandler(env Env) *EdgeRouterHandler {
@@ -51,17 +53,19 @@ func (handler *EdgeRouterHandler) NewModelEntity() BaseModelEntity {
 }
 
 func (handler *EdgeRouterHandler) HandleCreate(modelEntity *EdgeRouter) (string, error) {
-	cluster, err := handler.env.GetHandlers().Cluster.HandleRead(modelEntity.ClusterId)
+	if modelEntity.ClusterId != nil {
+		cluster, err := handler.env.GetHandlers().Cluster.HandleRead(*modelEntity.ClusterId)
 
-	if err != nil && !util.IsErrNotFoundErr(err) {
-		return "", err
-	}
+		if err != nil && !util.IsErrNotFoundErr(err) {
+			return "", err
+		}
 
-	if cluster == nil {
-		apiErr := apierror.NewNotFound()
-		apiErr.Cause = NewFieldError("clusterId not found", "clusterId", modelEntity.ClusterId)
-		apiErr.AppendCause = true
-		return "", apiErr
+		if cluster == nil {
+			apiErr := apierror.NewNotFound()
+			apiErr.Cause = NewFieldError("clusterId not found", "clusterId", modelEntity.ClusterId)
+			apiErr.AppendCause = true
+			return "", apiErr
+		}
 	}
 
 	return handler.create(modelEntity, nil)
@@ -140,20 +144,80 @@ func (handler *EdgeRouterHandler) HandleList(queryOptions *QueryOptions) (*EdgeR
 	return result, nil
 }
 
+func (handler *EdgeRouterHandler) HandleListForSession(sessionId string) (*EdgeRouterListResult, error) {
+	var result *EdgeRouterListResult
+
+	err := handler.env.GetDbProvider().GetDb().View(func(tx *bbolt.Tx) error {
+		session, err := handler.env.GetStores().Session.LoadOneById(tx, sessionId)
+		if err != nil {
+			return err
+		}
+		apiSession, err := handler.env.GetStores().ApiSession.LoadOneById(tx, session.ApiSessionId)
+		if err != nil {
+			return err
+		}
+
+		result, err = handler.HandleListForIdentityAndServiceWithTx(tx, apiSession.IdentityId, session.ServiceId, nil)
+		return err
+	})
+	return result, err
+}
+
+func (handler *EdgeRouterHandler) HandleListForIdentityAndServiceWithTx(tx *bbolt.Tx, identityId, serviceId string, limit *int) (*EdgeRouterListResult, error) {
+	result := &EdgeRouterListResult{handler: handler}
+
+	err := handler.env.GetDbProvider().GetDb().View(func(tx *bbolt.Tx) error {
+		service, err := handler.env.GetStores().EdgeService.LoadOneById(tx, serviceId)
+		if err != nil {
+			return err
+		}
+
+		query := fmt.Sprintf(`anyOf(edgeRouterPolicies.identities) = "%v"`, identityId)
+
+		if len(service.RoleAttributes) > 0 && !stringz.Contains(service.RoleAttributes, "all") {
+			query += fmt.Sprintf(` and anyOf(services) = "%v"`, service.Id)
+		}
+
+		if limit != nil {
+			query += " limit " + strconv.Itoa(*limit)
+		}
+
+		return handler.listWithTx(tx, query, result.collectConnected)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 type EdgeRouterListResult struct {
 	handler     *EdgeRouterHandler
 	EdgeRouters []*EdgeRouter
 	QueryMetaData
 }
 
-func (result *EdgeRouterListResult) collect(tx *bbolt.Tx, ids [][]byte, queryMetaData *QueryMetaData) error {
+func (result *EdgeRouterListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
-		entity, err := result.handler.handleReadInTx(tx, string(key))
+		entity, err := result.handler.handleReadInTx(tx, key)
 		if err != nil {
 			return err
 		}
 		result.EdgeRouters = append(result.EdgeRouters, entity)
+	}
+	return nil
+}
+
+func (result *EdgeRouterListResult) collectConnected(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
+	result.QueryMetaData = *queryMetaData
+	for _, key := range ids {
+		if result.handler.env.IsEdgeRouterOnline(key) {
+			entity, err := result.handler.handleReadInTx(tx, key)
+			if err != nil {
+				return err
+			}
+			result.EdgeRouters = append(result.EdgeRouters, entity)
+		}
 	}
 	return nil
 }

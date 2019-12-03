@@ -104,10 +104,10 @@ type ApiSessionListResult struct {
 	QueryMetaData
 }
 
-func (result *ApiSessionListResult) collect(tx *bbolt.Tx, ids [][]byte, queryMetaData *QueryMetaData) error {
+func (result *ApiSessionListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
-		ApiSession, err := result.handler.handleReadInTx(tx, string(key))
+		ApiSession, err := result.handler.handleReadInTx(tx, key)
 		if err != nil {
 			return err
 		}
