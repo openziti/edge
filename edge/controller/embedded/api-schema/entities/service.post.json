@@ -37,8 +37,9 @@
     "endpointAddress": {
       "type": "string"
     },
-    "clusters": {
-      "$ref": "definitions.all.json#/definitions/arrayOfIds"
+    "edgeRouterRoles" : {
+      "default" : null,
+      "$ref" : "definitions.all.json#/definitions/arrayOfString-null"
     },
     "tags": {
       "default": {},

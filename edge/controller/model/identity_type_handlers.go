@@ -129,10 +129,10 @@ type IdentityTypeListResult struct {
 	QueryMetaData
 }
 
-func (result *IdentityTypeListResult) collect(tx *bbolt.Tx, ids [][]byte, queryMetaData *QueryMetaData) error {
+func (result *IdentityTypeListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
-		entity, err := result.handler.handleReadInTx(tx, string(key))
+		entity, err := result.handler.handleReadInTx(tx, key)
 		if err != nil {
 			return err
 		}

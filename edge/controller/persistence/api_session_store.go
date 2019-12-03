@@ -17,9 +17,9 @@
 package persistence
 
 import (
+	"github.com/google/uuid"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
-	"github.com/google/uuid"
 	"go.etcd.io/bbolt"
 )
 
@@ -65,6 +65,7 @@ type ApiSessionStore interface {
 	LoadOneByToken(tx *bbolt.Tx, token string) (*ApiSession, error)
 	LoadOneByQuery(tx *bbolt.Tx, query string) (*ApiSession, error)
 	GetTokenIndex() boltz.ReadIndex
+	MarkActivity(tx *bbolt.Tx, tokens []string) error
 }
 
 func newApiSessionStore(stores *stores) *apiSessionStoreImpl {
@@ -134,4 +135,18 @@ func (store *apiSessionStoreImpl) DeleteById(ctx boltz.MutateContext, id string)
 		}
 	}
 	return store.baseStore.DeleteById(ctx, id)
+}
+
+func (store *apiSessionStoreImpl) MarkActivity(tx *bbolt.Tx, tokens []string) error {
+	mutCtx := boltz.NewMutateContext(tx)
+	for _, token := range tokens {
+		apiSession, err := store.LoadOneByToken(tx, token)
+		if err != nil {
+			return err
+		}
+		if err = store.Update(mutCtx, apiSession, UpdateTimeOnlyFieldChecker{}); err != nil {
+			return err
+		}
+	}
+	return nil
 }

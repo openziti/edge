@@ -150,10 +150,10 @@ type AppwanListResult struct {
 	QueryMetaData
 }
 
-func (result *AppwanListResult) collect(tx *bbolt.Tx, ids [][]byte, queryMetaData *QueryMetaData) error {
+func (result *AppwanListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
-		appWan, err := result.handler.handleReadInTx(tx, string(key))
+		appWan, err := result.handler.handleReadInTx(tx, key)
 		if err != nil {
 			return err
 		}

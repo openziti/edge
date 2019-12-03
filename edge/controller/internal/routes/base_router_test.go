@@ -39,7 +39,7 @@ var test = `
 func Test_getFields(t *testing.T) {
 	assert := require.New(t)
 	test2 := ServiceApiCreate{
-		Clusters: []string{"1", "2"},
+		EdgeRouterRoles: []string{"@foo", "2"},
 		Dns: &ServiceDnsApiPost{
 			Hostname: strPtr("google.com"),
 			Port:     uint16Ptr(6433),
@@ -77,7 +77,7 @@ func Test_getFields(t *testing.T) {
 			body: test2Bytes,
 			want: JsonFields{
 				"Name":            true,
-				"Clusters":        true,
+				"EdgeRouterRoles": true,
 				"Dns.Hostname":    true,
 				"Dns.Port":        true,
 				"EgressRouter":    false,

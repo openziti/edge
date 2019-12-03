@@ -22,6 +22,7 @@ import (
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/errorz"
+	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"go.etcd.io/bbolt"
 )
 
@@ -75,6 +76,52 @@ func (store *baseStore) addUniqueNameField() boltz.ReadIndex {
 	return store.AddUniqueIndex(symbolName)
 }
 
+func (store *baseStore) addRoleAttributesField() boltz.SetReadIndex {
+	symbol := store.AddSetSymbol(FieldRoleAttributes, ast.NodeTypeString)
+	return store.AddSetIndex(symbol)
+}
+
 func (store *baseStore) initializeIndexes(tx *bbolt.Tx, errorHolder errorz.ErrorHolder) {
 	store.InitializeIndexes(tx, errorHolder)
+}
+
+func (store *baseStore) getEntityIdsForRoleSet(tx *bbolt.Tx, roleSet []string, index boltz.SetReadIndex) ([]string, error) {
+	entityStore := index.GetSymbol().GetStore()
+	roles, ids := splitRolesAndIds(roleSet)
+	if stringz.Contains(roles, "all") {
+		ids, _, err := entityStore.QueryIds(tx, "true")
+		if err != nil {
+			return nil, err
+		}
+		return ids, nil
+	}
+	roleIds := entityStore.FindMatching(tx, index, roles)
+	for _, id := range ids {
+		if entityStore.IsEntityPresent(tx, id) {
+			roleIds = append(roleIds, id)
+		}
+	}
+	return roleIds, nil
+}
+
+func (store *baseStore) UpdateRelatedRoles(tx *bbolt.Tx, entityId string, roleSymbol boltz.EntitySetSymbol, linkCollection boltz.LinkCollection, new []boltz.FieldTypeAndValue, holder errorz.ErrorHolder) {
+	ids, _, err := roleSymbol.GetStore().QueryIds(tx, "true")
+	holder.SetError(err)
+
+	entityRoles := FieldValuesToIds(new)
+
+	for _, id := range ids {
+		roleSet := roleSymbol.EvalStringList(tx, []byte(id))
+		roles, ids := splitRolesAndIds(roleSet)
+
+		if stringz.Contains(ids, entityId) || stringz.Contains(roles, "all") || (len(roles) > 0 && stringz.ContainsAll(entityRoles, roles...)) {
+			err = linkCollection.AddLinks(tx, id, entityId)
+		} else {
+			err = linkCollection.RemoveLinks(tx, id, entityId)
+		}
+		holder.SetError(err)
+		if holder.HasError() {
+			return
+		}
+	}
 }

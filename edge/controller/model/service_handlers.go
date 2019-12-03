@@ -17,12 +17,12 @@
 package model
 
 import (
+	"fmt"
+	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/edge/controller/util"
 	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
-	"fmt"
-	"github.com/michaelquigley/pfxlog"
 	"go.etcd.io/bbolt"
 	"strings"
 )
@@ -124,11 +124,11 @@ func (handler *ServiceHandler) IsUpdated(field string) bool {
 		!strings.EqualFold(field, "Clusters")
 }
 
-func (handler *ServiceHandler) HandleUpdate(id string, service *Service) error {
+func (handler *ServiceHandler) HandleUpdate(service *Service) error {
 	return handler.update(service, nil, nil)
 }
 
-func (handler *ServiceHandler) HandlePatch(id string, service *Service, checker boltz.FieldChecker) error {
+func (handler *ServiceHandler) HandlePatch(service *Service, checker boltz.FieldChecker) error {
 	return handler.patch(service, checker, nil)
 }
 
@@ -138,10 +138,10 @@ type ServiceListResult struct {
 	QueryMetaData
 }
 
-func (result *ServiceListResult) collect(tx *bbolt.Tx, ids [][]byte, queryMetaData *QueryMetaData) error {
+func (result *ServiceListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
-		service, err := result.handler.readService(tx, string(key))
+		service, err := result.handler.readService(tx, key)
 		if err != nil {
 			return err
 		}
@@ -183,38 +183,10 @@ func (handler *ServiceHandler) HandleList(queryOptions *QueryOptions) (*ServiceL
 	return result, nil
 }
 
-func (handler *ServiceHandler) HandleCollectClusters(id string, collector func(entity BaseModelEntity)) error {
-	return handler.GetDb().View(func(tx *bbolt.Tx) error {
-		_, err := handler.readService(tx, id)
-		if err != nil {
-			return err
-		}
-		association := handler.store.GetLinkCollection(persistence.FieldServiceClusters)
-		for _, clusterId := range association.GetLinks(tx, id) {
-			cluster, err := handler.env.GetHandlers().Cluster.handleReadInTx(tx, clusterId)
-			if err != nil {
-				return err
-			}
-			collector(cluster)
-		}
-		return nil
-	})
+func (handler *ServiceHandler) HandleCollectEdgeRouters(id string, collector func(entity BaseModelEntity)) error {
+	return handler.HandleCollectAssociated(id, persistence.FieldServiceEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
 }
 
 func (handler *ServiceHandler) HandleCollectHostIds(id string, collector func(entity BaseModelEntity)) error {
-	return handler.GetDb().View(func(tx *bbolt.Tx) error {
-		_, err := handler.readService(tx, id)
-		if err != nil {
-			return err
-		}
-		association := handler.store.GetLinkCollection(persistence.FieldServiceHostingIdentities)
-		for _, identityId := range association.GetLinks(tx, id) {
-			identity, err := handler.env.GetHandlers().Identity.handleReadInTx(tx, identityId)
-			if err != nil {
-				return err
-			}
-			collector(identity)
-		}
-		return nil
-	})
+	return handler.HandleCollectAssociated(id, persistence.FieldServiceHostingIdentities, handler.env.GetHandlers().Identity, collector)
 }

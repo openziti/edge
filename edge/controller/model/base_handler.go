@@ -17,12 +17,12 @@
 package model
 
 import (
+	"github.com/google/uuid"
+	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/edge/controller/util"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
-	"github.com/google/uuid"
-	"github.com/michaelquigley/pfxlog"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
@@ -34,6 +34,8 @@ type Handler interface {
 	NewModelEntity() BaseModelEntity
 	BaseList(queryOptions *QueryOptions) (*BaseModelEntityListResult, error)
 	BaseLoad(id string) (BaseModelEntity, error)
+
+	readInTx(tx *bbolt.Tx, id string, modelEntity BaseModelEntity) error
 }
 
 type baseHandler struct {
@@ -81,11 +83,11 @@ type BaseModelEntityListResult struct {
 	QueryMetaData
 }
 
-func (result *BaseModelEntityListResult) collect(tx *bbolt.Tx, ids [][]byte, queryMetaData *QueryMetaData) error {
+func (result *BaseModelEntityListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
 		entity := result.handler.impl.NewModelEntity()
-		err := result.handler.readInTx(tx, string(key), entity)
+		err := result.handler.readInTx(tx, key, entity)
 		if err != nil {
 			return err
 		}
@@ -267,7 +269,7 @@ func (handler *baseHandler) delete(id string, beforeDelete func(tx *bbolt.Tx, id
 	})
 }
 
-type queryResultHandler func(tx *bbolt.Tx, ids [][]byte, qmd *QueryMetaData) error
+type queryResultHandler func(tx *bbolt.Tx, ids []string, qmd *QueryMetaData) error
 
 func (handler *baseHandler) parseAndList(queryOptions *QueryOptions, resultHandler queryResultHandler) error {
 	// validate that the submitted query is only using public symbols. The query options may contain an final
@@ -286,23 +288,45 @@ func (handler *baseHandler) parseAndList(queryOptions *QueryOptions, resultHandl
 }
 
 func (handler *baseHandler) list(queryString string, resultHandler queryResultHandler) error {
+	return handler.GetDbProvider().GetDb().View(func(tx *bbolt.Tx) error {
+		return handler.listWithTx(tx, queryString, resultHandler)
+	})
+}
+
+func (handler *baseHandler) listWithTx(tx *bbolt.Tx, queryString string, resultHandler queryResultHandler) error {
 	query, err := ast.Parse(handler.GetStore(), queryString)
 	if err != nil {
 		return err
 	}
 
-	return handler.GetDbProvider().GetDb().View(func(tx *bbolt.Tx) error {
-		keys, count, err := handler.GetStore().QueryIdsC(tx, query)
-		if err != nil {
+	keys, count, err := handler.GetStore().QueryIdsC(tx, query)
+	if err != nil {
+		return err
+	}
+	qmd := &QueryMetaData{
+		Count:            count,
+		Limit:            *query.GetLimit(),
+		Offset:           *query.GetSkip(),
+		FilterableFields: handler.GetStore().GetPublicSymbols(),
+	}
+	return resultHandler(tx, keys, qmd)
+}
+
+func (handler *baseHandler) HandleCollectAssociated(id string, field string, relatedHandler Handler, collector func(entity BaseModelEntity)) error {
+	return handler.GetDb().View(func(tx *bbolt.Tx) error {
+		entity := handler.impl.NewModelEntity()
+		if err := handler.readInTx(tx, id, entity); err != nil {
 			return err
 		}
-		qmd := &QueryMetaData{
-			Count:            count,
-			Limit:            *query.GetLimit(),
-			Offset:           *query.GetSkip(),
-			FilterableFields: handler.GetStore().GetPublicSymbols(),
+		relatedEntityIds := handler.store.GetRelatedEntitiesIdList(tx, id, field)
+		for _, relatedEntityId := range relatedEntityIds {
+			relatedEntity := relatedHandler.NewModelEntity()
+			if err := relatedHandler.readInTx(tx, relatedEntityId, relatedEntity); err != nil {
+				return err
+			}
+			collector(relatedEntity)
 		}
-		return resultHandler(tx, keys, qmd)
+		return nil
 	})
 }
 

@@ -17,17 +17,17 @@
 package model
 
 type Handlers struct {
-	ApiSession   *ApiSessionHandler
-	Appwan       *AppwanHandler
-	Ca           *CaHandler
-	Cluster      *ClusterHandler
-	EdgeRouter   *EdgeRouterHandler
-	EventLog     *EventLogHandler
-	GeoRegion    *GeoRegionHandler
-	Identity     *IdentityHandler
-	IdentityType *IdentityTypeHandler
-	Service      *ServiceHandler
-	Session      *SessionHandler
+	ApiSession       *ApiSessionHandler
+	Appwan           *AppwanHandler
+	Ca               *CaHandler
+	EdgeRouter       *EdgeRouterHandler
+	EdgeRouterPolicy *EdgeRouterPolicyHandler
+	EventLog         *EventLogHandler
+	GeoRegion        *GeoRegionHandler
+	Identity         *IdentityHandler
+	IdentityType     *IdentityTypeHandler
+	Service          *ServiceHandler
+	Session          *SessionHandler
 
 	Authenticator *AuthenticatorHandler
 	Enrollment    *EnrollmentHandler
@@ -40,8 +40,8 @@ func InitHandlers(env Env) *Handlers {
 	handlers.ApiSession = NewApiSessionHandler(env)
 	handlers.Appwan = NewAppwanHandler(env)
 	handlers.Ca = NewCaHandler(env)
-	handlers.Cluster = NewClusterHandler(env)
 	handlers.EdgeRouter = NewEdgeRouterHandler(env)
+	handlers.EdgeRouterPolicy = NewEdgeRouterPolicyHandler(env)
 	handlers.EventLog = NewEventLogHandler(env)
 	handlers.Service = NewServiceHandler(env)
 	handlers.GeoRegion = NewGeoRegionHandler(env)
