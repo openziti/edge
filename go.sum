@@ -100,6 +100,7 @@ github.com/gorilla/handlers v1.4.2/go.mod h1:Qkdc/uu4tH4g6mTK6auzZ766c4CA0Ng8+o/
 github.com/gorilla/mux v1.6.2/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/gorilla/mux v1.7.3 h1:gnP5JzjVOuiZD07fKKToCAOjS0yOpj/qPETTXCCS6hw=
 github.com/gorilla/mux v1.7.3/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
+github.com/gorilla/websocket v1.4.1/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
 github.com/hpcloud/tail v1.0.0 h1:nfCOvKYfkgYP8hkirhJocXT2+zOD8yUNjXaWfTlyFKI=
@@ -173,8 +174,12 @@ github.com/netfoundry/ziti-fabric v0.0.0-20191203170918-f312601f55c9 h1:36Fudtih
 github.com/netfoundry/ziti-fabric v0.0.0-20191203170918-f312601f55c9/go.mod h1:ktqE4LYK1Z4MGBpP29ylnUvEsSNwk7jXBfq2K/kq4nw=
 github.com/netfoundry/ziti-fabric v0.0.0-20191203174113-af4eb6e60864 h1:GGMpVeTIqeN+ZFC2MJX3qQNX+V9Zkda9lquhw1Toh+k=
 github.com/netfoundry/ziti-fabric v0.0.0-20191203174113-af4eb6e60864/go.mod h1:ktqE4LYK1Z4MGBpP29ylnUvEsSNwk7jXBfq2K/kq4nw=
+github.com/netfoundry/ziti-fabric v0.0.0-20191204210924-9ae5128a3754 h1:vAcUmxD+7EB9li95OftU1ZUnkGN4gPyIIr9gScXqTXk=
+github.com/netfoundry/ziti-fabric v0.0.0-20191204210924-9ae5128a3754/go.mod h1:ktqE4LYK1Z4MGBpP29ylnUvEsSNwk7jXBfq2K/kq4nw=
 github.com/netfoundry/ziti-foundation v0.0.0-20191203170231-5c1204e0e65d h1:V6VZeV8JVUipJhZgDUNUhaJ2L6bqmosAf+SNUj6C1f0=
 github.com/netfoundry/ziti-foundation v0.0.0-20191203170231-5c1204e0e65d/go.mod h1:27kvN9RZk7cpt2xba6owuXktNphq5hPK62CAiKnIS10=
+github.com/netfoundry/ziti-foundation v0.0.0-20191204210425-111b73773d5b h1:M+5fZPL/tvShPEfJZZLXCyce913f2K+EDoXDl3TYfl0=
+github.com/netfoundry/ziti-foundation v0.0.0-20191204210425-111b73773d5b/go.mod h1:sX1M5ZF14PmEzoUsX8X3M3ZGLndDyuqqKtwkxFgDE1Y=
 github.com/oleiade/reflections v1.0.0 h1:0ir4pc6v8/PJ0yw5AEtMddfXpWBXg9cnG7SgSoJuCgY=
 github.com/oleiade/reflections v1.0.0/go.mod h1:RbATFBbKYkVdqmSFtx13Bb/tVhR0lgOBXunWTZKeL4w=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=

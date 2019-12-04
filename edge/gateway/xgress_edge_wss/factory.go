@@ -1,24 +1,8 @@
-/*
-	Copyright 2019 Netfoundry, Inc.
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
-
-	https://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-*/
-
-package xgress_edge
+package xgress_edge_wss
 
 import (
-	"github.com/netfoundry/ziti-edge/edge/gateway/handler_edge_ctrl"
-	"github.com/netfoundry/ziti-edge/edge/gateway/internal/apiproxy"
+	// "github.com/netfoundry/ziti-edge/edge/gateway/handler_edge_ctrl"
+	// "github.com/netfoundry/ziti-edge/edge/gateway/internal/apiproxy"
 	"github.com/netfoundry/ziti-edge/edge/gateway/internal/fabric"
 	"github.com/netfoundry/ziti-edge/edge/gateway/internal/gateway"
 	"github.com/netfoundry/ziti-fabric/xgress"
@@ -52,11 +36,15 @@ func (factory *Factory) Enabled() bool {
 
 func (factory *Factory) BindChannel(ch channel2.Channel) error {
 	factory.ctrl = ch
-	ch.AddReceiveHandler(handler_edge_ctrl.NewHelloHandler(factory.config.Advertise, []string{"tls", "wss"}))
+	// ch.AddReceiveHandler(handler_edge_ctrl.NewHelloHandler(factory.config.Advertise, []string{"tls"}))
 
-	ch.AddReceiveHandler(handler_edge_ctrl.NewSessionAddedHandler(factory.stateManager))
-	ch.AddReceiveHandler(handler_edge_ctrl.NewSessionRemovedHandler(factory.stateManager))
-	ch.AddReceiveHandler(handler_edge_ctrl.NewSessionUpdatedHandler(factory.stateManager))
+	// ch.AddReceiveHandler(handler_edge_ctrl.NewNetworkSessionAddedHandler(factory.stateManager))
+	// ch.AddReceiveHandler(handler_edge_ctrl.NewNetworkSessionRemovedHandler(factory.stateManager))
+	// ch.AddReceiveHandler(handler_edge_ctrl.NewNetworkSessionUpdatedHandler(factory.stateManager))
+
+	// ch.AddReceiveHandler(handler_edge_ctrl.NewSessionAddedHandler(factory.stateManager))
+	// ch.AddReceiveHandler(handler_edge_ctrl.NewSessionRemovedHandler(factory.stateManager))
+	// ch.AddReceiveHandler(handler_edge_ctrl.NewSessionUpdatedHandler(factory.stateManager))
 	return nil
 }
 
@@ -86,7 +74,7 @@ func (factory *Factory) LoadConfig(configMap map[interface{}]interface{}) error 
 	}
 
 	factory.config = config
-	go apiproxy.Start(config)
+	// go apiproxy.Start(config)
 
 	return nil
 }
