@@ -17,6 +17,7 @@
 package router
 
 import (
+	"errors"
 	"fmt"
 	"github.com/mdlayher/netlink"
 	"github.com/mdlayher/netlink/nlenc"
@@ -120,9 +121,9 @@ func nlAddrReq(localPrefix, peerPrefix *net.IPNet, ifName string, t netlink.Head
 
 	_, err = c.Execute(req)
 	if err != nil {
-		switch err.(type) {
-		case *netlink.OpError:
-			if os.IsExist(err.(*netlink.OpError).Err) {
+		var nlErr *netlink.OpError
+		if errors.As(err, &nlErr) {
+			if os.IsExist(nlErr.Err) {
 				return nil
 			}
 		}
