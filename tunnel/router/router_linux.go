@@ -23,6 +23,7 @@ import (
 	"github.com/michaelquigley/pfxlog"
 	"golang.org/x/sys/unix"
 	"net"
+	"os"
 )
 
 // Add an address (or prefix) to the specified network interface.
@@ -31,7 +32,6 @@ func AddLocalAddress(prefix *net.IPNet, ifName string) error {
 }
 
 func RemoveLocalAddress(prefix *net.IPNet, ifName string) error {
-
 	return nlAddrReq(prefix, nil, ifName, unix.RTM_DELADDR)
 }
 
@@ -117,17 +117,16 @@ func nlAddrReq(localPrefix, peerPrefix *net.IPNet, ifName string, t netlink.Head
 		Data: append(ifmBytes, attrBytes...),
 	}
 
-	msgs, err := c.Execute(req)
-	if err == unix.EEXIST {
-		return nil
+
+	_, err = c.Execute(req)
+	if err != nil {
+		nlErr := err.(*netlink.OpError)
+		if os.IsExist(nlErr.Err) {
+			return nil
+		}
 	}
 
-	n := len(msgs)
-	if n != 1 {
-		return fmt.Errorf("expected 1 netlink message, but got %d", n)
-	}
-
-	return nil
+	return err
 }
 
 // marshalIfAddrmsg packs a unix.IfAddrmsg into a byte slice using host byte order.
