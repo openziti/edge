@@ -120,9 +120,11 @@ func nlAddrReq(localPrefix, peerPrefix *net.IPNet, ifName string, t netlink.Head
 
 	_, err = c.Execute(req)
 	if err != nil {
-		nlErr := err.(*netlink.OpError)
-		if os.IsExist(nlErr.Err) {
-			return nil
+		switch err.(type) {
+		case *netlink.OpError:
+			if os.IsExist(err.(*netlink.OpError).Err) {
+				return nil
+			}
 		}
 	}
 
