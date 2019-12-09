@@ -280,6 +280,7 @@ func (ctx *TestContext) cleanupAll() {
 	stores := []boltz.CrudStore{
 		ctx.stores.Session,
 		ctx.stores.ApiSession,
+		ctx.stores.EdgeRouterPolicy,
 		ctx.stores.Appwan,
 		ctx.GetServiceStore(),
 		ctx.stores.EdgeService,

@@ -38,7 +38,6 @@ import (
 	"github.com/netfoundry/ziti-edge/edge/internal/cert"
 	"github.com/netfoundry/ziti-edge/edge/internal/jwt"
 	"github.com/netfoundry/ziti-edge/edge/migration"
-	"github.com/netfoundry/ziti-edge/sdk/ziti/config"
 	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-fabric/xctrl"
 	"github.com/netfoundry/ziti-fabric/xmgmt"

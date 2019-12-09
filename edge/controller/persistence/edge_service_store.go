@@ -17,6 +17,7 @@
 package persistence
 
 import (
+	"github.com/google/uuid"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
@@ -50,6 +51,13 @@ const (
 	FieldServiceEdgeRouterRoles   = "edgeRouterRoles"
 	FieldServiceEdgeRouters       = "edgeRouters"
 )
+
+func newEdgeService(name string) *EdgeService {
+	return &EdgeService{
+		Service: network.Service{Id: uuid.New().String()},
+		Name:    name,
+	}
+}
 
 func (entity *EdgeService) LoadValues(store boltz.CrudStore, bucket *boltz.TypedBucket) {
 	_, err := store.GetParentStore().BaseLoadOneById(bucket.Tx(), entity.Id, &entity.Service)

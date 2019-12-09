@@ -161,7 +161,7 @@ func (store *edgeRouterStoreImpl) RolesChanged(tx *bbolt.Tx, rowId []byte, _ []b
 	store.UpdateRelatedRoles(tx, string(rowId), rolesSymbol, linkCollection, new, holder)
 
 	// Calculate service roles
-	rolesSymbol = store.stores.edgeService.symbolEdgeRouters
+	rolesSymbol = store.stores.edgeService.symbolEdgeRoutersRoles
 	linkCollection = store.stores.edgeService.edgeRouterCollection
 	store.UpdateRelatedRoles(tx, string(rowId), rolesSymbol, linkCollection, new, holder)
 }
@@ -169,6 +169,7 @@ func (store *edgeRouterStoreImpl) RolesChanged(tx *bbolt.Tx, rowId []byte, _ []b
 func (store *edgeRouterStoreImpl) initializeLinked() {
 	store.AddNullableFkIndex(store.symbolClusterId, store.stores.cluster.symbolEdgeRouters)
 	store.AddLinkCollection(store.symbolEdgeRouterPolicies, store.stores.edgeRouterPolicy.symbolEdgeRouters)
+	store.AddLinkCollection(store.symbolServices, store.stores.edgeService.symbolEdgeRouters)
 }
 
 func (store *edgeRouterStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*EdgeRouter, error) {
@@ -214,6 +215,21 @@ func (store *edgeRouterStoreImpl) DeleteById(ctx boltz.MutateContext, id string)
 		if stringz.Contains(policy.EdgeRouterRoles, id) {
 			policy.EdgeRouterRoles = stringz.Remove(policy.EdgeRouterRoles, id)
 			err = store.stores.edgeRouterPolicy.Update(ctx, policy, nil)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Remove entity from EdgeRouterRoles in edge service
+	for _, edgeServiceId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, FieldEdgeRouterServices) {
+		service, err := store.stores.edgeService.LoadOneById(ctx.Tx(), edgeServiceId)
+		if err != nil {
+			return err
+		}
+		if stringz.Contains(service.EdgeRouterRoles, id) {
+			service.EdgeRouterRoles = stringz.Remove(service.EdgeRouterRoles, id)
+			err = store.stores.edgeService.Update(ctx, service, nil)
 			if err != nil {
 				return err
 			}

@@ -227,23 +227,21 @@ func (b *Broker) apiSessionCreateEventHandler(args ...interface{}) {
 	b.sendApiSessionCreates(apiSession)
 }
 
-func (b *Broker) sendApiSessionCreates(apiSessions ...*persistence.ApiSession) {
+func (b *Broker) sendApiSessionCreates(apiSession *persistence.ApiSession) {
 	apiSessionMsg := &edge_ctrl_pb.ApiSessionAdded{}
 
 	apiSessionMsg.IsFullState = false
 
-	for _, session := range apiSessions {
-		fingerprints, err := b.getApiSessionFingerprints(session.IdentityId)
-		if err != nil {
-			pfxlog.Logger().WithError(err).Errorf("could not get session fingerprints")
-			return
-		}
-
-		apiSessionMsg.ApiSessions = append(apiSessionMsg.ApiSessions, &edge_ctrl_pb.ApiSession{
-			Token:            session.Token,
-			CertFingerprints: fingerprints,
-		})
+	fingerprints, err := b.getApiSessionFingerprints(apiSession.IdentityId)
+	if err != nil {
+		pfxlog.Logger().WithError(err).Errorf("could not get session fingerprints")
+		return
 	}
+
+	apiSessionMsg.ApiSessions = append(apiSessionMsg.ApiSessions, &edge_ctrl_pb.ApiSession{
+		Token:            apiSession.Token,
+		CertFingerprints: fingerprints,
+	})
 
 	byteMsg, err := proto.Marshal(apiSessionMsg)
 
@@ -272,21 +270,19 @@ func (b *Broker) apiSessionUpdateEventHandler(args ...interface{}) {
 	b.sendApiSessionUpdates(apiSession)
 }
 
-func (b *Broker) sendApiSessionUpdates(sessions ...*persistence.ApiSession) {
+func (b *Broker) sendApiSessionUpdates(apiSession *persistence.ApiSession) {
 	apiSessionMsg := &edge_ctrl_pb.ApiSessionUpdated{}
 
-	for _, session := range sessions {
-		fingerprints, err := b.getApiSessionFingerprints(session.IdentityId)
-		if err != nil {
-			pfxlog.Logger().WithError(err).Errorf("could not get session fingerprints")
-			return
-		}
-
-		apiSessionMsg.ApiSessions = append(apiSessionMsg.ApiSessions, &edge_ctrl_pb.ApiSession{
-			Token:            session.Token,
-			CertFingerprints: fingerprints,
-		})
+	fingerprints, err := b.getApiSessionFingerprints(apiSession.IdentityId)
+	if err != nil {
+		pfxlog.Logger().WithError(err).Errorf("could not get session fingerprints")
+		return
 	}
+
+	apiSessionMsg.ApiSessions = append(apiSessionMsg.ApiSessions, &edge_ctrl_pb.ApiSession{
+		Token:            apiSession.Token,
+		CertFingerprints: fingerprints,
+	})
 
 	byteMsg, err := proto.Marshal(apiSessionMsg)
 
@@ -327,13 +323,9 @@ func (b *Broker) apiSessionDeleteEventHandler(args ...interface{}) {
 	b.sendApiSessionDeletes(apiSession)
 }
 
-func (b *Broker) sendApiSessionDeletes(sessions ...*persistence.ApiSession) {
+func (b *Broker) sendApiSessionDeletes(apiSession *persistence.ApiSession) {
 	apiSessionMsg := &edge_ctrl_pb.ApiSessionRemoved{}
-
-	for _, session := range sessions {
-
-		apiSessionMsg.Tokens = append(apiSessionMsg.Tokens, session.Token)
-	}
+	apiSessionMsg.Tokens = append(apiSessionMsg.Tokens, apiSession.Token)
 
 	byteMsg, err := proto.Marshal(apiSessionMsg)
 
@@ -421,11 +413,10 @@ func (b *Broker) sessionDeleteEventHandler(args ...interface{}) {
 	b.sendSessionDeletes(session)
 }
 
-func (b *Broker) sendSessionDeletes(sessions ...*persistence.Session) {
+func (b *Broker) sendSessionDeletes(session *persistence.Session) {
 	sessionsRemoved := &edge_ctrl_pb.SessionRemoved{}
-	for _, session := range sessions {
-		sessionsRemoved.Tokens = append(sessionsRemoved.Tokens, session.Token)
-	}
+	sessionsRemoved.Tokens = append(sessionsRemoved.Tokens, session.Token)
+
 	if buf, err := proto.Marshal(sessionsRemoved); err == nil {
 		msg := channel2.NewMessage(SessionRemovedType, buf)
 		b.sendToAllEdgeRouters(msg)
@@ -449,38 +440,36 @@ func (b *Broker) sessionCreateEventHandler(args ...interface{}) {
 	b.sendSessionCreates(session)
 }
 
-func (b *Broker) sendSessionCreates(sessions ...*persistence.Session) {
+func (b *Broker) sendSessionCreates(session *persistence.Session) {
 	sessionAdded := &edge_ctrl_pb.SessionAdded{}
 
-	for _, session := range sessions {
-		service, err := b.ae.Handlers.Service.HandleRead(session.ServiceId)
-		if err != nil {
-			log := pfxlog.Logger()
-			log.WithField("cause", err).Error("could not send network session added, could not find service")
-			continue
-		}
-
-		fps, err := b.getActiveFingerprints(session.Id)
-
-		if err != nil {
-			pfxlog.Logger().Errorf("could not obtain a fingerprint for the api session [%s] and session [%s]", session.ApiSessionId, session.Id)
-			continue
-		}
-
-		svc, err := b.modelServiceToProto(service)
-
-		if err != nil {
-			pfxlog.Logger().Errorf("could not convert service [%s] to proto: %s", service.Id, err)
-			continue
-		}
-
-		sessionAdded.Sessions = append(sessionAdded.Sessions, &edge_ctrl_pb.Session{
-			Token:            session.Token,
-			Service:          svc,
-			CertFingerprints: fps,
-			Hosting:          session.IsHosting,
-		})
+	service, err := b.ae.Handlers.Service.HandleRead(session.ServiceId)
+	if err != nil {
+		log := pfxlog.Logger()
+		log.WithField("cause", err).Error("could not send network session added, could not find service")
+		return
 	}
+
+	fps, err := b.getActiveFingerprints(session.Id)
+
+	if err != nil {
+		pfxlog.Logger().Errorf("could not obtain a fingerprint for the api session [%s] and session [%s]", session.ApiSessionId, session.Id)
+		return
+	}
+
+	svc, err := b.modelServiceToProto(service)
+
+	if err != nil {
+		pfxlog.Logger().Errorf("could not convert service [%s] to proto: %s", service.Id, err)
+		return
+	}
+
+	sessionAdded.Sessions = append(sessionAdded.Sessions, &edge_ctrl_pb.Session{
+		Token:            session.Token,
+		Service:          svc,
+		CertFingerprints: fps,
+		Hosting:          session.IsHosting,
+	})
 
 	if buf, err := proto.Marshal(sessionAdded); err == nil {
 		msg := channel2.NewMessage(SessionAddedType, buf)
