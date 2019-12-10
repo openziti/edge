@@ -183,38 +183,10 @@ func (handler *ServiceHandler) HandleList(queryOptions *QueryOptions) (*ServiceL
 	return result, nil
 }
 
-func (handler *ServiceHandler) HandleCollectClusters(id string, collector func(entity BaseModelEntity)) error {
-	return handler.GetDb().View(func(tx *bbolt.Tx) error {
-		_, err := handler.readService(tx, id)
-		if err != nil {
-			return err
-		}
-		association := handler.store.GetLinkCollection(persistence.FieldServiceClusters)
-		for _, clusterId := range association.GetLinks(tx, id) {
-			cluster, err := handler.env.GetHandlers().Cluster.handleReadInTx(tx, clusterId)
-			if err != nil {
-				return err
-			}
-			collector(cluster)
-		}
-		return nil
-	})
+func (handler *ServiceHandler) HandleCollectEdgeRouters(id string, collector func(entity BaseModelEntity)) error {
+	return handler.HandleCollectAssociated(id, persistence.FieldServiceEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
 }
 
 func (handler *ServiceHandler) HandleCollectHostIds(id string, collector func(entity BaseModelEntity)) error {
-	return handler.GetDb().View(func(tx *bbolt.Tx) error {
-		_, err := handler.readService(tx, id)
-		if err != nil {
-			return err
-		}
-		association := handler.store.GetLinkCollection(persistence.FieldServiceHostingIdentities)
-		for _, identityId := range association.GetLinks(tx, id) {
-			identity, err := handler.env.GetHandlers().Identity.handleReadInTx(tx, identityId)
-			if err != nil {
-				return err
-			}
-			collector(identity)
-		}
-		return nil
-	})
+	return handler.HandleCollectAssociated(id, persistence.FieldServiceHostingIdentities, handler.env.GetHandlers().Identity, collector)
 }

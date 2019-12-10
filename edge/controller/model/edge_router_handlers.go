@@ -18,9 +18,7 @@ package model
 
 import (
 	"fmt"
-	"github.com/netfoundry/ziti-edge/edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/edge/controller/persistence"
-	"github.com/netfoundry/ziti-edge/edge/controller/util"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"go.etcd.io/bbolt"
@@ -34,9 +32,9 @@ func NewEdgeRouterHandler(env Env) *EdgeRouterHandler {
 			store: env.GetStores().EdgeRouter,
 		},
 		allowedFieldsChecker: boltz.MapFieldChecker{
-			persistence.FieldName:              struct{}{},
-			persistence.FieldEdgeRouterCluster: struct{}{},
-			persistence.FieldTags:              struct{}{},
+			persistence.FieldName:           struct{}{},
+			persistence.FieldRoleAttributes: struct{}{},
+			persistence.FieldTags:           struct{}{},
 		},
 	}
 	handler.impl = handler
@@ -53,21 +51,6 @@ func (handler *EdgeRouterHandler) NewModelEntity() BaseModelEntity {
 }
 
 func (handler *EdgeRouterHandler) HandleCreate(modelEntity *EdgeRouter) (string, error) {
-	if modelEntity.ClusterId != nil {
-		cluster, err := handler.env.GetHandlers().Cluster.HandleRead(*modelEntity.ClusterId)
-
-		if err != nil && !util.IsErrNotFoundErr(err) {
-			return "", err
-		}
-
-		if cluster == nil {
-			apiErr := apierror.NewNotFound()
-			apiErr.Cause = NewFieldError("clusterId not found", "clusterId", modelEntity.ClusterId)
-			apiErr.AppendCause = true
-			return "", apiErr
-		}
-	}
-
 	return handler.create(modelEntity, nil)
 }
 
@@ -164,27 +147,24 @@ func (handler *EdgeRouterHandler) HandleListForSession(sessionId string) (*EdgeR
 }
 
 func (handler *EdgeRouterHandler) HandleListForIdentityAndServiceWithTx(tx *bbolt.Tx, identityId, serviceId string, limit *int) (*EdgeRouterListResult, error) {
-	result := &EdgeRouterListResult{handler: handler}
 
-	err := handler.env.GetDbProvider().GetDb().View(func(tx *bbolt.Tx) error {
-		service, err := handler.env.GetStores().EdgeService.LoadOneById(tx, serviceId)
-		if err != nil {
-			return err
-		}
-
-		query := fmt.Sprintf(`anyOf(edgeRouterPolicies.identities) = "%v"`, identityId)
-
-		if len(service.RoleAttributes) > 0 && !stringz.Contains(service.RoleAttributes, "all") {
-			query += fmt.Sprintf(` and anyOf(services) = "%v"`, service.Id)
-		}
-
-		if limit != nil {
-			query += " limit " + strconv.Itoa(*limit)
-		}
-
-		return handler.listWithTx(tx, query, result.collectConnected)
-	})
+	service, err := handler.env.GetStores().EdgeService.LoadOneById(tx, serviceId)
 	if err != nil {
+		return nil, err
+	}
+
+	query := fmt.Sprintf(`anyOf(edgeRouterPolicies.identities) = "%v"`, identityId)
+
+	if len(service.RoleAttributes) > 0 && !stringz.Contains(service.RoleAttributes, "all") {
+		query += fmt.Sprintf(` and anyOf(services) = "%v"`, service.Id)
+	}
+
+	if limit != nil {
+		query += " limit " + strconv.Itoa(*limit)
+	}
+
+	result := &EdgeRouterListResult{handler: handler}
+	if err = handler.listWithTx(tx, query, result.collectConnected); err != nil {
 		return nil, err
 	}
 	return result, nil

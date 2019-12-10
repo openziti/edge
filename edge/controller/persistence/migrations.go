@@ -17,16 +17,16 @@
 package persistence
 
 import (
+	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/edge/migration"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
-	"github.com/michaelquigley/pfxlog"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
 
 const (
 	FieldVersion   = "version"
-	currentVersion = 1
+	currentVersion = 2
 )
 
 type Migrations struct {
@@ -74,8 +74,13 @@ func (m *Migrations) run(mtx *MigrationContext) error {
 			m.upgradeToV1FromPG(mtx)
 		} else {
 			pfxlog.Logger().Info("no postgres configured, skipping migration from postgres")
-			m.setVersion(1)
+			m.setVersion(2)
 		}
+	}
+
+	if m.dbVersion == 1 {
+		migrations = true
+		m.upgradeToV2FromV1(mtx)
 	}
 
 	if migrations {
@@ -110,11 +115,15 @@ func (m *Migrations) createDefaultData(mtx *MigrationContext) {
 }
 
 func (m *Migrations) upgradeToV1FromPG(mtx *MigrationContext) {
-	err := upgradeToV1FromPG(mtx)
-
-	if err != nil {
+	if err := upgradeToV1FromPG(mtx); err != nil {
 		m.versionBucket.SetError(err)
 	}
-
 	m.setVersion(1)
+}
+
+func (m *Migrations) upgradeToV2FromV1(mtx *MigrationContext) {
+	if err := createEdgeRouterPoliciesV2(mtx); err != nil {
+		m.versionBucket.SetError(err)
+	}
+	m.setVersion(2)
 }

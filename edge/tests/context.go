@@ -30,12 +30,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/netfoundry/ziti-foundation/common/constants"
-	"github.com/netfoundry/ziti-edge/edge/controller/server"
-	"github.com/netfoundry/ziti-fabric/controller"
 	"github.com/Jeffail/gabs"
 	"github.com/google/uuid"
 	"github.com/michaelquigley/pfxlog"
+	"github.com/netfoundry/ziti-edge/edge/controller/server"
+	"github.com/netfoundry/ziti-fabric/controller"
+	"github.com/netfoundry/ziti-foundation/common/constants"
 	"github.com/netfoundry/ziti-foundation/transport"
 	"github.com/netfoundry/ziti-foundation/transport/quic"
 	"github.com/netfoundry/ziti-foundation/transport/tcp"
@@ -65,7 +65,6 @@ type TestContext struct {
 	req                *require.Assertions
 	client             *resty.Client
 	enabledJsonLogging bool
-	clusterId          string
 }
 
 var defaultTestContext = &TestContext{}
@@ -109,7 +108,7 @@ func (ctx *TestContext) HttpClient(transport *http.Transport) *http.Client {
 		Transport:     transport,
 		CheckRedirect: nil,
 		Jar:           jar,
-		Timeout:       20 * time.Second,
+		Timeout:       2000 * time.Second,
 	}
 }
 
@@ -239,11 +238,12 @@ func (ctx *TestContext) requireCreateCluster(name string) string {
 	return ctx.getEntityId(body)
 }
 
-func (ctx *TestContext) requireCreateIdentity(name string, password string, isAdmin bool) string {
+func (ctx *TestContext) requireCreateIdentity(name string, password string, isAdmin bool, rolesAttributes ...string) string {
 	entityData := gabs.New()
 	ctx.setJsonValue(entityData, name, "name")
 	ctx.setJsonValue(entityData, "User", "type")
 	ctx.setJsonValue(entityData, isAdmin, "isAdmin")
+	ctx.setJsonValue(entityData, rolesAttributes, "roleAttributes")
 
 	enrollments := map[string]interface{}{
 		"updb": name,
@@ -404,17 +404,12 @@ func (ctx *TestContext) isServiceVisibleToUser(info *userInfo, serviceId string)
 }
 
 func (ctx *TestContext) newTestService() *testService {
-	if ctx.clusterId == "" {
-		ctx.clusterId = ctx.requireCreateCluster(uuid.New().String())
-	}
-
 	return &testService{
 		name:            uuid.New().String(),
 		dnsHostname:     uuid.New().String(),
 		dnsPort:         0,
 		egressRouter:    uuid.New().String(),
 		endpointAddress: uuid.New().String(),
-		clusterIds:      []string{ctx.clusterId},
 		hostIds:         nil,
 		tags:            nil,
 	}

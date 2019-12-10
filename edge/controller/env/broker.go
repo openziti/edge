@@ -39,12 +39,12 @@ import (
 )
 
 type Broker struct {
-	ae         *AppEnv
-	events     map[events.EventEmmiter]map[events.EventName][]events.Listener
-	clusterMap *clusterMap
+	ae            *AppEnv
+	events        map[events.EventEmmiter]map[events.EventName][]events.Listener
+	edgeRouterMap *edgeRouterMap
 }
 
-type clusterMap struct {
+type edgeRouterMap struct {
 	internalMap *sync.Map
 }
 
@@ -63,24 +63,19 @@ const (
 	ErrorType       = int32(edge_ctrl_pb.ContentType_ErrorType)
 )
 
-func (m *clusterMap) getEntryMap(clusterId string) *sync.Map {
-	if value, ok := m.internalMap.Load(clusterId); ok {
-		edgeRouterMap, ok := value.(*sync.Map)
-
-		if !ok {
-			panic("could not convert edge router map to *sync.Map")
-		}
-
-		return edgeRouterMap
-	}
-	return nil
-}
-
-func (m *clusterMap) AddEntry(edgeRouterEntry *edgeRouterEntry) {
+func (m *edgeRouterMap) AddEntry(edgeRouterEntry *edgeRouterEntry) {
 	m.internalMap.Store(edgeRouterEntry.EdgeRouter.Id, edgeRouterEntry)
 }
 
-func (m *clusterMap) GetOnlineEntries() []*edgeRouterEntry {
+func (m *edgeRouterMap) GetEntry(edgeRouterId string) *edgeRouterEntry {
+	val, found := m.internalMap.Load(edgeRouterId)
+	if !found {
+		return nil
+	}
+	return val.(*edgeRouterEntry)
+}
+
+func (m *edgeRouterMap) GetOnlineEntries() []*edgeRouterEntry {
 	var entries []*edgeRouterEntry
 
 	m.internalMap.Range(func(_, vi interface{}) bool {
@@ -96,11 +91,11 @@ func (m *clusterMap) GetOnlineEntries() []*edgeRouterEntry {
 	return entries
 }
 
-func (m *clusterMap) RemoveEntry(edgeRouterId string) {
+func (m *edgeRouterMap) RemoveEntry(edgeRouterId string) {
 	m.internalMap.Delete(edgeRouterId)
 }
 
-func (m *clusterMap) RangeEdgeRouterEntries(f func(entries *edgeRouterEntry) bool) {
+func (m *edgeRouterMap) RangeEdgeRouterEntries(f func(entries *edgeRouterEntry) bool) {
 	m.internalMap.Range(func(edgeRouterId, value interface{}) bool {
 		if edgeRouterEntry, ok := value.(*edgeRouterEntry); ok {
 			return f(edgeRouterEntry)
@@ -118,7 +113,7 @@ type edgeRouterEntry struct {
 func NewBroker(ae *AppEnv) *Broker {
 	b := &Broker{
 		ae: ae,
-		clusterMap: &clusterMap{
+		edgeRouterMap: &edgeRouterMap{
 			internalMap: &sync.Map{},
 		},
 	}
@@ -150,17 +145,12 @@ func NewBroker(ae *AppEnv) *Broker {
 }
 
 func (b *Broker) AddEdgeRouter(ch channel2.Channel, edgeRouter *model.EdgeRouter) {
-	if edgeRouter.ClusterId == nil || *edgeRouter.ClusterId == "" {
-		pfxlog.Logger().Errorf("adding connecting edge router failed, edge router [%s] did not have a cluster id", edgeRouter.Id)
-		return
-	}
-
 	edgeRouterEntry := &edgeRouterEntry{
 		EdgeRouter: edgeRouter,
 		Channel:    ch,
 	}
 
-	b.clusterMap.AddEntry(edgeRouterEntry)
+	b.edgeRouterMap.AddEntry(edgeRouterEntry)
 
 	sessionMsg, err := b.getCurrentSessions()
 
@@ -179,10 +169,10 @@ func (b *Broker) AddEdgeRouter(ch channel2.Channel, edgeRouter *model.EdgeRouter
 		pfxlog.Logger().WithField("cause", err).Error("error sending session added, could not marshal message content")
 	}
 
-	networkSessionMsg, err := b.getCurrentStateNetworkSessions(*edgeRouter.ClusterId)
+	networkSessionMsg, err := b.getCurrentStateNetworkSessions(edgeRouter.Id)
 
 	if err != nil {
-		pfxlog.Logger().WithField("cause", err).Errorf("could not get current network sessions for cluster id [%s]", *edgeRouter.ClusterId)
+		pfxlog.Logger().WithField("cause", err).Errorf("could not get current network sessions for edge router id [%s]", edgeRouter.Id)
 		return
 	}
 
@@ -297,7 +287,7 @@ func (b *Broker) sendApiSessionUpdates(apiSession *persistence.ApiSession) {
 }
 
 func (b *Broker) sendToAllEdgeRouters(msg *channel2.Message) {
-	b.clusterMap.RangeEdgeRouterEntries(func(edgeRouterEntry *edgeRouterEntry) bool {
+	b.edgeRouterMap.RangeEdgeRouterEntries(func(edgeRouterEntry *edgeRouterEntry) bool {
 		err := edgeRouterEntry.Channel.Send(msg)
 
 		if err != nil {
@@ -306,6 +296,24 @@ func (b *Broker) sendToAllEdgeRouters(msg *channel2.Message) {
 
 		return true
 	})
+}
+
+func (b *Broker) sendToAllEdgeRoutersForSession(sessionId string, msg *channel2.Message) {
+	edgeRouterList, err := b.ae.Handlers.EdgeRouter.HandleListForSession(sessionId)
+	if err != nil {
+		pfxlog.Logger().WithError(err).Errorf("could not get edge routers for session [%s]", sessionId)
+		return
+	}
+
+	for _, edgeRouter := range edgeRouterList.EdgeRouters {
+		edgeRouterEntry := b.edgeRouterMap.GetEntry(edgeRouter.Id)
+		if edgeRouterEntry != nil && !edgeRouterEntry.Channel.IsClosed() {
+			err := edgeRouterEntry.Channel.Send(msg)
+			if err != nil {
+				pfxlog.Logger().WithError(err).Errorf("could send session added message")
+			}
+		}
+	}
 }
 
 func (b *Broker) apiSessionDeleteEventHandler(args ...interface{}) {
@@ -419,7 +427,7 @@ func (b *Broker) sendSessionDeletes(session *persistence.Session) {
 
 	if buf, err := proto.Marshal(sessionsRemoved); err == nil {
 		msg := channel2.NewMessage(SessionRemovedType, buf)
-		b.sendToAllEdgeRouters(msg)
+		b.sendToAllEdgeRoutersForSession(session.Id, msg)
 	} else {
 		pfxlog.Logger().WithField("cause", err).Error("error sending session removed, could not marshal message content")
 	}
@@ -473,7 +481,7 @@ func (b *Broker) sendSessionCreates(session *persistence.Session) {
 
 	if buf, err := proto.Marshal(sessionAdded); err == nil {
 		msg := channel2.NewMessage(SessionAddedType, buf)
-		b.sendToAllEdgeRouters(msg)
+		b.sendToAllEdgeRoutersForSession(session.Id, msg)
 	} else {
 		pfxlog.Logger().WithField("cause", err).Error("error sending network session added, could not marshal message content")
 	}
@@ -523,13 +531,12 @@ func (b *Broker) getCurrentSessions() (*edge_ctrl_pb.ApiSessionAdded, error) {
 	return ret, nil
 }
 
-func (b *Broker) getCurrentStateNetworkSessions(clusterId string) (*edge_ctrl_pb.SessionAdded, error) {
+func (b *Broker) getCurrentStateNetworkSessions(edgeRouterId string) (*edge_ctrl_pb.SessionAdded, error) {
 	ret := &edge_ctrl_pb.SessionAdded{
 		IsFullState: true,
 	}
 
-	query := fmt.Sprintf(`anyOf(service.clusters.id) = "%v" limit none`, clusterId)
-	result, err := b.ae.Handlers.Session.HandleQuery(query)
+	result, err := b.ae.Handlers.Session.HandleListSessionForEdgeRouter(edgeRouterId)
 
 	if err != nil {
 		return nil, err
@@ -641,7 +648,7 @@ func (b *Broker) modelSessionToProto(ns *model.Session) (*edge_ctrl_pb.Session, 
 }
 
 func (b *Broker) GetOnlineEdgeRouter(id string) *model.EdgeRouter {
-	result, found := b.clusterMap.internalMap.Load(id)
+	result, found := b.edgeRouterMap.internalMap.Load(id)
 	if !found {
 		return nil
 	}
@@ -741,9 +748,7 @@ func (b *Broker) RouterDisconnected(r *network.Router) {
 			return
 		}
 
-		if edgeRouter.ClusterId != nil {
-			b.clusterMap.RemoveEntry(edgeRouter.Id)
-		}
+		b.edgeRouterMap.RemoveEntry(edgeRouter.Id)
 	}()
 }
 

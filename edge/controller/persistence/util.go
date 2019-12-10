@@ -64,3 +64,9 @@ func FieldValuesToIds(new []boltz.FieldTypeAndValue) []string {
 	}
 	return entityRoles
 }
+
+type UpdateTimeOnlyFieldChecker struct{}
+
+func (u UpdateTimeOnlyFieldChecker) IsUpdated(string) bool {
+	return false
+}

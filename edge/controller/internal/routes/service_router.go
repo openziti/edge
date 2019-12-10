@@ -53,38 +53,15 @@ func (ir *ServiceRouter) Register(ae *env.AppEnv) {
 		Default: permissions.IsAdmin(),
 	})
 
-	ir.registerClusterHandlers(ae, sr)
+	ir.registerEdgeRouterHandlers(ae, sr)
 	ir.registerHostingIdentitiesHandlers(ae, sr)
 }
 
-func (ir *ServiceRouter) registerClusterHandlers(ae *env.AppEnv, sr *mux.Router) {
-	urlWithSlash := fmt.Sprintf("/{%s}/clusters", response.IdPropertyName)
-	urlWithOutSlash := fmt.Sprintf("/{%s}/clusters/", response.IdPropertyName)
-
-	listHandler := ae.WrapHandler(ir.ListClusters, permissions.IsAdmin())
-	addHandler := ae.WrapHandler(ir.AddClusters, permissions.IsAdmin())
-	removeBulkHandler := ae.WrapHandler(ir.RemoveClustersBulk, permissions.IsAdmin())
-	setHandler := ae.WrapHandler(ir.SetClusters, permissions.IsAdmin())
-
-	sr.HandleFunc(urlWithSlash, listHandler).Methods(http.MethodGet)
-	sr.HandleFunc(urlWithOutSlash, listHandler).Methods(http.MethodGet)
-
-	sr.HandleFunc(urlWithSlash, addHandler).Methods(http.MethodPut)
-	sr.HandleFunc(urlWithOutSlash, addHandler).Methods(http.MethodPut)
-
-	sr.HandleFunc(urlWithSlash, removeBulkHandler).Methods(http.MethodDelete)
-	sr.HandleFunc(urlWithOutSlash, removeBulkHandler).Methods(http.MethodDelete)
-
-	sr.HandleFunc(urlWithSlash, setHandler).Methods(http.MethodPost)
-	sr.HandleFunc(urlWithOutSlash, setHandler).Methods(http.MethodPost)
-
-	urlWithSlashWithSubId := fmt.Sprintf("/{%s}/clusters/{%s}", response.IdPropertyName, response.SubIdPropertyName)
-	urlWithOutSlashWithSubId := fmt.Sprintf("/{%s}/clusters/{%s}/", response.IdPropertyName, response.SubIdPropertyName)
-
-	removeHandler := ae.WrapHandler(ir.RemoveCluster, permissions.IsAdmin())
-
-	sr.HandleFunc(urlWithSlashWithSubId, removeHandler).Methods(http.MethodDelete)
-	sr.HandleFunc(urlWithOutSlashWithSubId, removeHandler).Methods(http.MethodDelete)
+func (ir *ServiceRouter) registerEdgeRouterHandlers(ae *env.AppEnv, sr *mux.Router) {
+	edgeRouterUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameEdgeRouter)
+	edgeRouterListHandler := ae.WrapHandler(ir.ListEdgeRouters, permissions.IsAdmin())
+	sr.HandleFunc(edgeRouterUrl, edgeRouterListHandler).Methods(http.MethodGet)
+	sr.HandleFunc(edgeRouterUrl+"/", edgeRouterListHandler).Methods(http.MethodGet)
 }
 
 func (ir *ServiceRouter) registerHostingIdentitiesHandlers(ae *env.AppEnv, sr *mux.Router) {
@@ -169,24 +146,8 @@ func (ir *ServiceRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 	})
 }
 
-func (ir *ServiceRouter) ListClusters(ae *env.AppEnv, rc *response.RequestContext) {
-	ListAssociations(ae, rc, ir.IdType, ae.Handlers.Service.HandleCollectClusters, MapClusterToApiEntity)
-}
-
-func (ir *ServiceRouter) AddClusters(ae *env.AppEnv, rc *response.RequestContext) {
-	UpdateAssociationsFor(ae, rc, ir.IdType, ae.GetStores().EdgeService, model.AssociationsActionAdd, persistence.FieldServiceClusters)
-}
-
-func (ir *ServiceRouter) RemoveClustersBulk(ae *env.AppEnv, rc *response.RequestContext) {
-	UpdateAssociationsFor(ae, rc, ir.IdType, ae.GetStores().EdgeService, model.AssociationsActionRemove, persistence.FieldServiceClusters)
-}
-
-func (ir *ServiceRouter) RemoveCluster(ae *env.AppEnv, rc *response.RequestContext) {
-	RemoveAssociationFor(ae, rc, ir.IdType, ae.GetStores().EdgeService, persistence.FieldServiceClusters)
-}
-
-func (ir *ServiceRouter) SetClusters(ae *env.AppEnv, rc *response.RequestContext) {
-	UpdateAssociationsFor(ae, rc, ir.IdType, ae.GetStores().EdgeService, model.AssociationsActionSet, persistence.FieldServiceClusters)
+func (ir *ServiceRouter) ListEdgeRouters(ae *env.AppEnv, rc *response.RequestContext) {
+	ListAssociations(ae, rc, ir.IdType, ae.Handlers.Service.HandleCollectEdgeRouters, MapClusterToApiEntity)
 }
 
 func (ir *ServiceRouter) ListHostingIdentities(ae *env.AppEnv, rc *response.RequestContext) {

@@ -38,16 +38,16 @@ type EdgeRouterEntityApiRef struct {
 }
 
 type EdgeRouterApi struct {
-	Tags      *migration.PropertyMap `json:"tags"`
-	Name      *string                `json:"name"`
-	ClusterId *string                `json:"clusterId"`
+	Tags           *migration.PropertyMap `json:"tags"`
+	Name           *string                `json:"name"`
+	RoleAttributes []string               `json:"roleAttributes"`
 }
 
 func (i *EdgeRouterApi) ToModel(id string) *model.EdgeRouter {
 	result := &model.EdgeRouter{}
 	result.Id = id
 	result.Name = stringz.OrEmpty(i.Name)
-	result.ClusterId = i.ClusterId
+	result.RoleAttributes = i.RoleAttributes
 	if i.Tags != nil {
 		result.Tags = *i.Tags
 	}
@@ -58,7 +58,7 @@ type EdgeRouterApiList struct {
 	*env.BaseApi
 	Name                *string           `json:"name"`
 	Fingerprint         *string           `json:"fingerprint"`
-	Cluster             *EntityApiRef     `json:"cluster"`
+	RoleAttributes      []string          `json:"roleAttributes"`
 	IsVerified          *bool             `json:"isVerified"`
 	IsOnline            *bool             `json:"isOnline"`
 	EnrollmentToken     *string           `json:"enrollmentToken"`
@@ -117,20 +117,6 @@ func MapEdgeRouterToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e mode
 }
 
 func MapEdgeRouterToApiList(ae *env.AppEnv, i *model.EdgeRouter) (*EdgeRouterApiList, error) {
-	var clusterApiRef *EntityApiRef
-	if i.ClusterId != nil {
-		cluster, err := ae.Handlers.Cluster.HandleRead(*i.ClusterId)
-		if err != nil {
-			return nil, err
-		}
-		c, err := MapClusterToApiEntity(nil, nil, cluster)
-
-		if err != nil {
-			return nil, err
-		}
-		clusterApiRef = c.ToEntityApiRef()
-	}
-
 	hostname := ""
 	protocols := map[string]string{}
 
@@ -146,7 +132,7 @@ func MapEdgeRouterToApiList(ae *env.AppEnv, i *model.EdgeRouter) (*EdgeRouterApi
 	ret := &EdgeRouterApiList{
 		BaseApi:             env.FromBaseModelEntity(i),
 		Name:                &i.Name,
-		Cluster:             clusterApiRef,
+		RoleAttributes:      i.RoleAttributes,
 		EnrollmentToken:     i.EnrollmentToken,
 		EnrollmentCreatedAt: i.EnrollmentCreatedAt,
 		EnrollmentExpiresAt: i.EnrollmentExpiresAt,

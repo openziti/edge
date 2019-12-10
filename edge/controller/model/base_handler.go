@@ -34,6 +34,8 @@ type Handler interface {
 	NewModelEntity() BaseModelEntity
 	BaseList(queryOptions *QueryOptions) (*BaseModelEntityListResult, error)
 	BaseLoad(id string) (BaseModelEntity, error)
+
+	readInTx(tx *bbolt.Tx, id string, modelEntity BaseModelEntity) error
 }
 
 type baseHandler struct {
@@ -308,6 +310,24 @@ func (handler *baseHandler) listWithTx(tx *bbolt.Tx, queryString string, resultH
 		FilterableFields: handler.GetStore().GetPublicSymbols(),
 	}
 	return resultHandler(tx, keys, qmd)
+}
+
+func (handler *baseHandler) HandleCollectAssociated(id string, field string, relatedHandler Handler, collector func(entity BaseModelEntity)) error {
+	return handler.GetDb().View(func(tx *bbolt.Tx) error {
+		entity := handler.impl.NewModelEntity()
+		if err := handler.readInTx(tx, id, entity); err != nil {
+			return err
+		}
+		relatedEntityIds := handler.store.GetRelatedEntitiesIdList(tx, id, field)
+		for _, relatedEntityId := range relatedEntityIds {
+			relatedEntity := relatedHandler.NewModelEntity()
+			if err := relatedHandler.readInTx(tx, relatedEntityId, relatedEntity); err != nil {
+				return err
+			}
+			collector(relatedEntity)
+		}
+		return nil
+	})
 }
 
 type AndFieldChecker struct {

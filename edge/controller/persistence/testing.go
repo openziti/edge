@@ -74,6 +74,10 @@ func (ctx *TestContext) GetRouterStore() network.RouterStore {
 	return ctx.routerStore
 }
 
+func (ctx *TestContext) GetStores() *Stores {
+	return ctx.stores
+}
+
 func (ctx *TestContext) RemoveFromCache(_ string) {
 }
 
@@ -113,7 +117,7 @@ func (ctx *TestContext) Cleanup() {
 func (ctx *TestContext) requireNewCluster(name string) *Cluster {
 	cluster := &Cluster{
 		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               uuid.New().String(),
+		Name:               name,
 	}
 	ctx.requireCreate(cluster)
 	return cluster
