@@ -147,7 +147,7 @@ func (ir *ServiceRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 }
 
 func (ir *ServiceRouter) ListEdgeRouters(ae *env.AppEnv, rc *response.RequestContext) {
-	ListAssociations(ae, rc, ir.IdType, ae.Handlers.Service.HandleCollectEdgeRouters, MapClusterToApiEntity)
+	ListAssociations(ae, rc, ir.IdType, ae.Handlers.Service.HandleCollectEdgeRouters, MapEdgeRouterToApiEntity)
 }
 
 func (ir *ServiceRouter) ListHostingIdentities(ae *env.AppEnv, rc *response.RequestContext) {

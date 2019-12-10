@@ -20,7 +20,6 @@ type Handlers struct {
 	ApiSession       *ApiSessionHandler
 	Appwan           *AppwanHandler
 	Ca               *CaHandler
-	Cluster          *ClusterHandler
 	EdgeRouter       *EdgeRouterHandler
 	EdgeRouterPolicy *EdgeRouterPolicyHandler
 	EventLog         *EventLogHandler
@@ -41,7 +40,6 @@ func InitHandlers(env Env) *Handlers {
 	handlers.ApiSession = NewApiSessionHandler(env)
 	handlers.Appwan = NewAppwanHandler(env)
 	handlers.Ca = NewCaHandler(env)
-	handlers.Cluster = NewClusterHandler(env)
 	handlers.EdgeRouter = NewEdgeRouterHandler(env)
 	handlers.EdgeRouterPolicy = NewEdgeRouterPolicyHandler(env)
 	handlers.EventLog = NewEventLogHandler(env)
