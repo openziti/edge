@@ -19,6 +19,7 @@ package persistence
 import (
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
+	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
 
@@ -111,11 +112,15 @@ func (store *caStoreImpl) initializeLinked() {
 }
 
 func (store *caStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*Ca, error) {
-	ca := &Ca{}
-	if found, err := store.BaseLoadOneById(tx, id, ca); !found || err != nil {
+	entity := &Ca{}
+	found, err := store.BaseLoadOneById(tx, id, entity)
+	if err != nil {
 		return nil, err
 	}
-	return ca, nil
+	if !found {
+		return nil, errors.Errorf("no ca found with id %v", id)
+	}
+	return entity, nil
 }
 
 func (store *caStoreImpl) LoadOneByName(tx *bbolt.Tx, name string) (*Ca, error) {

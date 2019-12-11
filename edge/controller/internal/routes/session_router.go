@@ -123,17 +123,22 @@ func getSessionEdgeRouters(ae *env.AppEnv, ns *model.Session) ([]*SessionEdgeRou
 	}
 
 	for _, edgeRouter := range edgeRoutersForSession.EdgeRouters {
-		c := &SessionEdgeRouter{
-			Hostname: edgeRouter.Hostname,
-			Name:     &edgeRouter.Name,
-			Urls:     map[string]string{},
-		}
+		onlineEdgeRouter := ae.Broker.GetOnlineEdgeRouter(edgeRouter.Id)
 
-		for p, url := range edgeRouter.EdgeRouterProtocols {
-			c.Urls[p] = url
-		}
+		if onlineEdgeRouter != nil {
+			c := &SessionEdgeRouter{
+				Hostname: onlineEdgeRouter.Hostname,
+				Name:     &edgeRouter.Name,
+				Urls:     map[string]string{},
+			}
 
-		edgeRouters = append(edgeRouters, c)
+			for p, url := range onlineEdgeRouter.EdgeRouterProtocols {
+				c.Urls[p] = url
+			}
+
+			pfxlog.Logger().Infof("Returning %+v to %+v, with urls: %+v", edgeRouter, c, c.Urls)
+			edgeRouters = append(edgeRouters, c)
+		}
 	}
 
 	return edgeRouters, nil

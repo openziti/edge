@@ -23,6 +23,7 @@ import (
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
+	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 	"reflect"
 	"sort"
@@ -183,11 +184,15 @@ func (store *edgeServiceStoreImpl) initializeLinked() {
 }
 
 func (store *edgeServiceStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*EdgeService, error) {
-	service := &EdgeService{}
-	if found, err := store.BaseLoadOneById(tx, id, service); !found || err != nil {
+	entity := &EdgeService{}
+	found, err := store.BaseLoadOneById(tx, id, entity)
+	if err != nil {
 		return nil, err
 	}
-	return service, nil
+	if !found {
+		return nil, errors.Errorf("no service found with id %v", id)
+	}
+	return entity, nil
 }
 
 func (store *edgeServiceStoreImpl) LoadOneByName(tx *bbolt.Tx, name string) (*EdgeService, error) {

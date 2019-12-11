@@ -18,6 +18,7 @@ package persistence
 
 import (
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
+	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
 
@@ -78,11 +79,15 @@ func (store *IdentityTypeStoreImpl) GetNameIndex() boltz.ReadIndex {
 }
 
 func (store *IdentityTypeStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*IdentityType, error) {
-	identityType := &IdentityType{}
-	if found, err := store.BaseLoadOneById(tx, id, identityType); !found || err != nil {
+	entity := &IdentityType{}
+	found, err := store.BaseLoadOneById(tx, id, entity)
+	if err != nil {
 		return nil, err
 	}
-	return identityType, nil
+	if !found {
+		return nil, errors.Errorf("no identity type found with id %v", id)
+	}
+	return entity, nil
 }
 
 func (store *IdentityTypeStoreImpl) LoadOneByName(tx *bbolt.Tx, name string) (*IdentityType, error) {

@@ -21,6 +21,7 @@ import (
 	"github.com/netfoundry/ziti-edge/edge/controller/persistence"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
+	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 	"strconv"
 )
@@ -147,10 +148,12 @@ func (handler *EdgeRouterHandler) HandleListForSession(sessionId string) (*EdgeR
 }
 
 func (handler *EdgeRouterHandler) HandleListForIdentityAndServiceWithTx(tx *bbolt.Tx, identityId, serviceId string, limit *int) (*EdgeRouterListResult, error) {
-
 	service, err := handler.env.GetStores().EdgeService.LoadOneById(tx, serviceId)
 	if err != nil {
 		return nil, err
+	}
+	if service == nil {
+		return nil, errors.Errorf("no service with id %v found", serviceId)
 	}
 
 	query := fmt.Sprintf(`anyOf(edgeRouterPolicies.identities) = "%v"`, identityId)
@@ -164,7 +167,7 @@ func (handler *EdgeRouterHandler) HandleListForIdentityAndServiceWithTx(tx *bbol
 	}
 
 	result := &EdgeRouterListResult{handler: handler}
-	if err = handler.listWithTx(tx, query, result.collectConnected); err != nil {
+	if err = handler.listWithTx(tx, query, result.collect); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -188,20 +191,6 @@ func (result *EdgeRouterListResult) collect(tx *bbolt.Tx, ids []string, queryMet
 			return err
 		}
 		result.EdgeRouters = append(result.EdgeRouters, entity)
-	}
-	return nil
-}
-
-func (result *EdgeRouterListResult) collectConnected(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
-	result.QueryMetaData = *queryMetaData
-	for _, key := range ids {
-		if result.handler.env.IsEdgeRouterOnline(key) {
-			entity, err := result.handler.handleReadInTx(tx, key)
-			if err != nil {
-				return err
-			}
-			result.EdgeRouters = append(result.EdgeRouters, entity)
-		}
 	}
 	return nil
 }

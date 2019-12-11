@@ -107,11 +107,21 @@ func (ctx *TestContext) testEdgeRouterPolicyRoleEvaluation(_ *testing.T) {
 		}
 	}
 
+	// no roles
+	identity := NewIdentity(uuid.New().String(), identityTypeId)
+	ctx.requireCreate(identity)
+	identities = append(identities, identity)
+
 	stringz.Permutations(identityRolesAttrs, func(roles []string) {
 		identity := NewIdentity(uuid.New().String(), identityTypeId, roles...)
 		ctx.requireCreate(identity)
 		identities = append(identities, identity)
 	})
+
+	// no roles
+	edgeRouter := NewEdgeRouter(uuid.New().String())
+	ctx.requireCreate(edgeRouter)
+	edgeRouters = append(edgeRouters, edgeRouter)
 
 	stringz.Permutations(edgeRouterRoleAttrs, func(roles []string) {
 		edgeRouter := NewEdgeRouter(uuid.New().String(), roles...)

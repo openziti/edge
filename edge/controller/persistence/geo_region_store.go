@@ -18,6 +18,7 @@ package persistence
 
 import (
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
+	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
 
@@ -73,11 +74,15 @@ func (store *geoRegionStoreImpl) initializeLinked() {
 }
 
 func (store *geoRegionStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*GeoRegion, error) {
-	geoRegion := &GeoRegion{}
-	if found, err := store.BaseLoadOneById(tx, id, geoRegion); !found || err != nil {
+	entity := &GeoRegion{}
+	found, err := store.BaseLoadOneById(tx, id, entity)
+	if err != nil {
 		return nil, err
 	}
-	return geoRegion, nil
+	if !found {
+		return nil, errors.Errorf("no geo region found with id %v", id)
+	}
+	return entity, nil
 }
 
 func (store *geoRegionStoreImpl) LoadOneByName(tx *bbolt.Tx, name string) (*GeoRegion, error) {

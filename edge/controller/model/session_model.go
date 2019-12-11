@@ -55,9 +55,6 @@ func (entity *Session) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (per
 	if err != nil {
 		return nil, err
 	}
-	if service == nil {
-		return nil, NewFieldError("service not found", "ServiceId", entity.ServiceId)
-	}
 
 	if entity.IsHosting {
 		var found bool

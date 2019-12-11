@@ -22,6 +22,7 @@ import (
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/errorz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
+	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 	"time"
 )
@@ -100,6 +101,13 @@ func (entity *EdgeRouter) SetValues(ctx *boltz.PersistContext) {
 	ctx.SetTimeP(FieldEdgeRouterEnrollmentExpiresAt, entity.EnrollmentExpiresAt)
 	ctx.SetMap(FieldEdgeRouterProtocols, toStringInterfaceMap(entity.EdgeRouterProtocols))
 	ctx.SetStringList(FieldRoleAttributes, entity.RoleAttributes)
+
+	// index change won't fire if we don't have any roles on create, but we need to evaluate
+	// if we match any @any roles
+	if ctx.IsCreate && len(entity.RoleAttributes) == 0 {
+		store := ctx.Store.(*edgeRouterStoreImpl)
+		store.RolesChanged(ctx.Bucket.Tx(), []byte(entity.Id), nil, nil, ctx.Bucket)
+	}
 }
 
 func (entity *EdgeRouter) GetEntityType() string {
@@ -174,8 +182,12 @@ func (store *edgeRouterStoreImpl) initializeLinked() {
 
 func (store *edgeRouterStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*EdgeRouter, error) {
 	entity := &EdgeRouter{}
-	if found, err := store.BaseLoadOneById(tx, id, entity); !found || err != nil {
+	found, err := store.BaseLoadOneById(tx, id, entity)
+	if err != nil {
 		return nil, err
+	}
+	if !found {
+		return nil, errors.Errorf("no edge router found with id %v", id)
 	}
 	return entity, nil
 }
