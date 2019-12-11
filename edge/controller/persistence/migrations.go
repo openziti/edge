@@ -66,6 +66,7 @@ func (m *Migrations) run(mtx *MigrationContext) error {
 	}
 	pfxlog.Logger().Infof("bolt storage at version %v", m.dbVersion)
 	var migrations bool
+	baseVersion := m.dbVersion
 	if m.dbVersion == 0 {
 		migrations = true
 		m.createDefaultData(mtx)
@@ -74,13 +75,17 @@ func (m *Migrations) run(mtx *MigrationContext) error {
 			m.upgradeToV1FromPG(mtx)
 		} else {
 			pfxlog.Logger().Info("no postgres configured, skipping migration from postgres")
-			m.setVersion(2)
 		}
+		m.setVersion(1)
 	}
 
 	if m.dbVersion == 1 {
-		migrations = true
-		m.upgradeToV2FromV1(mtx)
+		// Only want to migrate existing database, if it's a fresh DB, leave it alone
+		if baseVersion == 1 {
+			migrations = true
+			m.upgradeToV2FromV1(mtx)
+		}
+		m.setVersion(2)
 	}
 
 	if migrations {
@@ -118,12 +123,10 @@ func (m *Migrations) upgradeToV1FromPG(mtx *MigrationContext) {
 	if err := upgradeToV1FromPG(mtx); err != nil {
 		m.versionBucket.SetError(err)
 	}
-	m.setVersion(1)
 }
 
 func (m *Migrations) upgradeToV2FromV1(mtx *MigrationContext) {
 	if err := createEdgeRouterPoliciesV2(mtx); err != nil {
 		m.versionBucket.SetError(err)
 	}
-	m.setVersion(2)
 }

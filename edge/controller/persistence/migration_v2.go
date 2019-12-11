@@ -61,14 +61,23 @@ func createEdgeRouterPoliciesV2(mtx *MigrationContext) error {
 		if err != nil {
 			return err
 		}
-		for _, clusterId := range mtx.Stores.EdgeService.GetRelatedEntitiesIdList(mtx.Ctx.Tx(), serviceId, FieldServiceClusters) {
-			cluster, err := mtx.Stores.Cluster.LoadOneById(mtx.Ctx.Tx(), clusterId)
+		clusterIds := mtx.Stores.EdgeService.GetRelatedEntitiesIdList(mtx.Ctx.Tx(), serviceId, FieldServiceClusters)
+		if len(clusterIds) > 0 {
+			cluster, err := mtx.Stores.Cluster.LoadOneById(mtx.Ctx.Tx(), clusterIds[0])
 			if err != nil {
 				return err
 			}
-			service.RoleAttributes = append(service.RoleAttributes, "cluster-"+cluster.Name)
+			service.EdgeRouterRoles = append(service.EdgeRouterRoles, "@cluster-"+cluster.Name)
 			if err = mtx.Stores.EdgeService.Update(mtx.Ctx, service, nil); err != nil {
 				return err
+			}
+		} else if len(clusterIds) > 1 {
+			for _, clusterId := range clusterIds[1:] {
+				edgeRouterIds := mtx.Stores.Cluster.GetRelatedEntitiesIdList(mtx.Ctx.Tx(), clusterId, FieldClusterEdgeRouters)
+				service.EdgeRouterRoles = append(service.EdgeRouterRoles, edgeRouterIds...)
+				if err = mtx.Stores.EdgeService.Update(mtx.Ctx, service, nil); err != nil {
+					return err
+				}
 			}
 		}
 	}

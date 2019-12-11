@@ -170,6 +170,10 @@ func (handler *EdgeRouterHandler) HandleListForIdentityAndServiceWithTx(tx *bbol
 	return result, nil
 }
 
+func (handler *EdgeRouterHandler) HandleCollectServices(id string, collector func(entity BaseModelEntity)) error {
+	return handler.HandleCollectAssociated(id, persistence.FieldEdgeRouterServices, handler.env.GetHandlers().Service, collector)
+}
+
 type EdgeRouterListResult struct {
 	handler     *EdgeRouterHandler
 	EdgeRouters []*EdgeRouter

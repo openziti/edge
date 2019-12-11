@@ -17,9 +17,11 @@
 package routes
 
 import (
+	"fmt"
 	"github.com/netfoundry/ziti-edge/edge/controller/env"
 	"github.com/netfoundry/ziti-edge/edge/controller/internal/permissions"
 	"github.com/netfoundry/ziti-edge/edge/controller/response"
+	"net/http"
 )
 
 func init() {
@@ -42,8 +44,14 @@ func NewEdgeRouterRouter() *EdgeRouterRouter {
 }
 
 func (ir *EdgeRouterRouter) Register(ae *env.AppEnv) {
-	registerCrudRouter(ae, ae.RootRouter, ir.BasePath, ir, permissions.IsAdmin())
+	sr := registerCrudRouter(ae, ae.RootRouter, ir.BasePath, ir, permissions.IsAdmin())
 	registerCrudRouter(ae, ae.RootRouter, ir.BasePathLegacy, ir, permissions.IsAdmin())
+
+	servicesUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameService)
+	servicesListHandler := ae.WrapHandler(ir.ListServices, permissions.IsAdmin())
+
+	sr.HandleFunc(servicesUrl, servicesListHandler).Methods(http.MethodGet)
+	sr.HandleFunc(servicesUrl+"/", servicesListHandler).Methods(http.MethodGet)
 }
 
 func (ir *EdgeRouterRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
@@ -78,4 +86,8 @@ func (ir *EdgeRouterRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 	Patch(rc, ae.Schemes.EdgeRouter.Patch, ir.IdType, apiEntity, func(id string, fields JsonFields) error {
 		return ae.Handlers.EdgeRouter.HandlePatch(apiEntity.ToModel(id), fields)
 	})
+}
+
+func (ir *EdgeRouterRouter) ListServices(ae *env.AppEnv, rc *response.RequestContext) {
+	ListAssociations(ae, rc, ir.IdType, ae.Handlers.EdgeRouter.HandleCollectServices, MapServiceToApiEntity)
 }
