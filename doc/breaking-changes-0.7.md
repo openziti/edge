@@ -3,7 +3,7 @@
 This page discusses the changes that you need to be aware of when migrating your Ziti deployment from version 0.6.x to version 0.7.x
 
 # Theme 
- * Ziti 0.7.0 replaces clusters with role attribute based policies.
+ * Ziti 0.7.0 replaces clusters with role attribute based policies
  * Ziti 0.7.0 takes steps towards consistent terminology for sessions
 
 # Edge Router Policy
@@ -49,7 +49,7 @@ It includes the following new concepts:
      
 ## Model Changes
 ### Role Attributes
-Edge routers and identities now have roleAttributes fields.
+Edge routers and identities now have roleAttributes fields. Edge routers no longer have an associated cluster.
 
 ### Edge Router Policies
 0.7.0 introduces a new model construct, the Edge Router Policy. This entity allows restricting which edge routers identities are allowed to use. An edge router policy has three attributes:
@@ -73,8 +73,8 @@ Services now have a new edgeRouterRoles field. If set, this specifies which edge
 ### Edge Router Access 
 When a service is dialed or bound, which edge routers will be returned?
 
-  * If the service edgeRouterRoles are NOT set, then it will the set of edge routers that the dialing/binding identity has access to 
-  * If the service edgeRouterRoles ARE set, then the it will be the intersection of the edge routers that the service has access to and the edge routers that the identity has access to
+  * If the service edgeRouterRoles are NOT set, then it will be the set of edge routers to which the dialing/binding identity has access 
+  * If the service edgeRouterRoles ARE set, then it will be the intersection of the edge routers to which the service has access and the set of edge routers to which the identity has access
 
 ### Cluster Removal and Migration
 The `/clusters` endpoint has been removed. The bbolt schema version has been bumped to 2. If starting a fresh controller no action will be taken. However, if coming from an existing 0.6 or earlier bbolt database, the following will be done:

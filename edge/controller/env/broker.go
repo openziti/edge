@@ -155,7 +155,7 @@ func (b *Broker) AddEdgeRouter(ch channel2.Channel, edgeRouter *model.EdgeRouter
 	sessionMsg, err := b.getCurrentSessions()
 
 	if err != nil {
-		pfxlog.Logger().WithField("cause", err).Error("could not get current sessions")
+		pfxlog.Logger().WithError(err).Error("could not get current sessions")
 		return
 	}
 
@@ -163,16 +163,16 @@ func (b *Broker) AddEdgeRouter(ch channel2.Channel, edgeRouter *model.EdgeRouter
 
 	if buf, err := proto.Marshal(sessionMsg); err == nil {
 		if err = ch.Send(channel2.NewMessage(ApiSessionAddedType, buf)); err != nil {
-			pfxlog.Logger().WithField("cause", err).Error("error sending session added")
+			pfxlog.Logger().WithError(err).Error("error sending session added")
 		}
 	} else {
-		pfxlog.Logger().WithField("cause", err).Error("error sending session added, could not marshal message content")
+		pfxlog.Logger().WithError(err).Error("error sending session added, could not marshal message content")
 	}
 
 	networkSessionMsg, err := b.getCurrentStateNetworkSessions(edgeRouter.Id)
 
 	if err != nil {
-		pfxlog.Logger().WithField("cause", err).Errorf("could not get current network sessions for edge router id [%s]", edgeRouter.Id)
+		pfxlog.Logger().WithError(err).Errorf("could not get current network sessions for edge router id [%s]", edgeRouter.Id)
 		return
 	}
 
@@ -180,10 +180,10 @@ func (b *Broker) AddEdgeRouter(ch channel2.Channel, edgeRouter *model.EdgeRouter
 
 	if buf, err := proto.Marshal(networkSessionMsg); err == nil {
 		if err = ch.Send(channel2.NewMessage(SessionAddedType, buf)); err != nil {
-			pfxlog.Logger().WithField("cause", err).Error("error sending network session added")
+			pfxlog.Logger().WithError(err).Error("error sending network session added")
 		}
 	} else {
-		pfxlog.Logger().WithField("cause", err).Error("error sending network session added, could not marshal message content")
+		pfxlog.Logger().WithError(err).Error("error sending network session added, could not marshal message content")
 	}
 
 	pfxlog.Logger().Infof("edge router connection finalized and synchronized [%s] [%s]", edgeRouter.Id, edgeRouter.Name)
@@ -288,12 +288,9 @@ func (b *Broker) sendApiSessionUpdates(apiSession *persistence.ApiSession) {
 
 func (b *Broker) sendToAllEdgeRouters(msg *channel2.Message) {
 	b.edgeRouterMap.RangeEdgeRouterEntries(func(edgeRouterEntry *edgeRouterEntry) bool {
-		err := edgeRouterEntry.Channel.Send(msg)
-
-		if err != nil {
-			pfxlog.Logger().WithError(err).Errorf("could send session added message")
+		if err := edgeRouterEntry.Channel.Send(msg); err != nil {
+			pfxlog.Logger().WithError(err).Errorf("could not send session added message")
 		}
-
 		return true
 	})
 }
@@ -308,9 +305,8 @@ func (b *Broker) sendToAllEdgeRoutersForSession(sessionId string, msg *channel2.
 	for _, edgeRouter := range edgeRouterList.EdgeRouters {
 		edgeRouterEntry := b.edgeRouterMap.GetEntry(edgeRouter.Id)
 		if edgeRouterEntry != nil && !edgeRouterEntry.Channel.IsClosed() {
-			err := edgeRouterEntry.Channel.Send(msg)
-			if err != nil {
-				pfxlog.Logger().WithError(err).Errorf("could send session added message")
+			if err := edgeRouterEntry.Channel.Send(msg); err != nil {
+				pfxlog.Logger().WithError(err).Errorf("could not send session added message")
 			}
 		}
 	}
@@ -429,7 +425,7 @@ func (b *Broker) sendSessionDeletes(session *persistence.Session) {
 		msg := channel2.NewMessage(SessionRemovedType, buf)
 		b.sendToAllEdgeRoutersForSession(session.Id, msg)
 	} else {
-		pfxlog.Logger().WithField("cause", err).Error("error sending session removed, could not marshal message content")
+		pfxlog.Logger().WithError(err).Error("error sending session removed, could not marshal message content")
 	}
 }
 
@@ -453,8 +449,7 @@ func (b *Broker) sendSessionCreates(session *persistence.Session) {
 
 	service, err := b.ae.Handlers.Service.HandleRead(session.ServiceId)
 	if err != nil {
-		log := pfxlog.Logger()
-		log.WithField("cause", err).Error("could not send network session added, could not find service")
+		pfxlog.Logger().WithError(err).Error("could not send network session added, could not find service")
 		return
 	}
 
@@ -483,7 +478,7 @@ func (b *Broker) sendSessionCreates(session *persistence.Session) {
 		msg := channel2.NewMessage(SessionAddedType, buf)
 		b.sendToAllEdgeRoutersForSession(session.Id, msg)
 	} else {
-		pfxlog.Logger().WithField("cause", err).Error("error sending network session added, could not marshal message content")
+		pfxlog.Logger().WithError(err).Error("error sending network session added, could not marshal message content")
 	}
 }
 
@@ -709,7 +704,7 @@ func (b *Broker) sendHello(r *network.Router, edgeRouter *model.EdgeRouter, fing
 
 						b.AddEdgeRouter(r.Control, edgeRouter)
 					} else {
-						pfxlog.Logger().WithField("cause", err).Error("could not unmarshal clientHello after serverHello")
+						pfxlog.Logger().WithError(err).Error("could not unmarshal clientHello after serverHello")
 						return
 					}
 				}
@@ -721,7 +716,7 @@ func (b *Broker) sendHello(r *network.Router, edgeRouter *model.EdgeRouter, fing
 							Error("client responded with error after serverHello")
 						return
 					} else {
-						pfxlog.Logger().WithField("cause", err).Error("could not unmarshal error from client after serverHello")
+						pfxlog.Logger().WithError(err).Error("could not unmarshal error from client after serverHello")
 						return
 					}
 
@@ -732,7 +727,7 @@ func (b *Broker) sendHello(r *network.Router, edgeRouter *model.EdgeRouter, fing
 			}
 
 		} else {
-			pfxlog.Logger().WithField("cause", err).Error("could not send serverHello message for edge router")
+			pfxlog.Logger().WithError(err).Error("could not send serverHello message for edge router")
 			return
 		}
 	}
