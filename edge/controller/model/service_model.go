@@ -93,5 +93,7 @@ func (entity *Service) FillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.BaseEnt
 	entity.DnsHostname = boltService.DnsHostname
 	entity.DnsPort = boltService.DnsPort
 	entity.EdgeRouterRoles = boltService.EdgeRouterRoles
+	entity.EgressRouter = boltService.Egress
+	entity.EndpointAddress = boltService.EndpointAddress
 	return nil
 }

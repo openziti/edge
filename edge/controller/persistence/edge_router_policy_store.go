@@ -5,7 +5,6 @@ import (
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
-	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 	"sort"
 )
@@ -110,12 +109,8 @@ func (store *edgeRouterPolicyStoreImpl) initializeLinked() {
 
 func (store *edgeRouterPolicyStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*EdgeRouterPolicy, error) {
 	entity := &EdgeRouterPolicy{}
-	found, err := store.BaseLoadOneById(tx, id, entity)
-	if err != nil {
+	if err := store.baseLoadOneById(tx, id, entity); err != nil {
 		return nil, err
-	}
-	if !found {
-		return nil, errors.Errorf("no edge router policy found with id %v", id)
 	}
 	return entity, nil
 }

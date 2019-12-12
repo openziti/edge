@@ -18,10 +18,8 @@ package model
 
 import (
 	"fmt"
-	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/edge/controller/util"
-	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 	"strings"
@@ -51,13 +49,19 @@ func (handler *ServiceHandler) HandleCreate(service *Service) (string, error) {
 }
 
 func (handler *ServiceHandler) HandleRead(id string) (*Service, error) {
-	var service *Service
-	err := handler.GetDb().View(func(tx *bbolt.Tx) error {
-		var err error
-		service, err = handler.readService(tx, id)
-		return err
-	})
-	return service, err
+	entity := &Service{}
+	if err := handler.read(id, entity); err != nil {
+		return nil, err
+	}
+	return entity, nil
+}
+
+func (handler *ServiceHandler) handleReadInTx(tx *bbolt.Tx, id string) (*Service, error) {
+	entity := &Service{}
+	if err := handler.readInTx(tx, id, entity); err != nil {
+		return nil, err
+	}
+	return entity, nil
 }
 
 func (handler *ServiceHandler) HandleReadForIdentity(id string, identityId string) (*Service, error) {
@@ -75,43 +79,9 @@ func (handler *ServiceHandler) HandleReadForIdentity(id string, identityId strin
 		return nil, err
 	}
 	if len(result.Services) == 0 {
-		return nil, util.RecordNotFoundError{}
+		return nil, util.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
 	}
 	return result.Services[0], nil
-}
-
-func (handler *ServiceHandler) readService(tx *bbolt.Tx, id string) (*Service, error) {
-	fabricService, err := handler.GetDbProvider().GetServiceStore().LoadOneById(tx, id)
-
-	if err != nil {
-		pfxlog.Logger().WithField("id", id).WithError(err).Error("could not load fabric service by id")
-		return nil, err
-	}
-
-	if fabricService == nil {
-		return nil, util.RecordNotFoundError{}
-	}
-
-	edgeService, err := handler.env.GetStores().EdgeService.LoadOneById(tx, id)
-	if err != nil {
-		pfxlog.Logger().WithField("id", id).WithError(err).Error("could not load edge service by id")
-		return nil, err
-	}
-	if edgeService == nil {
-		return nil, util.RecordNotFoundError{}
-	}
-	return handler.createServiceApiModel(tx, fabricService, edgeService)
-}
-
-func (handler *ServiceHandler) createServiceApiModel(tx *bbolt.Tx, fabricService *network.Service, edgeService *persistence.EdgeService) (*Service, error) {
-	var service Service
-	service.Id = fabricService.Id
-	service.EgressRouter = fabricService.Egress
-	service.EndpointAddress = fabricService.EndpointAddress
-	if err := service.FillFrom(handler, tx, edgeService); err != nil {
-		return nil, err
-	}
-	return &service, nil
 }
 
 func (handler *ServiceHandler) HandleDelete(id string) error {
@@ -141,7 +111,7 @@ type ServiceListResult struct {
 func (result *ServiceListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
-		service, err := result.handler.readService(tx, key)
+		service, err := result.handler.handleReadInTx(tx, key)
 		if err != nil {
 			return err
 		}

@@ -22,7 +22,6 @@ import (
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/errorz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
-	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
 
@@ -164,12 +163,8 @@ func (store *identityStoreImpl) initializeLinked() {
 
 func (store *identityStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*Identity, error) {
 	entity := &Identity{}
-	found, err := store.BaseLoadOneById(tx, id, entity)
-	if err != nil {
+	if err := store.baseLoadOneById(tx, id, entity); err != nil {
 		return nil, err
-	}
-	if !found {
-		return nil, errors.Errorf("no identity found with id %v", id)
 	}
 	return entity, nil
 }

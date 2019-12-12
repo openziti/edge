@@ -97,12 +97,8 @@ func (store *clusterStoreImpl) initializeLinked() {
 
 func (store *clusterStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*Cluster, error) {
 	entity := &Cluster{}
-	found, err := store.BaseLoadOneById(tx, id, entity)
-	if err != nil {
+	if err := store.baseLoadOneById(tx, id, entity); err != nil {
 		return nil, err
-	}
-	if !found {
-		return nil, errors.Errorf("no cluster found with id %v", id)
 	}
 	return entity, nil
 }

@@ -54,7 +54,7 @@ func (handler *ApiSessionHandler) HandleRead(id string) (*ApiSession, error) {
 func (handler *ApiSessionHandler) HandleReadByToken(token string) (*ApiSession, error) {
 	modelApiSession := &ApiSession{}
 	tokenIndex := handler.env.GetStores().ApiSession.GetTokenIndex()
-	if err := handler.readWithIndex([]byte(token), tokenIndex, modelApiSession); err != nil {
+	if err := handler.readWithIndex("token", []byte(token), tokenIndex, modelApiSession); err != nil {
 		return nil, err
 	}
 	return modelApiSession, nil

@@ -117,7 +117,7 @@ func (handler *IdentityTypeHandler) HandleList(queryOptions *QueryOptions) (*Ide
 func (handler *IdentityTypeHandler) HandleReadByName(name string) (*IdentityType, error) {
 	modelIdentityType := &IdentityType{}
 	nameIndex := handler.env.GetStores().IdentityType.GetNameIndex()
-	if err := handler.readWithIndex([]byte(name), nameIndex, modelIdentityType); err != nil {
+	if err := handler.readWithIndex("name", []byte(name), nameIndex, modelIdentityType); err != nil {
 		return nil, err
 	}
 	return modelIdentityType, nil

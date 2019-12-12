@@ -20,7 +20,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
-	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
 
@@ -107,12 +106,8 @@ func (store *apiSessionStoreImpl) initializeLinked() {
 
 func (store *apiSessionStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*ApiSession, error) {
 	entity := &ApiSession{}
-	found, err := store.BaseLoadOneById(tx, id, entity)
-	if err != nil {
+	if err := store.baseLoadOneById(tx, id, entity); err != nil {
 		return nil, err
-	}
-	if !found {
-		return nil, errors.Errorf("no api session found with id %v", id)
 	}
 	return entity, nil
 }

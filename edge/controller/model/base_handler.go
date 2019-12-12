@@ -170,7 +170,7 @@ func (handler *baseHandler) updateGeneral(modelEntity BaseModelEntity, checker b
 			return err
 		}
 		if !found {
-			return util.RecordNotFoundError{}
+			return util.NewNotFoundError(handler.GetStore().GetSingularEntityType(), "id", modelEntity.GetId())
 		}
 		var boltEntity persistence.BaseEdgeEntity
 		if patch {
@@ -210,22 +210,22 @@ func (handler *baseHandler) readInTx(tx *bbolt.Tx, id string, modelEntity BaseMo
 		return err
 	}
 	if !found {
-		return util.RecordNotFoundError{}
+		return util.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
 	}
 
 	return modelEntity.FillFrom(handler.impl, tx, boltEntity)
 }
 
-func (handler *baseHandler) readWithIndex(key []byte, index boltz.ReadIndex, modelEntity BaseModelEntity) error {
+func (handler *baseHandler) readWithIndex(name string, key []byte, index boltz.ReadIndex, modelEntity BaseModelEntity) error {
 	return handler.GetDb().View(func(tx *bbolt.Tx) error {
-		return handler.readInTxWithIndex(tx, key, index, modelEntity)
+		return handler.readInTxWithIndex(name, tx, key, index, modelEntity)
 	})
 }
 
-func (handler *baseHandler) readInTxWithIndex(tx *bbolt.Tx, key []byte, index boltz.ReadIndex, modelEntity BaseModelEntity) error {
+func (handler *baseHandler) readInTxWithIndex(name string, tx *bbolt.Tx, key []byte, index boltz.ReadIndex, modelEntity BaseModelEntity) error {
 	id := index.Read(tx, key)
 	if id == nil {
-		return util.RecordNotFoundError{}
+		return util.NewNotFoundError(handler.store.GetSingularEntityType(), name, string(key))
 	}
 	return handler.readInTx(tx, string(id), modelEntity)
 }
@@ -245,7 +245,7 @@ func (handler *baseHandler) delete(id string, beforeDelete func(tx *bbolt.Tx, id
 	return handler.GetDb().Update(func(tx *bbolt.Tx) error {
 		ctx := boltz.NewMutateContext(tx)
 		if !handler.GetStore().IsEntityPresent(tx, id) {
-			return util.RecordNotFoundError{}
+			return util.NewNotFoundError(handler.GetStore().GetSingularEntityType(), "id", id)
 		}
 
 		if beforeDelete != nil {

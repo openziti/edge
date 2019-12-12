@@ -116,7 +116,7 @@ func (handler *AppwanHandler) HandleCollectServices(id string, collector func(en
 		}
 		association := handler.store.GetLinkCollection(persistence.FieldAppwanServices)
 		for _, serviceId := range association.GetLinks(tx, id) {
-			service, err := handler.env.GetHandlers().Service.readService(tx, serviceId)
+			service, err := handler.env.GetHandlers().Service.handleReadInTx(tx, serviceId)
 			if err != nil {
 				return err
 			}

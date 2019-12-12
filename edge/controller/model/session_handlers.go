@@ -60,7 +60,7 @@ func (handler *SessionHandler) HandleReadForIdentity(id string, identityId strin
 		return nil, err
 	}
 	if len(result.Sessions) == 0 {
-		return nil, util.RecordNotFoundError{}
+		return nil, util.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
 	}
 	return result.Sessions[0], nil
 }
@@ -87,7 +87,7 @@ func (handler *SessionHandler) HandleDeleteForIdentity(id, identityId string) er
 		return err
 	}
 	if session == nil {
-		return util.RecordNotFoundError{}
+		return util.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
 	}
 	return handler.delete(id, nil, nil)
 }

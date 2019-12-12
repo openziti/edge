@@ -164,12 +164,8 @@ func (store *sessionStoreImpl) initializeLinked() {
 
 func (store *sessionStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*Session, error) {
 	entity := &Session{}
-	found, err := store.BaseLoadOneById(tx, id, entity)
-	if err != nil {
+	if err := store.baseLoadOneById(tx, id, entity); err != nil {
 		return nil, err
-	}
-	if !found {
-		return nil, errors.Errorf("no session found with id %v", id)
 	}
 	return entity, nil
 }
