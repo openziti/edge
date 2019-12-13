@@ -177,6 +177,10 @@ func (handler *EdgeRouterHandler) HandleCollectServices(id string, collector fun
 	return handler.HandleCollectAssociated(id, persistence.FieldEdgeRouterServices, handler.env.GetHandlers().Service, collector)
 }
 
+func (handler *EdgeRouterHandler) HandleCollectEdgeRouterPolicies(id string, collector func(entity BaseModelEntity)) error {
+	return handler.HandleCollectAssociated(id, persistence.FieldEdgeRouterEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
+}
+
 type EdgeRouterListResult struct {
 	handler     *EdgeRouterHandler
 	EdgeRouters []*EdgeRouter

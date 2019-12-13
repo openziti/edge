@@ -184,3 +184,7 @@ func path(path ...string) []string {
 	}
 	return path
 }
+
+func s(vals ...string) []string {
+	return vals
+}

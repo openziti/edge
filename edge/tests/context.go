@@ -21,12 +21,14 @@ package tests
 import (
 	cryptoTls "crypto/tls"
 	"fmt"
+	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"gopkg.in/resty.v1"
 	"net"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"os"
+	"sort"
 	"testing"
 	"time"
 
@@ -258,10 +260,30 @@ func (ctx *TestContext) requireCreateIdentity(name string, password string, isAd
 	return id
 }
 
+func (ctx *TestContext) requireNewEdgeRouter(roleAttributes ...string) *testEdgeRouter {
+	edgeRouter := newTestEdgeRouter(roleAttributes...)
+	ctx.requireCreateEntity(edgeRouter)
+	return edgeRouter
+}
+
+func (ctx *TestContext) requireNewEdgeRouterPolicy(edgeRouterRoles, identityRoles []string) *testEdgeRouterPolicy {
+	edgeRouterPolicy := newTestEdgeRouterPolicy(edgeRouterRoles, identityRoles)
+	ctx.requireCreateEntity(edgeRouterPolicy)
+	return edgeRouterPolicy
+}
+
+func (ctx *TestContext) requireNewIdentity(isAdmin bool, roleAttributes ...string) *testIdentity {
+	identity := newTestIdentity(isAdmin, roleAttributes...)
+	ctx.requireCreateEntity(identity)
+	return identity
+}
+
 func (ctx *TestContext) requireCreateEntity(entity testEntity) string {
 	httpStatus, body := ctx.createEntity(entity)
 	ctx.req.Equal(http.StatusCreated, httpStatus)
-	return ctx.getEntityId(body)
+	id := ctx.getEntityId(body)
+	entity.setId(id)
+	return id
 }
 
 func (ctx *TestContext) requireDeleteEntity(entity testEntity) {
@@ -368,6 +390,54 @@ func (ctx *TestContext) query(token, url string) (int, []byte) {
 func (ctx *TestContext) requireAddAssociation(url string, ids ...string) {
 	httpStatus, _ := ctx.addAssociation(url, ids...)
 	ctx.req.Equal(http.StatusOK, httpStatus)
+}
+
+func (ctx *TestContext) validateAssociations(entity testEntity, childType string, children ...testEntity) {
+	var ids []string
+	for _, child := range children {
+		ids = append(ids, child.getId())
+	}
+	ctx.validateAssociationsAt(fmt.Sprintf("%v/%v/%v", entity.getEntityType(), entity.getId(), childType), ids...)
+}
+
+func (ctx *TestContext) validateAssociationContains(entity testEntity, childType string, children ...testEntity) {
+	var ids []string
+	for _, child := range children {
+		ids = append(ids, child.getId())
+	}
+	ctx.validateAssociationsAtContains(fmt.Sprintf("%v/%v/%v", entity.getEntityType(), entity.getId(), childType), ids...)
+}
+
+func (ctx *TestContext) validateAssociationsAt(url string, ids ...string) {
+	result := ctx.requireQuery(ctx.adminSessionId, url)
+	data := ctx.requirePath(result, "data")
+	children, err := data.Children()
+
+	var actualIds []string
+	ctx.req.NoError(err)
+	for _, child := range children {
+		actualIds = append(actualIds, child.S("id").Data().(string))
+	}
+
+	sort.Strings(ids)
+	sort.Strings(actualIds)
+	ctx.req.Equal(ids, actualIds)
+}
+
+func (ctx *TestContext) validateAssociationsAtContains(url string, ids ...string) {
+	result := ctx.requireQuery(ctx.adminSessionId, url)
+	data := ctx.requirePath(result, "data")
+	children, err := data.Children()
+
+	var actualIds []string
+	ctx.req.NoError(err)
+	for _, child := range children {
+		actualIds = append(actualIds, child.S("id").Data().(string))
+	}
+
+	for _, id := range ids {
+		ctx.req.True(stringz.Contains(actualIds, id), "%+v should contain %v", actualIds, id)
+	}
 }
 
 func (ctx *TestContext) addAssociation(url string, ids ...string) (int, []byte) {

@@ -52,6 +52,12 @@ func (ir *EdgeRouterRouter) Register(ae *env.AppEnv) {
 
 	sr.HandleFunc(servicesUrl, servicesListHandler).Methods(http.MethodGet)
 	sr.HandleFunc(servicesUrl+"/", servicesListHandler).Methods(http.MethodGet)
+
+	edgeRouterPolicyUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameEdgeRouterPolicy)
+	edgeRouterPoliciesListHandler := ae.WrapHandler(ir.ListEdgeRouterPolicies, permissions.IsAdmin())
+
+	sr.HandleFunc(edgeRouterPolicyUrl, edgeRouterPoliciesListHandler).Methods(http.MethodGet)
+	sr.HandleFunc(edgeRouterPolicyUrl+"/", edgeRouterPoliciesListHandler).Methods(http.MethodGet)
 }
 
 func (ir *EdgeRouterRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
@@ -90,4 +96,8 @@ func (ir *EdgeRouterRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 
 func (ir *EdgeRouterRouter) ListServices(ae *env.AppEnv, rc *response.RequestContext) {
 	ListAssociations(ae, rc, ir.IdType, ae.Handlers.EdgeRouter.HandleCollectServices, MapServiceToApiEntity)
+}
+
+func (ir *EdgeRouterRouter) ListEdgeRouterPolicies(ae *env.AppEnv, rc *response.RequestContext) {
+	ListAssociations(ae, rc, ir.IdType, ae.Handlers.EdgeRouter.HandleCollectEdgeRouterPolicies, MapEdgeRouterPolicyToApiEntity)
 }
