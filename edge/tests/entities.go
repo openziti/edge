@@ -89,6 +89,7 @@ type testService struct {
 	endpointAddress string
 	hostIds         []string
 	edgeRouterRoles []string
+	roleAttributes  []string
 	tags            map[string]interface{}
 }
 
@@ -112,6 +113,7 @@ func (entity *testService) toJson(create bool, ctx *TestContext) string {
 	ctx.setJsonValue(entityData, entity.dnsHostname, "dns", "hostname")
 	ctx.setJsonValue(entityData, entity.dnsPort, "dns", "port")
 	ctx.setJsonValue(entityData, entity.edgeRouterRoles, "edgeRouterRoles")
+	ctx.setJsonValue(entityData, entity.roleAttributes, "roleAttributes")
 	if create {
 		if len(entity.hostIds) > 0 {
 			ctx.setJsonValue(entityData, entity.hostIds, "hostIds")
@@ -138,6 +140,9 @@ func (entity *testService) validate(ctx *TestContext, c *gabs.Container) {
 
 	sort.Strings(entity.edgeRouterRoles)
 	ctx.pathEqualsStringSlice(c, entity.edgeRouterRoles, path("edgeRouterRoles"))
+
+	sort.Strings(entity.roleAttributes)
+	ctx.pathEqualsStringSlice(c, entity.roleAttributes, path("roleAttributes"))
 }
 
 func newTestIdentity(isAdmin bool, roleAttributes ...string) *testIdentity {
@@ -294,5 +299,61 @@ func (entity *testEdgeRouterPolicy) validate(ctx *TestContext, c *gabs.Container
 	ctx.pathEqualsStringSlice(c, entity.edgeRouterRoles, path("edgeRouterRoles"))
 	sort.Strings(entity.identityRoles)
 	ctx.pathEqualsStringSlice(c, entity.identityRoles, path("identityRoles"))
+	ctx.pathEquals(c, entity.tags, path("tags"))
+}
+
+func newTestServicePolicy(policyType string, serviceRoles, identityRoles []string) *testServicePolicy {
+	return &testServicePolicy{
+		name:          uuid.New().String(),
+		policyType:    policyType,
+		serviceRoles:  serviceRoles,
+		identityRoles: identityRoles,
+	}
+}
+
+type testServicePolicy struct {
+	id            string
+	name          string
+	policyType    string
+	identityRoles []string
+	serviceRoles  []string
+	tags          map[string]interface{}
+}
+
+func (entity *testServicePolicy) getId() string {
+	return entity.id
+}
+
+func (entity *testServicePolicy) setId(id string) {
+	entity.id = id
+}
+
+func (entity *testServicePolicy) getEntityType() string {
+	return "service-policies"
+}
+
+func (entity *testServicePolicy) toJson(_ bool, ctx *TestContext) string {
+	entityData := gabs.New()
+	ctx.setJsonValue(entityData, entity.name, "name")
+	ctx.setJsonValue(entityData, entity.policyType, "type")
+	ctx.setJsonValue(entityData, entity.identityRoles, "identityRoles")
+	ctx.setJsonValue(entityData, entity.serviceRoles, "serviceRoles")
+
+	if len(entity.tags) > 0 {
+		ctx.setJsonValue(entityData, entity.tags, "tags")
+	}
+	return entityData.String()
+}
+
+func (entity *testServicePolicy) validate(ctx *TestContext, c *gabs.Container) {
+	if entity.tags == nil {
+		entity.tags = map[string]interface{}{}
+	}
+	ctx.pathEquals(c, entity.name, path("name"))
+	ctx.pathEquals(c, entity.policyType, path("type"))
+	sort.Strings(entity.identityRoles)
+	ctx.pathEqualsStringSlice(c, entity.identityRoles, path("identityRoles"))
+	sort.Strings(entity.serviceRoles)
+	ctx.pathEqualsStringSlice(c, entity.serviceRoles, path("serviceRoles"))
 	ctx.pathEquals(c, entity.tags, path("tags"))
 }

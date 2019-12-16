@@ -389,3 +389,7 @@ func (handler *IdentityHandler) HandleCreateWithAuthenticator(identity *Identity
 func (handler *IdentityHandler) HandleCollectEdgeRouterPolicies(id string, collector func(entity BaseModelEntity)) error {
 	return handler.HandleCollectAssociated(id, persistence.EntityTypeEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
 }
+
+func (handler *IdentityHandler) HandleCollectServicePolicies(id string, collector func(entity BaseModelEntity)) error {
+	return handler.HandleCollectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
+}

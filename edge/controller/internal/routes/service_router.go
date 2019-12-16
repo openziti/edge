@@ -92,6 +92,12 @@ func (ir *ServiceRouter) registerHostingIdentitiesHandlers(ae *env.AppEnv, sr *m
 
 	sr.HandleFunc(urlWithSlashWithSubId, removeHandler).Methods(http.MethodDelete)
 	sr.HandleFunc(urlWithOutSlashWithSubId, removeHandler).Methods(http.MethodDelete)
+
+	servicePolicyUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameServicePolicy)
+	servicePoliciesListHandler := ae.WrapHandler(ir.ListServicePolicies, permissions.IsAdmin())
+
+	sr.HandleFunc(servicePolicyUrl, servicePoliciesListHandler).Methods(http.MethodGet)
+	sr.HandleFunc(servicePolicyUrl+"/", servicePoliciesListHandler).Methods(http.MethodGet)
 }
 
 func (ir *ServiceRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
@@ -168,4 +174,8 @@ func (ir *ServiceRouter) RemoveHostingIdentity(ae *env.AppEnv, rc *response.Requ
 
 func (ir *ServiceRouter) SetHostingIdentities(ae *env.AppEnv, rc *response.RequestContext) {
 	UpdateAssociationsFor(ae, rc, ir.IdType, ae.GetStores().EdgeService, model.AssociationsActionSet, persistence.FieldServiceHostingIdentities)
+}
+
+func (ir *ServiceRouter) ListServicePolicies(ae *env.AppEnv, rc *response.RequestContext) {
+	ListAssociations(ae, rc, ir.IdType, ae.Handlers.Service.HandleCollectServicePolicies, MapServicePolicyToApiEntity)
 }

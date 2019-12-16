@@ -160,3 +160,7 @@ func (handler *ServiceHandler) HandleCollectEdgeRouters(id string, collector fun
 func (handler *ServiceHandler) HandleCollectHostIds(id string, collector func(entity BaseModelEntity)) error {
 	return handler.HandleCollectAssociated(id, persistence.FieldServiceHostingIdentities, handler.env.GetHandlers().Identity, collector)
 }
+
+func (handler *ServiceHandler) HandleCollectServicePolicies(id string, collector func(entity BaseModelEntity)) error {
+	return handler.HandleCollectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
+}

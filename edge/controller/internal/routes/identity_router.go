@@ -55,6 +55,12 @@ func (ir *IdentityRouter) Register(ae *env.AppEnv) {
 
 	sr.HandleFunc(edgeRouterPolicyUrl, edgeRouterPoliciesListHandler).Methods(http.MethodGet)
 	sr.HandleFunc(edgeRouterPolicyUrl+"/", edgeRouterPoliciesListHandler).Methods(http.MethodGet)
+
+	servicePolicyUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameServicePolicy)
+	servicePoliciesListHandler := ae.WrapHandler(ir.ListServicePolicies, permissions.IsAdmin())
+
+	sr.HandleFunc(servicePolicyUrl, servicePoliciesListHandler).Methods(http.MethodGet)
+	sr.HandleFunc(servicePolicyUrl+"/", servicePoliciesListHandler).Methods(http.MethodGet)
 }
 
 func detailCurrentUser(ae *env.AppEnv, rc *response.RequestContext) {
@@ -108,4 +114,8 @@ func (ir *IdentityRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 
 func (ir *IdentityRouter) ListEdgeRouterPolicies(ae *env.AppEnv, rc *response.RequestContext) {
 	ListAssociations(ae, rc, ir.IdType, ae.Handlers.Identity.HandleCollectEdgeRouterPolicies, MapEdgeRouterPolicyToApiEntity)
+}
+
+func (ir *IdentityRouter) ListServicePolicies(ae *env.AppEnv, rc *response.RequestContext) {
+	ListAssociations(ae, rc, ir.IdType, ae.Handlers.Identity.HandleCollectServicePolicies, MapServicePolicyToApiEntity)
 }

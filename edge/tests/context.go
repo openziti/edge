@@ -260,10 +260,23 @@ func (ctx *TestContext) requireCreateIdentity(name string, password string, isAd
 	return id
 }
 
+func (ctx *TestContext) requireNewService(roleAttributes ...string) *testService {
+	service := ctx.newTestService()
+	service.roleAttributes = roleAttributes
+	ctx.requireCreateEntity(service)
+	return service
+}
+
 func (ctx *TestContext) requireNewEdgeRouter(roleAttributes ...string) *testEdgeRouter {
 	edgeRouter := newTestEdgeRouter(roleAttributes...)
 	ctx.requireCreateEntity(edgeRouter)
 	return edgeRouter
+}
+
+func (ctx *TestContext) requireNewServicePolicy(policyType string, serviceRoles, identityRoles []string) *testServicePolicy {
+	servicePolicy := newTestServicePolicy(policyType, serviceRoles, identityRoles)
+	ctx.requireCreateEntity(servicePolicy)
+	return servicePolicy
 }
 
 func (ctx *TestContext) requireNewEdgeRouterPolicy(edgeRouterRoles, identityRoles []string) *testEdgeRouterPolicy {

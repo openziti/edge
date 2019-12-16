@@ -147,6 +147,7 @@ type Schemes struct {
 	NetworkSession   *BasicEntitySchema
 	Policy           *BasicEntitySchema
 	Service          *BasicEntitySchema
+	ServicePolicy    *BasicEntitySchema
 	FabricConfigs    *FabricConfigSchemas
 }
 

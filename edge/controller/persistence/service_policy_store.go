@@ -14,6 +14,9 @@ const (
 	FieldServicePolicyIdentityRoles = "identityRoles"
 	FieldServicePolicyServiceRoles  = "serviceRoles"
 
+	PolicyTypeDialName = "Dial"
+	PolicyTypeBindName = "Bind"
+
 	PolicyTypeInvalid int32 = iota
 	PolicyTypeDial
 	PolicyTypeBind

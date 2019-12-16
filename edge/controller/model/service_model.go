@@ -35,6 +35,7 @@ type Service struct {
 	EndpointAddress string   `json:"endpointAddress"`
 	HostIds         []string `json:"hostIds"`
 	EdgeRouterRoles []string `json:"edgeRouterRoles"`
+	RoleAttributes  []string `json:"roleAttributes"`
 }
 
 func (entity *Service) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (persistence.BaseEdgeEntity, error) {
@@ -65,6 +66,7 @@ func (entity *Service) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (per
 		DnsPort:          entity.DnsPort,
 		HostIds:          entity.HostIds,
 		EdgeRouterRoles:  entity.EdgeRouterRoles,
+		RoleAttributes:   entity.RoleAttributes,
 	}
 
 	return edgeService, nil
@@ -95,5 +97,6 @@ func (entity *Service) FillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.BaseEnt
 	entity.EdgeRouterRoles = boltService.EdgeRouterRoles
 	entity.EgressRouter = boltService.Egress
 	entity.EndpointAddress = boltService.EndpointAddress
+	entity.RoleAttributes = boltService.RoleAttributes
 	return nil
 }

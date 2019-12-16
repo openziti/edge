@@ -40,6 +40,7 @@ type ServiceApiCreate struct {
 	EgressRouter    *string                `json:"egressRouter"`
 	EndpointAddress *string                `json:"endpointAddress"`
 	EdgeRouterRoles []string               `json:"edgeRouterRoles"`
+	RoleAttributes  []string               `json:"roleAttributes"`
 }
 
 // DnsHostname is used by deepcopy to copy the dnsHostname value into the target struct
@@ -67,6 +68,7 @@ func (i *ServiceApiCreate) ToModel() *model.Service {
 	result.DnsPort = i.DnsPort()
 	result.EdgeRouterRoles = i.EdgeRouterRoles
 	result.HostIds = i.HostIds
+	result.RoleAttributes = i.RoleAttributes
 	result.Tags = i.Tags
 	return result
 }
@@ -78,6 +80,7 @@ type ServiceApiUpdate struct {
 	EgressRouter    *string                `json:"egressRouter"`
 	EndpointAddress *string                `json:"endpointAddress"`
 	EdgeRouterRoles []string               `json:"edgeRouterRoles"`
+	RoleAttributes  []string               `json:"roleAttributes"`
 }
 
 func (i *ServiceApiUpdate) DnsHostname() string {
@@ -104,6 +107,7 @@ func (i *ServiceApiUpdate) ToModel(id string) *model.Service {
 	result.DnsPort = i.DnsPort()
 	result.Tags = i.Tags
 	result.EdgeRouterRoles = i.EdgeRouterRoles
+	result.RoleAttributes = i.RoleAttributes
 	return result
 }
 
