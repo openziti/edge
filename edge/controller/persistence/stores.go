@@ -37,7 +37,8 @@ type Stores struct {
 	Identity         IdentityStore
 	IdentityType     IdentityTypeStore
 	Session          SessionStore
-	ServiceConfigs   ServiceConfigsStore
+	ServiceConfig    ServiceConfigsStore
+	ServicePolicy    ServicePolicyStore
 	Enrollment       EnrollmentStore
 	Authenticator    AuthenticatorStore
 
@@ -67,7 +68,8 @@ type stores struct {
 	geoRegion        *geoRegionStoreImpl
 	identity         *identityStoreImpl
 	identityType     *IdentityTypeStoreImpl
-	serviceConfigs   *serviceConfigsStoreImpl
+	serviceConfig    *serviceConfigsStoreImpl
+	servicePolicy    *servicePolicyStoreImpl
 	session          *sessionStoreImpl
 	enrollment       *enrollmentStoreImpl
 	authenticator    *authenticatorStoreImpl
@@ -93,7 +95,8 @@ func NewBoltStores(dbProvider DbProvider) (*Stores, error) {
 	internalStores.identityType = newIdentityTypeStore(internalStores)
 	internalStores.enrollment = newEnrollmentStore(internalStores)
 	internalStores.authenticator = newAuthenticatorStore(internalStores)
-	internalStores.serviceConfigs = newServiceConfigsStore(internalStores)
+	internalStores.serviceConfig = newServiceConfigsStore(internalStores)
+	internalStores.servicePolicy = newServicePolicyStore(internalStores)
 	internalStores.session = newSessionStore(internalStores)
 
 	externalStores := &Stores{
@@ -110,7 +113,8 @@ func NewBoltStores(dbProvider DbProvider) (*Stores, error) {
 		GeoRegion:        internalStores.geoRegion,
 		Identity:         internalStores.identity,
 		IdentityType:     internalStores.identityType,
-		ServiceConfigs:   internalStores.serviceConfigs,
+		ServiceConfig:    internalStores.serviceConfig,
+		ServicePolicy:    internalStores.servicePolicy,
 		Session:          internalStores.session,
 		Authenticator:    internalStores.authenticator,
 		Enrollment:       internalStores.enrollment,
@@ -118,18 +122,20 @@ func NewBoltStores(dbProvider DbProvider) (*Stores, error) {
 
 	externalStores.storeList = []Store{
 		internalStores.apiSession,
+		internalStores.authenticator,
 		internalStores.appwan,
 		internalStores.ca,
 		internalStores.cluster,
 		internalStores.edgeRouter,
 		internalStores.edgeRouterPolicy,
 		internalStores.edgeService,
+		internalStores.enrollment,
 		internalStores.geoRegion,
 		internalStores.identity,
 		internalStores.identityType,
 		internalStores.session,
-		internalStores.authenticator,
-		internalStores.enrollment,
+		internalStores.serviceConfig,
+		internalStores.servicePolicy,
 	}
 
 	err := dbProvider.GetDb().Update(func(tx *bbolt.Tx) error {

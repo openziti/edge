@@ -25,7 +25,6 @@ import (
 
 const (
 	FieldApiSessionIdentity = "identity"
-	FieldApiSessionSessions = "sessions"
 	FieldApiSessionToken    = "token"
 )
 
@@ -97,7 +96,7 @@ func (store *apiSessionStoreImpl) initializeLocal() {
 	symbolToken := store.AddSymbol(FieldApiSessionToken, ast.NodeTypeString)
 	store.indexToken = store.AddUniqueIndex(symbolToken)
 	store.symbolIdentity = store.AddFkSymbol(FieldApiSessionIdentity, store.stores.identity)
-	store.symbolSessions = store.AddFkSetSymbol(FieldApiSessionSessions, store.stores.session)
+	store.symbolSessions = store.AddFkSetSymbol(EntityTypeSessions, store.stores.session)
 }
 
 func (store *apiSessionStoreImpl) initializeLinked() {
@@ -129,7 +128,7 @@ func (store *apiSessionStoreImpl) LoadOneByQuery(tx *bbolt.Tx, query string) (*A
 }
 
 func (store *apiSessionStoreImpl) DeleteById(ctx boltz.MutateContext, id string) error {
-	for _, sessionId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, FieldApiSessionSessions) {
+	for _, sessionId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, EntityTypeSessions) {
 		if err := store.stores.session.DeleteById(ctx, sessionId); err != nil {
 			return err
 		}

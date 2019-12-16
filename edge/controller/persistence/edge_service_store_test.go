@@ -296,7 +296,7 @@ func (ctx *TestContext) testServiceEdgeRouterRoleEvaluation(_ *testing.T) {
 
 	var edgeRouters []*EdgeRouter
 	for i := 0; i < 5; i++ {
-		edgeRouter := NewEdgeRouter(uuid.New().String())
+		edgeRouter := newEdgeRouter(uuid.New().String())
 		ctx.requireCreate(edgeRouter)
 		edgeRouters = append(edgeRouters, edgeRouter)
 	}
@@ -312,7 +312,7 @@ func (ctx *TestContext) testServiceEdgeRouterRoleEvaluation(_ *testing.T) {
 	services := ctx.createServiceWithEdgeRouterLimits(edgeRouterRoles, edgeRouters, true)
 
 	for i := 0; i < 9; i++ {
-		relatedEdgeRouters := ctx.getRelatedIds(services[i], FieldServiceEdgeRouters)
+		relatedEdgeRouters := ctx.getRelatedIds(services[i], EntityTypeEdgeRouters)
 		if i == 3 {
 			ctx.Equal([]string{edgeRouters[0].Id}, relatedEdgeRouters)
 		} else if i == 4 || i == 5 {
@@ -328,7 +328,7 @@ func (ctx *TestContext) testServiceEdgeRouterRoleEvaluation(_ *testing.T) {
 	}
 
 	stringz.Permutations(edgeRouterRoleAttrs, func(roles []string) {
-		edgeRouter := NewEdgeRouter(uuid.New().String(), roles...)
+		edgeRouter := newEdgeRouter(uuid.New().String(), roles...)
 		ctx.requireCreate(edgeRouter)
 		edgeRouters = append(edgeRouters, edgeRouter)
 	})
@@ -342,7 +342,7 @@ func (ctx *TestContext) testServiceEdgeRouterRoleEvaluation(_ *testing.T) {
 	edgeRouters = nil
 
 	stringz.Permutations(edgeRouterRoleAttrs, func(roles []string) {
-		edgeRouter := NewEdgeRouter(uuid.New().String())
+		edgeRouter := newEdgeRouter(uuid.New().String())
 		ctx.requireCreate(edgeRouter)
 		edgeRouter.RoleAttributes = roles
 		ctx.requireUpdate(edgeRouter)
@@ -435,9 +435,9 @@ func (ctx *TestContext) createServiceWithEdgeRouterLimits(edgeRouterRoles []stri
 func (ctx *TestContext) validateServiceEdgeRouters(edgeRouters []*EdgeRouter, services []*EdgeService) {
 	for _, service := range services {
 		count := 0
-		relatedEdgeRouters := ctx.getRelatedIds(service, FieldServiceEdgeRouters)
+		relatedEdgeRouters := ctx.getRelatedIds(service, EntityTypeEdgeRouters)
 		for _, edgeRouter := range edgeRouters {
-			relatedServices := ctx.getRelatedIds(edgeRouter, FieldEdgeRouterServices)
+			relatedServices := ctx.getRelatedIds(edgeRouter, EntityTypeServices)
 			shouldContain := ctx.policyShouldMatch(service.EdgeRouterRoles, edgeRouter.Id, edgeRouter.RoleAttributes)
 			policyContains := stringz.Contains(relatedEdgeRouters, edgeRouter.Id)
 			ctx.Equal(shouldContain, policyContains, "entity roles attr: %v. service roles: %v, service edge routers %+v, edge router services: %+v",

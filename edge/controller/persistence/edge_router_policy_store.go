@@ -10,9 +10,6 @@ import (
 )
 
 const (
-	FieldEdgeRouterPolicyEdgeRouters = "edgeRouters"
-	FieldEdgeRouterPolicyIdentities  = "identities"
-
 	FieldEdgeRouterPolicyEdgeRouterRoles = "edgeRouterRoles"
 	FieldEdgeRouterPolicyIdentityRoles   = "identityRoles"
 )
@@ -98,8 +95,8 @@ func (store *edgeRouterPolicyStoreImpl) initializeLocal() {
 	store.indexName = store.addUniqueNameField()
 	store.symbolIdentityRoles = store.AddSetSymbol(FieldEdgeRouterPolicyIdentityRoles, ast.NodeTypeString)
 	store.symbolEdgeRouterRoles = store.AddSetSymbol(FieldEdgeRouterPolicyEdgeRouterRoles, ast.NodeTypeString)
-	store.symbolIdentities = store.AddFkSetSymbol(FieldEdgeRouterPolicyIdentities, store.stores.identity)
-	store.symbolEdgeRouters = store.AddFkSetSymbol(FieldEdgeRouterPolicyEdgeRouters, store.stores.edgeService)
+	store.symbolIdentities = store.AddFkSetSymbol(EntityTypeIdentities, store.stores.identity)
+	store.symbolEdgeRouters = store.AddFkSetSymbol(EntityTypeEdgeRouters, store.stores.edgeService)
 }
 
 func (store *edgeRouterPolicyStoreImpl) initializeLinked() {

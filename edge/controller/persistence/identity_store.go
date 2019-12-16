@@ -81,11 +81,10 @@ func (entity *Identity) SetValues(ctx *boltz.PersistContext) {
 	ctx.SetLinkedIds(FieldIdentityAuthenticators, entity.Authenticators)
 	ctx.SetStringList(FieldRoleAttributes, entity.RoleAttributes)
 
-	// index change won't fire if we don't have any roles on create, but we need to evaluate
-	// if we match any @any roles
+	// index change won't fire if we don't have any roles on create, but we need to evaluate if we match any @all roles
 	if ctx.IsCreate && len(entity.RoleAttributes) == 0 {
 		store := ctx.Store.(*identityStoreImpl)
-		store.RolesChanged(ctx.Bucket.Tx(), []byte(entity.Id), nil, nil, ctx.Bucket)
+		store.rolesChanged(ctx.Bucket.Tx(), []byte(entity.Id), nil, nil, ctx.Bucket)
 	}
 }
 
@@ -116,9 +115,10 @@ type identityStoreImpl struct {
 
 	symbolApiSessions        boltz.EntitySetSymbol
 	symbolAppwans            boltz.EntitySymbol
+	symbolAuthenticators     boltz.EntitySetSymbol
 	symbolEdgeRouterPolicies boltz.EntitySetSymbol
 	symbolEnrollments        boltz.EntitySetSymbol
-	symbolAuthenticators     boltz.EntitySetSymbol
+	symbolServicePolicies    boltz.EntitySetSymbol
 	symbolHostableServices   boltz.EntitySymbol
 	symbolIdentityTypeId     boltz.EntitySymbol
 }
@@ -136,7 +136,7 @@ func (store *identityStoreImpl) initializeLocal() {
 	store.symbolAppwans = store.AddFkSetSymbol(FieldIdentityAppwans, store.stores.appwan)
 	store.symbolEdgeRouterPolicies = store.AddFkSetSymbol(EntityTypeEdgeRouterPolicies, store.stores.edgeRouterPolicy)
 	store.symbolHostableServices = store.AddFkSetSymbol(FieldIdentityHostableServices, store.stores.edgeService)
-
+	store.symbolServicePolicies = store.AddFkSetSymbol(EntityTypeServicePolicies, store.stores.servicePolicy)
 	store.symbolEnrollments = store.AddFkSetSymbol(FieldIdentityEnrollments, store.stores.enrollment)
 	store.symbolAuthenticators = store.AddFkSetSymbol(FieldIdentityAuthenticators, store.stores.authenticator)
 
@@ -145,12 +145,16 @@ func (store *identityStoreImpl) initializeLocal() {
 	store.AddSymbol(FieldIdentityIsAdmin, ast.NodeTypeBool)
 	store.AddSymbol(FieldIdentityIsDefaultAdmin, ast.NodeTypeBool)
 
-	store.indexRoleAttributes.AddListener(store.RolesChanged)
+	store.indexRoleAttributes.AddListener(store.rolesChanged)
 }
 
-func (store *identityStoreImpl) RolesChanged(tx *bbolt.Tx, rowId []byte, _ []boltz.FieldTypeAndValue, new []boltz.FieldTypeAndValue, holder errorz.ErrorHolder) {
+func (store *identityStoreImpl) rolesChanged(tx *bbolt.Tx, rowId []byte, _ []boltz.FieldTypeAndValue, new []boltz.FieldTypeAndValue, holder errorz.ErrorHolder) {
 	rolesSymbol := store.stores.edgeRouterPolicy.symbolIdentityRoles
 	linkCollection := store.stores.edgeRouterPolicy.identityCollection
+	store.UpdateRelatedRoles(tx, string(rowId), rolesSymbol, linkCollection, new, holder)
+
+	rolesSymbol = store.stores.servicePolicy.symbolIdentityRoles
+	linkCollection = store.stores.servicePolicy.identityCollection
 	store.UpdateRelatedRoles(tx, string(rowId), rolesSymbol, linkCollection, new, holder)
 }
 
@@ -159,6 +163,7 @@ func (store *identityStoreImpl) initializeLinked() {
 	store.AddLinkCollection(store.symbolAuthenticators, store.stores.authenticator.symbolIdentityId)
 	store.AddLinkCollection(store.symbolEnrollments, store.stores.enrollment.symbolIdentityId)
 	store.AddLinkCollection(store.symbolEdgeRouterPolicies, store.stores.edgeRouterPolicy.symbolIdentities)
+	store.AddLinkCollection(store.symbolServicePolicies, store.stores.servicePolicy.symbolIdentities)
 }
 
 func (store *identityStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*Identity, error) {
@@ -213,6 +218,21 @@ func (store *identityStoreImpl) DeleteById(ctx boltz.MutateContext, id string) e
 		if stringz.Contains(policy.IdentityRoles, id) {
 			policy.IdentityRoles = stringz.Remove(policy.IdentityRoles, id)
 			err = store.stores.edgeRouterPolicy.Update(ctx, policy, nil)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Remove entity from IdentityRoles in service policies
+	for _, servicePolicyId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, EntityTypeServicePolicies) {
+		policy, err := store.stores.servicePolicy.LoadOneById(ctx.Tx(), servicePolicyId)
+		if err != nil {
+			return err
+		}
+		if stringz.Contains(policy.IdentityRoles, id) {
+			policy.IdentityRoles = stringz.Remove(policy.IdentityRoles, id)
+			err = store.stores.servicePolicy.Update(ctx, policy, nil)
 			if err != nil {
 				return err
 			}

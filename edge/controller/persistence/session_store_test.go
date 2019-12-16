@@ -86,11 +86,11 @@ func (ctx *TestContext) testCreateSessions(_ *testing.T) {
 	loadedSession := &Session{}
 	ctx.validateBaseline(session, loadedSession)
 
-	sessionIds := ctx.getRelatedIds(apiSession, FieldApiSessionSessions)
+	sessionIds := ctx.getRelatedIds(apiSession, EntityTypeSessions)
 	ctx.EqualValues(1, len(sessionIds))
 	ctx.EqualValues(session.Id, sessionIds[0])
 
-	sessionIds = ctx.getRelatedIds(service, FieldServiceSessions)
+	sessionIds = ctx.getRelatedIds(service, EntityTypeSessions)
 	ctx.EqualValues(1, len(sessionIds))
 	ctx.EqualValues(session.Id, sessionIds[0])
 
@@ -101,23 +101,23 @@ func (ctx *TestContext) testCreateSessions(_ *testing.T) {
 	loadedSession2 := &Session{}
 	ctx.validateBaseline(session2, loadedSession2)
 
-	sessionIds = ctx.getRelatedIds(apiSession, FieldApiSessionSessions)
+	sessionIds = ctx.getRelatedIds(apiSession, EntityTypeSessions)
 	ctx.EqualValues(2, len(sessionIds))
 	ctx.True(stringz.Contains(sessionIds, session.Id))
 	ctx.True(stringz.Contains(sessionIds, session2.Id))
 
-	sessionIds = ctx.getRelatedIds(service, FieldServiceSessions)
+	sessionIds = ctx.getRelatedIds(service, EntityTypeSessions)
 	ctx.EqualValues(2, len(sessionIds))
 	ctx.True(stringz.Contains(sessionIds, session.Id))
 	ctx.True(stringz.Contains(sessionIds, session2.Id))
 
 	ctx.requireDelete(session)
 
-	sessionIds = ctx.getRelatedIds(apiSession, FieldApiSessionSessions)
+	sessionIds = ctx.getRelatedIds(apiSession, EntityTypeSessions)
 	ctx.EqualValues(1, len(sessionIds))
 	ctx.EqualValues(session2.Id, sessionIds[0])
 
-	sessionIds = ctx.getRelatedIds(service, FieldServiceSessions)
+	sessionIds = ctx.getRelatedIds(service, EntityTypeSessions)
 	ctx.EqualValues(1, len(sessionIds))
 	ctx.EqualValues(session2.Id, sessionIds[0])
 }

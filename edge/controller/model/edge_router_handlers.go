@@ -174,11 +174,11 @@ func (handler *EdgeRouterHandler) HandleListForIdentityAndServiceWithTx(tx *bbol
 }
 
 func (handler *EdgeRouterHandler) HandleCollectServices(id string, collector func(entity BaseModelEntity)) error {
-	return handler.HandleCollectAssociated(id, persistence.FieldEdgeRouterServices, handler.env.GetHandlers().Service, collector)
+	return handler.HandleCollectAssociated(id, persistence.EntityTypeServices, handler.env.GetHandlers().Service, collector)
 }
 
 func (handler *EdgeRouterHandler) HandleCollectEdgeRouterPolicies(id string, collector func(entity BaseModelEntity)) error {
-	return handler.HandleCollectAssociated(id, persistence.FieldEdgeRouterEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
+	return handler.HandleCollectAssociated(id, persistence.EntityTypeEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
 }
 
 type EdgeRouterListResult struct {

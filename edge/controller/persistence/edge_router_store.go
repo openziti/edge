@@ -37,11 +37,9 @@ const (
 	FieldEdgeRouterEnrollmentCreatedAt = "enrollmentCreatedAt"
 	FieldEdgeRouterEnrollmentExpiresAt = "enrollmentExpiresAt"
 	FieldEdgeRouterProtocols           = "protocols"
-	FieldEdgeRouterEdgeRouterPolicies  = "edgeRouterPolicies"
-	FieldEdgeRouterServices            = "services"
 )
 
-func NewEdgeRouter(name string, roleAttributes ...string) *EdgeRouter {
+func newEdgeRouter(name string, roleAttributes ...string) *EdgeRouter {
 	return &EdgeRouter{
 		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
 		Name:               name,
@@ -101,8 +99,7 @@ func (entity *EdgeRouter) SetValues(ctx *boltz.PersistContext) {
 	ctx.SetMap(FieldEdgeRouterProtocols, toStringInterfaceMap(entity.EdgeRouterProtocols))
 	ctx.SetStringList(FieldRoleAttributes, entity.RoleAttributes)
 
-	// index change won't fire if we don't have any roles on create, but we need to evaluate
-	// if we match any @any roles
+	// index change won't fire if we don't have any roles on create, but we need to evaluate if we match any @all roles
 	if ctx.IsCreate && len(entity.RoleAttributes) == 0 {
 		store := ctx.Store.(*edgeRouterStoreImpl)
 		store.RolesChanged(ctx.Bucket.Tx(), []byte(entity.Id), nil, nil, ctx.Bucket)
@@ -156,8 +153,8 @@ func (store *edgeRouterStoreImpl) initializeLocal() {
 	store.AddSymbol(FieldEdgeRouterEnrollmentToken, ast.NodeTypeString)
 	store.AddSymbol(FieldEdgeRouterEnrollmentCreatedAt, ast.NodeTypeString)
 	store.AddSymbol(FieldEdgeRouterEnrollmentExpiresAt, ast.NodeTypeString)
-	store.symbolEdgeRouterPolicies = store.AddFkSetSymbol(FieldEdgeRouterEdgeRouterPolicies, store.stores.edgeRouterPolicy)
-	store.symbolServices = store.AddFkSetSymbol(FieldEdgeRouterServices, store.stores.edgeService)
+	store.symbolEdgeRouterPolicies = store.AddFkSetSymbol(EntityTypeEdgeRouterPolicies, store.stores.edgeRouterPolicy)
+	store.symbolServices = store.AddFkSetSymbol(EntityTypeServices, store.stores.edgeService)
 	store.indexRoleAttributes.AddListener(store.RolesChanged)
 }
 
@@ -229,7 +226,7 @@ func (store *edgeRouterStoreImpl) DeleteById(ctx boltz.MutateContext, id string)
 	}
 
 	// Remove entity from EdgeRouterRoles in edge service
-	for _, edgeServiceId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, FieldEdgeRouterServices) {
+	for _, edgeServiceId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, EntityTypeServices) {
 		service, err := store.stores.edgeService.LoadOneById(ctx.Tx(), edgeServiceId)
 		if err != nil {
 			return err

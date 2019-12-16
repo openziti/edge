@@ -22,6 +22,7 @@ import (
 	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
+	"github.com/netfoundry/ziti-foundation/util/errorz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"go.etcd.io/bbolt"
 	"reflect"
@@ -46,16 +47,15 @@ const (
 	FieldServiceDnsPort           = "dnsPort"
 	FieldServiceAppwans           = "appwans"
 	FieldServiceClusters          = "clusters"
-	FieldServiceSessions          = "sessions"
 	FieldServiceHostingIdentities = "hostingIdentities"
 	FieldServiceEdgeRouterRoles   = "edgeRouterRoles"
-	FieldServiceEdgeRouters       = "edgeRouters"
 )
 
-func newEdgeService(name string) *EdgeService {
+func newEdgeService(name string, roleAttributes ...string) *EdgeService {
 	return &EdgeService{
-		Service: network.Service{Id: uuid.New().String()},
-		Name:    name,
+		Service:        network.Service{Id: uuid.New().String()},
+		Name:           name,
+		RoleAttributes: roleAttributes,
 	}
 }
 
@@ -97,6 +97,12 @@ func (entity *EdgeService) SetValues(ctx *boltz.PersistContext) {
 		store := ctx.Store.(*edgeServiceStoreImpl)
 		store.edgeRouterRolesChanged(ctx, entity.Id, entity.EdgeRouterRoles)
 	}
+
+	// index change won't fire if we don't have any roles on create, but we need to evaluate if we match any @all roles
+	if ctx.IsCreate && len(entity.RoleAttributes) == 0 {
+		store := ctx.Store.(*edgeServiceStoreImpl)
+		store.rolesChanged(ctx.Bucket.Tx(), []byte(entity.Id), nil, nil, ctx.Bucket)
+	}
 }
 
 func (entity *EdgeService) GetEntityType() string {
@@ -129,6 +135,7 @@ type edgeServiceStoreImpl struct {
 
 	symbolEdgeRouters      boltz.EntitySetSymbol
 	symbolEdgeRoutersRoles boltz.EntitySetSymbol
+	symbolServicePolicies  boltz.EntitySetSymbol
 
 	edgeRouterCollection boltz.LinkCollection
 }
@@ -149,10 +156,12 @@ func (store *edgeServiceStoreImpl) initializeLocal() {
 	store.symbolAppwans = store.AddFkSetSymbol(FieldServiceAppwans, store.stores.appwan)
 	store.symbolClusters = store.AddFkSetSymbol(FieldServiceClusters, store.stores.cluster)
 	store.symbolHostIds = store.AddFkSetSymbol(FieldServiceHostingIdentities, store.stores.identity)
-	store.symbolSessions = store.AddFkSetSymbol(FieldServiceSessions, store.stores.session)
+	store.symbolSessions = store.AddFkSetSymbol(EntityTypeSessions, store.stores.session)
 	store.symbolEdgeRoutersRoles = store.AddSetSymbol(FieldServiceEdgeRouterRoles, ast.NodeTypeString)
-	store.symbolEdgeRouters = store.AddFkSetSymbol(FieldServiceEdgeRouters, store.stores.edgeRouter)
+	store.symbolEdgeRouters = store.AddFkSetSymbol(EntityTypeEdgeRouters, store.stores.edgeRouter)
+	store.symbolServicePolicies = store.AddFkSetSymbol(EntityTypeServicePolicies, store.stores.servicePolicy)
 
+	store.indexRoleAttributes.AddListener(store.rolesChanged)
 }
 
 func (store *edgeServiceStoreImpl) edgeRouterRolesChanged(ctx *boltz.PersistContext, entityId string, roles []string) {
@@ -162,11 +171,18 @@ func (store *edgeServiceStoreImpl) edgeRouterRolesChanged(ctx *boltz.PersistCont
 	}
 }
 
+func (store *edgeServiceStoreImpl) rolesChanged(tx *bbolt.Tx, rowId []byte, _ []boltz.FieldTypeAndValue, new []boltz.FieldTypeAndValue, holder errorz.ErrorHolder) {
+	rolesSymbol := store.stores.servicePolicy.symbolServiceRoles
+	linkCollection := store.stores.servicePolicy.serviceCollection
+	store.UpdateRelatedRoles(tx, string(rowId), rolesSymbol, linkCollection, new, holder)
+}
+
 func (store *edgeServiceStoreImpl) initializeLinked() {
 	store.AddLinkCollection(store.symbolAppwans, store.stores.appwan.symbolServices)
 	store.AddLinkCollection(store.symbolClusters, store.stores.cluster.symbolServices)
 	store.AddLinkCollection(store.symbolHostIds, store.stores.identity.symbolHostableServices)
 	store.edgeRouterCollection = store.AddLinkCollection(store.symbolEdgeRouters, store.stores.edgeRouter.symbolServices)
+	store.AddLinkCollection(store.symbolServicePolicies, store.stores.servicePolicy.symbolServices)
 
 	store.EventEmmiter.AddListener(boltz.EventUpdate, func(i ...interface{}) {
 		if len(i) != 1 {
@@ -206,11 +222,27 @@ func (store *edgeServiceStoreImpl) LoadOneByQuery(tx *bbolt.Tx, query string) (*
 	return entity, nil
 }
 
-func (store *edgeServiceStoreImpl) CleanupExternal(ctx boltz.MutateContext, id string) error {
-	for _, sessionId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, FieldServiceSessions) {
+func (store *edgeServiceStoreImpl) DeleteById(ctx boltz.MutateContext, id string) error {
+	for _, sessionId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, EntityTypeSessions) {
 		if err := store.stores.session.DeleteById(ctx, sessionId); err != nil {
 			return err
 		}
 	}
-	return store.baseStore.CleanupExternal(ctx, id)
+
+	// Remove entity from ServiceRoles in service policies
+	for _, servicePolicyId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, EntityTypeServicePolicies) {
+		policy, err := store.stores.servicePolicy.LoadOneById(ctx.Tx(), servicePolicyId)
+		if err != nil {
+			return err
+		}
+		if stringz.Contains(policy.ServiceRoles, id) {
+			policy.ServiceRoles = stringz.Remove(policy.ServiceRoles, id)
+			err = store.stores.servicePolicy.Update(ctx, policy, nil)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return store.BaseStore.DeleteById(ctx, id)
 }

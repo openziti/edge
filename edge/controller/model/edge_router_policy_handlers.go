@@ -95,11 +95,11 @@ func (handler *EdgeRouterPolicyHandler) HandleListEdgeRouters(id string) ([]*Edg
 }
 
 func (handler *EdgeRouterPolicyHandler) HandleCollectEdgeRouters(id string, collector func(entity BaseModelEntity)) error {
-	return handler.HandleCollectAssociated(id, persistence.FieldEdgeRouterPolicyEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
+	return handler.HandleCollectAssociated(id, persistence.EntityTypeEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
 }
 
 func (handler *EdgeRouterPolicyHandler) HandleCollectIdentities(id string, collector func(entity BaseModelEntity)) error {
-	return handler.HandleCollectAssociated(id, persistence.FieldEdgeRouterPolicyIdentities, handler.env.GetHandlers().Identity, collector)
+	return handler.HandleCollectAssociated(id, persistence.EntityTypeIdentities, handler.env.GetHandlers().Identity, collector)
 }
 
 type EdgeRouterPolicyListResult struct {

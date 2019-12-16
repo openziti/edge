@@ -4,7 +4,7 @@ func NewServiceConfigsHandler(env Env) *ServiceConfigsHandler {
 	handler := &ServiceConfigsHandler{
 		baseHandler: baseHandler{
 			env:   env,
-			store: env.GetStores().ServiceConfigs,
+			store: env.GetStores().ServiceConfig,
 		},
 	}
 	handler.impl = handler

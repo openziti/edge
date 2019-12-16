@@ -154,7 +154,7 @@ func (handler *ServiceHandler) HandleList(queryOptions *QueryOptions) (*ServiceL
 }
 
 func (handler *ServiceHandler) HandleCollectEdgeRouters(id string, collector func(entity BaseModelEntity)) error {
-	return handler.HandleCollectAssociated(id, persistence.FieldServiceEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
+	return handler.HandleCollectAssociated(id, persistence.EntityTypeEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
 }
 
 func (handler *ServiceHandler) HandleCollectHostIds(id string, collector func(entity BaseModelEntity)) error {

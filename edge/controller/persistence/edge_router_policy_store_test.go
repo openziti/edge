@@ -26,8 +26,8 @@ func (ctx *TestContext) testCreateEdgeRouterPolicy(_ *testing.T) {
 	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		load := &EdgeRouterPolicy{}
 		ctx.validateBaseline(policy, load)
-		ctx.Equal(0, len(ctx.stores.EdgeRouterPolicy.GetRelatedEntitiesIdList(tx, policy.Id, FieldEdgeRouterPolicyEdgeRouters)))
-		ctx.Equal(0, len(ctx.stores.EdgeRouterPolicy.GetRelatedEntitiesIdList(tx, policy.Id, FieldEdgeRouterPolicyIdentities)))
+		ctx.Equal(0, len(ctx.stores.EdgeRouterPolicy.GetRelatedEntitiesIdList(tx, policy.Id, EntityTypeEdgeRouters)))
+		ctx.Equal(0, len(ctx.stores.EdgeRouterPolicy.GetRelatedEntitiesIdList(tx, policy.Id, EntityTypeIdentities)))
 
 		testPolicy, err := ctx.stores.EdgeRouterPolicy.LoadOneByName(tx, policy.Name)
 		ctx.NoError(err)
@@ -62,7 +62,7 @@ func (ctx *TestContext) testEdgeRouterPolicyRoleEvaluation(_ *testing.T) {
 
 	var edgeRouters []*EdgeRouter
 	for i := 0; i < 5; i++ {
-		edgeRouter := NewEdgeRouter(uuid.New().String())
+		edgeRouter := newEdgeRouter(uuid.New().String())
 		ctx.requireCreate(edgeRouter)
 		edgeRouters = append(edgeRouters, edgeRouter)
 	}
@@ -85,8 +85,8 @@ func (ctx *TestContext) testEdgeRouterPolicyRoleEvaluation(_ *testing.T) {
 	policies := ctx.createEdgeRouterPolicies(identityRoles, edgeRouterRoles, identities, edgeRouters, true)
 
 	for i := 0; i < 9; i++ {
-		relatedEdgeRouters := ctx.getRelatedIds(policies[i], FieldEdgeRouterPolicyEdgeRouters)
-		relatedIdentities := ctx.getRelatedIds(policies[i], FieldEdgeRouterPolicyIdentities)
+		relatedEdgeRouters := ctx.getRelatedIds(policies[i], EntityTypeEdgeRouters)
+		relatedIdentities := ctx.getRelatedIds(policies[i], EntityTypeIdentities)
 		if i == 3 {
 			ctx.Equal([]string{edgeRouters[0].Id}, relatedEdgeRouters)
 			ctx.Equal([]string{identities[0].Id}, relatedIdentities)
@@ -119,18 +119,18 @@ func (ctx *TestContext) testEdgeRouterPolicyRoleEvaluation(_ *testing.T) {
 	})
 
 	// no roles
-	edgeRouter := NewEdgeRouter(uuid.New().String())
+	edgeRouter := newEdgeRouter(uuid.New().String())
 	ctx.requireCreate(edgeRouter)
 	edgeRouters = append(edgeRouters, edgeRouter)
 
 	stringz.Permutations(edgeRouterRoleAttrs, func(roles []string) {
-		edgeRouter := NewEdgeRouter(uuid.New().String(), roles...)
+		edgeRouter := newEdgeRouter(uuid.New().String(), roles...)
 		ctx.requireCreate(edgeRouter)
 		edgeRouters = append(edgeRouters, edgeRouter)
 	})
 
-	ctx.validatePolicyIdentities(identities, policies)
-	ctx.validatePolicyEdgeRouters(edgeRouters, policies)
+	ctx.validateEdgeRouterPolicyIdentities(identities, policies)
+	ctx.validateEdgeRouterPolicyEdgeRouters(edgeRouters, policies)
 
 	for _, identity := range identities {
 		ctx.requireDelete(identity)
@@ -152,15 +152,15 @@ func (ctx *TestContext) testEdgeRouterPolicyRoleEvaluation(_ *testing.T) {
 	})
 
 	stringz.Permutations(edgeRouterRoleAttrs, func(roles []string) {
-		edgeRouter := NewEdgeRouter(uuid.New().String())
+		edgeRouter := newEdgeRouter(uuid.New().String())
 		ctx.requireCreate(edgeRouter)
 		edgeRouter.RoleAttributes = roles
 		ctx.requireUpdate(edgeRouter)
 		edgeRouters = append(edgeRouters, edgeRouter)
 	})
 
-	ctx.validatePolicyIdentities(identities, policies)
-	ctx.validatePolicyEdgeRouters(edgeRouters, policies)
+	ctx.validateEdgeRouterPolicyIdentities(identities, policies)
+	ctx.validateEdgeRouterPolicyEdgeRouters(edgeRouters, policies)
 
 	// ensure policies get cleaned up
 	for _, policy := range policies {
@@ -170,8 +170,8 @@ func (ctx *TestContext) testEdgeRouterPolicyRoleEvaluation(_ *testing.T) {
 	// test with policies created after identities/edge routers
 	policies = ctx.createEdgeRouterPolicies(identityRoles, edgeRouterRoles, identities, edgeRouters, true)
 
-	ctx.validatePolicyIdentities(identities, policies)
-	ctx.validatePolicyEdgeRouters(edgeRouters, policies)
+	ctx.validateEdgeRouterPolicyIdentities(identities, policies)
+	ctx.validateEdgeRouterPolicyEdgeRouters(edgeRouters, policies)
 
 	for _, policy := range policies {
 		ctx.requireDelete(policy)
@@ -180,8 +180,8 @@ func (ctx *TestContext) testEdgeRouterPolicyRoleEvaluation(_ *testing.T) {
 	// test with policies created after identities/edge routers and roles added after created
 	policies = ctx.createEdgeRouterPolicies(identityRoles, edgeRouterRoles, identities, edgeRouters, false)
 
-	ctx.validatePolicyIdentities(identities, policies)
-	ctx.validatePolicyEdgeRouters(edgeRouters, policies)
+	ctx.validateEdgeRouterPolicyIdentities(identities, policies)
+	ctx.validateEdgeRouterPolicyEdgeRouters(edgeRouters, policies)
 
 	for _, identity := range identities {
 		if len(identity.RoleAttributes) > 0 {
@@ -207,8 +207,8 @@ func (ctx *TestContext) testEdgeRouterPolicyRoleEvaluation(_ *testing.T) {
 		ctx.requireUpdate(policy)
 	}
 
-	ctx.validatePolicyIdentities(identities, policies)
-	ctx.validatePolicyEdgeRouters(edgeRouters, policies)
+	ctx.validateEdgeRouterPolicyIdentities(identities, policies)
+	ctx.validateEdgeRouterPolicyEdgeRouters(edgeRouters, policies)
 }
 
 func (ctx *TestContext) createEdgeRouterPolicies(identityRoles, edgeRouterRoles []string, identities []*Identity, edgeRouters []*EdgeRouter, oncreate bool) []*EdgeRouterPolicy {
@@ -265,10 +265,10 @@ func (ctx *TestContext) createEdgeRouterPolicies(identityRoles, edgeRouterRoles 
 	return policies
 }
 
-func (ctx *TestContext) validatePolicyIdentities(identities []*Identity, policies []*EdgeRouterPolicy) {
+func (ctx *TestContext) validateEdgeRouterPolicyIdentities(identities []*Identity, policies []*EdgeRouterPolicy) {
 	for _, policy := range policies {
 		count := 0
-		relatedIdentities := ctx.getRelatedIds(policy, FieldEdgeRouterPolicyIdentities)
+		relatedIdentities := ctx.getRelatedIds(policy, EntityTypeIdentities)
 		for _, identity := range identities {
 			relatedPolicies := ctx.getRelatedIds(identity, EntityTypeEdgeRouterPolicies)
 			shouldContain := ctx.policyShouldMatch(policy.IdentityRoles, identity.Id, identity.RoleAttributes)
@@ -287,10 +287,10 @@ func (ctx *TestContext) validatePolicyIdentities(identities []*Identity, policie
 	}
 }
 
-func (ctx *TestContext) validatePolicyEdgeRouters(edgeRouters []*EdgeRouter, policies []*EdgeRouterPolicy) {
+func (ctx *TestContext) validateEdgeRouterPolicyEdgeRouters(edgeRouters []*EdgeRouter, policies []*EdgeRouterPolicy) {
 	for _, policy := range policies {
 		count := 0
-		relatedEdgeRouters := ctx.getRelatedIds(policy, FieldEdgeRouterPolicyEdgeRouters)
+		relatedEdgeRouters := ctx.getRelatedIds(policy, EntityTypeEdgeRouters)
 		for _, edgeRouter := range edgeRouters {
 			relatedPolicies := ctx.getRelatedIds(edgeRouter, EntityTypeEdgeRouterPolicies)
 			shouldContain := ctx.policyShouldMatch(policy.EdgeRouterRoles, edgeRouter.Id, edgeRouter.RoleAttributes)
