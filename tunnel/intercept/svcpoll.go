@@ -125,21 +125,22 @@ func updateServices(context ziti.Context, interceptor Interceptor, resolver dns.
 	}
 
 	// build map of all in-use address strings, so we know when a route needs to be removed
-	allAddrs := make(map[string]*struct{}, len(all))
+	allAddrs := make(map[string]int, len(all))
 	for _, svc := range all {
 		addr := svc.Dns.Hostname
 		if _, ok := allAddrs[addr]; !ok {
-			allAddrs[addr] = nil
+			allAddrs[addr] += 1
 		}
 	}
 
 	for _, svc := range removed {
 		log.Infof("stopping tunnel for unavailable service: %s", svc.Name)
-		_, sharedAddress := allAddrs[svc.Dns.Hostname]
-		err := interceptor.StopIntercepting(svc.Name, !sharedAddress)
+		useCnt := allAddrs[svc.Dns.Hostname]
+		err := interceptor.StopIntercepting(svc.Name, useCnt == 1)
 		if err != nil {
 			log.Errorf("failed to stop intercepting: %v", err)
 		}
+		allAddrs[svc.Dns.Hostname] -= 1
 	}
 }
 
