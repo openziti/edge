@@ -288,15 +288,7 @@ func (t *tProxyInterceptor) Stop() {
 }
 
 func (t *tProxyInterceptor) Intercept(service edge.Service, resolver dns.Resolver) error {
-	err := t.intercept(service, resolver, (*TCPIPPortAddr)(t.tcpLn.Addr().(*net.TCPAddr)))
-	if err != nil {
-		return err
-	}
-	return t.intercept(service, resolver, (*UDPIPPortAddr)(t.udpLn.LocalAddr().(*net.UDPAddr)))
-}
-
-func (t *tProxyInterceptor) intercept(service edge.Service, resolver dns.Resolver, port IPPortAddr) error {
-	interceptAddr, err := intercept.NewInterceptAddress(service, port.GetProtocol(), resolver)
+	interceptAddr, err := intercept.NewInterceptAddress(service, "tcp/udp", resolver)
 	if err != nil {
 		return fmt.Errorf("unable to intercept %s: %v", service.Name, err)
 	}
@@ -307,26 +299,44 @@ func (t *tProxyInterceptor) intercept(service edge.Service, resolver dns.Resolve
 		return fmt.Errorf("failed to add local route: %v", err)
 	}
 
-	spec := []string{
-		"-m", "comment", "--comment", service.Name,
-		"-d", ipNet.String(),
-		"-p", interceptAddr.Proto(),
-		"--dport", strconv.Itoa(interceptAddr.Port()),
-		"-j", "TPROXY",
-		"--tproxy-mark", "0x1/0x1",
-		fmt.Sprintf("--on-ip=%s", port.GetIP().String()),
-		fmt.Sprintf("--on-port=%d", port.GetPort()),
+	tcpLnAddr := (*TCPIPPortAddr)(t.tcpLn.Addr().(*net.TCPAddr))
+	udpLnAddr := (*UDPIPPortAddr)(t.udpLn.LocalAddr().(*net.UDPAddr))
+	specs := map[string][]string{
+		"tcp": {
+			"-m", "comment", "--comment", service.Name,
+			"-d", ipNet.String(),
+			"-p", "tcp",
+			"--dport", strconv.Itoa(interceptAddr.Port()),
+			"-j", "TPROXY",
+			"--tproxy-mark", "0x1/0x1",
+			fmt.Sprintf("--on-ip=%s", tcpLnAddr.GetIP().String()),
+			fmt.Sprintf("--on-port=%d", tcpLnAddr.GetPort()),
+		},
+		"udp": {
+			"-m", "comment", "--comment", service.Name,
+			"-d", ipNet.String(),
+			"-p", "udp",
+			"--dport", strconv.Itoa(interceptAddr.Port()),
+			"-j", "TPROXY",
+			"--tproxy-mark", "0x1/0x1",
+			fmt.Sprintf("--on-ip=%s", udpLnAddr.GetIP().String()),
+			fmt.Sprintf("--on-port=%d", udpLnAddr.GetPort()),
+		},
 	}
 
-	pfxlog.Logger().Infof("Adding rule iptables -t %v -A %v %v", mangleTable, dstChain, spec)
-	err = t.ipt.AppendUnique(mangleTable, dstChain, spec...)
-	if err != nil {
-		return fmt.Errorf("failed to append rule: %v", err)
+	for _, spec := range specs {
+		pfxlog.Logger().Infof("Inserting rule iptables -t %v -I %v %v", mangleTable, dstChain, spec)
+		err = t.ipt.AppendUnique(mangleTable, dstChain, spec...)
+		if err != nil {
+			return fmt.Errorf("failed to append rule: %v", err)
+		}
 	}
 
-	err = t.interceptLUT.Put(*interceptAddr, service.Name, spec)
+	err = t.interceptLUT.Put(*interceptAddr, service.Name, specs)
 	if err != nil {
-		_ = t.ipt.Delete(mangleTable, dstChain, spec...)
+		for _, spec := range specs {
+			_ = t.ipt.Delete(mangleTable, dstChain, spec...)
+		}
 		return fmt.Errorf("failed to add intercept record: %v", err)
 	}
 
@@ -340,9 +350,13 @@ func (t *tProxyInterceptor) StopIntercepting(serviceName string, removeRoute boo
 	}
 	defer t.interceptLUT.Remove(service.Addr)
 
-	err = t.ipt.Delete(mangleTable, dstChain, service.Data.([]string)...)
-	if err != nil {
-		return fmt.Errorf("failed to remove iptables rule for service %s: %v", serviceName, err)
+	specs := service.Data.(map[string][]string)
+	for _, spec := range specs {
+		pfxlog.Logger().Infof("Deleting rule iptables -t %v -D %v %v", mangleTable, dstChain, spec)
+		err = t.ipt.Delete(mangleTable, dstChain, spec...)
+		if err != nil {
+			return fmt.Errorf("failed to remove iptables rule for service %s: %v", serviceName, err)
+		}
 	}
 
 	if removeRoute {
