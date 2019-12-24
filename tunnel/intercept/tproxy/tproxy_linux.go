@@ -155,8 +155,10 @@ func (t *tProxyInterceptor) accept(context ziti.Context) {
 			}
 			log.Infof("received connection: %s --> %s", client.LocalAddr().String(), client.RemoteAddr().String())
 			service, err := t.interceptLUT.GetByAddress(client.LocalAddr())
-			if err != nil {
-				log.Debugf("received connection for %s, which does not map to an intercepted service", client.LocalAddr().String())
+			if service == nil {
+				log.Warnf("received connection for %s, which does not map to an intercepted service", client.LocalAddr().String())
+				client.Close()
+				continue
 			}
 			go tunnel.Run(context, service.Name, client)
 		}
