@@ -62,7 +62,7 @@ func ServicePoller(context ziti.Context, interceptor Interceptor, resolver dns.R
 		case s := <-sig:
 			log.Debugf("caught signal %v", s)
 			switch s {
-			case os.Interrupt, os.Kill, syscall.SIGTERM:
+			case syscall.SIGINT, syscall.SIGKILL, syscall.SIGTERM:
 				log.Debugf("caught signal %v", s)
 				goto done
 			}
