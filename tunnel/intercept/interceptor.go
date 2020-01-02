@@ -137,7 +137,7 @@ func (m LUT) GetByAddress(addr net.Addr) (*InterceptedService, error) {
 }
 
 func (m LUT) GetByName(serviceName string) []InterceptedService {
-	r := make([]InterceptedService, 0)
+	var r []InterceptedService
 	for _, service := range m {
 		if serviceName == service.Name {
 			r = append(r, service)
