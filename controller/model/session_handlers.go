@@ -18,6 +18,7 @@ package model
 
 import (
 	"fmt"
+
 	"github.com/netfoundry/ziti-edge/controller/util"
 	"go.etcd.io/bbolt"
 )

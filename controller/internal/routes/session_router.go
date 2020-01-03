@@ -17,13 +17,11 @@
 package routes
 
 import (
-	"github.com/Jeffail/gabs"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/internal/permissions"
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
-	"github.com/netfoundry/ziti-edge/controller/util"
 )
 
 func init() {
@@ -144,39 +142,20 @@ func getSessionEdgeRouters(ae *env.AppEnv, ns *model.Session) ([]*SessionEdgeRou
 }
 
 func (nsr *SessionRequestResponder) RespondWithCreatedId(id string, link *response.Link) {
-	ns, _ := nsr.ae.GetHandlers().Session.HandleRead(id)
-
-	gws, err := getSessionEdgeRouters(nsr.ae, ns)
+	modelSession, err := nsr.ae.GetHandlers().Session.HandleRead(id)
 	if err != nil {
-		if util.IsErrNotFoundErr(err) {
-			nsr.RespondWithNotFound()
-		} else {
-			nsr.RespondWithError(err)
-		}
+		nsr.RespondWithError(err)
 		return
 	}
 
-	json := gabs.New()
-
-	if _, err := json.SetP(id, "id"); err != nil {
-		pfxlog.Logger().WithField("cause", err).Error("could not set value by path")
+	apiSession, err := MapSessionToApiList(nsr.ae, modelSession)
+	if err != nil {
+		nsr.RespondWithError(err)
+		return
 	}
-
-	if _, err := json.SetP(gws, "gateways"); err != nil {
-		pfxlog.Logger().WithField("cause", err).Error("could not set value by path")
+	newSession := &NewSession{
+		SessionApiList: apiSession,
+		Token:          modelSession.Token,
 	}
-
-	if _, err := json.SetP(map[string]*response.Link{"self": link}, "_links"); err != nil {
-		pfxlog.Logger().WithField("cause", err).Error("could not set value by path")
-	}
-
-	if _, err := json.SetP(ns.Token, "token"); err != nil {
-		pfxlog.Logger().WithField("cause", err).Error("could not set value by path")
-	}
-
-	if _, err := json.SetP(ns.IsHosting, "hosting"); err != nil {
-		pfxlog.Logger().WithField("cause", err).Error("could not set value by path")
-	}
-
-	nsr.RequestResponder.RespondWithCreated(json.Data(), nil, link)
+	nsr.RespondWithCreated(newSession, nil, link)
 }
