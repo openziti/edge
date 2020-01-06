@@ -120,7 +120,7 @@ func updateServices(context ziti.Context, interceptor Interceptor, resolver dns.
 				log.Infof("Hosting newly available service %s", svc.Name)
 				go host(context, svc, dialAddr)
 			} else {
-				log.Infof("service %v is hostable but is missing a dial address. Add a 'tunneler.dial.addr' tag to the service to fix", svc.Name)
+				log.Warnf("service %v is hostable but is missing a dial address. Add a 'tunneler.dial.addr' tag to the service to fix", svc.Name)
 			}
 		}
 	}
