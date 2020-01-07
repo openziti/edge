@@ -31,7 +31,7 @@ type ServicePolicyEnforcer struct {
 	*runner.BaseOperation
 }
 
-func NewAppWanEnforcer(appEnv *env.AppEnv, f time.Duration) *ServicePolicyEnforcer {
+func NewServicePolicyEnforcer(appEnv *env.AppEnv, f time.Duration) *ServicePolicyEnforcer {
 	return &ServicePolicyEnforcer{
 		appEnv:        appEnv,
 		BaseOperation: runner.NewBaseOperation("ServicePolicyEnforcer", f)}

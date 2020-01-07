@@ -78,15 +78,22 @@ func Test_Services(t *testing.T) {
 		service3 := ctx.requireCreateNewService(dialRole, bindRole)
 		service3.permissions = []string{"Dial", "Bind"}
 		service4 := ctx.requireCreateNewService()
+		service5 := ctx.requireCreateNewService()
+		service6 := ctx.requireCreateNewService()
+		service7 := ctx.requireCreateNewService()
 
 		ctx.requireNewServicePolicy("Dial", s("@"+dialRole), s("@"+identityRole))
 		ctx.requireNewServicePolicy("Bind", s("@"+bindRole), s("@"+identityRole))
 
 		fmt.Printf("Expecting\n%v\n%v\n%v and not\n%v to be in final list\n", service1.id, service2.id, service3.id, service4.id)
-		query := url.QueryEscape(fmt.Sprintf(`id in ["%v", "%v", "%v", "%v"]`, service1.id, service2.id, service3.id, service4.id))
+		query := url.QueryEscape(fmt.Sprintf(`id in ["%v", "%v", "%v", "%v", "%v", "%v", "%v"]`,
+			service1.id, service2.id, service3.id, service4.id, service5.id, service6.id, service7.id))
 		result := ctx.requireQuery(nonAdminUser.sessionId, "services?filter="+query)
 		data := ctx.requirePath(result, "data")
 		ctx.requireNoChildWith(data, "id", service4.id)
+		ctx.requireNoChildWith(data, "id", service5.id)
+		ctx.requireNoChildWith(data, "id", service6.id)
+		ctx.requireNoChildWith(data, "id", service7.id)
 
 		jsonService := ctx.requireChildWith(data, "id", service1.id)
 		service1.validate(ctx, jsonService)
