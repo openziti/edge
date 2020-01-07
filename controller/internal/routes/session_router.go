@@ -30,19 +30,28 @@ func init() {
 }
 
 type SessionRouter struct {
-	BasePath string
-	IdType   response.IdType
+	BasePath       string
+	LegacyBasePath string
+	IdType         response.IdType
 }
 
 func NewSessionRouter() *SessionRouter {
 	return &SessionRouter{
-		BasePath: "/" + EntityNameNetworkSession,
-		IdType:   response.IdTypeUuid,
+		BasePath:       "/" + EntityNameSession,
+		LegacyBasePath: "/" + EntityNameSessionLegacy,
+		IdType:         response.IdTypeUuid,
 	}
 }
 
 func (ir *SessionRouter) Register(ae *env.AppEnv) {
 	registerCreateReadDeleteRouter(ae, ae.RootRouter, ir.BasePath, ir, &crudResolvers{
+		Create:  permissions.IsAuthenticated(),
+		Read:    permissions.IsAuthenticated(),
+		Delete:  permissions.IsAuthenticated(),
+		Default: permissions.IsAdmin(),
+	})
+
+	registerCreateReadDeleteRouter(ae, ae.RootRouter, ir.LegacyBasePath, ir, &crudResolvers{
 		Create:  permissions.IsAuthenticated(),
 		Read:    permissions.IsAuthenticated(),
 		Delete:  permissions.IsAuthenticated(),
@@ -95,7 +104,7 @@ func (ir *SessionRouter) Create(ae *env.AppEnv, rc *response.RequestContext) {
 
 	sessionCreate := &SessionApiPost{}
 	responder := &SessionRequestResponder{ae: ae, RequestResponder: rc.RequestResponder}
-	Create(rc, responder, ae.Schemes.NetworkSession.Post, sessionCreate, (&SessionApiList{}).BuildSelfLink, func() (string, error) {
+	Create(rc, responder, ae.Schemes.Session.Post, sessionCreate, (&SessionApiList{}).BuildSelfLink, func() (string, error) {
 		return ae.Handlers.Session.HandleCreate(sessionCreate.ToModel(rc))
 	})
 }

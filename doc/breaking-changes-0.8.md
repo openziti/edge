@@ -48,6 +48,14 @@ The following concepts were introduced in 0.7 for edge router policies. They are
      * Service 3 would match because its ID is listed explicitly
      
 ## Model Changes
+### Session Names
+  1. api sessions had two endpoints in 0.7, `/api-sessions` and `/sessions` which was deprecated. `/sessions` is now no longer valid for api sessions
+  2. sessions used the `/network-sessions` endpoint. In this release, `/network-sessions` has been deprecated and `/sessions` should be used instead. 
+  
+### Session Format
+  1. When creating a session, the returned JSON has the same base format as when listing sessions, so it now includes the service and api-session information. The only difference is that the session token is also returned from session create, but not when listing sessions.
+  1. The gateways attribute of session has been renamed to edgeRouters.
+
 ### Role Attributes
 Services now have a roleAttributes field. Identities already had a roleAttributes field, for used with edge router policies.
 
@@ -149,3 +157,16 @@ Several types have been renamed to conform to standard nomenclature
 # ziti command line changes
   1. The `ziti edge controller create/delete gateway` commands have been removed. Use `ziti edge controller create/delete edge-router` instead.
   2. There are new `ziti edge controller create/delete service-policy` commands
+  
+# Ziti Proxy changes
+ziti-proxy has been incorporated into the ziti-tunnel command. Where previously one would have run 
+
+```
+ZITI_SDK_CONFIG=./config.json ziti-proxy run <proxied services>
+``` 
+
+now one should use 
+
+```
+ziti-tunnel proxy -i ./config.json <proxied services>
+``` 

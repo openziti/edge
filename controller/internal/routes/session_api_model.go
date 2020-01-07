@@ -26,7 +26,8 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/response"
 )
 
-const EntityNameNetworkSession = "network-sessions"
+const EntityNameSession = "sessions"
+const EntityNameSessionLegacy = "network-sessions"
 
 type SessionApiPost struct {
 	ServiceId *string                `json:"serviceId"`
@@ -54,13 +55,13 @@ type NewSession struct {
 type SessionApiList struct {
 	*env.BaseApi
 	Hosting     bool                 `json:"hosting"`
-	ApiSession  *EntityApiRef        `json:"session"`
+	ApiSession  *EntityApiRef        `json:"apiSession"`
 	Service     *EntityApiRef        `json:"service"`
 	EdgeRouters []*SessionEdgeRouter `json:"edgeRouters"`
 }
 
 func (SessionApiList) BuildSelfLink(id string) *response.Link {
-	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameNetworkSession, id))
+	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameSession, id))
 }
 
 func (e *SessionApiList) GetSelfLink() *response.Link {
@@ -78,7 +79,7 @@ func (e *SessionApiList) PopulateLinks() {
 func (e *SessionApiList) ToEntityApiRef() *EntityApiRef {
 	e.PopulateLinks()
 	return &EntityApiRef{
-		Entity: EntityNameNetworkSession,
+		Entity: EntityNameSession,
 		Name:   nil,
 		Id:     e.Id,
 		Links:  e.Links,

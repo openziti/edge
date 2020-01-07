@@ -26,8 +26,7 @@ import (
 )
 
 const (
-	EntityNameApiSession       = "api-sessions"
-	EntityNameApiSessionLegacy = "sessions"
+	EntityNameApiSession = "api-sessions"
 )
 
 func NewApiSessionEntityRef(s *model.ApiSession) *EntityApiRef {
