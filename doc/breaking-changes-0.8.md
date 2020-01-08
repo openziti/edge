@@ -51,6 +51,7 @@ The following concepts were introduced in 0.7 for edge router policies. They are
 ### Session Names
   1. api sessions had two endpoints in 0.7, `/api-sessions` and `/sessions` which was deprecated. `/sessions` is now no longer valid for api sessions
   2. sessions used the `/network-sessions` endpoint. In this release, `/network-sessions` has been deprecated and `/sessions` should be used instead. 
+  3. `/current-session` is now `/current-api-session`
   
 ### Session Format
   1. When creating a session, the returned JSON has the same base format as when listing sessions, so it now includes the service and api-session information. The only difference is that the session token is also returned from session create, but not when listing sessions.
