@@ -24,7 +24,6 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/response"
-	"github.com/netfoundry/ziti-edge/migration"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 )
 
@@ -51,7 +50,7 @@ type IdentityApiList struct {
 }
 
 type IdentityApiUpdate struct {
-	Tags           *migration.PropertyMap `json:"tags"`
+	Tags           map[string]interface{} `json:"tags"`
 	Name           *string                `json:"name"`
 	Type           *string                `json:"type"`
 	IsAdmin        *bool                  `json:"isAdmin"`
@@ -66,9 +65,7 @@ func (i IdentityApiUpdate) ToModel(id string) *model.Identity {
 	result.IsDefaultAdmin = false
 	result.IdentityTypeId = stringz.OrEmpty(i.Type)
 	result.RoleAttributes = i.RoleAttributes
-	if i.Tags != nil {
-		result.Tags = *i.Tags
-	}
+	result.Tags = i.Tags
 	return result
 }
 
