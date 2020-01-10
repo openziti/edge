@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
-	"sort"
 	"strings"
 
 	"github.com/netfoundry/ziti-edge/controller/apierror"
@@ -54,7 +53,7 @@ func (ctx *TestContext) getEntityId(body []byte) string {
 func (ctx *TestContext) pathEquals(container *gabs.Container, val interface{}, path []string) {
 	pathValue := container.Search(path...)
 	if val == nil {
-		ctx.req.Nil(pathValue)
+		ctx.req.True(pathValue == nil || pathValue.Data() == nil)
 	} else {
 		ctx.req.Equal(val, pathValue.Data())
 	}
@@ -135,23 +134,19 @@ func (ctx *TestContext) requireFieldError(httpStatus int, body []byte, errorCode
 	return parsed
 }
 
-func (ctx *TestContext) requireMultiFieldError(httpStatus int, body []byte, errorCode string, field string, ids ...string) *gabs.Container {
-	ctx.req.Equal(http.StatusBadRequest, httpStatus)
-	parsed := ctx.parseJson(body)
-	ctx.pathEquals(parsed, errorCode, path("error.code"))
-	ctx.pathEquals(parsed, field, path("error.cause.field"))
-	valueElems := ctx.toStringSlice(ctx.requirePath(parsed, "error.cause.value"))
-	sort.Strings(valueElems)
-	sort.Strings(ids)
-	ctx.req.Equal(ids, valueElems)
-	return parsed
-}
-
 func (ctx *TestContext) requireNotFoundError(httpStatus int, body []byte) *gabs.Container {
 	ctx.req.Equal(http.StatusNotFound, httpStatus)
 	parsed := ctx.parseJson(body)
 	ctx.pathEquals(parsed, apierror.NotFoundCode, path("error.code"))
 	ctx.pathEquals(parsed, "The resource requested was not found or is no longer available", path("error.message"))
+	return parsed
+}
+
+func (ctx *TestContext) requireUnauthorizedError(httpStatus int, body []byte) *gabs.Container {
+	ctx.req.Equal(http.StatusUnauthorized, httpStatus)
+	parsed := ctx.parseJson(body)
+	ctx.pathEquals(parsed, apierror.UnauthorizedCode, path("error.code"))
+	ctx.pathEquals(parsed, "The request could not be completed. The session is not authorized or the credentials are invalid", path("error.message"))
 	return parsed
 }
 
@@ -168,18 +163,6 @@ func (ctx *TestContext) logJson(data []byte) {
 			}
 		}
 	}
-}
-
-func (ctx *TestContext) newNamedEntityJson(name string) *gabs.Container {
-	entityData := gabs.New()
-	ctx.setJsonValue(entityData, name, "name")
-	return entityData
-}
-
-func (ctx *TestContext) idsJson(ids ...string) *gabs.Container {
-	entityData := gabs.New()
-	ctx.setJsonValue(entityData, ids, "ids")
-	return entityData
 }
 
 func path(path ...string) []string {

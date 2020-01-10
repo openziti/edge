@@ -308,3 +308,41 @@ func (entity *testServicePolicy) validate(ctx *TestContext, c *gabs.Container) {
 	ctx.pathEqualsStringSlice(c, entity.serviceRoles, path("serviceRoles"))
 	ctx.pathEquals(c, entity.tags, path("tags"))
 }
+
+type testConfig struct {
+	id   string
+	name string
+	data map[string]interface{}
+	tags map[string]interface{}
+}
+
+func (entity *testConfig) getId() string {
+	return entity.id
+}
+
+func (entity *testConfig) setId(id string) {
+	entity.id = id
+}
+
+func (entity *testConfig) getEntityType() string {
+	return "configs"
+}
+
+func (entity *testConfig) toJson(_ bool, ctx *TestContext) string {
+	entityData := gabs.New()
+	ctx.setJsonValue(entityData, entity.name, "name")
+	ctx.setJsonValue(entityData, entity.data, "data")
+	if len(entity.tags) > 0 {
+		ctx.setJsonValue(entityData, entity.tags, "tags")
+	}
+	return entityData.String()
+}
+
+func (entity *testConfig) validate(ctx *TestContext, c *gabs.Container) {
+	if entity.tags == nil {
+		entity.tags = map[string]interface{}{}
+	}
+	ctx.pathEquals(c, entity.name, path("name"))
+	ctx.pathEquals(c, entity.data, path("data"))
+	ctx.pathEquals(c, entity.tags, path("tags"))
+}

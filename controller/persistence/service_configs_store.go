@@ -5,10 +5,6 @@ import (
 	"go.etcd.io/bbolt"
 )
 
-const (
-	FieldConfigData = "data"
-)
-
 type ServiceConfigs struct {
 	BaseEdgeEntityImpl
 	Name string
@@ -26,23 +22,6 @@ func (entity *ServiceConfigs) SetValues(ctx *boltz.PersistContext) {
 
 func (entity *ServiceConfigs) GetEntityType() string {
 	return EntityTypeServiceConfigs
-}
-
-type Config struct {
-	BaseEdgeEntityImpl
-	Data map[string]interface{}
-}
-
-func (entity *Config) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket) {
-	entity.Data = bucket.GetMap(FieldConfigData)
-}
-
-func (entity *Config) SetValues(ctx *boltz.PersistContext) {
-	ctx.SetMap(FieldConfigData, entity.Data)
-}
-
-func (entity *Config) GetEntityType() string {
-	return EntityTypeConfigs
 }
 
 type ServiceConfigsStore interface {
