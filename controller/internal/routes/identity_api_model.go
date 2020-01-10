@@ -248,20 +248,12 @@ func MapToIdentityApiList(ae *env.AppEnv, i *model.Identity) (*IdentityApiList, 
 		return nil, err
 	}
 
-	err = ae.GetHandlers().Identity.CollectAuthenticators(ret.Id, func(entity model.BaseModelEntity) error {
-		authenticatorModel, ok := entity.(*model.Authenticator)
-
-		if !ok {
-			return fmt.Errorf("entity is not an enrollment \"%s\"", entity.GetId())
-		}
-
+	err = ae.GetHandlers().Identity.CollectAuthenticators(ret.Id, func(authenticator *model.Authenticator) error {
 		var err error
-		ret.Authenticators[authenticatorModel.Method], err = MapToIdentityAuthenticatorApiList(ae, authenticatorModel)
-
+		ret.Authenticators[authenticator.Method], err = MapToIdentityAuthenticatorApiList(ae, authenticator)
 		if err != nil {
 			return err
 		}
-
 		return nil
 	})
 
