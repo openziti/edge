@@ -85,6 +85,38 @@
         }
       }
     },
+    "config-data-null": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^.{1,50}$": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            {
+              "type": "number",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "definitions.all.json#/definitions/config-data"
+            }
+          ]
+        }
+      }
+    },
     "name": {
       "type": "string",
       "minLength": 2,
