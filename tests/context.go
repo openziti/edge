@@ -337,20 +337,39 @@ func (ctx *TestContext) requireUpdateEntity(entity testEntity) {
 	ctx.req.Equal(http.StatusOK, httpStatus)
 }
 
-func (ctx *TestContext) updateEntity(entity testEntity) (int, []byte) {
-	return ctx.updateEntityOfType(entity.getId(), entity.getEntityType(), entity.toJson(false, ctx))
+func (ctx *TestContext) requirePatchEntity(entity testEntity, fields ...string) {
+	httpStatus, _ := ctx.patchEntity(entity, fields...)
+	ctx.req.Equal(http.StatusOK, httpStatus)
 }
 
-func (ctx *TestContext) updateEntityOfType(id string, entityType string, body string) (int, []byte) {
+func (ctx *TestContext) updateEntity(entity testEntity) (int, []byte) {
+	return ctx.updateEntityOfType(entity.getId(), entity.getEntityType(), entity.toJson(false, ctx), false)
+}
+
+func (ctx *TestContext) patchEntity(entity testEntity, fields ...string) (int, []byte) {
+	return ctx.updateEntityOfType(entity.getId(), entity.getEntityType(), entity.toJson(false, ctx, fields...), true)
+}
+
+func (ctx *TestContext) updateEntityOfType(id string, entityType string, body string, patch bool) (int, []byte) {
+	if ctx.enabledJsonLogging {
+		fmt.Printf("update body:\n%v\n", body)
+	}
 	client := ctx.DefaultClient()
 	urlPath := fmt.Sprintf("/%v/%v", entityType, id)
 	pfxlog.Logger().Infof("url path: %v", urlPath)
-	resp, err := client.
+	var err error
+	var resp *resty.Response
+	request := client.
 		R().
 		SetHeader("Content-Type", "application/json").
 		SetHeader(constants.ZitiSession, ctx.adminSessionId).
-		SetBody(body).
-		Put(urlPath)
+		SetBody(body)
+
+	if patch {
+		resp, err = request.Patch(urlPath)
+	} else {
+		resp, err = request.Put(urlPath)
+	}
 
 	ctx.req.NoError(err)
 	ctx.logJson(resp.Body())
@@ -376,6 +395,13 @@ func (ctx *TestContext) completeEnrollment(identityId string, password string) {
 	ctx.req.NoError(err)
 	ctx.logJson(resp.Body())
 	ctx.req.Equal(http.StatusOK, resp.StatusCode())
+}
+
+func (ctx *TestContext) validateUpdate(entity testEntity) *gabs.Container {
+	result := ctx.requireQuery(ctx.adminSessionId, entity.getEntityType()+"/"+entity.getId())
+	jsonConfig := ctx.requirePath(result, "data")
+	entity.validate(ctx, jsonConfig)
+	return jsonConfig
 }
 
 func (ctx *TestContext) requireQuery(token, url string) *gabs.Container {

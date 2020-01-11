@@ -22,6 +22,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"net/http"
 	"reflect"
 	"strings"
@@ -35,6 +36,17 @@ import (
 func (ctx *TestContext) setJsonValue(container *gabs.Container, value interface{}, path ...string) {
 	_, err := container.Set(value, path...)
 	ctx.req.NoError(err)
+}
+
+func (ctx *TestContext) setValue(container *gabs.Container, value interface{}, fields []string, field string) {
+	ctx.setValueWithPath(container, value, fields, field, field)
+}
+
+func (ctx *TestContext) setValueWithPath(container *gabs.Container, value interface{}, fields []string, field string, path ...string) {
+	if len(fields) == 0 || stringz.Contains(fields, field) {
+		_, err := container.Set(value, path...)
+		ctx.req.NoError(err)
+	}
 }
 
 func (ctx *TestContext) parseJson(body []byte) *gabs.Container {

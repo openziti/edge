@@ -104,11 +104,59 @@ func Test_Configs(t *testing.T) {
 		now = time.Now()
 		config.data = map[string]interface{}{"snafu": false}
 		ctx.requireUpdateEntity(config)
-
-		result := ctx.requireQuery(ctx.adminSessionId, "configs/"+config.id)
-		jsonConfig := ctx.requirePath(result, "data")
-		config.validate(ctx, jsonConfig)
+		jsonConfig := ctx.validateUpdate(config)
 		ctx.validateDateFieldsForUpdate(now, createdAt, jsonConfig)
+	})
+
+	ctx.enabledJsonLogging = true
+	t.Run("patch config should pass", func(t *testing.T) {
+		now := time.Now()
+		config := ctx.requireCreateNewConfig(map[string]interface{}{"port": float64(22)})
+		entityJson := ctx.validateEntityWithQuery(config)
+		createdAt := ctx.validateDateFieldsForCreate(now, entityJson)
+
+		time.Sleep(time.Millisecond * 10)
+		now = time.Now()
+		newName := uuid.New().String()
+		config.name = newName
+		config.data = map[string]interface{}{"foo": "bar"}
+		config.tags = map[string]interface{}{"baz": "bam"}
+		ctx.requirePatchEntity(config, "name")
+
+		config.data = map[string]interface{}{"port": float64(22)} // data should not have gotten updated
+		config.tags = nil                                         // tags should not be updated
+		jsonConfig := ctx.validateUpdate(config)
+		ctx.validateDateFieldsForUpdate(now, createdAt, jsonConfig)
+
+		time.Sleep(time.Millisecond * 10)
+		now = time.Now()
+		config.name = uuid.New().String()
+		config.data = map[string]interface{}{"foo": "bar"}
+		config.tags = map[string]interface{}{"baz": "bam"}
+		ctx.requirePatchEntity(config, "data")
+
+		config.name = newName // name should not be updated
+		config.tags = nil     // tags should not be updated
+		ctx.validateUpdate(config)
+
+		time.Sleep(time.Millisecond * 10)
+		now = time.Now()
+		config.name = uuid.New().String()
+		config.data = map[string]interface{}{"bim": "bam"}
+		config.tags = map[string]interface{}{"enlightened": false}
+		ctx.requirePatchEntity(config, "tags")
+
+		config.name = newName                              // name should not be updated
+		config.data = map[string]interface{}{"foo": "bar"} // data should not have gotten updated
+		ctx.validateUpdate(config)
+
+		time.Sleep(time.Millisecond * 10)
+		now = time.Now()
+		config.name = uuid.New().String()
+		config.data = map[string]interface{}{"bim": "bom"}
+		config.tags = map[string]interface{}{"enlightened": true}
+		ctx.requirePatchEntity(config, "name", "data", "tags")
+		ctx.validateUpdate(config)
 	})
 
 	t.Run("delete should pass", func(t *testing.T) {

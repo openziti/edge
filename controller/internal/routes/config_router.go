@@ -72,6 +72,6 @@ func (ir *ConfigRouter) Update(ae *env.AppEnv, rc *response.RequestContext) {
 func (ir *ConfigRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 	apiEntity := &ConfigApi{}
 	Patch(rc, ae.Schemes.Config.Patch, ir.IdType, apiEntity, func(id string, fields JsonFields) error {
-		return ae.Handlers.Config.Patch(apiEntity.ToModel(id), fields.ConcatNestedNames())
+		return ae.Handlers.Config.Patch(apiEntity.ToModel(id), fields.FilterMaps("tags", "data"))
 	})
 }

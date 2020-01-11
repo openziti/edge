@@ -10,7 +10,7 @@
     },
     "data": {
       "default": {},
-      "$ref": "definitions.all.json#/definitions/config-data"
+      "$ref": "definitions.all.json#/definitions/config-data-null"
     },
     "tags": {
       "default": {},
