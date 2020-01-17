@@ -108,6 +108,48 @@ func (store *baseStore) baseLoadOneById(tx *bbolt.Tx, id string, entity boltz.Ba
 	return nil
 }
 
+func (store *baseStore) updateEntityNameReferences(bucket *boltz.TypedBucket, rolesSymbol boltz.EntitySetSymbol, entity NamedEdgeEntity, oldName string) {
+	// If the entity name is the same as entity ID, bail out. We don't want to remove any references by ID, since
+	// those take precedence over named references
+	if store.IsEntityPresent(bucket.Tx(), oldName) {
+		return
+	}
+	oldNameRef := entityRef(oldName)
+	newNameRef := entityRef(entity.GetName())
+	for _, policyHolderId := range store.GetRelatedEntitiesIdList(bucket.Tx(), entity.GetId(), rolesSymbol.GetStore().GetEntityType()) {
+		err := rolesSymbol.Map(bucket.Tx(), []byte(policyHolderId), func(rolesElem string) (s *string, b bool, b2 bool) {
+			if rolesElem == oldNameRef {
+				return &newNameRef, true, true
+			}
+			return nil, false, true
+		})
+		if err != nil {
+			bucket.SetError(err)
+			return
+		}
+	}
+}
+
+func (store *baseStore) deleteEntityReferences(tx *bbolt.Tx, entity NamedEdgeEntity, rolesSymbol boltz.EntitySetSymbol) error {
+	// If the entity name is the same as entity ID, don't remove any of those references as id references take precedence
+	checkName := !store.IsEntityPresent(tx, entity.GetName())
+	idRef := entityRef(entity.GetId())
+	nameRef := entityRef(entity.GetName())
+
+	for _, policyHolderId := range store.GetRelatedEntitiesIdList(tx, entity.GetId(), rolesSymbol.GetStore().GetEntityType()) {
+		err := rolesSymbol.Map(tx, []byte(policyHolderId), func(rolesElem string) (s *string, b bool, b2 bool) {
+			if rolesElem == idRef || (checkName && rolesElem == nameRef) {
+				return nil, true, true
+			}
+			return nil, false, true
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (store *baseStore) getEntityIdsForRoleSet(tx *bbolt.Tx, field string, roleSet []string, index boltz.SetReadIndex, targetStore NameIndexedStore) ([]string, error) {
 	entityStore := index.GetSymbol().GetStore()
 	roles, ids, err := splitRolesAndIds(roleSet)
