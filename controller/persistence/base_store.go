@@ -18,6 +18,7 @@ package persistence
 
 import (
 	"fmt"
+	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/util"
 	"github.com/netfoundry/ziti-edge/controller/validation"
 	"github.com/netfoundry/ziti-fabric/controller/network"
@@ -112,6 +113,7 @@ func (store *baseStore) updateEntityNameReferences(bucket *boltz.TypedBucket, ro
 	// If the entity name is the same as entity ID, bail out. We don't want to remove any references by ID, since
 	// those take precedence over named references
 	if store.IsEntityPresent(bucket.Tx(), oldName) {
+		pfxlog.Logger().Warnf("%v has name %v which is also used as an ID", store.GetSingularEntityType(), oldName)
 		return
 	}
 	oldNameRef := entityRef(oldName)
@@ -133,6 +135,9 @@ func (store *baseStore) updateEntityNameReferences(bucket *boltz.TypedBucket, ro
 func (store *baseStore) deleteEntityReferences(tx *bbolt.Tx, entity NamedEdgeEntity, rolesSymbol boltz.EntitySetSymbol) error {
 	// If the entity name is the same as entity ID, don't remove any of those references as id references take precedence
 	checkName := !store.IsEntityPresent(tx, entity.GetName())
+	if !checkName {
+		pfxlog.Logger().Warnf("%v has name %v which is also used as an ID", store.GetSingularEntityType(), entity.GetName())
+	}
 	idRef := entityRef(entity.GetId())
 	nameRef := entityRef(entity.GetName())
 
