@@ -114,17 +114,22 @@ func updateServices(context ziti.Context, interceptor Interceptor, resolver dns.
 	for _, svc := range added {
 		if stringz.Contains(svc.Permissions, "Dial") {
 			clientConfig := &entities.ServiceConfig{}
-			if found, err := svc.GetConfigOfType(entities.ClientConfigV1, clientConfig); found && err == nil {
+			found, err := svc.GetConfigOfType(entities.ClientConfigV1, clientConfig)
+
+			if found && err == nil {
 				svc.ClientConfig = clientConfig
 			} else if !found {
-				pfxlog.Logger().Infof("no service config of type %v for service %v", entities.ClientConfigV1, svc.Name)
+				pfxlog.Logger().Debugf("no service config of type %v for service %v", entities.ClientConfigV1, svc.Name)
 			} else if err != nil {
-				pfxlog.Logger().WithError(err).Infof("error decoding service config of type %v for service %v", entities.ClientConfigV1, svc.Name)
+				pfxlog.Logger().WithError(err).Errorf("error decoding service config of type %v for service %v", entities.ClientConfigV1, svc.Name)
 			}
-			log.Infof("starting tunnel for newly available service %s", svc.Name)
-			err := interceptor.Intercept(svc, resolver)
-			if err != nil {
-				log.Errorf("failed to intercept service: %v", err)
+
+			if err == nil {
+				log.Infof("starting tunnel for newly available service %s", svc.Name)
+				err := interceptor.Intercept(svc, resolver)
+				if err != nil {
+					log.Errorf("failed to intercept service: %v", err)
+				}
 			}
 		}
 		if stringz.Contains(svc.Permissions, "Bind") {
