@@ -61,6 +61,10 @@ func createInitialTunnelerConfigTypes(mtx *MigrationContext) error {
 		if err := mtx.Stores.Config.Create(mtx.Ctx, config); err != nil {
 			return err
 		}
+		service.Configs = append(service.Configs, config.Id)
+		if err := mtx.Stores.EdgeService.Update(mtx.Ctx, service, nil); err != nil {
+			return err
+		}
 	}
 
 	return nil
