@@ -57,6 +57,27 @@ func Test_ConfigTypes(t *testing.T) {
 		ctx.validateDateFieldsForCreate(now, entityJson)
 	})
 
+	t.Run("create config type with invalid schema should fail", func(t *testing.T) {
+		ctx.testContextChanged(t)
+		configType := ctx.newConfigType()
+		configType.schema = map[string]interface{}{
+			"$id":                  "http://ziti-edge.netfoundry.io/schemas/test.config.json",
+			"type":                 "objectionable", // not a valid type
+			"additionalProperties": false,
+			"required": []interface{}{
+				"hostname",
+				"port",
+			},
+			"properties": map[string]interface{}{
+				"hostname": map[string]interface{}{
+					"type": "string",
+				},
+			},
+		}
+		httpCode, body := ctx.AdminSession.createEntity(configType)
+		ctx.requireFieldError(httpCode, body, apierror.InvalidFieldCode, "schema")
+	})
+
 	t.Run("create config type with schema should pass", func(t *testing.T) {
 		ctx.testContextChanged(t)
 		now := time.Now()
