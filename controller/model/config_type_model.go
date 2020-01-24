@@ -22,24 +22,34 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/validation"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
+	"github.com/xeipuuv/gojsonschema"
 	"go.etcd.io/bbolt"
 	"reflect"
 )
 
 type ConfigType struct {
 	BaseModelEntityImpl
-	Name string
-	Type string
-	Data map[string]interface{}
+	Name   string
+	Schema map[string]interface{}
 }
 
-func (entity *ConfigType) ToBoltEntityForCreate(_ *bbolt.Tx, _ Handler) (persistence.BaseEdgeEntity, error) {
+func (entity *ConfigType) GetCompiledSchema() (*gojsonschema.Schema, error) {
+	if len(entity.Schema) == 0 {
+		return nil, errors.Errorf("no schema defined on config type %v", entity.Name)
+	}
+	entitySchemaLoader := gojsonschema.NewGoLoader(entity.Schema)
+	schemaLoader := gojsonschema.NewSchemaLoader()
+	return schemaLoader.Compile(entitySchemaLoader)
+}
+
+func (entity *ConfigType) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (persistence.BaseEdgeEntity, error) {
 	if entity.Name == ConfigTypeAll {
 		return nil, validation.NewFieldError(fmt.Sprintf("%v is a keyword and may not be used as a config type name", entity.Name), "name", entity.Name)
 	}
 	return &persistence.ConfigType{
 		BaseEdgeEntityImpl: *persistence.NewBaseEdgeEntity(entity.Id, entity.Tags),
 		Name:               entity.Name,
+		Schema:             entity.Schema,
 	}, nil
 }
 
@@ -59,5 +69,6 @@ func (entity *ConfigType) FillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.Base
 
 	entity.fillCommon(boltConfigType)
 	entity.Name = boltConfigType.Name
+	entity.Schema = boltConfigType.Schema
 	return nil
 }
