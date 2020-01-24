@@ -46,6 +46,12 @@ func (entity *ConfigType) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (
 	if entity.Name == ConfigTypeAll {
 		return nil, validation.NewFieldError(fmt.Sprintf("%v is a keyword and may not be used as a config type name", entity.Name), "name", entity.Name)
 	}
+
+	if len(entity.Schema) > 0 {
+		if _, err := entity.GetCompiledSchema(); err != nil {
+			return nil, validation.NewFieldError(fmt.Sprintf("invalid schema %v", err), "schema", entity.Schema)
+		}
+	}
 	return &persistence.ConfigType{
 		BaseEdgeEntityImpl: *persistence.NewBaseEdgeEntity(entity.Id, entity.Tags),
 		Name:               entity.Name,
