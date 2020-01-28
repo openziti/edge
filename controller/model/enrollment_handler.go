@@ -42,7 +42,7 @@ func NewEnrollmentHandler(env Env) *EnrollmentHandler {
 	return handler
 }
 
-func (handler *EnrollmentHandler) NewModelEntity() BaseModelEntity {
+func (handler *EnrollmentHandler) NewModelEntity() BoltEntitySink {
 	return &Enrollment{}
 }
 

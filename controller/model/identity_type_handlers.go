@@ -35,7 +35,7 @@ type IdentityTypeHandler struct {
 	baseHandler
 }
 
-func (handler *IdentityTypeHandler) NewModelEntity() BaseModelEntity {
+func (handler *IdentityTypeHandler) NewModelEntity() BoltEntitySink {
 	return &IdentityType{}
 }
 

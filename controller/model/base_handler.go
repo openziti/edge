@@ -31,11 +31,11 @@ type Handler interface {
 	GetStore() persistence.Store
 	GetDbProvider() persistence.DbProvider
 	GetEnv() Env
-	NewModelEntity() BaseModelEntity
+	NewModelEntity() BoltEntitySink
 	BaseList(queryOptions *QueryOptions) (*BaseModelEntityListResult, error)
 	BaseLoad(id string) (BaseModelEntity, error)
 
-	readEntityInTx(tx *bbolt.Tx, id string, modelEntity BaseModelEntity) error
+	readEntityInTx(tx *bbolt.Tx, id string, modelEntity BoltEntitySink) error
 }
 
 type baseHandler struct {
@@ -96,7 +96,7 @@ func (result *BaseModelEntityListResult) collect(tx *bbolt.Tx, ids []string, que
 	return nil
 }
 
-func (handler *baseHandler) createEntity(modelEntity BaseModelEntity) (string, error) {
+func (handler *baseHandler) createEntity(modelEntity BoltEntitySource) (string, error) {
 	var id string
 	err := handler.GetDb().Update(func(tx *bbolt.Tx) error {
 		var err error
@@ -109,7 +109,7 @@ func (handler *baseHandler) createEntity(modelEntity BaseModelEntity) (string, e
 	return id, nil
 }
 
-func (handler *baseHandler) createEntityInTx(ctx boltz.MutateContext, modelEntity BaseModelEntity) (string, error) {
+func (handler *baseHandler) createEntityInTx(ctx boltz.MutateContext, modelEntity BoltEntitySource) (string, error) {
 	if modelEntity == nil {
 		return "", errors.Errorf("can't create %v with nil value", handler.store.GetEntityType())
 	}
@@ -130,15 +130,15 @@ func (handler *baseHandler) createEntityInTx(ctx boltz.MutateContext, modelEntit
 	return modelEntity.GetId(), nil
 }
 
-func (handler *baseHandler) updateEntity(modelEntity BaseModelEntity, checker boltz.FieldChecker) error {
+func (handler *baseHandler) updateEntity(modelEntity BoltEntitySource, checker boltz.FieldChecker) error {
 	return handler.updateGeneral(modelEntity, checker, false)
 }
 
-func (handler *baseHandler) patchEntity(modelEntity BaseModelEntity, checker boltz.FieldChecker) error {
+func (handler *baseHandler) patchEntity(modelEntity BoltEntitySource, checker boltz.FieldChecker) error {
 	return handler.updateGeneral(modelEntity, checker, true)
 }
 
-func (handler *baseHandler) updateGeneral(modelEntity BaseModelEntity, checker boltz.FieldChecker, patch bool) error {
+func (handler *baseHandler) updateGeneral(modelEntity BoltEntitySource, checker boltz.FieldChecker, patch bool) error {
 	return handler.GetDb().Update(func(tx *bbolt.Tx) error {
 		ctx := boltz.NewMutateContext(tx)
 		existing := handler.store.NewStoreEntity()
@@ -170,13 +170,13 @@ func (handler *baseHandler) updateGeneral(modelEntity BaseModelEntity, checker b
 	})
 }
 
-func (handler *baseHandler) readEntity(id string, modelEntity BaseModelEntity) error {
+func (handler *baseHandler) readEntity(id string, modelEntity BoltEntitySink) error {
 	return handler.GetDb().View(func(tx *bbolt.Tx) error {
 		return handler.readEntityInTx(tx, id, modelEntity)
 	})
 }
 
-func (handler *baseHandler) readEntityInTx(tx *bbolt.Tx, id string, modelEntity BaseModelEntity) error {
+func (handler *baseHandler) readEntityInTx(tx *bbolt.Tx, id string, modelEntity BoltEntitySink) error {
 	boltEntity := handler.store.NewStoreEntity()
 	found, err := handler.store.BaseLoadOneById(tx, id, boltEntity)
 	if err != nil {
@@ -189,13 +189,13 @@ func (handler *baseHandler) readEntityInTx(tx *bbolt.Tx, id string, modelEntity 
 	return modelEntity.FillFrom(handler.impl, tx, boltEntity)
 }
 
-func (handler *baseHandler) readEntityWithIndex(name string, key []byte, index boltz.ReadIndex, modelEntity BaseModelEntity) error {
+func (handler *baseHandler) readEntityWithIndex(name string, key []byte, index boltz.ReadIndex, modelEntity BoltEntitySink) error {
 	return handler.GetDb().View(func(tx *bbolt.Tx) error {
 		return handler.readEntityInTxWithIndex(name, tx, key, index, modelEntity)
 	})
 }
 
-func (handler *baseHandler) readEntityInTxWithIndex(name string, tx *bbolt.Tx, key []byte, index boltz.ReadIndex, modelEntity BaseModelEntity) error {
+func (handler *baseHandler) readEntityInTxWithIndex(name string, tx *bbolt.Tx, key []byte, index boltz.ReadIndex, modelEntity BoltEntitySink) error {
 	id := index.Read(tx, key)
 	if id == nil {
 		return util.NewNotFoundError(handler.store.GetSingularEntityType(), name, string(key))

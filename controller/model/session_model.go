@@ -55,7 +55,7 @@ func (entity *Session) ToBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (per
 		return nil, validation.NewFieldError("api session not found", "ApiSessionId", entity.ApiSessionId)
 	}
 
-	service, err := handler.GetEnv().GetHandlers().Service.ReadForIdentity(entity.ServiceId, apiSession.IdentityId)
+	service, err := handler.GetEnv().GetHandlers().Service.ReadForIdentity(entity.ServiceId, apiSession.IdentityId, nil)
 	if err != nil {
 		return nil, err
 	}

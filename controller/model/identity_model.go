@@ -18,6 +18,7 @@ package model
 
 import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
+	"github.com/netfoundry/ziti-edge/controller/util"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -72,4 +73,33 @@ func (entity *Identity) FillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.BaseEn
 	entity.RoleAttributes = boltIdentity.RoleAttributes
 
 	return nil
+}
+
+type ServiceConfig struct {
+	Service string
+	Config  string
+}
+
+func toBoltServiceConfigs(tx *bbolt.Tx, handler Handler, serviceConfigs []ServiceConfig) ([]persistence.ServiceConfig, error) {
+	serviceStore := handler.GetEnv().GetStores().EdgeService
+	configStore := handler.GetEnv().GetStores().Config
+
+	var boltServiceConfigs []persistence.ServiceConfig
+	for _, serviceConfig := range serviceConfigs {
+		service := persistence.ValidateAndConvertNameToId(tx, serviceStore, serviceConfig.Service)
+		if service == nil {
+			return nil, util.NewNotFoundError(serviceStore.GetSingularEntityType(), "id or name", serviceConfig.Service)
+		}
+
+		config := persistence.ValidateAndConvertNameToId(tx, configStore, serviceConfig.Config)
+		if config == nil {
+			return nil, util.NewNotFoundError(configStore.GetSingularEntityType(), "id or name", serviceConfig.Config)
+		}
+
+		boltServiceConfigs = append(boltServiceConfigs, persistence.ServiceConfig{
+			ServiceId: *service,
+			ConfigId:  *config,
+		})
+	}
+	return boltServiceConfigs, nil
 }

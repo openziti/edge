@@ -35,7 +35,7 @@ type ApiSessionHandler struct {
 	baseHandler
 }
 
-func (handler *ApiSessionHandler) NewModelEntity() BaseModelEntity {
+func (handler *ApiSessionHandler) NewModelEntity() BoltEntitySink {
 	return &ApiSession{}
 }
 
