@@ -53,7 +53,7 @@ func NewIdentityHandler(env Env) *IdentityHandler {
 	return handler
 }
 
-func (handler IdentityHandler) NewModelEntity() BoltEntitySink {
+func (handler IdentityHandler) newModelEntity() boltEntitySink {
 	return &Identity{}
 }
 
@@ -99,7 +99,7 @@ func (handler *IdentityHandler) CreateWithEnrollments(identityModel *Identity, e
 
 	err = handler.GetDb().Update(func(tx *bbolt.Tx) error {
 		ctx := boltz.NewMutateContext(tx)
-		boltEntity, err := identityModel.ToBoltEntityForCreate(tx, handler.impl)
+		boltEntity, err := identityModel.toBoltEntityForCreate(tx, handler.impl)
 		if err != nil {
 			return err
 		}
@@ -358,7 +358,7 @@ func (handler *IdentityHandler) CreateWithAuthenticator(identity *Identity, auth
 
 	err = handler.env.GetDbProvider().GetDb().Update(func(tx *bbolt.Tx) error {
 		ctx := boltz.NewMutateContext(tx)
-		boltIdentity, err := identity.ToBoltEntityForCreate(tx, handler)
+		boltIdentity, err := identity.toBoltEntityForCreate(tx, handler)
 
 		if err != nil {
 			return err
@@ -368,7 +368,7 @@ func (handler *IdentityHandler) CreateWithAuthenticator(identity *Identity, auth
 			return err
 		}
 
-		boltAuthenticator, err := authenticator.ToBoltEntityForCreate(tx, handler.env.GetHandlers().Authenticator)
+		boltAuthenticator, err := authenticator.toBoltEntityForCreate(tx, handler.env.GetHandlers().Authenticator)
 
 		if err != nil {
 			return err

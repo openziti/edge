@@ -38,7 +38,7 @@ type CaHandler struct {
 	baseHandler
 }
 
-func (handler *CaHandler) NewModelEntity() BoltEntitySink {
+func (handler *CaHandler) newModelEntity() boltEntitySink {
 	return &Ca{}
 }
 

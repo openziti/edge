@@ -36,7 +36,7 @@ type ServicePolicyHandler struct {
 	baseHandler
 }
 
-func (handler *ServicePolicyHandler) NewModelEntity() BoltEntitySink {
+func (handler *ServicePolicyHandler) newModelEntity() boltEntitySink {
 	return &ServicePolicy{}
 }
 

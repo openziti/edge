@@ -40,7 +40,7 @@ type ServiceHandler struct {
 	baseHandler
 }
 
-func (handler *ServiceHandler) NewModelEntity() BoltEntitySink {
+func (handler *ServiceHandler) newModelEntity() boltEntitySink {
 	return &ServiceDetail{}
 }
 

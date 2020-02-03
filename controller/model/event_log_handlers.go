@@ -31,7 +31,7 @@ type EventLogHandler struct {
 	baseHandler
 }
 
-func (handler *EventLogHandler) NewModelEntity() BoltEntitySink {
+func (handler *EventLogHandler) newModelEntity() boltEntitySink {
 	return &EventLog{}
 }
 

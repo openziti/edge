@@ -41,7 +41,7 @@ type ConfigTypeHandler struct {
 	baseHandler
 }
 
-func (handler *ConfigTypeHandler) NewModelEntity() BoltEntitySink {
+func (handler *ConfigTypeHandler) newModelEntity() boltEntitySink {
 	return &ConfigType{}
 }
 

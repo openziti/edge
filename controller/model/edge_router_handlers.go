@@ -47,7 +47,7 @@ type EdgeRouterHandler struct {
 	allowedFieldsChecker boltz.FieldChecker
 }
 
-func (handler *EdgeRouterHandler) NewModelEntity() BoltEntitySink {
+func (handler *EdgeRouterHandler) newModelEntity() boltEntitySink {
 	return &EdgeRouter{}
 }
 
