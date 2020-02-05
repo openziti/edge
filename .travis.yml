@@ -1,5 +1,7 @@
 version: "~> 1.0"
 
+gobuild_args: --tags apitests
+
 before_install:
   - openssl aes-256-cbc -K $encrypted_c467fd803693_key -iv $encrypted_c467fd803693_iv -in github_deploy_key.enc -out github_deploy_key -d
 
