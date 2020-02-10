@@ -2,9 +2,6 @@ version: "~> 1.0"
 
 gobuild_args: --tags apitests
 
-env:
-  global: VERSION_FILE=./version
-
 import:
   - source: netfoundry/ziti-ci:go-defaults.yml@v1
   - source: netfoundry/ziti-ci:git-setup.yml@v1
