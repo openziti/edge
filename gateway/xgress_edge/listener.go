@@ -152,7 +152,7 @@ func (proxy *ingressProxy) processConnect(req *channel2.Message, ch channel2.Cha
 
 	// fabric connect
 	log.Debug("dialing fabric")
-	sessionInfo, err := xgress.GetSession(proxy.listener.factory, ns.Token, ns.Service.Id)
+	sessionInfo, err := xgress.GetSession(proxy.listener.factory, ns.Token, ns.Service.Id, nil)
 	if err != nil {
 		log.Warn("failed to dial fabric ", err)
 		proxy.sendStateClosedReply(err.Error(), req)
@@ -199,7 +199,7 @@ func (proxy *ingressProxy) processBind(req *channel2.Message, ch channel2.Channe
 	}
 
 	log.Debug("binding service")
-	if err := xgress.BindService(proxy.listener.factory, token, ns.Service.Id); err != nil {
+	if err := xgress.BindService(proxy.listener.factory, token, ns.Service.Id, nil); err != nil {
 		proxy.sendStateClosedReply(err.Error(), req)
 		return
 	}

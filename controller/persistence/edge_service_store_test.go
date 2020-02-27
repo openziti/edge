@@ -18,12 +18,12 @@ package persistence
 
 import (
 	"fmt"
+	"github.com/netfoundry/ziti-fabric/controller/db"
 	"testing"
 	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
-	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"go.etcd.io/bbolt"
@@ -43,7 +43,7 @@ func Test_EdgeServiceStore(t *testing.T) {
 }
 
 func (ctx *TestContext) testServiceParentChild(_ *testing.T) {
-	fabricService := &network.Service{
+	fabricService := &db.Service{
 		Id:              uuid.New().String(),
 		Binding:         uuid.New().String(),
 		EndpointAddress: uuid.New().String(),
@@ -89,7 +89,7 @@ func (ctx *TestContext) testCreateInvalidServices(_ *testing.T) {
 	ctx.requireCreate(apiSession)
 
 	edgeService := &EdgeService{
-		Service: network.Service{
+		Service: db.Service{
 			Id:              uuid.New().String(),
 			Binding:         uuid.New().String(),
 			EndpointAddress: uuid.New().String(),
@@ -107,7 +107,7 @@ func (ctx *TestContext) testCreateServices(_ *testing.T) {
 	defer ctx.cleanupAll()
 
 	edgeService := &EdgeService{
-		Service: network.Service{
+		Service: db.Service{
 			Id:              uuid.New().String(),
 			Binding:         uuid.New().String(),
 			EndpointAddress: uuid.New().String(),
@@ -140,7 +140,7 @@ func (ctx *TestContext) createServiceTestEntities() *serviceTestEntities {
 	servicePolicy := ctx.requireNewServicePolicy(PolicyTypeDial, ss(), ss(roleRef(role)))
 
 	service1 := &EdgeService{
-		Service: network.Service{
+		Service: db.Service{
 			Id:              uuid.New().String(),
 			Binding:         uuid.New().String(),
 			EndpointAddress: uuid.New().String(),
