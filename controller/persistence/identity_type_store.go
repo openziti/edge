@@ -26,6 +26,10 @@ type IdentityType struct {
 	Name string
 }
 
+func (entity *IdentityType) GetName() string {
+	return entity.Name
+}
+
 func (entity *IdentityType) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket) {
 	entity.LoadBaseValues(bucket)
 	entity.Name = bucket.GetStringOrError(FieldName)

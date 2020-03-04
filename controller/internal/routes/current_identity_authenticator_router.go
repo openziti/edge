@@ -63,7 +63,7 @@ func (ir *CurrentIdentityAuthenticatorRouter) List(ae *env.AppEnv, rc *response.
 }
 
 func (ir *CurrentIdentityAuthenticatorRouter) Detail(ae *env.AppEnv, rc *response.RequestContext) {
-	Detail(rc, ir.IdType, func(rc *response.RequestContext, id string) (entity BaseApiEntity, err error) {
+	Detail(rc, ir.IdType, func(rc *response.RequestContext, id string) (entity interface{}, err error) {
 		authenticator, err := ae.GetHandlers().Authenticator.ReadForIdentity(rc.Identity.Id, id)
 		if err != nil {
 			return nil, err

@@ -18,6 +18,7 @@ package persistence
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/netfoundry/ziti-fabric/controller/db"
 	"time"
 
@@ -196,15 +197,27 @@ func migrateServicesFromPG(mtx *MigrationContext) error {
 
 		edgeService := &EdgeService{
 			Service: db.Service{
-				Id:              pgService.ID,
-				Binding:         "edge", //todo confirm this
-				EndpointAddress: stringz.OrEmpty(pgService.EndpointAddress),
-				Egress:          stringz.OrEmpty(pgService.EgressRouter),
+				Id: pgService.ID,
 			},
 			EdgeEntityFields: toBaseBoltEntity(&pgService.BaseDbEntity).EdgeEntityFields,
 			Name:             *pgService.Name,
 		}
+
 		if err = mtx.Stores.EdgeService.Create(mtx.Ctx, edgeService); err != nil {
+			return err
+		}
+
+		endpoint := &db.Endpoint{
+			Id:        uuid.New().String(),
+			Service:   edgeService.Id,
+			Router:    stringz.OrEmpty(pgService.EgressRouter),
+			Binding:   "transport",
+			Address:   stringz.OrEmpty(pgService.EndpointAddress),
+			CreatedAt: time.Time{},
+			PeerData:  nil,
+		}
+
+		if err = mtx.Stores.Endpoint.Create(mtx.Ctx, endpoint); err != nil {
 			return err
 		}
 

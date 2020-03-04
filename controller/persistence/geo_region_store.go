@@ -26,6 +26,10 @@ type GeoRegion struct {
 	Name string
 }
 
+func (entity *GeoRegion) GetName() string {
+	return entity.Name
+}
+
 func (entity *GeoRegion) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket) {
 	entity.LoadBaseValues(bucket)
 	entity.Name = bucket.GetStringOrError(FieldName)

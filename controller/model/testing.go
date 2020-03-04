@@ -49,7 +49,7 @@ func (ctx *TestContext) GetEnrollmentJwtGenerator() jwt.EnrollmentGenerator {
 }
 
 func (ctx *TestContext) GetDbProvider() persistence.DbProvider {
-	return ctx.TestContext
+	return ctx.DbProvider
 }
 
 func (ctx *TestContext) GetAuthRegistry() AuthRegistry {
@@ -123,12 +123,10 @@ func (ctx *TestContext) requireNewIdentity(isAdmin bool) *Identity {
 
 func (ctx *TestContext) requireNewService() *Service {
 	service := &Service{
-		EndpointAddress: "hosted:unclaimed",
-		EgressRouter:    "unclaimed",
-		Name:            uuid.New().String(),
+		Name: uuid.New().String(),
 	}
 	var err error
-	service.Id, err = ctx.handlers.Service.Create(service)
+	service.Id, err = ctx.handlers.EdgeService.Create(service)
 	ctx.NoError(err)
 	return service
 }

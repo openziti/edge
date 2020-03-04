@@ -27,27 +27,24 @@ import (
 var test = `
 {
 	"name" : "Foo",
-	"egressRouter" : "001",
-	"endpointAddress" : null,
+	"endpointStrategy" : "default",
 	"configs" : [ "ssh-config", "ssh-server-config" ]
 }
-      
 `
 
 func Test_getFields(t *testing.T) {
 	assert := require.New(t)
 	test2 := ServiceApiCreate{
-		RoleAttributes: []string{"foo", "bar"},
-		Name:           strPtr("Foo"),
-		Configs:        []string{"ssh-config", "ssh-server-config"},
+		RoleAttributes:   []string{"foo", "bar"},
+		Name:             strPtr("Foo"),
+		EndpointStrategy: strPtr("default"),
+		Configs:          []string{"ssh-config", "ssh-server-config"},
 		Tags: map[string]interface{}{
 			"foo": "bar",
 			"nested": map[string]interface{}{
 				"go": true,
 			},
 		},
-		EgressRouter:    nil,
-		EndpointAddress: strPtr("tcp:foo:1234"),
 	}
 
 	test2Bytes, err := json.Marshal(test2)
@@ -63,10 +60,9 @@ func Test_getFields(t *testing.T) {
 			name: "test",
 			body: []byte(test),
 			want: JsonFields{
-				"name":            true,
-				"configs":         true,
-				"egressRouter":    true,
-				"endpointAddress": false,
+				"name":             true,
+				"endpointStrategy": true,
+				"configs":          true,
 			},
 			wantErr: false,
 		},
@@ -74,12 +70,11 @@ func Test_getFields(t *testing.T) {
 			name: "test2",
 			body: test2Bytes,
 			want: JsonFields{
-				"name":            true,
-				"roleAttributes":  true,
-				"egressRouter":    false,
-				"endpointAddress": true,
-				"tags":            true,
-				"configs":         true,
+				"name":             true,
+				"endpointStrategy": true,
+				"roleAttributes":   true,
+				"tags":             true,
+				"configs":          true,
 			},
 			wantErr: false,
 		},

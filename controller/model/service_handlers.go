@@ -25,8 +25,8 @@ import (
 	"go.etcd.io/bbolt"
 )
 
-func NewServiceHandler(env Env) *ServiceHandler {
-	handler := &ServiceHandler{
+func NewServiceHandler(env Env) *EdgeServiceHandler {
+	handler := &EdgeServiceHandler{
 		baseHandler: baseHandler{
 			env:   env,
 			store: env.GetStores().EdgeService,
@@ -36,19 +36,19 @@ func NewServiceHandler(env Env) *ServiceHandler {
 	return handler
 }
 
-type ServiceHandler struct {
+type EdgeServiceHandler struct {
 	baseHandler
 }
 
-func (handler *ServiceHandler) newModelEntity() boltEntitySink {
+func (handler *EdgeServiceHandler) newModelEntity() boltEntitySink {
 	return &ServiceDetail{}
 }
 
-func (handler *ServiceHandler) Create(service *Service) (string, error) {
+func (handler *EdgeServiceHandler) Create(service *Service) (string, error) {
 	return handler.createEntity(service)
 }
 
-func (handler *ServiceHandler) Read(id string) (*Service, error) {
+func (handler *EdgeServiceHandler) Read(id string) (*Service, error) {
 	entity := &Service{}
 	if err := handler.readEntity(id, entity); err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func (handler *ServiceHandler) Read(id string) (*Service, error) {
 	return entity, nil
 }
 
-func (handler *ServiceHandler) readInTx(tx *bbolt.Tx, id string) (*ServiceDetail, error) {
+func (handler *EdgeServiceHandler) readInTx(tx *bbolt.Tx, id string) (*ServiceDetail, error) {
 	entity := &ServiceDetail{}
 	if err := handler.readEntityInTx(tx, id, entity); err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (handler *ServiceHandler) readInTx(tx *bbolt.Tx, id string) (*ServiceDetail
 	return entity, nil
 }
 
-func (handler *ServiceHandler) ReadForIdentity(id string, identityId string, configTypes map[string]struct{}) (*ServiceDetail, error) {
+func (handler *EdgeServiceHandler) ReadForIdentity(id string, identityId string, configTypes map[string]struct{}) (*ServiceDetail, error) {
 	var service *ServiceDetail
 	err := handler.GetDb().View(func(tx *bbolt.Tx) error {
 		identity, err := handler.GetEnv().GetHandlers().Identity.readInTx(tx, identityId)
@@ -88,7 +88,7 @@ func (handler *ServiceHandler) ReadForIdentity(id string, identityId string, con
 	return service, err
 }
 
-func (handler *ServiceHandler) ReadForIdentityInTx(tx *bbolt.Tx, id string, identityId string) (*ServiceDetail, error) {
+func (handler *EdgeServiceHandler) ReadForIdentityInTx(tx *bbolt.Tx, id string, identityId string) (*ServiceDetail, error) {
 	query := `id = "%v" and not isEmpty(from servicePolicies where (type = %v and anyOf(identities.id) = "%v"))`
 
 	dialQuery := fmt.Sprintf(query, id, persistence.PolicyTypeDial, identityId)
@@ -121,19 +121,19 @@ func (handler *ServiceHandler) ReadForIdentityInTx(tx *bbolt.Tx, id string, iden
 	return result, nil
 }
 
-func (handler *ServiceHandler) Delete(id string) error {
+func (handler *EdgeServiceHandler) Delete(id string) error {
 	return handler.deleteEntity(id, nil)
 }
 
-func (handler *ServiceHandler) Update(service *Service) error {
+func (handler *EdgeServiceHandler) Update(service *Service) error {
 	return handler.updateEntity(service, nil)
 }
 
-func (handler *ServiceHandler) Patch(service *Service, checker boltz.FieldChecker) error {
+func (handler *EdgeServiceHandler) Patch(service *Service, checker boltz.FieldChecker) error {
 	return handler.patchEntity(service, checker)
 }
 
-func (handler *ServiceHandler) PublicQueryForIdentity(sessionIdentity *Identity, configTypes map[string]struct{}, queryOptions *QueryOptions) (*ServiceListResult, error) {
+func (handler *EdgeServiceHandler) PublicQueryForIdentity(sessionIdentity *Identity, configTypes map[string]struct{}, queryOptions *QueryOptions) (*ServiceListResult, error) {
 	if sessionIdentity.IsAdmin {
 		return handler.listServices(queryOptions, sessionIdentity.Id, configTypes, true)
 	}
@@ -146,7 +146,7 @@ func (handler *ServiceHandler) PublicQueryForIdentity(sessionIdentity *Identity,
 	return handler.listServices(queryOptions, sessionIdentity.Id, configTypes, false)
 }
 
-func (handler *ServiceHandler) queryServices(tx *bbolt.Tx, query string) (*ServiceListResult, error) {
+func (handler *EdgeServiceHandler) queryServices(tx *bbolt.Tx, query string) (*ServiceListResult, error) {
 	result := &ServiceListResult{handler: handler}
 	err := handler.listWithTx(tx, query, result.collect)
 	if err != nil {
@@ -155,7 +155,7 @@ func (handler *ServiceHandler) queryServices(tx *bbolt.Tx, query string) (*Servi
 	return result, nil
 }
 
-func (handler *ServiceHandler) listServices(queryOptions *QueryOptions, identityId string, configTypes map[string]struct{}, isAdmin bool) (*ServiceListResult, error) {
+func (handler *EdgeServiceHandler) listServices(queryOptions *QueryOptions, identityId string, configTypes map[string]struct{}, isAdmin bool) (*ServiceListResult, error) {
 	result := &ServiceListResult{
 		handler:     handler,
 		identityId:  identityId,
@@ -169,20 +169,27 @@ func (handler *ServiceHandler) listServices(queryOptions *QueryOptions, identity
 	return result, nil
 }
 
-func (handler *ServiceHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity BaseModelEntity)) error {
+func (handler *EdgeServiceHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity BaseModelEntity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServiceEdgeRouterPolicies, handler.env.GetHandlers().ServiceEdgeRouterPolicy, collector)
 }
 
-func (handler *ServiceHandler) CollectServicePolicies(id string, collector func(entity BaseModelEntity)) error {
+func (handler *EdgeServiceHandler) CollectServicePolicies(id string, collector func(entity BaseModelEntity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
 }
 
-func (handler *ServiceHandler) CollectConfigs(id string, collector func(entity BaseModelEntity)) error {
+func (handler *EdgeServiceHandler) CollectConfigs(id string, collector func(entity BaseModelEntity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeConfigs, handler.env.GetHandlers().Config, collector)
 }
 
+func (handler *EdgeServiceHandler) GetRoleAttributes() []string {
+	handler.GetDb().View(func(tx *bbolt.Tx) error {
+		return nil
+	})
+	return nil
+}
+
 type ServiceListResult struct {
-	handler     *ServiceHandler
+	handler     *EdgeServiceHandler
 	Services    []*ServiceDetail
 	identityId  string
 	configTypes map[string]struct{}
@@ -215,7 +222,7 @@ func (result *ServiceListResult) collect(tx *bbolt.Tx, ids []string, queryMetaDa
 	return nil
 }
 
-func (handler *ServiceHandler) mergeConfigs(tx *bbolt.Tx, configTypes map[string]struct{}, service *ServiceDetail,
+func (handler *EdgeServiceHandler) mergeConfigs(tx *bbolt.Tx, configTypes map[string]struct{}, service *ServiceDetail,
 	identityServiceConfigs map[string]map[string]map[string]interface{}) {
 	service.Config = map[string]map[string]interface{}{}
 

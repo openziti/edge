@@ -17,10 +17,8 @@
 package persistence
 
 import (
-	"crypto/rand"
 	"fmt"
 	"github.com/netfoundry/ziti-fabric/controller/db"
-	"github.com/netfoundry/ziti-sdk-golang/ziti/edge"
 	"testing"
 	"time"
 
@@ -46,10 +44,7 @@ func Test_EdgeServiceStore(t *testing.T) {
 
 func (ctx *TestContext) testServiceParentChild(_ *testing.T) {
 	fabricService := &db.Service{
-		Id:              uuid.New().String(),
-		Binding:         uuid.New().String(),
-		EndpointAddress: uuid.New().String(),
-		Egress:          uuid.New().String(),
+		Id: uuid.New().String(),
 	}
 
 	ctx.requireCreate(fabricService)
@@ -71,7 +66,7 @@ func (ctx *TestContext) testServiceParentChild(_ *testing.T) {
 	ctx.requireCreate(edgeService)
 
 	err = ctx.GetDb().View(func(tx *bbolt.Tx) error {
-		query := fmt.Sprintf(`binding = "%v" and name = "%v"`, fabricService.Binding, edgeService.Name)
+		query := fmt.Sprintf(`id = "%v" and name = "%v"`, fabricService.Id, edgeService.Name)
 		ids, _, err := ctx.stores.EdgeService.QueryIds(tx, query)
 		if err != nil {
 			return err
@@ -92,10 +87,7 @@ func (ctx *TestContext) testCreateInvalidServices(_ *testing.T) {
 
 	edgeService := &EdgeService{
 		Service: db.Service{
-			Id:              uuid.New().String(),
-			Binding:         uuid.New().String(),
-			EndpointAddress: uuid.New().String(),
-			Egress:          uuid.New().String(),
+			Id: uuid.New().String(),
 		},
 		Name: uuid.New().String(),
 	}
@@ -110,10 +102,7 @@ func (ctx *TestContext) testCreateServices(_ *testing.T) {
 
 	edgeService := &EdgeService{
 		Service: db.Service{
-			Id:              uuid.New().String(),
-			Binding:         uuid.New().String(),
-			EndpointAddress: uuid.New().String(),
-			Egress:          uuid.New().String(),
+			Id: uuid.New().String(),
 		},
 		Name: uuid.New().String(),
 	}
@@ -143,10 +132,7 @@ func (ctx *TestContext) createServiceTestEntities() *serviceTestEntities {
 
 	service1 := &EdgeService{
 		Service: db.Service{
-			Id:              uuid.New().String(),
-			Binding:         uuid.New().String(),
-			EndpointAddress: uuid.New().String(),
-			Egress:          uuid.New().String(),
+			Id: uuid.New().String(),
 		},
 		Name:           uuid.New().String(),
 		RoleAttributes: []string{role},
@@ -177,7 +163,7 @@ func (ctx *TestContext) testLoadQueryServices(_ *testing.T) {
 
 	entities := ctx.createServiceTestEntities()
 
-	err := ctx.db.View(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		service, err := ctx.stores.EdgeService.LoadOneById(tx, entities.service1.Id)
 		ctx.NoError(err)
 		ctx.NotNil(service)
@@ -216,7 +202,7 @@ func (ctx *TestContext) testUpdateServices(_ *testing.T) {
 	earlier := time.Now()
 	time.Sleep(time.Millisecond * 50)
 
-	err := ctx.db.Update(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		original, err := ctx.stores.EdgeService.LoadOneById(tx, entities.service1.Id)
 		ctx.NoError(err)
 		ctx.NotNil(original)
@@ -228,13 +214,6 @@ func (ctx *TestContext) testUpdateServices(_ *testing.T) {
 		tags := ctx.createTags()
 		now := time.Now()
 		service.Name = uuid.New().String()
-		service.Binding = uuid.New().String()
-		service.EndpointAddress = uuid.New().String()
-		service.Egress = uuid.New().String()
-		pk := make([]byte, 32)
-		rand.Read(pk)
-		service.PeerData = make(map[uint32][]byte)
-		service.PeerData[edge.PublicKeyHeader] = pk
 		service.UpdatedAt = earlier
 		service.CreatedAt = now
 		service.Tags = tags

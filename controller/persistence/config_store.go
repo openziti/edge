@@ -45,6 +45,10 @@ type Config struct {
 	Data map[string]interface{}
 }
 
+func (entity *Config) GetName() string {
+	return entity.Name
+}
+
 func (entity *Config) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket) {
 	entity.LoadBaseValues(bucket)
 	entity.Name = bucket.GetStringOrError(FieldName)

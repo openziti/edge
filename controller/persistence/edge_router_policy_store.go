@@ -25,6 +25,10 @@ type EdgeRouterPolicy struct {
 	EdgeRouterRoles []string
 }
 
+func (entity *EdgeRouterPolicy) GetName() string {
+	return entity.Name
+}
+
 func (entity *EdgeRouterPolicy) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket) {
 	entity.LoadBaseValues(bucket)
 	entity.Name = bucket.GetStringOrError(FieldName)

@@ -91,9 +91,9 @@ type EdgeServiceStore interface {
 	GetNameIndex() boltz.ReadIndex
 }
 
-func newEdgeServiceStore(stores *stores, serviceStore db.ServiceStore) *edgeServiceStoreImpl {
+func newEdgeServiceStore(stores *stores) *edgeServiceStoreImpl {
 	store := &edgeServiceStoreImpl{
-		baseStore: newChildBaseStore(stores, serviceStore, EntityTypeServices),
+		baseStore: newChildBaseStore(stores, stores.Service, EntityTypeServices),
 	}
 	store.InitImpl(store)
 	return store

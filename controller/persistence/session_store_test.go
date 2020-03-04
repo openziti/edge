@@ -146,7 +146,7 @@ func (ctx *TestContext) testCreateSessionsCerts(_ *testing.T) {
 	ctx.requireCreate(session)
 
 	var certs []*SessionCert
-	err := ctx.db.View(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		var err error
 		certs, err = ctx.stores.Session.LoadCerts(tx, session.Id)
 		return err
@@ -206,7 +206,7 @@ func (ctx *TestContext) testLoadQuerySessions(_ *testing.T) {
 
 	entities := ctx.createSessionTestEntities()
 
-	err := ctx.db.View(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		session, err := ctx.stores.Session.LoadOneByToken(tx, entities.session1.Token)
 		ctx.NoError(err)
 		ctx.NotNil(session)
@@ -235,7 +235,7 @@ func (ctx *TestContext) testUpdateSessions(_ *testing.T) {
 	earlier := time.Now()
 	time.Sleep(time.Millisecond * 50)
 
-	err := ctx.db.Update(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		original, err := ctx.stores.Session.LoadOneById(tx, entities.session1.Id)
 		ctx.NoError(err)
 		ctx.NotNil(original)

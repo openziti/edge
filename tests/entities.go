@@ -34,14 +34,13 @@ type entity interface {
 }
 
 type service struct {
-	id              string
-	name            string
-	egressRouter    string
-	endpointAddress string
-	roleAttributes  []string
-	configs         []string
-	permissions     []string
-	tags            map[string]interface{}
+	id               string
+	name             string
+	endpointStrategy string
+	roleAttributes   []string
+	configs          []string
+	permissions      []string
+	tags             map[string]interface{}
 }
 
 func (entity *service) getId() string {
@@ -59,8 +58,7 @@ func (entity *service) getEntityType() string {
 func (entity *service) toJson(_ bool, ctx *TestContext, _ ...string) string {
 	entityData := gabs.New()
 	ctx.setJsonValue(entityData, entity.name, "name")
-	ctx.setJsonValue(entityData, entity.egressRouter, "egressRouter")
-	ctx.setJsonValue(entityData, entity.endpointAddress, "endpointAddress")
+	ctx.setJsonValue(entityData, entity.endpointStrategy, "endpointStrategy")
 	ctx.setJsonValue(entityData, entity.roleAttributes, "roleAttributes")
 	ctx.setJsonValue(entityData, entity.configs, "configs")
 
@@ -76,8 +74,7 @@ func (entity *service) validate(ctx *TestContext, c *gabs.Container) {
 		entity.tags = map[string]interface{}{}
 	}
 	ctx.pathEquals(c, entity.name, path("name"))
-	ctx.pathEquals(c, entity.egressRouter, path("egressRouter"))
-	ctx.pathEquals(c, entity.endpointAddress, path("endpointAddress"))
+	ctx.pathEquals(c, entity.endpointStrategy, path("endpointStrategy"))
 	ctx.pathEquals(c, entity.tags, path("tags"))
 
 	sort.Strings(entity.roleAttributes)
@@ -180,7 +177,6 @@ func (entity *edgeRouter) toJson(_ bool, ctx *TestContext, _ ...string) string {
 
 	ctx.setJsonValue(entityData, entity.tags, "tags")
 
-	
 	return entityData.String()
 }
 

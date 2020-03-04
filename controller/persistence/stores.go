@@ -17,6 +17,7 @@
 package persistence
 
 import (
+	"github.com/netfoundry/ziti-fabric/controller/db"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/errorz"
 	"go.etcd.io/bbolt"
@@ -24,6 +25,11 @@ import (
 
 type Stores struct {
 	DbProvider DbProvider
+
+	// fabric stores
+	Endpoint db.EndpointStore
+	Router   db.RouterStore
+	Service  db.ServiceStore
 
 	ApiSession              ApiSessionStore
 	Appwan                  AppwanStore
@@ -59,6 +65,11 @@ func (stores *Stores) getStoreForEntity(entity boltz.BaseEntity) Store {
 type stores struct {
 	DbProvider DbProvider
 
+	// fabric stores
+	Endpoint db.EndpointStore
+	Router   db.RouterStore
+	Service  db.ServiceStore
+
 	apiSession              *apiSessionStoreImpl
 	appwan                  *appwanStoreImpl
 	ca                      *caStoreImpl
@@ -86,6 +97,10 @@ func NewBoltStores(dbProvider DbProvider) (*Stores, error) {
 		DbProvider: dbProvider,
 	}
 
+	internalStores.Endpoint = dbProvider.GetStores().Endpoint
+	internalStores.Router = dbProvider.GetStores().Router
+	internalStores.Service = dbProvider.GetStores().Service
+
 	internalStores.apiSession = newApiSessionStore(internalStores)
 	internalStores.authenticator = newAuthenticatorStore(internalStores)
 	internalStores.appwan = newAppwanStore(internalStores)
@@ -95,7 +110,7 @@ func NewBoltStores(dbProvider DbProvider) (*Stores, error) {
 	internalStores.configType = newConfigTypesStore(internalStores)
 	internalStores.edgeRouter = newEdgeRouterStore(internalStores)
 	internalStores.edgeRouterPolicy = newEdgeRouterPolicyStore(internalStores)
-	internalStores.edgeService = newEdgeServiceStore(internalStores, dbProvider.GetFabricStores().Service)
+	internalStores.edgeService = newEdgeServiceStore(internalStores)
 	internalStores.eventLog = newEventLogStore(internalStores)
 	internalStores.geoRegion = newGeoRegionStore(internalStores)
 	internalStores.identity = newIdentityStore(internalStores)
@@ -107,6 +122,10 @@ func NewBoltStores(dbProvider DbProvider) (*Stores, error) {
 
 	externalStores := &Stores{
 		DbProvider: dbProvider,
+
+		Endpoint: dbProvider.GetStores().Endpoint,
+		Router:   dbProvider.GetStores().Router,
+		Service:  dbProvider.GetStores().Service,
 
 		ApiSession:              internalStores.apiSession,
 		Appwan:                  internalStores.appwan,

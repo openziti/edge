@@ -36,12 +36,31 @@ import (
 	"go.etcd.io/bbolt"
 )
 
+type TestDbProvider struct {
+	db           *db.Db
+	fabricStores *db.Stores
+}
+
+func (p *TestDbProvider) GetDb() boltz.Db {
+	return p.db
+}
+
+func (p *TestDbProvider) GetStores() *db.Stores {
+	return p.fabricStores
+}
+
+func (p *TestDbProvider) GetServiceCache() network.Cache {
+	return p
+}
+
+func (p *TestDbProvider) RemoveFromCache(_ string) {
+}
+
 type TestContext struct {
 	require.Assertions
 	t             *testing.T
 	dbFile        *os.File
-	db            *db.Db
-	fabricStores  *db.Stores
+	DbProvider    *TestDbProvider
 	stores        *Stores
 	ReferenceTime time.Time
 }
@@ -51,29 +70,18 @@ func NewTestContext(t *testing.T) *TestContext {
 		Assertions:    *require.New(t),
 		t:             t,
 		dbFile:        nil,
-		db:            nil,
+		DbProvider:    &TestDbProvider{},
 		stores:        nil,
 		ReferenceTime: time.Now(),
 	}
 }
 
 func (ctx *TestContext) GetDb() boltz.Db {
-	return ctx.db
-}
-
-func (ctx *TestContext) GetFabricStores() *db.Stores {
-	return ctx.fabricStores
-}
-
-func (ctx *TestContext) GetServiceCache() network.Cache {
-	return ctx
+	return ctx.DbProvider.db
 }
 
 func (ctx *TestContext) GetStores() *Stores {
 	return ctx.stores
-}
-
-func (ctx *TestContext) RemoveFromCache(_ string) {
 }
 
 func (ctx *TestContext) Init() {
@@ -84,19 +92,19 @@ func (ctx *TestContext) Init() {
 	err = ctx.dbFile.Close()
 	ctx.NoError(err)
 
-	ctx.db, err = db.Open(ctx.dbFile.Name())
+	ctx.DbProvider.db, err = db.Open(ctx.dbFile.Name())
 	ctx.NoError(err)
 
-	ctx.fabricStores = db.InitStores()
-	ctx.stores, err = NewBoltStores(ctx)
+	ctx.DbProvider.fabricStores = db.InitStores()
+	ctx.stores, err = NewBoltStores(ctx.DbProvider)
 	ctx.NoError(err)
 
-	ctx.NoError(RunMigrations(ctx, ctx.stores, nil))
+	ctx.NoError(RunMigrations(ctx.DbProvider, ctx.stores, nil))
 }
 
 func (ctx *TestContext) Cleanup() {
-	if ctx.db != nil {
-		if err := ctx.db.Close(); err != nil {
+	if ctx.GetDb() != nil {
+		if err := ctx.GetDb().Close(); err != nil {
 			fmt.Printf("error closing bolt db: %v", err)
 		}
 	}
@@ -133,10 +141,7 @@ func (ctx *TestContext) requireNewIdentity(name string, isAdmin bool) *Identity 
 func (ctx *TestContext) requireNewService(name string) *EdgeService {
 	edgeService := &EdgeService{
 		Service: db.Service{
-			Id:              uuid.New().String(),
-			Binding:         "edge",
-			EndpointAddress: "hosted:unclaimed",
-			Egress:          "unclaimed",
+			Id: uuid.New().String(),
 		},
 		Name: name,
 	}
@@ -224,9 +229,9 @@ func (ctx *TestContext) getStoreForEntity(entity boltz.BaseEntity) (boltz.CrudSt
 	var store boltz.CrudStore
 
 	if _, ok := entity.(*db.Service); ok {
-		store = ctx.fabricStores.Service
+		store = ctx.stores.Service
 	} else if _, ok := entity.(*db.Router); ok {
-		store = ctx.fabricStores.Router
+		store = ctx.stores.Router
 	} else {
 		store = ctx.stores.getStoreForEntity(entity)
 	}
@@ -332,7 +337,7 @@ func (ctx *TestContext) cleanupAll() {
 		ctx.stores.ApiSession,
 		ctx.stores.EdgeRouterPolicy,
 		ctx.stores.Appwan,
-		ctx.fabricStores.Service,
+		ctx.stores.Service,
 		ctx.stores.EdgeService,
 		ctx.stores.Identity,
 		ctx.stores.EdgeRouter,
@@ -353,7 +358,7 @@ func (ctx *TestContext) cleanupAll() {
 
 func (ctx *TestContext) getIdentityTypeId() string {
 	var result string
-	err := ctx.db.View(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		ids, _, err := ctx.stores.IdentityType.QueryIds(tx, "true")
 		if err != nil {
 			return err

@@ -129,7 +129,7 @@ func MapSessionToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e model.B
 }
 
 func MapSessionToApiList(ae *env.AppEnv, i *model.Session) (*SessionApiList, error) {
-	service, err := ae.Handlers.Service.Read(i.ServiceId)
+	service, err := ae.Handlers.EdgeService.Read(i.ServiceId)
 	if err != nil {
 		return nil, err
 	}

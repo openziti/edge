@@ -65,7 +65,7 @@ func (handler *ServicePolicyHandler) Delete(id string) error {
 }
 
 func (handler *ServicePolicyHandler) CollectServices(id string, collector func(entity BaseModelEntity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeServices, handler.env.GetHandlers().Service, collector)
+	return handler.collectAssociated(id, persistence.EntityTypeServices, handler.env.GetHandlers().EdgeService, collector)
 }
 
 func (handler *ServicePolicyHandler) CollectIdentities(id string, collector func(entity BaseModelEntity)) error {

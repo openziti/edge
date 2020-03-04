@@ -98,7 +98,7 @@ func (handler *EdgeRouterHandler) Patch(modelEntity *EdgeRouter, checker boltz.F
 }
 
 func (handler *EdgeRouterHandler) beforeDelete(tx *bbolt.Tx, id string) error {
-	store := handler.GetDbProvider().GetFabricStores().Router
+	store := handler.env.GetStores().Router
 	if store.IsEntityPresent(tx, id) {
 		return store.DeleteById(boltz.NewMutateContext(tx), id)
 	}

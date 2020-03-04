@@ -34,8 +34,8 @@ import (
 
 type DbProvider interface {
 	GetDb() boltz.Db
-	GetFabricStores() *db.Stores
 	GetServiceCache() network.Cache
+	GetStores() *db.Stores
 }
 
 type Store interface {

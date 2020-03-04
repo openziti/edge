@@ -18,52 +18,65 @@ package model
 
 import (
 	"fmt"
+	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/validation"
 	"github.com/netfoundry/ziti-fabric/controller/db"
-	"reflect"
-	"strings"
-
-	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
+	"reflect"
+	"time"
 )
 
 type Service struct {
 	BaseModelEntityImpl
-	Name            string   `json:"name"`
-	EgressRouter    string   `json:"egressRouter"`
-	EndpointAddress string   `json:"endpointAddress"`
-	RoleAttributes  []string `json:"roleAttributes"`
-	Configs         []string `json:"configs"`
+	Name             string   `json:"name"`
+	EndpointStrategy string   `json:"endpointStrategy"`
+	RoleAttributes   []string `json:"roleAttributes"`
+	Configs          []string `json:"configs"`
 }
 
 func (entity *Service) toBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (persistence.BaseEdgeEntity, error) {
-	entity.Sanitize()
 	if err := entity.mapConfigTypeNamesToIds(tx, handler); err != nil {
 		return nil, err
 	}
 
-	binding := "transport"
-	if strings.HasPrefix(entity.EndpointAddress, "hosted") {
-		binding = "edge"
-	} else if strings.HasPrefix(entity.EndpointAddress, "udp") {
-		binding = "udp"
-	}
+	/*
+		edgeRouterStore := handler.GetEnv().GetStores().EdgeRouter
 
-	edgeRouterStore := handler.GetEnv().GetStores().EdgeRouter
-	if !edgeRouterStore.IsEntityPresent(tx, entity.EgressRouter) {
-		if edgeRouterId := edgeRouterStore.GetNameIndex().Read(tx, []byte(entity.EgressRouter)); edgeRouterId != nil {
-			entity.EgressRouter = string(edgeRouterId)
+		var endpoints []*db.Endpoint
+		for _, e := range entity.Endpoints {
+			binding := "transport"
+			if strings.HasPrefix(e.Address, "udp") {
+				binding = "udp"
+			}
+
+			router := e.Router
+			if !edgeRouterStore.IsEntityPresent(tx, router) {
+				if edgeRouterId := edgeRouterStore.GetNameIndex().Read(tx, []byte(router)); edgeRouterId != nil {
+					router = string(edgeRouterId)
+				} else {
+					return nil, util.NewNotFoundError("router", "id or name", router)
+				}
+			}
+
+			address := strings.Replace(e.Address, "://", ":", 1)
+			endpoints = append(endpoints, &db.Endpoint{
+				Id:        uuid.New().String(),
+				Service:   entity.Id,
+				Router:    router,
+				Binding:   binding,
+				Address:   address,
+				CreatedAt: time.Now(),
+				PeerData:  nil,
+			})
 		}
-	}
+	*/
 
 	edgeService := &persistence.EdgeService{
 		Service: db.Service{
-			Id:              entity.Id,
-			Binding:         binding,
-			EndpointAddress: entity.EndpointAddress,
-			Egress:          entity.EgressRouter,
+			Id:               entity.Id,
+			EndpointStrategy: entity.EndpointStrategy,
 		},
 		EdgeEntityFields: persistence.EdgeEntityFields{Tags: entity.Tags},
 		Name:             entity.Name,
@@ -112,45 +125,55 @@ func (entity *Service) toBoltEntityForPatch(tx *bbolt.Tx, handler Handler) (pers
 	return entity.toBoltEntityForCreate(tx, handler)
 }
 
-func (entity *Service) Sanitize() {
-	entity.EndpointAddress = strings.Replace(entity.EndpointAddress, "://", ":", 1)
-}
-
 func (entity *Service) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.BaseEntity) error {
-	boltService, ok := boltEntity.(*persistence.EdgeService)
-	if !ok {
-		return errors.Errorf("unexpected type %v when filling model service", reflect.TypeOf(boltEntity))
-	}
-	entity.fillCommon(boltService)
-	entity.Name = boltService.Name
-	entity.EgressRouter = boltService.Egress
-	entity.EndpointAddress = boltService.EndpointAddress
-	entity.RoleAttributes = boltService.RoleAttributes
-	entity.Configs = boltService.Configs
-	return nil
+	return errors.Errorf("service type should not be used for reading")
 }
 
 type ServiceDetail struct {
 	BaseModelEntityImpl
-	Name            string                            `json:"name"`
-	EgressRouter    string                            `json:"egressRouter"`
-	EndpointAddress string                            `json:"endpointAddress"`
-	RoleAttributes  []string                          `json:"roleAttributes"`
-	Permissions     []string                          `json:"permissions"`
-	Configs         []string                          `json:"configs"`
-	Config          map[string]map[string]interface{} `json:"config"`
+	Name             string                            `json:"name"`
+	EndpointStrategy string                            `json:"endpointStrategy"`
+	Endpoints        []*ServiceEndpointDetail          `json:"endpoints"`
+	RoleAttributes   []string                          `json:"roleAttributes"`
+	Permissions      []string                          `json:"permissions"`
+	Configs          []string                          `json:"configs"`
+	Config           map[string]map[string]interface{} `json:"config"`
 }
 
-func (entity *ServiceDetail) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.BaseEntity) error {
+type ServiceEndpointDetail struct {
+	Id        string
+	Binding   string
+	Router    string
+	Address   string
+	CreatedAt time.Time
+}
+
+func (entity *ServiceDetail) fillFrom(handler Handler, tx *bbolt.Tx, boltEntity boltz.BaseEntity) error {
 	boltService, ok := boltEntity.(*persistence.EdgeService)
 	if !ok {
 		return errors.Errorf("unexpected type %v when filling model service", reflect.TypeOf(boltEntity))
 	}
 	entity.fillCommon(boltService)
 	entity.Name = boltService.Name
-	entity.EgressRouter = boltService.Egress
-	entity.EndpointAddress = boltService.EndpointAddress
+	entity.EndpointStrategy = boltService.EndpointStrategy
 	entity.RoleAttributes = boltService.RoleAttributes
 	entity.Configs = boltService.Configs
+
+	endpointIds := handler.GetEnv().GetStores().Service.GetRelatedEntitiesIdList(tx, entity.Id, db.EntityTypeEndpoints)
+	endpointStore := handler.GetEnv().GetStores().Endpoint
+	for _, endpointId := range endpointIds {
+		endpoint, err := endpointStore.LoadOneById(tx, endpointId)
+		if err != nil {
+			return err
+		}
+		entity.Endpoints = append(entity.Endpoints, &ServiceEndpointDetail{
+			Id:        endpoint.Id,
+			Router:    endpoint.Router,
+			Binding:   endpoint.Binding,
+			Address:   endpoint.Address,
+			CreatedAt: endpoint.CreatedAt,
+		})
+	}
+
 	return nil
 }

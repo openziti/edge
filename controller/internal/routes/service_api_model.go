@@ -29,19 +29,17 @@ import (
 const EntityNameService = "services"
 
 type ServiceApiCreate struct {
-	Name            *string                `json:"name"`
-	Tags            map[string]interface{} `json:"tags"`
-	EgressRouter    *string                `json:"egressRouter"`
-	EndpointAddress *string                `json:"endpointAddress"`
-	RoleAttributes  []string               `json:"roleAttributes"`
-	Configs         []string               `json:"configs"`
+	Name             *string                `json:"name"`
+	EndpointStrategy *string                `json:"endpointStrategy"`
+	Tags             map[string]interface{} `json:"tags"`
+	RoleAttributes   []string               `json:"roleAttributes"`
+	Configs          []string               `json:"configs"`
 }
 
 func (i *ServiceApiCreate) ToModel() *model.Service {
 	result := &model.Service{}
 	result.Name = stringz.OrEmpty(i.Name)
-	result.EgressRouter = stringz.OrEmpty(i.EgressRouter)
-	result.EndpointAddress = stringz.OrEmpty(i.EndpointAddress)
+	result.EndpointStrategy = stringz.OrEmpty(i.EndpointStrategy)
 	result.RoleAttributes = i.RoleAttributes
 	result.Tags = i.Tags
 	result.Configs = i.Configs
@@ -49,20 +47,18 @@ func (i *ServiceApiCreate) ToModel() *model.Service {
 }
 
 type ServiceApiUpdate struct {
-	Name            *string                `json:"name"`
-	Tags            map[string]interface{} `json:"tags"`
-	EgressRouter    *string                `json:"egressRouter"`
-	EndpointAddress *string                `json:"endpointAddress"`
-	RoleAttributes  []string               `json:"roleAttributes"`
-	Configs         []string               `json:"configs"`
+	Name             *string                `json:"name"`
+	EndpointStrategy *string                `json:"endpointStrategy"`
+	Tags             map[string]interface{} `json:"tags"`
+	RoleAttributes   []string               `json:"roleAttributes"`
+	Configs          []string               `json:"configs"`
 }
 
 func (i *ServiceApiUpdate) ToModel(id string) *model.Service {
 	result := &model.Service{}
 	result.Id = id
 	result.Name = stringz.OrEmpty(i.Name)
-	result.EgressRouter = stringz.OrEmpty(i.EgressRouter)
-	result.EndpointAddress = stringz.OrEmpty(i.EndpointAddress)
+	result.EndpointStrategy = stringz.OrEmpty(i.EndpointStrategy)
 	result.Tags = i.Tags
 	result.RoleAttributes = i.RoleAttributes
 	result.Configs = i.Configs
@@ -88,13 +84,12 @@ func NewServiceLink(sessionId string) *response.Link {
 
 type ServiceApiList struct {
 	*env.BaseApi
-	Name            *string                           `json:"name"`
-	EndpointAddress *string                           `json:"endpointAddress"`
-	EgressRouter    *string                           `json:"egressRouter"`
-	RoleAttributes  []string                          `json:"roleAttributes"`
-	Permissions     []string                          `json:"permissions"`
-	Configs         []string                          `json:"configs"`
-	Config          map[string]map[string]interface{} `json:"config"`
+	Name             *string                           `json:"name"`
+	EndpointStrategy *string                           `json:"endpointStrategy"`
+	RoleAttributes   []string                          `json:"roleAttributes"`
+	Permissions      []string                          `json:"permissions"`
+	Configs          []string                          `json:"configs"`
+	Config           map[string]map[string]interface{} `json:"config"`
 }
 
 func (e *ServiceApiList) GetSelfLink() *response.Link {
@@ -166,14 +161,13 @@ func MapServiceToApiEntity(ae *env.AppEnv, rc *response.RequestContext, e model.
 
 func MapToServiceApiList(_ *env.AppEnv, _ *response.RequestContext, i *model.ServiceDetail) (*ServiceApiList, error) {
 	ret := &ServiceApiList{
-		BaseApi:         env.FromBaseModelEntity(i),
-		Name:            &i.Name,
-		EndpointAddress: &i.EndpointAddress,
-		EgressRouter:    &i.EgressRouter,
-		RoleAttributes:  i.RoleAttributes,
-		Permissions:     i.Permissions,
-		Configs:         i.Configs,
-		Config:          i.Config,
+		BaseApi:          env.FromBaseModelEntity(i),
+		Name:             &i.Name,
+		EndpointStrategy: &i.EndpointStrategy,
+		RoleAttributes:   i.RoleAttributes,
+		Permissions:      i.Permissions,
+		Configs:          i.Configs,
+		Config:           i.Config,
 	}
 	ret.PopulateLinks()
 	return ret, nil

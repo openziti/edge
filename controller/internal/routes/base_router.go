@@ -19,12 +19,10 @@ package routes
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/model"
-	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/response"
 	"github.com/netfoundry/ziti-edge/controller/util"
 	"github.com/netfoundry/ziti-edge/controller/validation"
@@ -197,7 +195,7 @@ func Create(rc *response.RequestContext, rr response.RequestResponder, sc *gojso
 		rr.RespondWithCouldNotParseBody(err)
 		return
 	}
-	
+
 	il := gojsonschema.NewBytesLoader(body)
 
 	result, err := sc.Validate(il)
@@ -237,7 +235,7 @@ func Create(rc *response.RequestContext, rr response.RequestResponder, sc *gojso
 }
 
 func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, handler model.Handler, mapper ModelToApiMapper, idType response.IdType) {
-	Detail(rc, idType, func(rc *response.RequestContext, id string) (BaseApiEntity, error) {
+	Detail(rc, idType, func(rc *response.RequestContext, id string) (interface{}, error) {
 		entity, err := handler.BaseLoad(id)
 		if err != nil {
 			return nil, err
@@ -246,7 +244,7 @@ func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, handler mode
 	})
 }
 
-type ModelDetailF func(rc *response.RequestContext, id string) (BaseApiEntity, error)
+type ModelDetailF func(rc *response.RequestContext, id string) (interface{}, error)
 
 func Detail(rc *response.RequestContext, idType response.IdType, f ModelDetailF) {
 	id, err := rc.GetIdFromRequest(idType)
@@ -531,136 +529,4 @@ func ListAssociations(ae *env.AppEnv, rc *response.RequestContext, idType respon
 	}
 
 	rc.RequestResponder.RespondWithOk(subApiEs, meta)
-}
-
-type AssocF func(parentId string, childIds []string) error
-
-func UpdateAssociationsFor(ae *env.AppEnv, rc *response.RequestContext, idType response.IdType, store persistence.Store, action model.AssociationAction, field string) {
-	UpdateAssociations(ae, rc, idType, func(parentId string, childIds []string) error {
-		return ae.Handlers.Associations.UpdateAssociations(store, action, field, parentId, childIds...)
-	})
-}
-
-func UpdateAssociations(ae *env.AppEnv, rc *response.RequestContext, idType response.IdType, assocF AssocF) {
-	parentId, err := rc.GetIdFromRequest(idType)
-
-	if err != nil {
-		log := pfxlog.Logger()
-		logErr := fmt.Errorf("could not find parentId property: %v", response.IdPropertyName)
-		log.WithField("property", response.IdPropertyName).
-			Error(logErr)
-		rc.RequestResponder.RespondWithError(err)
-		return
-	}
-
-	body, err := ioutil.ReadAll(rc.Request.Body)
-
-	in := &associationIdArrayRequest{}
-
-	if err != nil {
-		rc.RequestResponder.RespondWithError(err)
-	}
-
-	il := gojsonschema.NewBytesLoader(body)
-
-	result, err := ae.Schemes.Association.Put.Validate(il)
-
-	if err != nil {
-		rc.RequestResponder.RespondWithError(err)
-		return
-	}
-
-	if !result.Valid() {
-		rc.RequestResponder.RespondWithValidationErrors(validation.NewSchemaValidationErrors(result))
-		return
-	}
-
-	err = unmarshal(body, in)
-
-	if err != nil {
-		rc.RequestResponder.RespondWithCouldNotParseBody(err)
-		return
-	}
-
-	for i, cid := range in.Ids {
-		_, err := uuid.Parse(cid)
-
-		if err != nil {
-			fieldErr := apierror.NewFieldError(fmt.Sprintf("invalid UUID as ID [%s]: %s", cid, err), fmt.Sprintf("ids[%d]", i), cid)
-			rc.RequestResponder.RespondWithApiError(apierror.NewField(fieldErr))
-			return
-		}
-	}
-
-	err = assocF(parentId, in.Ids)
-
-	if err != nil {
-		if util.IsErrNotFoundErr(err) {
-			rc.RequestResponder.RespondWithNotFound()
-			return
-		}
-
-		if fe, ok := err.(*validation.FieldError); ok {
-			rc.RequestResponder.RespondWithFieldError(fe)
-			return
-		}
-
-		rc.RequestResponder.RespondWithError(err)
-		return
-	}
-
-	rc.RequestResponder.RespondWithOk(nil, nil)
-}
-
-func RemoveAssociationFor(ae *env.AppEnv, rc *response.RequestContext, idType response.IdType, store persistence.Store, field string) {
-	RemoveAssociationForModel(rc, idType, func(parentId string, childIds []string) error {
-		return ae.Handlers.Associations.UpdateAssociations(store, model.AssociationsActionRemove, field, parentId, childIds...)
-	})
-}
-
-func RemoveAssociationForModel(rc *response.RequestContext, idType response.IdType, assocF AssocF) {
-	parentId, err := rc.GetIdFromRequest(idType)
-
-	if err != nil {
-		log := pfxlog.Logger()
-		logErr := fmt.Errorf("could not load parent id property: %v", response.IdPropertyName)
-		log.WithField("property", response.IdPropertyName).
-			Error(logErr)
-		rc.RequestResponder.RespondWithError(err)
-		return
-	}
-
-	subId, err := rc.GetSubIdFromRequest()
-
-	if err != nil {
-		log := pfxlog.Logger()
-		logErr := fmt.Errorf("could not find assigned entity property: %v", response.SubIdPropertyName)
-		log.WithField("property", response.SubIdPropertyName).
-			Error(logErr)
-		rc.RequestResponder.RespondWithError(err)
-		return
-	}
-
-	err = assocF(parentId, []string{subId})
-
-	if err != nil {
-		if util.IsErrNotFoundErr(err) {
-			rc.RequestResponder.RespondWithNotFound()
-			return
-		}
-
-		if fe, ok := err.(*validation.FieldError); ok {
-			rc.RequestResponder.RespondWithFieldError(fe)
-			return
-		}
-
-		log := pfxlog.Logger()
-		log.WithField("parentId", parentId).
-			WithField("cause", err).
-			Errorf("could not load parent record by id [%s]: %s", parentId, err)
-		rc.RequestResponder.RespondWithError(err)
-		return
-	}
-
-	rc.RequestResponder.RespondWithOk(nil, nil)
 }

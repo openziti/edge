@@ -172,7 +172,7 @@ func Test_Services(t *testing.T) {
 
 		time.Sleep(time.Millisecond * 10)
 		now = time.Now()
-		service.endpointAddress = uuid.New().String()
+		service.endpointStrategy = uuid.New().String()
 		ctx.AdminSession.requireUpdateEntity(service)
 
 		result := ctx.AdminSession.requireQuery("services/" + service.id)
@@ -298,7 +298,7 @@ func Test_ServiceListWithConfigs(t *testing.T) {
 		service.configs = map[string]*config{}
 	}
 
-	ctx.AdminSession.requireRemoveIdentityServiceConfigs(session.identityId, serviceConfig{Service: service1.id, Config: config5.id}, serviceConfig{Service: service3.id, Config: config1.id}, )
+	ctx.AdminSession.requireRemoveIdentityServiceConfigs(session.identityId, serviceConfig{Service: service1.id, Config: config5.id}, serviceConfig{Service: service3.id, Config: config1.id})
 	currentConfigs = ctx.AdminSession.listIdentityServiceConfigs(session.identityId)
 	checkConfigs = []serviceConfig{
 		{Service: service4.id, Config: config1.id},

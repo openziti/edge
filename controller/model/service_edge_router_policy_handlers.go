@@ -99,7 +99,7 @@ func (handler *ServiceEdgeRouterPolicyHandler) CollectEdgeRouters(id string, col
 }
 
 func (handler *ServiceEdgeRouterPolicyHandler) CollectServices(id string, collector func(entity BaseModelEntity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeServices, handler.env.GetHandlers().Service, collector)
+	return handler.collectAssociated(id, persistence.EntityTypeServices, handler.env.GetHandlers().EdgeService, collector)
 }
 
 type ServiceEdgeRouterPolicyListResult struct {

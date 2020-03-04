@@ -44,6 +44,10 @@ type Ca struct {
 	IsAuthEnabled             bool
 }
 
+func (entity *Ca) GetName() string {
+	return entity.Name
+}
+
 func (entity *Ca) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket) {
 	entity.LoadBaseValues(bucket)
 	entity.Name = bucket.GetStringOrError(FieldName)

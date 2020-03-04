@@ -22,13 +22,13 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 	identity := ctx.requireNewIdentity(uuid.New().String(), false)
 
 	clientConfigTypeId := ""
-	err := ctx.db.Update(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		clientConfigTypeId = string(ctx.stores.ConfigType.GetNameIndex().Read(tx, []byte("ziti-tunneler-client.v1")))
 		return nil
 	})
 
 	serverConfigTypeId := ""
-	err = ctx.db.Update(func(tx *bbolt.Tx) error {
+	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		serverConfigTypeId = string(ctx.stores.ConfigType.GetNameIndex().Read(tx, []byte("ziti-tunneler-server.v1")))
 		return nil
 	})
@@ -51,7 +51,7 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 	})
 	ctx.requireCreate(config3)
 
-	err = ctx.db.Update(func(tx *bbolt.Tx) error {
+	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		err := ctx.stores.Identity.AssignServiceConfigs(tx, identity.Id,
 			ServiceConfig{ServiceId: service.Id, ConfigId: config.Id},
 			ServiceConfig{ServiceId: service.Id, ConfigId: config2.Id})
@@ -59,7 +59,7 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 		return nil
 	})
 
-	err = ctx.db.Update(func(tx *bbolt.Tx) error {
+	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		err := ctx.stores.Identity.AssignServiceConfigs(tx, identity.Id, ServiceConfig{ServiceId: service.Id, ConfigId: config.Id})
 		ctx.NoError(err)
 
@@ -79,7 +79,7 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 		return nil
 	})
 
-	err = ctx.db.Update(func(tx *bbolt.Tx) error {
+	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		err := ctx.stores.Identity.RemoveServiceConfigs(tx, identity.Id, ServiceConfig{ServiceId: service.Id, ConfigId: config.Id})
 		ctx.NoError(err)
 
@@ -92,7 +92,7 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 	})
 
 	ctx.requireDelete(config)
-	err = ctx.db.Update(func(tx *bbolt.Tx) error {
+	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		serviceConfigs := ctx.getServiceConfigs(tx, identity.Id, "all")
 		ctx.Equal(0, len(serviceConfigs))
 		return nil
@@ -100,7 +100,7 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 
 	ctx.requireCreate(config)
 
-	err = ctx.db.Update(func(tx *bbolt.Tx) error {
+	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		err := ctx.stores.Identity.AssignServiceConfigs(tx, identity.Id,
 			ServiceConfig{ServiceId: service.Id, ConfigId: config.Id},
 			ServiceConfig{ServiceId: service.Id, ConfigId: config3.Id})
@@ -133,7 +133,7 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 
 	ctx.requireDelete(identity)
 
-	err = ctx.db.Update(func(tx *bbolt.Tx) error {
+	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		identityServices := ctx.getIdentityServices(tx, config.Id)
 		ctx.Equal(0, len(identityServices))
 

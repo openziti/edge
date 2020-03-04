@@ -144,7 +144,7 @@ func (ctx *TestContext) testLoadQueryApiSessions(_ *testing.T) {
 
 	entities := ctx.createApiSessionTestEntities()
 
-	err := ctx.db.View(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		apiSession, err := ctx.stores.ApiSession.LoadOneByToken(tx, entities.apiSession1.Token)
 		ctx.NoError(err)
 		ctx.NotNil(apiSession)
@@ -179,7 +179,7 @@ func (ctx *TestContext) testUpdateApiSessions(_ *testing.T) {
 	earlier := time.Now()
 	time.Sleep(time.Millisecond * 50)
 
-	err := ctx.db.Update(func(tx *bbolt.Tx) error {
+	err := ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		original, err := ctx.stores.ApiSession.LoadOneById(tx, entities.apiSession1.Id)
 		ctx.NoError(err)
 		ctx.NotNil(original)

@@ -38,6 +38,10 @@ type ServicePolicy struct {
 	ServiceRoles  []string
 }
 
+func (entity *ServicePolicy) GetName() string {
+	return entity.Name
+}
+
 func (entity *ServicePolicy) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket) {
 	entity.LoadBaseValues(bucket)
 	entity.Name = bucket.GetStringOrError(FieldName)
