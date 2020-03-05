@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 NetFoundry, Inc.
+	Copyright 2020 NetFoundry, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -126,7 +126,16 @@ func (entity *Service) toBoltEntityForPatch(tx *bbolt.Tx, handler Handler) (pers
 }
 
 func (entity *Service) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.BaseEntity) error {
-	return errors.Errorf("service type should not be used for reading")
+	boltService, ok := boltEntity.(*persistence.EdgeService)
+	if !ok {
+		return errors.Errorf("unexpected type %v when filling model service", reflect.TypeOf(boltEntity))
+	}
+	entity.fillCommon(boltService)
+	entity.Name = boltService.Name
+	entity.EndpointStrategy = boltService.EndpointStrategy
+	entity.RoleAttributes = boltService.RoleAttributes
+	entity.Configs = boltService.Configs
+	return nil
 }
 
 type ServiceDetail struct {

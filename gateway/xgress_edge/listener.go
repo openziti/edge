@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 NetFoundry, Inc.
+	Copyright 2020 NetFoundry, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -91,8 +91,8 @@ func (proxy *ingressProxy) close() {
 	log.Debugf("closing")
 	listeners := proxy.listener.factory.hostedServices.cleanupServices(proxy)
 	for _, listener := range listeners {
-		if err := xgress.UnbindService(proxy.listener.factory, listener.token, listener.service); err != nil {
-			log.Warnf("failed to unbind service %v for hostToken %v on channel close", listener.service, listener.token)
+		if err := xgress.RemoveEndpoint(proxy.listener.factory, listener.token); err != nil {
+			log.Warnf("failed to remove endpoint on service %v for hostToken %v on channel close", listener.service, listener.token)
 		}
 	}
 	proxy.msgMux.ExecuteClose()
@@ -209,7 +209,7 @@ func (proxy *ingressProxy) processBind(req *channel2.Message, ch channel2.Channe
 		hostData[edge.PublicKeyHeader] = pubKey
 	}
 
-	if err := xgress.BindService(proxy.listener.factory, token, ns.Service.Id, hostData); err != nil {
+	if err := xgress.AddEndpoint(proxy.listener.factory, token, ns.Service.Id, "edge", "hosted:"+token, hostData); err != nil {
 		proxy.sendStateClosedReply(err.Error(), req)
 		return
 	}
@@ -266,7 +266,7 @@ func (proxy *ingressProxy) processUnbind(req *channel2.Message, ch channel2.Chan
 	}
 
 	defer proxy.listener.factory.hostedServices.Delete(token)
-	if err := xgress.UnbindService(proxy.listener.factory, token, ns.Service.Id); err != nil {
+	if err := xgress.RemoveEndpoint(proxy.listener.factory, token); err != nil {
 		proxy.sendStateClosedReply(err.Error(), req)
 	} else {
 		proxy.sendStateClosedReply("unbind successful", req)
@@ -276,7 +276,7 @@ func (proxy *ingressProxy) processUnbind(req *channel2.Message, ch channel2.Chan
 func (proxy *ingressProxy) sendStateConnectedReply(req *channel2.Message, hostData map[uint32][]byte) {
 	connId, _ := req.GetUint32Header(edge.ConnIdHeader)
 	msg := edge.NewStateConnectedMsg(connId)
-	for k,v := range hostData {
+	for k, v := range hostData {
 		msg.Headers[int32(k)] = v
 	}
 	msg.ReplyTo(req)
