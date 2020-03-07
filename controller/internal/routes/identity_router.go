@@ -133,7 +133,7 @@ func (ir *IdentityRouter) ListServicePolicies(ae *env.AppEnv, rc *response.Reque
 }
 
 func (ir *IdentityRouter) ListServiceConfigs(ae *env.AppEnv, rc *response.RequestContext) {
-	listWithId(ae, rc, ir.IdType, func(id string) ([]interface{}, error) {
+	listWithId(rc, ir.IdType, func(id string) ([]interface{}, error) {
 		configs, err := ae.Handlers.Identity.GetServiceConfigs(id)
 		if err != nil {
 			return nil, err

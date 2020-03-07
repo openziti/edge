@@ -10,7 +10,10 @@
       "$ref": "definitions.all.json#/definitions/name"
     },
     "endpointStrategy": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "roleAttributes": {
       "default": null,

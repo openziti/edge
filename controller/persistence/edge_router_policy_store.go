@@ -12,13 +12,13 @@ import (
 
 func newEdgeRouterPolicy(name string) *EdgeRouterPolicy {
 	return &EdgeRouterPolicy{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               name,
+		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
+		Name:          name,
 	}
 }
 
 type EdgeRouterPolicy struct {
-	BaseEdgeEntityImpl
+	boltz.BaseExtEntity
 	Name            string
 	Semantic        string
 	IdentityRoles   []string
@@ -106,12 +106,12 @@ type edgeRouterPolicyStoreImpl struct {
 	edgeRouterCollection boltz.LinkCollection
 }
 
-func (store *edgeRouterPolicyStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *edgeRouterPolicyStoreImpl) NewStoreEntity() boltz.Entity {
 	return &EdgeRouterPolicy{}
 }
 
 func (store *edgeRouterPolicyStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 
 	store.indexName = store.addUniqueNameField()
 	store.symbolSemantic = store.AddSymbol(FieldSemantic, ast.NodeTypeString)

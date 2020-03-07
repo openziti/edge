@@ -139,5 +139,5 @@ func (handler *EnrollmentHandler) readInTx(tx *bbolt.Tx, id string) (*Enrollment
 }
 
 func (handler *EnrollmentHandler) Delete(id string) error {
-	return handler.deleteEntity(id, nil)
+	return handler.deleteEntity(id)
 }

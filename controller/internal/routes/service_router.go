@@ -18,11 +18,10 @@ package routes
 
 import (
 	"fmt"
-	"github.com/netfoundry/ziti-edge/controller/util"
+	"github.com/michaelquigley/pfxlog"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"net/http"
 	"strings"
-
-	"github.com/michaelquigley/pfxlog"
 
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/internal/permissions"
@@ -85,7 +84,7 @@ func (ir *ServiceRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
 					return nil, err
 				}
 				if identity == nil {
-					return nil, util.NewNotFoundError("identity", "id or name", asId)
+					return nil, boltz.NewNotFoundError("identity", "id or name", asId)
 				}
 			}
 		}

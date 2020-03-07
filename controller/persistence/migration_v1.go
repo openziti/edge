@@ -16,6 +16,8 @@
 
 package persistence
 
+import "github.com/netfoundry/ziti-foundation/storage/boltz"
+
 var geoRegionsV1 = map[string]string{
 	"a0e2c29f-9922-4435-a8a7-5dbf7bd92377": "Canada Central",
 	"ac469973-105c-4de1-9f31-fffc077487fb": "US West",
@@ -39,8 +41,8 @@ var geoRegionsV1 = map[string]string{
 func createGeoRegionsV1(mtx *MigrationContext) error {
 	for id, name := range geoRegionsV1 {
 		geoRegion := &GeoRegion{
-			BaseEdgeEntityImpl: *NewBaseEdgeEntity(id, nil),
-			Name:               name,
+			BaseExtEntity: *boltz.NewExtEntity(id, nil),
+			Name:          name,
 		}
 
 		err := mtx.Stores.GeoRegion.Create(mtx.Ctx, geoRegion)
@@ -62,8 +64,8 @@ var IdentityTypesV1 = map[string]string{
 func createIdentityTypesV1(mtx *MigrationContext) error {
 	for id, name := range IdentityTypesV1 {
 		identityType := &IdentityType{
-			BaseEdgeEntityImpl: *NewBaseEdgeEntity(id, nil),
-			Name:               name,
+			BaseExtEntity: *boltz.NewExtEntity(id, nil),
+			Name:          name,
 		}
 
 		err := mtx.Stores.IdentityType.Create(mtx.Ctx, identityType)

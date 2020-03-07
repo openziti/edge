@@ -33,7 +33,7 @@ const (
 )
 
 type Ca struct {
-	BaseEdgeEntityImpl
+	boltz.BaseExtEntity
 	Name                      string
 	Fingerprint               string
 	CertPem                   string
@@ -96,12 +96,12 @@ type caStoreImpl struct {
 	indexName boltz.ReadIndex
 }
 
-func (store *caStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *caStoreImpl) NewStoreEntity() boltz.Entity {
 	return &Ca{}
 }
 
 func (store *caStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 	store.indexName = store.addUniqueNameField()
 	store.AddSymbol(FieldCaFingerprint, ast.NodeTypeString)
 	store.AddSymbol(FieldCaIsVerified, ast.NodeTypeBool)

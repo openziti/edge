@@ -18,6 +18,7 @@ package routes
 
 import (
 	"fmt"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 	"time"
 
 	"github.com/michaelquigley/pfxlog"
@@ -95,7 +96,7 @@ func (e *EdgeRouterApiList) ToEntityApiRef() *EntityApiRef {
 	}
 }
 
-func MapEdgeRouterToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e model.BaseModelEntity) (BaseApiEntity, error) {
+func MapEdgeRouterToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*model.EdgeRouter)
 
 	if !ok {

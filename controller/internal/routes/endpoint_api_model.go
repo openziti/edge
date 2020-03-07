@@ -20,44 +20,48 @@ import (
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/env"
-	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
 	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 )
 
-const EntityNameConfigType = "config-types"
+const EntityNameEndpoint = "endpoints"
 
-type ConfigTypeApi struct {
-	Name   *string                `json:"name"`
-	Schema map[string]interface{} `json:"schema"`
-	Tags   map[string]interface{} `json:"tags"`
+type EndpointApi struct {
+	Service *string `json:"service"`
+	Router  *string `json:"router"`
+	Binding *string `json:"binding"`
+	Address *string `json:"address"`
 }
 
-func (i *ConfigTypeApi) ToModel(id string) *model.ConfigType {
-	result := &model.ConfigType{}
+func (i *EndpointApi) ToModel(id string) *network.Endpoint {
+	result := &network.Endpoint{}
 	result.Id = id
-	result.Name = stringz.OrEmpty(i.Name)
-	result.Schema = i.Schema
-	result.Tags = i.Tags
+	result.Service = stringz.OrEmpty(i.Service)
+	result.Router = stringz.OrEmpty(i.Router)
+	result.Binding = stringz.OrEmpty(i.Service)
+	result.Address = stringz.OrEmpty(i.Service)
+
 	return result
 }
 
-type ConfigTypeApiList struct {
+type EndpointApiList struct {
 	*env.BaseApi
-	Name   string                 `json:"name"`
-	Schema map[string]interface{} `json:"schema"`
+	Service string `json:"service"`
+	Router  string `json:"router"`
+	Binding string `json:"binding"`
+	Address string `json:"address"`
 }
 
-func (c *ConfigTypeApiList) GetSelfLink() *response.Link {
+func (c *EndpointApiList) GetSelfLink() *response.Link {
 	return c.BuildSelfLink(c.Id)
 }
 
-func (ConfigTypeApiList) BuildSelfLink(id string) *response.Link {
-	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameConfigType, id))
+func (EndpointApiList) BuildSelfLink(id string) *response.Link {
+	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameEndpoint, id))
 }
 
-func (c *ConfigTypeApiList) PopulateLinks() {
+func (c *EndpointApiList) PopulateLinks() {
 	if c.Links == nil {
 		self := c.GetSelfLink()
 		c.Links = &response.Links{
@@ -66,27 +70,27 @@ func (c *ConfigTypeApiList) PopulateLinks() {
 	}
 }
 
-func (c *ConfigTypeApiList) ToEntityApiRef() *EntityApiRef {
+func (c *EndpointApiList) ToEntityApiRef() *EntityApiRef {
 	c.PopulateLinks()
 	return &EntityApiRef{
-		Entity: EntityNameConfigType,
-		Name:   &c.Name,
+		Entity: EntityNameEndpoint,
+		Name:   nil,
 		Id:     c.Id,
 		Links:  c.Links,
 	}
 }
 
-func MapConfigTypeToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
-	i, ok := e.(*model.ConfigType)
+func MapEndpointToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
+	i, ok := e.(*network.Endpoint)
 
 	if !ok {
-		err := fmt.Errorf("entity is not a configuration type \"%s\"", e.GetId())
+		err := fmt.Errorf("entity is not a endpointuration \"%s\"", e.GetId())
 		log := pfxlog.Logger()
 		log.Error(err)
 		return nil, err
 	}
 
-	al, err := MapConfigTypeToApiList(i)
+	al, err := MapEndpointToApiList(i)
 
 	if err != nil {
 		err := fmt.Errorf("could not convert to API entity \"%s\": %s", e.GetId(), err)
@@ -97,11 +101,13 @@ func MapConfigTypeToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e netwo
 	return al, nil
 }
 
-func MapConfigTypeToApiList(i *model.ConfigType) (*ConfigTypeApiList, error) {
-	ret := &ConfigTypeApiList{
+func MapEndpointToApiList(i *network.Endpoint) (*EndpointApiList, error) {
+	ret := &EndpointApiList{
 		BaseApi: env.FromBaseModelEntity(i),
-		Name:    i.Name,
-		Schema:  i.Schema,
+		Service: i.Service,
+		Router:  i.Router,
+		Binding: i.Binding,
+		Address: i.Address,
 	}
 
 	ret.PopulateLinks()

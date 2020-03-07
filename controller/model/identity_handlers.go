@@ -22,8 +22,8 @@ import (
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-edge/controller/util"
 	"github.com/netfoundry/ziti-edge/controller/validation"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
@@ -44,7 +44,7 @@ func NewIdentityHandler(env Env) *IdentityHandler {
 			persistence.FieldIdentityIsDefaultAdmin: struct{}{},
 			persistence.FieldIdentityIsAdmin:        struct{}{},
 			persistence.FieldIdentityType:           struct{}{},
-			persistence.FieldTags:                   struct{}{},
+			boltz.FieldTags:                         struct{}{},
 		},
 	}
 	handler.impl = handler
@@ -58,7 +58,7 @@ func (handler IdentityHandler) newModelEntity() boltEntitySink {
 func (handler *IdentityHandler) Create(identityModel *Identity) (string, error) {
 	identityType, err := handler.env.GetHandlers().IdentityType.ReadByIdOrName(identityModel.IdentityTypeId)
 
-	if err != nil && !util.IsErrNotFoundErr(err) {
+	if err != nil && !boltz.IsErrNotFoundErr(err) {
 		return "", err
 	}
 
@@ -77,7 +77,7 @@ func (handler *IdentityHandler) Create(identityModel *Identity) (string, error) 
 func (handler *IdentityHandler) CreateWithEnrollments(identityModel *Identity, enrollmentsModels []*Enrollment) (string, []string, error) {
 	identityType, err := handler.env.GetHandlers().IdentityType.ReadByIdOrName(identityModel.IdentityTypeId)
 
-	if err != nil && !util.IsErrNotFoundErr(err) {
+	if err != nil && !boltz.IsErrNotFoundErr(err) {
 		return "", nil, err
 	}
 
@@ -136,7 +136,7 @@ func (handler *IdentityHandler) CreateWithEnrollments(identityModel *Identity, e
 func (handler *IdentityHandler) Update(identity *Identity) error {
 	identityType, err := handler.env.GetHandlers().IdentityType.ReadByIdOrName(identity.IdentityTypeId)
 
-	if err != nil && !util.IsErrNotFoundErr(err) {
+	if err != nil && !boltz.IsErrNotFoundErr(err) {
 		return err
 	}
 
@@ -156,7 +156,7 @@ func (handler *IdentityHandler) Patch(identity *Identity, checker boltz.FieldChe
 	combinedChecker := &AndFieldChecker{first: handler, second: checker}
 	if checker.IsUpdated("type") {
 		identityType, err := handler.env.GetHandlers().IdentityType.ReadByIdOrName(identity.IdentityTypeId)
-		if err != nil && !util.IsErrNotFoundErr(err) {
+		if err != nil && !boltz.IsErrNotFoundErr(err) {
 			return err
 		}
 
@@ -184,7 +184,7 @@ func (handler *IdentityHandler) Delete(id string) error {
 		return apierror.NewEntityCanNotBeDeleted()
 	}
 
-	return handler.deleteEntity(id, nil)
+	return handler.deleteEntity(id)
 }
 
 func (handler IdentityHandler) IsUpdated(field string) bool {
@@ -225,7 +225,7 @@ func (handler *IdentityHandler) ReadOneByQuery(query string) (*Identity, error) 
 func (handler *IdentityHandler) InitializeDefaultAdmin(username, password, name string) error {
 	identity, err := handler.ReadDefaultAdmin()
 
-	if err != nil && !util.IsErrNotFoundErr(err) {
+	if err != nil && !boltz.IsErrNotFoundErr(err) {
 		pfxlog.Logger().Panic(err)
 	}
 
@@ -243,7 +243,7 @@ func (handler *IdentityHandler) InitializeDefaultAdmin(username, password, name 
 	authenticatorId := uuid.New().String()
 
 	defaultAdmin := &Identity{
-		BaseModelEntityImpl: BaseModelEntityImpl{
+		BaseEntity: network.BaseEntity{
 			Id: identityId,
 		},
 		Name:           name,
@@ -253,7 +253,7 @@ func (handler *IdentityHandler) InitializeDefaultAdmin(username, password, name 
 	}
 
 	authenticator := &Authenticator{
-		BaseModelEntityImpl: BaseModelEntityImpl{
+		BaseEntity: network.BaseEntity{
 			Id: authenticatorId,
 		},
 		Method:     persistence.MethodAuthenticatorUpdb,
@@ -338,7 +338,7 @@ func (handler *IdentityHandler) CreateWithAuthenticator(identity *Identity, auth
 
 	identityType, err := handler.env.GetHandlers().IdentityType.ReadByIdOrName(identity.IdentityTypeId)
 
-	if err != nil && !util.IsErrNotFoundErr(err) {
+	if err != nil && !boltz.IsErrNotFoundErr(err) {
 		return "", "", err
 	}
 
@@ -381,11 +381,11 @@ func (handler *IdentityHandler) CreateWithAuthenticator(identity *Identity, auth
 	return identity.Id, authenticator.Id, nil
 }
 
-func (handler *IdentityHandler) CollectEdgeRouterPolicies(id string, collector func(entity BaseModelEntity)) error {
+func (handler *IdentityHandler) CollectEdgeRouterPolicies(id string, collector func(entity network.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
 }
 
-func (handler *IdentityHandler) CollectServicePolicies(id string, collector func(entity BaseModelEntity)) error {
+func (handler *IdentityHandler) CollectServicePolicies(id string, collector func(entity network.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
 }
 

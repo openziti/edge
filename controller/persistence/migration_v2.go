@@ -16,14 +16,17 @@
 
 package persistence
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
+)
 
 func createEdgeRouterPoliciesV2(mtx *MigrationContext) error {
 	allPolicy := &EdgeRouterPolicy{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               "migration policy allowing access to all edge routers and all identities",
-		IdentityRoles:      []string{AllRole},
-		EdgeRouterRoles:    []string{AllRole},
+		BaseExtEntity:   boltz.BaseExtEntity{Id: uuid.New().String()},
+		Name:            "migration policy allowing access to all edge routers and all identities",
+		IdentityRoles:   []string{AllRole},
+		EdgeRouterRoles: []string{AllRole},
 	}
 	err := mtx.Stores.EdgeRouterPolicy.Create(mtx.Ctx, allPolicy)
 	if err != nil {

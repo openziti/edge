@@ -18,6 +18,7 @@ package model
 
 import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
@@ -70,21 +71,12 @@ func (handler *EdgeRouterPolicyHandler) Patch(edgeRouterPolicy *EdgeRouterPolicy
 }
 
 func (handler *EdgeRouterPolicyHandler) Delete(id string) error {
-	return handler.deleteEntity(id, nil)
-}
-
-func (handler *EdgeRouterPolicyHandler) List(queryOptions *QueryOptions) (*EdgeRouterPolicyListResult, error) {
-	result := &EdgeRouterPolicyListResult{handler: handler}
-	err := handler.parseAndList(queryOptions, result.collect)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
+	return handler.deleteEntity(id)
 }
 
 func (handler *EdgeRouterPolicyHandler) ListEdgeRouters(id string) ([]*EdgeRouter, error) {
 	var result []*EdgeRouter
-	err := handler.CollectEdgeRouters(id, func(entity BaseModelEntity) {
+	err := handler.CollectEdgeRouters(id, func(entity network.Entity) {
 		result = append(result, entity.(*EdgeRouter))
 	})
 
@@ -94,21 +86,21 @@ func (handler *EdgeRouterPolicyHandler) ListEdgeRouters(id string) ([]*EdgeRoute
 	return result, nil
 }
 
-func (handler *EdgeRouterPolicyHandler) CollectEdgeRouters(id string, collector func(entity BaseModelEntity)) error {
+func (handler *EdgeRouterPolicyHandler) CollectEdgeRouters(id string, collector func(entity network.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
 }
 
-func (handler *EdgeRouterPolicyHandler) CollectIdentities(id string, collector func(entity BaseModelEntity)) error {
+func (handler *EdgeRouterPolicyHandler) CollectIdentities(id string, collector func(entity network.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeIdentities, handler.env.GetHandlers().Identity, collector)
 }
 
 type EdgeRouterPolicyListResult struct {
 	handler            *EdgeRouterPolicyHandler
 	EdgeRouterPolicies []*EdgeRouterPolicy
-	QueryMetaData
+	network.QueryMetaData
 }
 
-func (result *EdgeRouterPolicyListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
+func (result *EdgeRouterPolicyListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
 		entity, err := result.handler.readInTx(tx, key)

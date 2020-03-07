@@ -28,7 +28,7 @@ import (
 
 type EdgeService struct {
 	db.Service
-	EdgeEntityFields
+	boltz.ExtEntityFields
 	Name           string
 	RoleAttributes []string
 	Configs        []string
@@ -112,12 +112,12 @@ type edgeServiceStoreImpl struct {
 	symbolConfigs                   boltz.EntitySetSymbol
 }
 
-func (store *edgeServiceStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *edgeServiceStoreImpl) NewStoreEntity() boltz.Entity {
 	return &EdgeService{}
 }
 
 func (store *edgeServiceStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 	store.GetParentStore().GrantSymbols(store)
 
 	store.indexName = store.addUniqueNameField()
@@ -146,7 +146,7 @@ func (store *edgeServiceStoreImpl) rolesChanged(tx *bbolt.Tx, rowId []byte, _ []
 	UpdateRelatedRoles(store, tx, string(rowId), rolesSymbol, linkCollection, new, holder, semanticSymbol)
 }
 
-func (store *edgeServiceStoreImpl) nameChanged(bucket *boltz.TypedBucket, entity NamedEdgeEntity, oldName string) {
+func (store *edgeServiceStoreImpl) nameChanged(bucket *boltz.TypedBucket, entity boltz.NamedExtEntity, oldName string) {
 	store.updateEntityNameReferences(bucket, store.stores.servicePolicy.symbolServiceRoles, entity, oldName)
 	store.updateEntityNameReferences(bucket, store.stores.serviceEdgeRouterPolicy.symbolServiceRoles, entity, oldName)
 }

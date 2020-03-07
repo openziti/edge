@@ -121,10 +121,10 @@ func (ctx *TestContext) createApiSessionTestEntities() *apiSessionTestEntities {
 
 	service := ctx.requireNewService("test-service")
 	session := &Session{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Token:              uuid.New().String(),
-		ApiSessionId:       apiSession2.Id,
-		ServiceId:          service.Id,
+		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
+		Token:         uuid.New().String(),
+		ApiSessionId:  apiSession2.Id,
+		ServiceId:     service.Id,
 	}
 	ctx.requireCreate(session)
 

@@ -1,0 +1,24 @@
+{
+  "$id": "http://ziti-edge.netfoundry.io/schemas/endpoint.post.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "service",
+    "router",
+    "address"
+  ],
+  "properties": {
+    "router": {
+      "type": "string"
+    },
+    "binding": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "address": {
+      "type": "string"
+    }
+  }
+}

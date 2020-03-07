@@ -33,8 +33,8 @@ var serverConfigV1TypeId = "cea49285-6c07-42cf-9f52-09a9b115c783"
 
 func createInitialTunnelerConfigTypes(mtx *MigrationContext) error {
 	clientConfigTypeV1 := &ConfigType{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: clientConfigV1TypeId},
-		Name:               "ziti-tunneler-client.v1",
+		BaseExtEntity: boltz.BaseExtEntity{Id: clientConfigV1TypeId},
+		Name:          "ziti-tunneler-client.v1",
 		Schema: map[string]interface{}{
 			"$id":                  "http://ziti-edge.netfoundry.io/schemas/ziti-tunneler-client.v1.config.json",
 			"type":                 "object",
@@ -61,8 +61,8 @@ func createInitialTunnelerConfigTypes(mtx *MigrationContext) error {
 	}
 
 	serverConfigTypeV1 := &ConfigType{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: serverConfigV1TypeId},
-		Name:               "ziti-tunneler-server.v1",
+		BaseExtEntity: boltz.BaseExtEntity{Id: serverConfigV1TypeId},
+		Name:          "ziti-tunneler-server.v1",
 		Schema: map[string]interface{}{
 			"$id":                  "http://ziti-edge.netfoundry.io/schemas/ziti-tunneler-server.v1.config.json",
 			"type":                 "object",
@@ -142,10 +142,10 @@ func createServiceConfigs(mtx *MigrationContext, service *EdgeService, hostname 
 		"port":     port,
 	}
 	config := &Config{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               service.Name + "-tunneler-client-config",
-		Type:               clientConfigV1TypeId,
-		Data:               clientConfigData,
+		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
+		Name:          service.Name + "-tunneler-client-config",
+		Type:          clientConfigV1TypeId,
+		Data:          clientConfigData,
 	}
 	if err := mtx.Stores.Config.Create(mtx.Ctx, config); err != nil {
 		return err

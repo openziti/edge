@@ -39,6 +39,7 @@ import (
 type TestDbProvider struct {
 	db           *db.Db
 	fabricStores *db.Stores
+	controllers  *network.Controllers
 }
 
 func (p *TestDbProvider) GetDb() boltz.Db {
@@ -54,6 +55,10 @@ func (p *TestDbProvider) GetServiceCache() network.Cache {
 }
 
 func (p *TestDbProvider) RemoveFromCache(_ string) {
+}
+
+func (p *TestDbProvider) GetControllers() *network.Controllers {
+	return p.controllers
 }
 
 type TestContext struct {
@@ -96,7 +101,9 @@ func (ctx *TestContext) Init() {
 	ctx.NoError(err)
 
 	ctx.DbProvider.fabricStores = db.InitStores()
+	ctx.DbProvider.controllers = network.NewControllers(ctx.DbProvider.db, ctx.DbProvider.fabricStores)
 	ctx.stores, err = NewBoltStores(ctx.DbProvider)
+
 	ctx.NoError(err)
 
 	ctx.NoError(RunMigrations(ctx.DbProvider, ctx.stores, nil))
@@ -118,11 +125,11 @@ func (ctx *TestContext) Cleanup() {
 
 func (ctx *TestContext) requireNewServicePolicy(policyType int32, identityRoles []string, serviceRoles []string) *ServicePolicy {
 	entity := &ServicePolicy{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               uuid.New().String(),
-		PolicyType:         policyType,
-		IdentityRoles:      identityRoles,
-		ServiceRoles:       serviceRoles,
+		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
+		Name:          uuid.New().String(),
+		PolicyType:    policyType,
+		IdentityRoles: identityRoles,
+		ServiceRoles:  serviceRoles,
 	}
 	ctx.requireCreate(entity)
 	return entity
@@ -130,9 +137,9 @@ func (ctx *TestContext) requireNewServicePolicy(policyType int32, identityRoles 
 
 func (ctx *TestContext) requireNewIdentity(name string, isAdmin bool) *Identity {
 	identity := &Identity{
-		BaseEdgeEntityImpl: *NewBaseEdgeEntity(uuid.New().String(), nil),
-		Name:               name,
-		IsAdmin:            isAdmin,
+		BaseExtEntity: *boltz.NewExtEntity(uuid.New().String(), nil),
+		Name:          name,
+		IsAdmin:       isAdmin,
 	}
 	ctx.requireCreate(identity)
 	return identity
@@ -149,20 +156,20 @@ func (ctx *TestContext) requireNewService(name string) *EdgeService {
 	return edgeService
 }
 
-func (ctx *TestContext) requireDelete(entity boltz.BaseEntity) {
+func (ctx *TestContext) requireDelete(entity boltz.Entity) {
 	err := ctx.delete(entity)
 	ctx.NoError(err)
 	ctx.validateDeleted(entity.GetId())
 }
 
-func (ctx *TestContext) requireReload(entity boltz.BaseEntity) {
+func (ctx *TestContext) requireReload(entity boltz.Entity) {
 	ctx.NoError(ctx.reload(entity))
 }
 
-func (ctx *TestContext) delete(entity boltz.BaseEntity) error {
+func (ctx *TestContext) delete(entity boltz.Entity) error {
 	return ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		mutateContext := boltz.NewMutateContext(tx)
-		store := ctx.stores.getStoreForEntity(entity)
+		store := ctx.stores.GetStoreForEntity(entity)
 		if store == nil {
 			return errors.Errorf("no store for entity of type '%v'", entity.GetEntityType())
 		}
@@ -170,15 +177,15 @@ func (ctx *TestContext) delete(entity boltz.BaseEntity) error {
 	})
 }
 
-func (ctx *TestContext) reload(entity boltz.BaseEntity) error {
+func (ctx *TestContext) reload(entity boltz.Entity) error {
 	return ctx.GetDb().View(func(tx *bbolt.Tx) error {
-		store := ctx.stores.getStoreForEntity(entity)
+		store := ctx.stores.GetStoreForEntity(entity)
 		if store == nil {
 			return errors.Errorf("no store for entity of type '%v'", entity.GetEntityType())
 		}
 		found, err := store.BaseLoadOneById(tx, entity.GetId(), entity)
 		if !found {
-			return errors.Errorf("Could not reload %v with id %v", store.GetSingularEntityType(), entity.GetId())
+			return errors.Errorf("Could not reload %v with id %v", store.GetEntityType(), entity.GetId())
 		}
 		return err
 	})
@@ -191,7 +198,7 @@ func (ctx *TestContext) validateDeleted(id string) {
 	ctx.NoError(err)
 }
 
-func (ctx *TestContext) requireCreate(entity boltz.BaseEntity) {
+func (ctx *TestContext) requireCreate(entity boltz.Entity) {
 	err := ctx.create(entity)
 	if err != nil {
 		fmt.Printf("error: %+v\n", err)
@@ -199,11 +206,11 @@ func (ctx *TestContext) requireCreate(entity boltz.BaseEntity) {
 	ctx.NoError(err)
 }
 
-func (ctx *TestContext) requireUpdate(entity boltz.BaseEntity) {
+func (ctx *TestContext) requireUpdate(entity boltz.Entity) {
 	ctx.NoError(ctx.update(entity))
 }
 
-func (ctx *TestContext) create(entity boltz.BaseEntity) error {
+func (ctx *TestContext) create(entity boltz.Entity) error {
 	return ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		mutateContext := boltz.NewMutateContext(tx)
 		store, err := ctx.getStoreForEntity(entity)
@@ -214,7 +221,7 @@ func (ctx *TestContext) create(entity boltz.BaseEntity) error {
 	})
 }
 
-func (ctx *TestContext) update(entity boltz.BaseEntity) error {
+func (ctx *TestContext) update(entity boltz.Entity) error {
 	return ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		mutateContext := boltz.NewMutateContext(tx)
 		store, err := ctx.getStoreForEntity(entity)
@@ -225,7 +232,7 @@ func (ctx *TestContext) update(entity boltz.BaseEntity) error {
 	})
 }
 
-func (ctx *TestContext) getStoreForEntity(entity boltz.BaseEntity) (boltz.CrudStore, error) {
+func (ctx *TestContext) getStoreForEntity(entity boltz.Entity) (boltz.CrudStore, error) {
 	var store boltz.CrudStore
 
 	if _, ok := entity.(*db.Service); ok {
@@ -233,7 +240,7 @@ func (ctx *TestContext) getStoreForEntity(entity boltz.BaseEntity) (boltz.CrudSt
 	} else if _, ok := entity.(*db.Router); ok {
 		store = ctx.stores.Router
 	} else {
-		store = ctx.stores.getStoreForEntity(entity)
+		store = ctx.stores.GetStoreForEntity(entity)
 	}
 	if store != nil {
 		return store, nil
@@ -242,12 +249,12 @@ func (ctx *TestContext) getStoreForEntity(entity boltz.BaseEntity) (boltz.CrudSt
 	return nil, errors.Errorf("no store for entity of type '%v'", entity.GetEntityType())
 }
 
-func (ctx *TestContext) validateBaseline(entity BaseEdgeEntity) {
-	store := ctx.stores.getStoreForEntity(entity)
+func (ctx *TestContext) validateBaseline(entity boltz.ExtEntity) {
+	store := ctx.stores.GetStoreForEntity(entity)
 	ctx.NotNil(store, "no store for entity of type '%v'", entity.GetEntityType())
 
-	loaded, ok := store.NewStoreEntity().(BaseEdgeEntity)
-	ctx.True(ok, "store entity type does not implement BaseEntity: %v", reflect.TypeOf(store.NewStoreEntity()))
+	loaded, ok := store.NewStoreEntity().(boltz.ExtEntity)
+	ctx.True(ok, "store entity type does not implement Entity: %v", reflect.TypeOf(store.NewStoreEntity()))
 
 	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		found, err := store.BaseLoadOneById(tx, entity.GetId(), loaded)
@@ -265,21 +272,21 @@ func (ctx *TestContext) validateBaseline(entity BaseEdgeEntity) {
 	})
 	ctx.NoError(err)
 
-	entity.setCreateAt(loaded.GetCreatedAt())
-	entity.setUpdatedAt(loaded.GetUpdatedAt())
+	entity.SetCreatedAt(loaded.GetCreatedAt())
+	entity.SetUpdatedAt(loaded.GetUpdatedAt())
 	if entity.GetTags() == nil {
-		entity.setTags(map[string]interface{}{})
+		entity.SetTags(map[string]interface{}{})
 	}
 
 	ctx.True(cmp.Equal(entity, loaded), cmp.Diff(entity, loaded))
 }
 
-func (ctx *TestContext) validateUpdated(entity BaseEdgeEntity) {
-	store := ctx.stores.getStoreForEntity(entity)
+func (ctx *TestContext) validateUpdated(entity boltz.ExtEntity) {
+	store := ctx.stores.GetStoreForEntity(entity)
 	ctx.NotNil(store, "no store for entity of type '%v'", entity.GetEntityType())
 
-	loaded, ok := store.NewStoreEntity().(BaseEdgeEntity)
-	ctx.True(ok, "store entity type does not implement BaseEntity: %v", reflect.TypeOf(store.NewStoreEntity()))
+	loaded, ok := store.NewStoreEntity().(boltz.ExtEntity)
+	ctx.True(ok, "store entity type does not implement Entity: %v", reflect.TypeOf(store.NewStoreEntity()))
 
 	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		found, err := store.BaseLoadOneById(tx, entity.GetId(), loaded)
@@ -297,19 +304,19 @@ func (ctx *TestContext) validateUpdated(entity BaseEdgeEntity) {
 	})
 	ctx.NoError(err)
 
-	entity.setCreateAt(loaded.GetCreatedAt())
-	entity.setUpdatedAt(loaded.GetUpdatedAt())
+	entity.SetCreatedAt(loaded.GetCreatedAt())
+	entity.SetUpdatedAt(loaded.GetUpdatedAt())
 	if entity.GetTags() == nil {
-		entity.setTags(map[string]interface{}{})
+		entity.SetTags(map[string]interface{}{})
 	}
 
 	ctx.True(cmp.Equal(entity, loaded), cmp.Diff(entity, loaded))
 }
 
-func (ctx *TestContext) getRelatedIds(entity boltz.BaseEntity, field string) []string {
+func (ctx *TestContext) getRelatedIds(entity boltz.Entity, field string) []string {
 	var result []string
 	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
-		store := ctx.stores.getStoreForEntity(entity)
+		store := ctx.stores.GetStoreForEntity(entity)
 		if store == nil {
 			return errors.Errorf("no store for entity of type '%v'", entity.GetEntityType())
 		}

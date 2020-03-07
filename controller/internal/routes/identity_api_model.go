@@ -18,6 +18,7 @@ package routes
 
 import (
 	"fmt"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/env"
@@ -99,26 +100,23 @@ func (i *IdentityApiCreate) ToModel() (*model.Identity, []*model.Enrollment) {
 	if caId, ok := i.Enrollment[persistence.MethodEnrollOttCa]; ok {
 		caId := caId.(string)
 		enrollment := &model.Enrollment{
-			BaseModelEntityImpl: model.BaseModelEntityImpl{},
-			Method:              persistence.MethodEnrollOttCa,
-			CaId:                &caId,
+			Method: persistence.MethodEnrollOttCa,
+			CaId:   &caId,
 		}
 		enrollments = append(enrollments, enrollment)
 	}
 
 	if _, ok := i.Enrollment[persistence.MethodEnrollOtt]; ok {
 		enrollments = append(enrollments, &model.Enrollment{
-			BaseModelEntityImpl: model.BaseModelEntityImpl{},
-			Method:              persistence.MethodEnrollOtt,
+			Method: persistence.MethodEnrollOtt,
 		})
 	}
 
 	if val, ok := i.Enrollment[persistence.MethodEnrollUpdb]; ok {
 		username := val.(string)
 		enrollments = append(enrollments, &model.Enrollment{
-			BaseModelEntityImpl: model.BaseModelEntityImpl{},
-			Method:              persistence.MethodEnrollUpdb,
-			Username:            &username,
+			Method:   persistence.MethodEnrollUpdb,
+			Username: &username,
 		})
 	}
 
@@ -187,7 +185,7 @@ func NewIdentityLink(identityId string) *response.Link {
 	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameIdentity, identityId))
 }
 
-func MapIdentityToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e model.BaseModelEntity) (BaseApiEntity, error) {
+func MapIdentityToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*model.Identity)
 
 	if !ok {
@@ -318,5 +316,5 @@ type IdentityServiceConfig struct {
 }
 
 func (entity IdentityServiceConfig) toModel() model.ServiceConfig {
-	return model.ServiceConfig{Config: entity.Config, Service: entity.Service,}
+	return model.ServiceConfig{Config: entity.Config, Service: entity.Service}
 }

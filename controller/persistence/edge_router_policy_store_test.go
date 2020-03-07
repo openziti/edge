@@ -3,6 +3,7 @@ package persistence
 import (
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"go.etcd.io/bbolt"
 	"sort"
@@ -437,7 +438,7 @@ func (ctx *TestContext) validateEdgeRouterPolicyEdgeRouters(edgeRouters []*EdgeR
 	}
 }
 
-func (ctx *TestContext) policyShouldMatch(semantic string, roleSet []string, entity NamedEdgeEntity, roleAttribute []string) bool {
+func (ctx *TestContext) policyShouldMatch(semantic string, roleSet []string, entity boltz.NamedExtEntity, roleAttribute []string) bool {
 	roles, ids, err := splitRolesAndIds(roleSet)
 	ctx.NoError(err)
 	isIdMatch := stringz.Contains(ids, entity.GetId())

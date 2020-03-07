@@ -24,13 +24,13 @@ const (
 
 func newServicePolicy(name string) *ServicePolicy {
 	return &ServicePolicy{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               name,
+		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
+		Name:          name,
 	}
 }
 
 type ServicePolicy struct {
-	BaseEdgeEntityImpl
+	boltz.BaseExtEntity
 	PolicyType    int32
 	Name          string
 	Semantic      string
@@ -120,12 +120,12 @@ type servicePolicyStoreImpl struct {
 	serviceCollection  boltz.LinkCollection
 }
 
-func (store *servicePolicyStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *servicePolicyStoreImpl) NewStoreEntity() boltz.Entity {
 	return &ServicePolicy{}
 }
 
 func (store *servicePolicyStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 
 	store.indexName = store.addUniqueNameField()
 	store.AddSymbol(FieldServicePolicyType, ast.NodeTypeInt64)

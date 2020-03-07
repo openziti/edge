@@ -18,6 +18,7 @@ package routes
 
 import (
 	"fmt"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/env"
@@ -86,6 +87,8 @@ type ServiceApiList struct {
 	*env.BaseApi
 	Name             *string                           `json:"name"`
 	EndpointStrategy *string                           `json:"endpointStrategy"`
+	EndpointAddress  *string                           `json:"endpointAddress"`
+	EgressRouter     *string                           `json:"egressRouter"`
 	RoleAttributes   []string                          `json:"roleAttributes"`
 	Permissions      []string                          `json:"permissions"`
 	Configs          []string                          `json:"configs"`
@@ -122,7 +125,7 @@ func (e *ServiceApiList) ToEntityApiRef() *EntityApiRef {
 }
 
 func MapServicesToApiEntities(ae *env.AppEnv, rc *response.RequestContext, es []*model.ServiceDetail) ([]BaseApiEntity, error) {
-	// can't use modelToApi b/c it require list of BaseModelEntity
+	// can't use modelToApi b/c it require list of network.Entity
 	apiEntities := make([]BaseApiEntity, 0)
 
 	for _, e := range es {
@@ -138,7 +141,7 @@ func MapServicesToApiEntities(ae *env.AppEnv, rc *response.RequestContext, es []
 	return apiEntities, nil
 }
 
-func MapServiceToApiEntity(ae *env.AppEnv, rc *response.RequestContext, e model.BaseModelEntity) (BaseApiEntity, error) {
+func MapServiceToApiEntity(ae *env.AppEnv, rc *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*model.ServiceDetail)
 
 	if !ok {
@@ -169,6 +172,7 @@ func MapToServiceApiList(_ *env.AppEnv, _ *response.RequestContext, i *model.Ser
 		Configs:          i.Configs,
 		Config:           i.Config,
 	}
+
 	ret.PopulateLinks()
 	return ret, nil
 }

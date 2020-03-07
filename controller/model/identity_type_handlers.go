@@ -17,7 +17,7 @@
 package model
 
 import (
-	"github.com/netfoundry/ziti-edge/controller/util"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 )
 
 func NewIdentityTypeHandler(env Env) *IdentityTypeHandler {
@@ -59,7 +59,7 @@ func (handler *IdentityTypeHandler) ReadByIdOrName(idOrName string) (*IdentityTy
 		return modelEntity, nil
 	}
 
-	if !util.IsErrNotFoundErr(err) {
+	if !boltz.IsErrNotFoundErr(err) {
 		return nil, err
 	}
 
@@ -75,7 +75,7 @@ func (handler *IdentityTypeHandler) ReadByIdOrName(idOrName string) (*IdentityTy
 }
 
 func (handler *IdentityTypeHandler) Delete(id string) error {
-	return handler.deleteEntity(id, nil)
+	return handler.deleteEntity(id)
 }
 
 func (handler *IdentityTypeHandler) ReadByName(name string) (*IdentityType, error) {

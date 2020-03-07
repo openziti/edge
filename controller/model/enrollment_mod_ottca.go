@@ -22,6 +22,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/internal/cert"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 )
 
 type EnrollModuleOttCa struct {
@@ -125,9 +126,9 @@ func (module *EnrollModuleOttCa) Process(ctx EnrollmentContext) (*EnrollmentResu
 	}
 
 	newAuthenticator := &Authenticator{
-		BaseModelEntityImpl: BaseModelEntityImpl{},
-		Method:              persistence.MethodAuthenticatorCert,
-		IdentityId:          identity.Id,
+		BaseEntity: network.BaseEntity{},
+		Method:     persistence.MethodAuthenticatorCert,
+		IdentityId: identity.Id,
 		SubType: &AuthenticatorCert{
 			Fingerprint: fingerprint,
 			Pem:         string(certPem),

@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/netfoundry/ziti-fabric/controller/db"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"time"
 
 	"github.com/michaelquigley/pfxlog"
@@ -71,7 +72,7 @@ func migrateCasFromPG(mtx *MigrationContext) error {
 			return err
 		}
 		ca := &Ca{
-			BaseEdgeEntityImpl:        *toBaseBoltEntity(&pgCa.BaseDbEntity),
+			BaseExtEntity:             *toBaseBoltEntity(&pgCa.BaseDbEntity),
 			Name:                      *pgCa.Name,
 			Fingerprint:               *pgCa.Fingerprint,
 			CertPem:                   *pgCa.CertPem,
@@ -123,10 +124,10 @@ func migrateAuthenticatorsFromPG(mtx *MigrationContext) error {
 		}
 
 		authenticator := &Authenticator{
-			BaseEdgeEntityImpl: *toBaseBoltEntity(&pgAuthenticator.BaseDbEntity),
-			Type:               *pgAuthenticator.Method,
-			IdentityId:         *pgAuthenticator.IdentityID,
-			SubType:            subtype,
+			BaseExtEntity: *toBaseBoltEntity(&pgAuthenticator.BaseDbEntity),
+			Type:          *pgAuthenticator.Method,
+			IdentityId:    *pgAuthenticator.IdentityID,
+			SubType:       subtype,
 		}
 		err = mtx.Stores.Authenticator.Create(mtx.Ctx, authenticator)
 	}
@@ -147,15 +148,15 @@ func migrateEnrollmentsFromPG(mtx *MigrationContext) error {
 		}
 
 		enrollment := &Enrollment{
-			BaseEdgeEntityImpl: *toBaseBoltEntity(&pgEnrollment.BaseDbEntity),
-			Token:              *pgEnrollment.Token,
-			Method:             *pgEnrollment.Method,
-			IdentityId:         *pgEnrollment.IdentityID,
-			ExpiresAt:          pgEnrollment.ExpiresAt,
-			IssuedAt:           pgEnrollment.CreatedAt,
-			CaId:               nil,
-			Username:           nil,
-			Jwt:                "",
+			BaseExtEntity: *toBaseBoltEntity(&pgEnrollment.BaseDbEntity),
+			Token:         *pgEnrollment.Token,
+			Method:        *pgEnrollment.Method,
+			IdentityId:    *pgEnrollment.IdentityID,
+			ExpiresAt:     pgEnrollment.ExpiresAt,
+			IssuedAt:      pgEnrollment.CreatedAt,
+			CaId:          nil,
+			Username:      nil,
+			Jwt:           "",
 		}
 		method := *pgEnrollment.Method
 		switch {
@@ -199,8 +200,8 @@ func migrateServicesFromPG(mtx *MigrationContext) error {
 			Service: db.Service{
 				Id: pgService.ID,
 			},
-			EdgeEntityFields: toBaseBoltEntity(&pgService.BaseDbEntity).EdgeEntityFields,
-			Name:             *pgService.Name,
+			ExtEntityFields: toBaseBoltEntity(&pgService.BaseDbEntity).ExtEntityFields,
+			Name:            *pgService.Name,
 		}
 
 		if err = mtx.Stores.EdgeService.Create(mtx.Ctx, edgeService); err != nil {
@@ -208,13 +209,12 @@ func migrateServicesFromPG(mtx *MigrationContext) error {
 		}
 
 		endpoint := &db.Endpoint{
-			Id:        uuid.New().String(),
-			Service:   edgeService.Id,
-			Router:    stringz.OrEmpty(pgService.EgressRouter),
-			Binding:   "transport",
-			Address:   stringz.OrEmpty(pgService.EndpointAddress),
-			CreatedAt: time.Time{},
-			PeerData:  nil,
+			BaseExtEntity: *boltz.NewExtEntity(uuid.New().String(), nil),
+			Service:       edgeService.Id,
+			Router:        stringz.OrEmpty(pgService.EgressRouter),
+			Binding:       "transport",
+			Address:       stringz.OrEmpty(pgService.EndpointAddress),
+			PeerData:      nil,
 		}
 
 		if err = mtx.Stores.Endpoint.Create(mtx.Ctx, endpoint); err != nil {
@@ -261,10 +261,10 @@ func migrateAppWansFromPG(mtx *MigrationContext) error {
 		}
 
 		appwan := &Appwan{
-			BaseEdgeEntityImpl: *toBaseBoltEntity(&pgAppwan.BaseDbEntity),
-			Name:               *pgAppwan.Name,
-			Identities:         identityIds,
-			Services:           serviceIds,
+			BaseExtEntity: *toBaseBoltEntity(&pgAppwan.BaseDbEntity),
+			Name:          *pgAppwan.Name,
+			Identities:    identityIds,
+			Services:      serviceIds,
 		}
 		err = mtx.Stores.Appwan.Create(mtx.Ctx, appwan)
 	}
@@ -284,11 +284,11 @@ func migrateIdentitiesFromPG(mtx *MigrationContext) error {
 			return err
 		}
 		identity := &Identity{
-			BaseEdgeEntityImpl: *toBaseBoltEntity(&pgIdentity.BaseDbEntity),
-			Name:               *pgIdentity.Name,
-			IdentityTypeId:     pgIdentity.Type.ID,
-			IsDefaultAdmin:     *pgIdentity.IsDefaultAdmin,
-			IsAdmin:            *pgIdentity.IsAdmin,
+			BaseExtEntity:  *toBaseBoltEntity(&pgIdentity.BaseDbEntity),
+			Name:           *pgIdentity.Name,
+			IdentityTypeId: pgIdentity.Type.ID,
+			IsDefaultAdmin: *pgIdentity.IsDefaultAdmin,
+			IsAdmin:        *pgIdentity.IsAdmin,
 			//enrollments & auths done in their own section
 		}
 		err = mtx.Stores.Identity.Create(mtx.Ctx, identity)
@@ -310,16 +310,16 @@ func migrateEventLogsFromPG(mtx *MigrationContext) error {
 			return err
 		}
 		eventLog := &EventLog{
-			BaseEdgeEntityImpl: *toBaseBoltEntity(&pgEventLog.BaseDbEntity),
-			Data:               pgEventLog.Data,
-			Type:               pgEventLog.Type,
-			FormattedMessage:   pgEventLog.FormattedMessage,
-			FormatString:       pgEventLog.FormatString,
-			FormatData:         pgEventLog.FormatData,
-			EntityType:         pgEventLog.EntityType,
-			EntityId:           pgEventLog.EntityId,
-			ActorType:          pgEventLog.ActorType,
-			ActorId:            pgEventLog.ActorId,
+			BaseExtEntity:    *toBaseBoltEntity(&pgEventLog.BaseDbEntity),
+			Data:             pgEventLog.Data,
+			Type:             pgEventLog.Type,
+			FormattedMessage: pgEventLog.FormattedMessage,
+			FormatString:     pgEventLog.FormatString,
+			FormatData:       pgEventLog.FormatData,
+			EntityType:       pgEventLog.EntityType,
+			EntityId:         pgEventLog.EntityId,
+			ActorType:        pgEventLog.ActorType,
+			ActorId:          pgEventLog.ActorId,
 		}
 		err = mtx.Stores.EventLog.Create(mtx.Ctx, eventLog)
 	}
@@ -340,8 +340,8 @@ func migrateClusterFromPG(mtx *MigrationContext) error {
 			return err
 		}
 		cluster := &Cluster{
-			BaseEdgeEntityImpl: *toBaseBoltEntity(&pgCluster.BaseDbEntity),
-			Name:               *pgCluster.Name,
+			BaseExtEntity: *toBaseBoltEntity(&pgCluster.BaseDbEntity),
+			Name:          *pgCluster.Name,
 		}
 		err = mtx.Stores.Cluster.Create(mtx.Ctx, cluster)
 	}
@@ -363,7 +363,7 @@ func migrateEdgeRoutersFromPG(mtx *MigrationContext) error {
 		}
 
 		edgeRouter := &EdgeRouter{
-			BaseEdgeEntityImpl:  *toBaseBoltEntity(&pgEdgeRouter.BaseDbEntity),
+			BaseExtEntity:       *toBaseBoltEntity(&pgEdgeRouter.BaseDbEntity),
 			Name:                *pgEdgeRouter.Name,
 			ClusterId:           pgEdgeRouter.ClusterID,
 			Fingerprint:         pgEdgeRouter.Fingerprint,
@@ -383,8 +383,8 @@ func migrateEdgeRoutersFromPG(mtx *MigrationContext) error {
 	return nil
 }
 
-func toBaseBoltEntity(entity *migration.BaseDbEntity) *BaseEdgeEntityImpl {
-	result := BaseEdgeEntityImpl{Id: entity.ID}
+func toBaseBoltEntity(entity *migration.BaseDbEntity) *boltz.BaseExtEntity {
+	result := boltz.BaseExtEntity{Id: entity.ID}
 	if entity.Tags != nil {
 		result.Tags = *entity.Tags
 	}

@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-edge/controller/util"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
@@ -107,12 +107,12 @@ func (handler *EdgeServiceHandler) ReadForIdentityInTx(tx *bbolt.Tx, id string, 
 		return nil, err
 	}
 	if result == nil {
-		return nil, util.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
+		return nil, boltz.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
 	}
 	if bindCount > 0 {
 		result.Permissions = append(result.Permissions, persistence.PolicyTypeBindName)
 	} else if dialCount == 0 {
-		return nil, util.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
+		return nil, boltz.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
 	}
 
 	if dialCount > 0 {
@@ -122,7 +122,7 @@ func (handler *EdgeServiceHandler) ReadForIdentityInTx(tx *bbolt.Tx, id string, 
 }
 
 func (handler *EdgeServiceHandler) Delete(id string) error {
-	return handler.deleteEntity(id, nil)
+	return handler.deleteEntity(id)
 }
 
 func (handler *EdgeServiceHandler) Update(service *Service) error {
@@ -169,22 +169,22 @@ func (handler *EdgeServiceHandler) listServices(queryOptions *QueryOptions, iden
 	return result, nil
 }
 
-func (handler *EdgeServiceHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity BaseModelEntity)) error {
+func (handler *EdgeServiceHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity network.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServiceEdgeRouterPolicies, handler.env.GetHandlers().ServiceEdgeRouterPolicy, collector)
 }
 
-func (handler *EdgeServiceHandler) CollectServicePolicies(id string, collector func(entity BaseModelEntity)) error {
+func (handler *EdgeServiceHandler) CollectServicePolicies(id string, collector func(entity network.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
 }
 
-func (handler *EdgeServiceHandler) CollectConfigs(id string, collector func(entity BaseModelEntity)) error {
+func (handler *EdgeServiceHandler) CollectConfigs(id string, collector func(entity network.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeConfigs, handler.env.GetHandlers().Config, collector)
 }
 
 func (handler *EdgeServiceHandler) GetRoleAttributes() []string {
-	handler.GetDb().View(func(tx *bbolt.Tx) error {
-		return nil
-	})
+	//handler.GetDb().View(func(tx *bbolt.Tx) error {
+	//	return nil
+	//})
 	return nil
 }
 
@@ -194,10 +194,10 @@ type ServiceListResult struct {
 	identityId  string
 	configTypes map[string]struct{}
 	isAdmin     bool
-	QueryMetaData
+	network.QueryMetaData
 }
 
-func (result *ServiceListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *QueryMetaData) error {
+func (result *ServiceListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	var service *ServiceDetail
 	var err error

@@ -31,13 +31,13 @@ const (
 
 func newConfigType(name string) *ConfigType {
 	return &ConfigType{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               name,
+		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
+		Name:          name,
 	}
 }
 
 type ConfigType struct {
-	BaseEdgeEntityImpl
+	boltz.BaseExtEntity
 	Name   string
 	Schema map[string]interface{}
 }
@@ -104,7 +104,7 @@ func (store *configTypeStoreImpl) GetNameIndex() boltz.ReadIndex {
 }
 
 func (store *configTypeStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 	store.indexName = store.addUniqueNameField()
 	store.symbolConfigs = store.AddFkSetSymbol(EntityTypeConfigs, store.stores.config)
 	store.AddSymbol(FieldConfigTypeSchema, ast.NodeTypeString)
@@ -113,7 +113,7 @@ func (store *configTypeStoreImpl) initializeLocal() {
 func (store *configTypeStoreImpl) initializeLinked() {
 }
 
-func (store *configTypeStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *configTypeStoreImpl) NewStoreEntity() boltz.Entity {
 	return &ConfigType{}
 }
 

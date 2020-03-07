@@ -40,14 +40,14 @@ const (
 
 func newEdgeRouter(name string, roleAttributes ...string) *EdgeRouter {
 	return &EdgeRouter{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               name,
-		RoleAttributes:     roleAttributes,
+		BaseExtEntity:  boltz.BaseExtEntity{Id: uuid.New().String()},
+		Name:           name,
+		RoleAttributes: roleAttributes,
 	}
 }
 
 type EdgeRouter struct {
-	BaseEdgeEntityImpl
+	boltz.BaseExtEntity
 	Name                string
 	ClusterId           *string
 	IsVerified          bool
@@ -143,12 +143,12 @@ type edgeRouterStoreImpl struct {
 	symbolServiceEdgeRouterPolicies boltz.EntitySetSymbol
 }
 
-func (store *edgeRouterStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *edgeRouterStoreImpl) NewStoreEntity() boltz.Entity {
 	return &EdgeRouter{}
 }
 
 func (store *edgeRouterStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 
 	store.indexName = store.addUniqueNameField()
 	store.indexRoleAttributes = store.addRoleAttributesField()
@@ -178,7 +178,7 @@ func (store *edgeRouterStoreImpl) rolesChanged(tx *bbolt.Tx, rowId []byte, _ []b
 	UpdateRelatedRoles(store, tx, string(rowId), rolesSymbol, linkCollection, new, holder, semanticSymbol)
 }
 
-func (store *edgeRouterStoreImpl) nameChanged(bucket *boltz.TypedBucket, entity NamedEdgeEntity, oldName string) {
+func (store *edgeRouterStoreImpl) nameChanged(bucket *boltz.TypedBucket, entity boltz.NamedExtEntity, oldName string) {
 	store.updateEntityNameReferences(bucket, store.stores.edgeRouterPolicy.symbolEdgeRouterRoles, entity, oldName)
 	store.updateEntityNameReferences(bucket, store.stores.serviceEdgeRouterPolicy.symbolEdgeRouterRoles, entity, oldName)
 }
@@ -226,6 +226,10 @@ func (store *edgeRouterStoreImpl) DeleteById(ctx boltz.MutateContext, id string)
 		if err := store.deleteEntityReferences(ctx.Tx(), entity, store.stores.serviceEdgeRouterPolicy.symbolEdgeRouterRoles); err != nil {
 			return err
 		}
+	}
+
+	if store.stores.Router.IsEntityPresent(ctx.Tx(), id) {
+		return store.stores.Router.DeleteById(ctx, id)
 	}
 
 	return store.baseStore.DeleteById(ctx, id)

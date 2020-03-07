@@ -24,8 +24,9 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
-	"github.com/netfoundry/ziti-edge/controller/util"
 	"github.com/netfoundry/ziti-edge/controller/validation"
+	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/xeipuuv/gojsonschema"
 	"io/ioutil"
 	"strings"
@@ -34,10 +35,6 @@ import (
 const (
 	EntityNameSelf = "self"
 )
-
-type associationIdArrayRequest struct {
-	Ids []string `json:"ids"`
-}
 
 func unmarshal(body []byte, in interface{}) error {
 	err := json.Unmarshal(body, in)
@@ -113,7 +110,7 @@ func getJsonFields(prefix string, m map[string]interface{}, result JsonFields) {
 	}
 }
 
-func modelToApi(ae *env.AppEnv, rc *response.RequestContext, mapper ModelToApiMapper, es []model.BaseModelEntity) ([]BaseApiEntity, error) {
+func modelToApi(ae *env.AppEnv, rc *response.RequestContext, mapper ModelToApiMapper, es []network.Entity) ([]BaseApiEntity, error) {
 	apiEntities := make([]BaseApiEntity, 0)
 
 	for _, e := range es {
@@ -212,7 +209,7 @@ func Create(rc *response.RequestContext, rr response.RequestResponder, sc *gojso
 
 	id, err := creator()
 	if err != nil {
-		if util.IsErrNotFoundErr(err) {
+		if boltz.IsErrNotFoundErr(err) {
 			rr.RespondWithNotFound()
 			return
 		}
@@ -234,9 +231,13 @@ func Create(rc *response.RequestContext, rr response.RequestResponder, sc *gojso
 	rr.RespondWithCreatedId(id, lb(id))
 }
 
-func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, handler model.Handler, mapper ModelToApiMapper, idType response.IdType) {
+type baseLoader interface {
+	BaseLoad(id string) (network.Entity, error)
+}
+
+func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, loader baseLoader, mapper ModelToApiMapper, idType response.IdType) {
 	Detail(rc, idType, func(rc *response.RequestContext, id string) (interface{}, error) {
-		entity, err := handler.BaseLoad(id)
+		entity, err := loader.BaseLoad(id)
 		if err != nil {
 			return nil, err
 		}
@@ -258,7 +259,7 @@ func Detail(rc *response.RequestContext, idType response.IdType, f ModelDetailF)
 	apiEntity, err := f(rc, id)
 
 	if err != nil {
-		if util.IsErrNotFoundErr(err) {
+		if boltz.IsErrNotFoundErr(err) {
 			rc.RequestResponder.RespondWithNotFound()
 			return
 		}
@@ -296,7 +297,7 @@ func Delete(rc *response.RequestContext, idType response.IdType, deleteF ModelDe
 	err = deleteF(rc, id)
 
 	if err != nil {
-		if util.IsErrNotFoundErr(err) {
+		if boltz.IsErrNotFoundErr(err) {
 			rc.RequestResponder.RespondWithNotFound()
 		} else {
 			rc.RequestResponder.RespondWithError(err)
@@ -352,7 +353,7 @@ func UpdateAllowEmptyBody(rc *response.RequestContext, sc *gojsonschema.Schema, 
 	}
 
 	if err = updateF(id); err != nil {
-		if util.IsErrNotFoundErr(err) {
+		if boltz.IsErrNotFoundErr(err) {
 			rc.RequestResponder.RespondWithNotFound()
 			return
 		}
@@ -419,7 +420,7 @@ func Patch(rc *response.RequestContext, sc *gojsonschema.Schema, idType response
 
 	err = patchF(id, jsonFields)
 	if err != nil {
-		if util.IsErrNotFoundErr(err) {
+		if boltz.IsErrNotFoundErr(err) {
 			rc.RequestResponder.RespondWithNotFound()
 			return
 		}
@@ -441,7 +442,7 @@ func Patch(rc *response.RequestContext, sc *gojsonschema.Schema, idType response
 	rc.RequestResponder.RespondWithOk(nil, nil)
 }
 
-func listWithId(ae *env.AppEnv, rc *response.RequestContext, idType response.IdType, f func(id string) ([]interface{}, error)) {
+func listWithId(rc *response.RequestContext, idType response.IdType, f func(id string) ([]interface{}, error)) {
 	id, err := rc.GetIdFromRequest(idType)
 
 	if err != nil {
@@ -455,7 +456,7 @@ func listWithId(ae *env.AppEnv, rc *response.RequestContext, idType response.IdT
 	results, err := f(id)
 
 	if err != nil {
-		if util.IsErrNotFoundErr(err) {
+		if boltz.IsErrNotFoundErr(err) {
 			rc.RequestResponder.RespondWithNotFound()
 			return
 		}
@@ -480,7 +481,7 @@ func listWithId(ae *env.AppEnv, rc *response.RequestContext, idType response.IdT
 	rc.RequestResponder.RespondWithOk(results, meta)
 }
 
-type ListAssocF func(string, func(model.BaseModelEntity)) error
+type ListAssocF func(string, func(network.Entity)) error
 
 func ListAssociations(ae *env.AppEnv, rc *response.RequestContext, idType response.IdType, listF ListAssocF, converter ModelToApiMapper) {
 	id, err := rc.GetIdFromRequest(idType)
@@ -493,13 +494,13 @@ func ListAssociations(ae *env.AppEnv, rc *response.RequestContext, idType respon
 		return
 	}
 
-	var modelResults []model.BaseModelEntity
-	err = listF(id, func(entity model.BaseModelEntity) {
+	var modelResults []network.Entity
+	err = listF(id, func(entity network.Entity) {
 		modelResults = append(modelResults, entity)
 	})
 
 	if err != nil {
-		if util.IsErrNotFoundErr(err) {
+		if boltz.IsErrNotFoundErr(err) {
 			rc.RequestResponder.RespondWithNotFound()
 			return
 		}

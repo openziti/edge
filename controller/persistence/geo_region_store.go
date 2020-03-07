@@ -22,7 +22,7 @@ import (
 )
 
 type GeoRegion struct {
-	BaseEdgeEntityImpl
+	boltz.BaseExtEntity
 	Name string
 }
 
@@ -63,12 +63,12 @@ type geoRegionStoreImpl struct {
 	indexName boltz.ReadIndex
 }
 
-func (store *geoRegionStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *geoRegionStoreImpl) NewStoreEntity() boltz.Entity {
 	return &GeoRegion{}
 }
 
 func (store *geoRegionStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 	store.indexName = store.addUniqueNameField()
 }
 

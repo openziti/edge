@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-edge/controller/util"
 	"github.com/netfoundry/ziti-edge/crypto"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
@@ -35,7 +34,7 @@ type AuthenticatorHandler struct {
 }
 
 func (handler AuthenticatorHandler) Delete(id string) error {
-	return handler.deleteEntity(id, nil)
+	return handler.deleteEntity(id)
 }
 
 func (handler AuthenticatorHandler) IsUpdated(field string) bool {
@@ -188,7 +187,7 @@ func (handler AuthenticatorHandler) UpdateSelf(authenticatorSelf *AuthenticatorS
 	}
 
 	if authenticator == nil {
-		return util.NewNotFoundError(handler.authStore.GetSingularEntityType(), "id", authenticatorSelf.Id)
+		return boltz.NewNotFoundError(handler.authStore.GetSingularEntityType(), "id", authenticatorSelf.Id)
 	}
 
 	if authenticator.IdentityId != authenticatorSelf.IdentityId {
@@ -244,7 +243,7 @@ func (handler AuthenticatorHandler) PatchSelf(authenticatorSelf *AuthenticatorSe
 	}
 
 	if authenticator == nil {
-		return util.NewNotFoundError(handler.authStore.GetSingularEntityType(), "id", authenticatorSelf.Id)
+		return boltz.NewNotFoundError(handler.authStore.GetSingularEntityType(), "id", authenticatorSelf.Id)
 	}
 
 	if authenticator.IdentityId != authenticatorSelf.IdentityId {
@@ -319,8 +318,8 @@ func (handler AuthenticatorHandler) ListForIdentity(identityId string, options *
 	}
 
 	return &AuthenticatorListQueryResult{
-		BaseModelEntityListResult: result,
-		Authenticators:            authenticators,
+		EntityListResult: result,
+		Authenticators:   authenticators,
 	}, nil
 }
 
@@ -345,6 +344,6 @@ type HashedPassword struct {
 }
 
 type AuthenticatorListQueryResult struct {
-	*BaseModelEntityListResult
+	*EntityListResult
 	Authenticators []*Authenticator
 }

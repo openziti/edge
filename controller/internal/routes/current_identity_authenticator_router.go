@@ -22,7 +22,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/internal/permissions"
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
-	"github.com/netfoundry/ziti-edge/controller/util"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 )
 
 func init() {
@@ -70,7 +70,7 @@ func (ir *CurrentIdentityAuthenticatorRouter) Detail(ae *env.AppEnv, rc *respons
 		}
 
 		if authenticator == nil {
-			return nil, util.NewNotFoundError(ae.GetHandlers().Authenticator.GetStore().GetSingularEntityType(), "id", id)
+			return nil, boltz.NewNotFoundError(ae.GetHandlers().Authenticator.GetStore().GetSingularEntityType(), "id", id)
 		}
 
 		apiAuthenticator, err := MapAuthenticatorToApiList(authenticator)

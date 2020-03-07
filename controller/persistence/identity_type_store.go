@@ -22,7 +22,7 @@ import (
 )
 
 type IdentityType struct {
-	BaseEdgeEntityImpl
+	boltz.BaseExtEntity
 	Name string
 }
 
@@ -64,12 +64,12 @@ type IdentityTypeStoreImpl struct {
 	indexName boltz.ReadIndex
 }
 
-func (store *IdentityTypeStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *IdentityTypeStoreImpl) NewStoreEntity() boltz.Entity {
 	return &IdentityType{}
 }
 
 func (store *IdentityTypeStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 	store.indexName = store.addUniqueNameField()
 }
 

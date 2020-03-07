@@ -18,6 +18,7 @@ package routes
 
 import (
 	"fmt"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 
 	"github.com/google/uuid"
 	"github.com/michaelquigley/pfxlog"
@@ -41,7 +42,7 @@ func (i *SessionApiPost) ToModel(rc *response.RequestContext) *model.Session {
 		sessionType = *i.Type
 	}
 	return &model.Session{
-		BaseModelEntityImpl: model.BaseModelEntityImpl{
+		BaseEntity: network.BaseEntity{
 			Tags: i.Tags,
 		},
 		Token:        uuid.New().String(),
@@ -91,7 +92,7 @@ func (e *SessionApiList) ToEntityApiRef() *EntityApiRef {
 }
 
 func MapSessionsToApiEntities(ae *env.AppEnv, rc *response.RequestContext, es []*model.Session) ([]BaseApiEntity, error) {
-	// can't use modelToApi b/c it require list of BaseModelEntity
+	// can't use modelToApi b/c it require list of network.Entity
 	apiEntities := make([]BaseApiEntity, 0)
 
 	for _, e := range es {
@@ -107,7 +108,7 @@ func MapSessionsToApiEntities(ae *env.AppEnv, rc *response.RequestContext, es []
 	return apiEntities, nil
 }
 
-func MapSessionToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e model.BaseModelEntity) (BaseApiEntity, error) {
+func MapSessionToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*model.Session)
 
 	if !ok {

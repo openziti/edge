@@ -22,6 +22,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 )
 
 const EntityNameIdentityType = "identity-types"
@@ -57,7 +58,7 @@ func (e *IdentityTypeApiList) ToEntityApiRef() *EntityApiRef {
 	}
 }
 
-func MapIdentityTypeToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e model.BaseModelEntity) (BaseApiEntity, error) {
+func MapIdentityTypeToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*model.IdentityType)
 
 	if !ok {
