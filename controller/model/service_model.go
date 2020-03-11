@@ -44,13 +44,12 @@ func (entity *Service) toBoltEntity(tx *bbolt.Tx, handler Handler) (boltz.Entity
 
 	edgeService := &persistence.EdgeService{
 		Service: db.Service{
-			Id:               entity.Id,
+			BaseExtEntity:    *boltz.NewExtEntity(entity.Id, entity.Tags),
 			EndpointStrategy: entity.EndpointStrategy,
 		},
-		ExtEntityFields: boltz.ExtEntityFields{Tags: entity.Tags},
-		Name:            entity.Name,
-		RoleAttributes:  entity.RoleAttributes,
-		Configs:         entity.Configs,
+		Name:           entity.Name,
+		RoleAttributes: entity.RoleAttributes,
+		Configs:        entity.Configs,
 	}
 	return edgeService, nil
 }

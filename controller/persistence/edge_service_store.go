@@ -28,7 +28,6 @@ import (
 
 type EdgeService struct {
 	db.Service
-	boltz.ExtEntityFields
 	Name           string
 	RoleAttributes []string
 	Configs        []string
@@ -40,7 +39,9 @@ const (
 
 func newEdgeService(name string, roleAttributes ...string) *EdgeService {
 	return &EdgeService{
-		Service:        db.Service{Id: uuid.New().String()},
+		Service: db.Service{
+			BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
+		},
 		Name:           name,
 		RoleAttributes: roleAttributes,
 	}

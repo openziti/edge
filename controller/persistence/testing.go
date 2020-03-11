@@ -148,7 +148,7 @@ func (ctx *TestContext) requireNewIdentity(name string, isAdmin bool) *Identity 
 func (ctx *TestContext) requireNewService(name string) *EdgeService {
 	edgeService := &EdgeService{
 		Service: db.Service{
-			Id: uuid.New().String(),
+			BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
 		},
 		Name: name,
 	}

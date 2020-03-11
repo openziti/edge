@@ -44,7 +44,7 @@ func Test_EdgeServiceStore(t *testing.T) {
 
 func (ctx *TestContext) testServiceParentChild(_ *testing.T) {
 	fabricService := &db.Service{
-		Id: uuid.New().String(),
+		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
 	}
 
 	ctx.requireCreate(fabricService)
@@ -87,7 +87,7 @@ func (ctx *TestContext) testCreateInvalidServices(_ *testing.T) {
 
 	edgeService := &EdgeService{
 		Service: db.Service{
-			Id: uuid.New().String(),
+			BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
 		},
 		Name: uuid.New().String(),
 	}
@@ -102,7 +102,7 @@ func (ctx *TestContext) testCreateServices(_ *testing.T) {
 
 	edgeService := &EdgeService{
 		Service: db.Service{
-			Id: uuid.New().String(),
+			BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
 		},
 		Name: uuid.New().String(),
 	}
@@ -132,7 +132,7 @@ func (ctx *TestContext) createServiceTestEntities() *serviceTestEntities {
 
 	service1 := &EdgeService{
 		Service: db.Service{
-			Id: uuid.New().String(),
+			BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
 		},
 		Name:           uuid.New().String(),
 		RoleAttributes: []string{role},

@@ -198,10 +198,10 @@ func migrateServicesFromPG(mtx *MigrationContext) error {
 
 		edgeService := &EdgeService{
 			Service: db.Service{
-				Id: pgService.ID,
+				BaseExtEntity:    *toBaseBoltEntity(&pgService.BaseDbEntity),
+				EndpointStrategy: "",
 			},
-			ExtEntityFields: toBaseBoltEntity(&pgService.BaseDbEntity).ExtEntityFields,
-			Name:            *pgService.Name,
+			Name: *pgService.Name,
 		}
 
 		if err = mtx.Stores.EdgeService.Create(mtx.Ctx, edgeService); err != nil {
