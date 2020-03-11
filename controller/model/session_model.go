@@ -19,7 +19,7 @@ package model
 import (
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/validation"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"reflect"
 	"time"
 
@@ -32,7 +32,7 @@ import (
 )
 
 type Session struct {
-	network.BaseEntity
+	models.BaseEntity
 	Token        string
 	ApiSessionId string
 	ServiceId    string

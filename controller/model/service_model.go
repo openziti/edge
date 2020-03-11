@@ -21,7 +21,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/validation"
 	"github.com/netfoundry/ziti-fabric/controller/db"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -30,7 +30,7 @@ import (
 )
 
 type Service struct {
-	network.BaseEntity
+	models.BaseEntity
 	Name             string   `json:"name"`
 	EndpointStrategy string   `json:"endpointStrategy"`
 	RoleAttributes   []string `json:"roleAttributes"`
@@ -111,7 +111,7 @@ func (entity *Service) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.Entity)
 }
 
 type ServiceDetail struct {
-	network.BaseEntity
+	models.BaseEntity
 	Name             string                            `json:"name"`
 	EndpointStrategy string                            `json:"endpointStrategy"`
 	Endpoints        []*ServiceEndpointDetail          `json:"endpoints"`

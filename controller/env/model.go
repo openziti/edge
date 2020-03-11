@@ -19,7 +19,7 @@ package env
 import (
 	"github.com/netfoundry/ziti-edge/controller/response"
 	"github.com/netfoundry/ziti-edge/migration"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"time"
 )
 
@@ -44,7 +44,7 @@ func FromBaseDbEntity(entity *migration.BaseDbEntity) *BaseApi {
 	}
 }
 
-func FromBaseModelEntity(entity network.Entity) *BaseApi {
+func FromBaseModelEntity(entity models.Entity) *BaseApi {
 	createdAt := entity.GetCreatedAt()
 	updatedAt := entity.GetUpdatedAt()
 	return &BaseApi{

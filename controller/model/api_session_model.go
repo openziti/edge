@@ -19,7 +19,7 @@ package model
 import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/validation"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"github.com/pkg/errors"
@@ -28,7 +28,7 @@ import (
 )
 
 type ApiSession struct {
-	network.BaseEntity
+	models.BaseEntity
 	Token       string
 	IdentityId  string
 	Identity    *Identity

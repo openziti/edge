@@ -24,7 +24,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/response"
 	"github.com/netfoundry/ziti-edge/controller/validation"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/xeipuuv/gojsonschema"
 	"io/ioutil"
@@ -109,7 +109,7 @@ func getJsonFields(prefix string, m map[string]interface{}, result JsonFields) {
 	}
 }
 
-func modelToApi(ae *env.AppEnv, rc *response.RequestContext, mapper ModelToApiMapper, es []network.Entity) ([]BaseApiEntity, error) {
+func modelToApi(ae *env.AppEnv, rc *response.RequestContext, mapper ModelToApiMapper, es []models.Entity) ([]BaseApiEntity, error) {
 	apiEntities := make([]BaseApiEntity, 0)
 
 	for _, e := range es {
@@ -125,7 +125,7 @@ func modelToApi(ae *env.AppEnv, rc *response.RequestContext, mapper ModelToApiMa
 	return apiEntities, nil
 }
 
-func ListWithHandler(ae *env.AppEnv, rc *response.RequestContext, lister network.EntityLister, mapper ModelToApiMapper) {
+func ListWithHandler(ae *env.AppEnv, rc *response.RequestContext, lister models.EntityLister, mapper ModelToApiMapper) {
 	List(rc, func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error) {
 		// validate that the submitted query is only using public symbols. The query options may contain an final
 		// query which has been modified with additional filters
@@ -239,7 +239,7 @@ func Create(rc *response.RequestContext, rr response.RequestResponder, sc *gojso
 	rr.RespondWithCreatedId(id, lb(id))
 }
 
-func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, loader network.EntityLoader, mapper ModelToApiMapper, idType response.IdType) {
+func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, loader models.EntityLoader, mapper ModelToApiMapper, idType response.IdType) {
 	Detail(rc, idType, func(rc *response.RequestContext, id string) (interface{}, error) {
 		entity, err := loader.BaseLoad(id)
 		if err != nil {
@@ -485,7 +485,7 @@ func listWithId(rc *response.RequestContext, idType response.IdType, f func(id s
 	rc.RequestResponder.RespondWithOk(results, meta)
 }
 
-type ListAssocF func(string, func(network.Entity)) error
+type ListAssocF func(string, func(models.Entity)) error
 
 func ListAssociations(ae *env.AppEnv, rc *response.RequestContext, idType response.IdType, listF ListAssocF, converter ModelToApiMapper) {
 	id, err := rc.GetIdFromRequest(idType)
@@ -498,8 +498,8 @@ func ListAssociations(ae *env.AppEnv, rc *response.RequestContext, idType respon
 		return
 	}
 
-	var modelResults []network.Entity
-	err = listF(id, func(entity network.Entity) {
+	var modelResults []models.Entity
+	err = listF(id, func(entity models.Entity) {
 		modelResults = append(modelResults, entity)
 	})
 

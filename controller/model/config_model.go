@@ -19,7 +19,7 @@ package model
 import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/validation"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"github.com/xeipuuv/gojsonschema"
@@ -28,7 +28,7 @@ import (
 )
 
 type Config struct {
-	network.BaseEntity
+	models.BaseEntity
 	Name string
 	Type string
 	Data map[string]interface{}

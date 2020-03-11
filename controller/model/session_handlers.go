@@ -18,7 +18,7 @@ package model
 
 import (
 	"fmt"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 
 	"go.etcd.io/bbolt"
@@ -162,10 +162,10 @@ func (handler *SessionHandler) ListSessionsForEdgeRouter(edgeRouterId string) (*
 type SessionListResult struct {
 	handler  *SessionHandler
 	Sessions []*Session
-	network.QueryMetaData
+	models.QueryMetaData
 }
 
-func (result *SessionListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
+func (result *SessionListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *models.QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
 		entity, err := result.handler.readInTx(tx, key)

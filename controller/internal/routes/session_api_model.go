@@ -18,13 +18,12 @@ package routes
 
 import (
 	"fmt"
-	"github.com/netfoundry/ziti-fabric/controller/network"
-
 	"github.com/google/uuid"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 )
 
 const EntityNameSession = "sessions"
@@ -42,7 +41,7 @@ func (i *SessionApiPost) ToModel(rc *response.RequestContext) *model.Session {
 		sessionType = *i.Type
 	}
 	return &model.Session{
-		BaseEntity: network.BaseEntity{
+		BaseEntity: models.BaseEntity{
 			Tags: i.Tags,
 		},
 		Token:        uuid.New().String(),
@@ -108,7 +107,7 @@ func MapSessionsToApiEntities(ae *env.AppEnv, rc *response.RequestContext, es []
 	return apiEntities, nil
 }
 
-func MapSessionToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
+func MapSessionToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e models.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*model.Session)
 
 	if !ok {

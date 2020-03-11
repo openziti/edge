@@ -22,7 +22,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/validation"
 	"github.com/netfoundry/ziti-fabric/controller/controllers"
-	network "github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -30,8 +30,8 @@ import (
 )
 
 type Handler interface {
-	network.EntityLoader
-	network.EntityLister
+	models.EntityLoader
+	models.EntityLister
 
 	GetEnv() Env
 
@@ -41,7 +41,7 @@ type Handler interface {
 
 func newBaseHandler(env Env, store boltz.CrudStore) baseHandler {
 	return baseHandler{
-		BaseController: network.BaseController{
+		BaseController: models.BaseController{
 			Store: store,
 		},
 		env: env,
@@ -49,7 +49,7 @@ func newBaseHandler(env Env, store boltz.CrudStore) baseHandler {
 }
 
 type baseHandler struct {
-	network.BaseController
+	models.BaseController
 	env  Env
 	impl Handler
 }
@@ -66,7 +66,7 @@ func (handler *baseHandler) GetEnv() Env {
 	return handler.env
 }
 
-func (handler *baseHandler) BaseLoad(id string) (network.Entity, error) {
+func (handler *baseHandler) BaseLoad(id string) (models.Entity, error) {
 	entity := handler.impl.newModelEntity()
 	if err := handler.readEntity(id, entity); err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (handler *baseHandler) BaseLoad(id string) (network.Entity, error) {
 	return entity, nil
 }
 
-func (handler *baseHandler) BaseLoadInTx(tx *bbolt.Tx, id string) (network.Entity, error) {
+func (handler *baseHandler) BaseLoadInTx(tx *bbolt.Tx, id string) (models.Entity, error) {
 	entity := handler.impl.newModelEntity()
 	if err := handler.readEntityInTx(tx, id, entity); err != nil {
 		return nil, err
@@ -82,8 +82,8 @@ func (handler *baseHandler) BaseLoadInTx(tx *bbolt.Tx, id string) (network.Entit
 	return entity, nil
 }
 
-func (handler *baseHandler) BaseList(query string) (*network.EntityListResult, error) {
-	result := &network.EntityListResult{Loader: handler}
+func (handler *baseHandler) BaseList(query string) (*models.EntityListResult, error) {
+	result := &models.EntityListResult{Loader: handler}
 	err := handler.list(query, result.Collect)
 	if err != nil {
 		return nil, err
@@ -231,7 +231,7 @@ func (handler *baseHandler) readEntityInTxWithIndex(name string, tx *bbolt.Tx, k
 	return handler.readEntityInTx(tx, string(id), modelEntity)
 }
 
-func (handler *baseHandler) readEntityByQuery(query string) (network.Entity, error) {
+func (handler *baseHandler) readEntityByQuery(query string) (models.Entity, error) {
 	result, err := handler.BaseList(query)
 	if err != nil {
 		return nil, err
@@ -246,13 +246,13 @@ func (handler *baseHandler) deleteEntity(id string) error {
 	return controllers.DeleteEntityById(handler.GetStore(), handler.GetDb(), id)
 }
 
-func (handler *baseHandler) list(queryString string, resultHandler network.ListResultHandler) error {
+func (handler *baseHandler) list(queryString string, resultHandler models.ListResultHandler) error {
 	return handler.GetDb().View(func(tx *bbolt.Tx) error {
 		return handler.ListWithTx(tx, queryString, resultHandler)
 	})
 }
 
-func (handler *baseHandler) collectAssociated(id string, field string, relatedHandler Handler, collector func(entity network.Entity)) error {
+func (handler *baseHandler) collectAssociated(id string, field string, relatedHandler Handler, collector func(entity models.Entity)) error {
 	return handler.GetDb().View(func(tx *bbolt.Tx) error {
 		entity := handler.impl.newModelEntity()
 		if err := handler.readEntityInTx(tx, id, entity); err != nil {

@@ -21,7 +21,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-sdk-golang/ziti/config"
 	"github.com/pkg/errors"
@@ -31,7 +31,7 @@ import (
 )
 
 type EdgeRouter struct {
-	network.BaseEntity
+	models.BaseEntity
 	Name                string
 	RoleAttributes      []string
 	IsVerified          bool

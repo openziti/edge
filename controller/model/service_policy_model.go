@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/validation"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -29,7 +29,7 @@ import (
 )
 
 type ServicePolicy struct {
-	network.BaseEntity
+	models.BaseEntity
 	Name          string
 	PolicyType    string
 	Semantic      string

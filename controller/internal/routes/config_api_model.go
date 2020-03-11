@@ -22,7 +22,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"math"
 )
@@ -98,7 +98,7 @@ func (c *ConfigApiList) ToEntityApiRef() *EntityApiRef {
 	}
 }
 
-func MapConfigToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
+func MapConfigToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e models.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*model.Config)
 
 	if !ok {

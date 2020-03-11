@@ -22,7 +22,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/crypto"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 	"reflect"
@@ -336,6 +336,6 @@ type HashedPassword struct {
 }
 
 type AuthenticatorListQueryResult struct {
-	*network.EntityListResult
+	*models.EntityListResult
 	Authenticators []*Authenticator
 }

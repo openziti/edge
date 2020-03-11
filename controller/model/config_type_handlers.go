@@ -18,7 +18,7 @@ package model
 
 import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
@@ -84,6 +84,6 @@ func (handler *ConfigTypeHandler) Delete(id string) error {
 	return handler.deleteEntity(id)
 }
 
-func (handler *ConfigTypeHandler) CollectConfigs(id string, collector func(entity network.Entity)) error {
+func (handler *ConfigTypeHandler) CollectConfigs(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeConfigs, handler.env.GetHandlers().Config, collector)
 }

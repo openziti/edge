@@ -18,7 +18,7 @@ package model
 
 import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 	"strings"
@@ -100,10 +100,10 @@ func (handler *CaHandler) Query(query string) (*CaListResult, error) {
 type CaListResult struct {
 	handler *CaHandler
 	Cas     []*Ca
-	network.QueryMetaData
+	models.QueryMetaData
 }
 
-func (result *CaListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
+func (result *CaListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *models.QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
 		entity, err := result.handler.readInTx(tx, key)

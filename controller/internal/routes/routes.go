@@ -25,7 +25,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/predicate"
 	"github.com/netfoundry/ziti-edge/controller/response"
 	"github.com/netfoundry/ziti-edge/migration"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"net/http"
 	"strconv"
 )
@@ -67,7 +67,7 @@ type ReadUpdateRouter interface {
 	Patch(ae *env.AppEnv, rc *response.RequestContext)
 }
 
-type ModelToApiMapper func(*env.AppEnv, *response.RequestContext, network.Entity) (BaseApiEntity, error)
+type ModelToApiMapper func(*env.AppEnv, *response.RequestContext, models.Entity) (BaseApiEntity, error)
 
 func GetModelQueryOptionsFromRequest(r *http.Request) (*QueryOptions, error) {
 	filter := r.URL.Query().Get("filter")
@@ -456,7 +456,7 @@ type QueryResult struct {
 	FilterableFields []string
 }
 
-func NewQueryResult(result []BaseApiEntity, metadata *network.QueryMetaData) *QueryResult {
+func NewQueryResult(result []BaseApiEntity, metadata *models.QueryMetaData) *QueryResult {
 	return &QueryResult{
 		Result:           result,
 		Count:            metadata.Count,

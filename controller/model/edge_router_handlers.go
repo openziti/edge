@@ -19,7 +19,7 @@ package model
 import (
 	"fmt"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -149,21 +149,21 @@ func (handler *EdgeRouterHandler) ListForIdentityAndServiceWithTx(tx *bbolt.Tx, 
 	return result, nil
 }
 
-func (handler *EdgeRouterHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity network.Entity)) error {
+func (handler *EdgeRouterHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServiceEdgeRouterPolicies, handler.env.GetHandlers().ServiceEdgeRouterPolicy, collector)
 }
 
-func (handler *EdgeRouterHandler) CollectEdgeRouterPolicies(id string, collector func(entity network.Entity)) error {
+func (handler *EdgeRouterHandler) CollectEdgeRouterPolicies(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
 }
 
 type EdgeRouterListResult struct {
 	handler     *EdgeRouterHandler
 	EdgeRouters []*EdgeRouter
-	network.QueryMetaData
+	models.QueryMetaData
 }
 
-func (result *EdgeRouterListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
+func (result *EdgeRouterListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *models.QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
 		entity, err := result.handler.readInTx(tx, key)

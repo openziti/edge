@@ -17,18 +17,18 @@
 package model
 
 import (
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
 
 type boltEntitySink interface {
-	network.Entity
+	models.Entity
 	fillFrom(handler Handler, tx *bbolt.Tx, boltEntity boltz.Entity) error
 }
 
 type boltEntitySource interface {
-	network.Entity
+	models.Entity
 	toBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (boltz.Entity, error)
 	toBoltEntityForUpdate(tx *bbolt.Tx, handler Handler) (boltz.Entity, error)
 	toBoltEntityForPatch(tx *bbolt.Tx, handler Handler) (boltz.Entity, error)

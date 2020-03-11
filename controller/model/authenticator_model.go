@@ -20,7 +20,7 @@ import (
 	"encoding/base64"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -28,14 +28,14 @@ import (
 )
 
 type Authenticator struct {
-	network.BaseEntity
+	models.BaseEntity
 	Method     string
 	IdentityId string
 	SubType    interface{}
 }
 
 type AuthenticatorSelf struct {
-	network.BaseEntity
+	models.BaseEntity
 	CurrentPassword string
 	NewPassword     string
 	IdentityId      string

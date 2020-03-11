@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
@@ -155,15 +155,15 @@ func (handler *EdgeServiceHandler) queryServices(query string, identityId string
 	return result, nil
 }
 
-func (handler *EdgeServiceHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity network.Entity)) error {
+func (handler *EdgeServiceHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServiceEdgeRouterPolicies, handler.env.GetHandlers().ServiceEdgeRouterPolicy, collector)
 }
 
-func (handler *EdgeServiceHandler) CollectServicePolicies(id string, collector func(entity network.Entity)) error {
+func (handler *EdgeServiceHandler) CollectServicePolicies(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
 }
 
-func (handler *EdgeServiceHandler) CollectConfigs(id string, collector func(entity network.Entity)) error {
+func (handler *EdgeServiceHandler) CollectConfigs(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeConfigs, handler.env.GetHandlers().Config, collector)
 }
 
@@ -180,10 +180,10 @@ type ServiceListResult struct {
 	identityId  string
 	configTypes map[string]struct{}
 	isAdmin     bool
-	network.QueryMetaData
+	models.QueryMetaData
 }
 
-func (result *ServiceListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
+func (result *ServiceListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *models.QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	var service *ServiceDetail
 	var err error

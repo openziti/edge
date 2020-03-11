@@ -22,7 +22,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/netfoundry/ziti-sdk-golang/ziti/config"
 	"github.com/pkg/errors"
@@ -32,7 +32,7 @@ import (
 )
 
 type Enrollment struct {
-	network.BaseEntity
+	models.BaseEntity
 	Method     string
 	IdentityId string
 	Token      string

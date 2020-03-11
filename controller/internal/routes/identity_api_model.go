@@ -18,13 +18,12 @@ package routes
 
 import (
 	"fmt"
-	"github.com/netfoundry/ziti-fabric/controller/network"
-
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/response"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 )
 
@@ -185,7 +184,7 @@ func NewIdentityLink(identityId string) *response.Link {
 	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameIdentity, identityId))
 }
 
-func MapIdentityToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
+func MapIdentityToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e models.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*model.Identity)
 
 	if !ok {

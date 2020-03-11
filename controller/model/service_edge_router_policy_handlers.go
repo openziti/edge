@@ -18,7 +18,7 @@ package model
 
 import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
@@ -73,7 +73,7 @@ func (handler *ServiceEdgeRouterPolicyHandler) Delete(id string) error {
 
 func (handler *ServiceEdgeRouterPolicyHandler) ListEdgeRouters(id string) ([]*EdgeRouter, error) {
 	var result []*EdgeRouter
-	err := handler.CollectEdgeRouters(id, func(entity network.Entity) {
+	err := handler.CollectEdgeRouters(id, func(entity models.Entity) {
 		result = append(result, entity.(*EdgeRouter))
 	})
 
@@ -83,21 +83,21 @@ func (handler *ServiceEdgeRouterPolicyHandler) ListEdgeRouters(id string) ([]*Ed
 	return result, nil
 }
 
-func (handler *ServiceEdgeRouterPolicyHandler) CollectEdgeRouters(id string, collector func(entity network.Entity)) error {
+func (handler *ServiceEdgeRouterPolicyHandler) CollectEdgeRouters(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
 }
 
-func (handler *ServiceEdgeRouterPolicyHandler) CollectServices(id string, collector func(entity network.Entity)) error {
+func (handler *ServiceEdgeRouterPolicyHandler) CollectServices(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServices, handler.env.GetHandlers().EdgeService, collector)
 }
 
 type ServiceEdgeRouterPolicyListResult struct {
 	handler                   *ServiceEdgeRouterPolicyHandler
 	ServiceEdgeRouterPolicies []*ServiceEdgeRouterPolicy
-	network.QueryMetaData
+	models.QueryMetaData
 }
 
-func (result *ServiceEdgeRouterPolicyListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
+func (result *ServiceEdgeRouterPolicyListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *models.QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
 		entity, err := result.handler.readInTx(tx, key)

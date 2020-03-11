@@ -17,7 +17,7 @@
 package routes
 
 import (
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"reflect"
 	"testing"
 
@@ -43,7 +43,7 @@ func TestServiceApiCreate_ToModelService(t *testing.T) {
 			RoleAttributes:   []string{"id1", "id2"},
 			Tags:             map[string]interface{}{"hello": 1, "thing": "hi"},
 		}, want: &model.Service{
-			BaseEntity: network.BaseEntity{
+			BaseEntity: models.BaseEntity{
 				Tags: map[string]interface{}{"hello": 1, "thing": "hi"},
 			},
 			Name:             "bar",
@@ -84,7 +84,7 @@ func TestServiceApiUpdate_ToModelService(t *testing.T) {
 			EndpointStrategy: strPtr("foobar"),
 			Tags:             map[string]interface{}{"hello": 1, "thing": "hi"},
 		}, want: &model.Service{
-			BaseEntity: network.BaseEntity{
+			BaseEntity: models.BaseEntity{
 				Tags: map[string]interface{}{"hello": 1, "thing": "hi"},
 			},
 			Name:             "bar",

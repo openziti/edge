@@ -17,7 +17,7 @@
 package model
 
 import (
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 	"strings"
@@ -79,10 +79,10 @@ func (handler *ConfigHandler) Delete(id string) error {
 type ConfigListResult struct {
 	handler *ConfigHandler
 	Configs []*Config
-	network.QueryMetaData
+	models.QueryMetaData
 }
 
-func (result *ConfigListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
+func (result *ConfigListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *models.QueryMetaData) error {
 	result.QueryMetaData = *queryMetaData
 	for _, key := range ids {
 		entity, err := result.handler.readInTx(tx, key)

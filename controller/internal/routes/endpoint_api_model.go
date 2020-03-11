@@ -21,6 +21,7 @@ import (
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/response"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 )
@@ -80,7 +81,7 @@ func (c *EndpointApiList) ToEntityApiRef() *EntityApiRef {
 	}
 }
 
-func MapEndpointToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e network.Entity) (BaseApiEntity, error) {
+func MapEndpointToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e models.Entity) (BaseApiEntity, error) {
 	i, ok := e.(*network.Endpoint)
 
 	if !ok {

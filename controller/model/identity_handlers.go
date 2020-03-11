@@ -23,7 +23,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/controller/validation"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
@@ -240,7 +240,7 @@ func (handler *IdentityHandler) InitializeDefaultAdmin(username, password, name 
 	authenticatorId := uuid.New().String()
 
 	defaultAdmin := &Identity{
-		BaseEntity: network.BaseEntity{
+		BaseEntity: models.BaseEntity{
 			Id: identityId,
 		},
 		Name:           name,
@@ -250,7 +250,7 @@ func (handler *IdentityHandler) InitializeDefaultAdmin(username, password, name 
 	}
 
 	authenticator := &Authenticator{
-		BaseEntity: network.BaseEntity{
+		BaseEntity: models.BaseEntity{
 			Id: authenticatorId,
 		},
 		Method:     persistence.MethodAuthenticatorUpdb,
@@ -378,11 +378,11 @@ func (handler *IdentityHandler) CreateWithAuthenticator(identity *Identity, auth
 	return identity.Id, authenticator.Id, nil
 }
 
-func (handler *IdentityHandler) CollectEdgeRouterPolicies(id string, collector func(entity network.Entity)) error {
+func (handler *IdentityHandler) CollectEdgeRouterPolicies(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
 }
 
-func (handler *IdentityHandler) CollectServicePolicies(id string, collector func(entity network.Entity)) error {
+func (handler *IdentityHandler) CollectServicePolicies(id string, collector func(entity models.Entity)) error {
 	return handler.collectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
 }
 
