@@ -44,7 +44,7 @@ func (ir *EndpointRouter) Register(ae *env.AppEnv) {
 }
 
 func (ir *EndpointRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
-	// ListWithHandler(ae, rc, ae.Handlers.Endpoint, MapEndpointToApiEntity)
+	ListWithHandler(ae, rc, ae.Handlers.Endpoint, MapEndpointToApiEntity)
 }
 
 func (ir *EndpointRouter) Detail(ae *env.AppEnv, rc *response.RequestContext) {

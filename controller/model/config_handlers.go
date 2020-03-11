@@ -25,10 +25,7 @@ import (
 
 func NewConfigHandler(env Env) *ConfigHandler {
 	handler := &ConfigHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().Config,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().Config),
 	}
 	handler.impl = handler
 	return handler

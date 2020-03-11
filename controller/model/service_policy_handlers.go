@@ -24,10 +24,7 @@ import (
 
 func NewServicePolicyHandler(env Env) *ServicePolicyHandler {
 	handler := &ServicePolicyHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().ServicePolicy,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().ServicePolicy),
 	}
 	handler.impl = handler
 	return handler

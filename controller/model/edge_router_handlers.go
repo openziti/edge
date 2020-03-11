@@ -28,10 +28,7 @@ import (
 
 func NewEdgeRouterHandler(env Env) *EdgeRouterHandler {
 	handler := &EdgeRouterHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().EdgeRouter,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().EdgeRouter),
 		allowedFieldsChecker: boltz.MapFieldChecker{
 			persistence.FieldName:           struct{}{},
 			persistence.FieldRoleAttributes: struct{}{},
@@ -146,7 +143,7 @@ func (handler *EdgeRouterHandler) ListForIdentityAndServiceWithTx(tx *bbolt.Tx, 
 	}
 
 	result := &EdgeRouterListResult{handler: handler}
-	if err = handler.listWithTx(tx, query, result.collect); err != nil {
+	if err = handler.ListWithTx(tx, query, result.collect); err != nil {
 		return nil, err
 	}
 	return result, nil

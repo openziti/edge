@@ -22,7 +22,6 @@ import (
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/env"
-	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
 	"github.com/netfoundry/ziti-edge/controller/validation"
 	"github.com/netfoundry/ziti-fabric/controller/network"
@@ -126,21 +125,30 @@ func modelToApi(ae *env.AppEnv, rc *response.RequestContext, mapper ModelToApiMa
 	return apiEntities, nil
 }
 
-func ListWithHandler(ae *env.AppEnv, rc *response.RequestContext, handler model.Handler, mapper ModelToApiMapper) {
-	List(rc, func(rc *response.RequestContext, queryOptions *model.QueryOptions) (*QueryResult, error) {
-		result, err := handler.BaseList(queryOptions)
+func ListWithHandler(ae *env.AppEnv, rc *response.RequestContext, lister network.EntityLister, mapper ModelToApiMapper) {
+	List(rc, func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error) {
+		// validate that the submitted query is only using public symbols. The query options may contain an final
+		// query which has been modified with additional filters
+		queryString, err := queryOptions.getFullQuery(lister.GetStore())
 		if err != nil {
 			return nil, err
 		}
-		apiEntities, err := modelToApi(ae, rc, mapper, result.Entities)
+
+		result, err := lister.BaseList(queryString)
 		if err != nil {
 			return nil, err
 		}
-		return NewQueryResult(apiEntities, &result.QueryMetaData), nil
+
+		apiEntities, err := modelToApi(ae, rc, mapper, result.GetEntities())
+		if err != nil {
+			return nil, err
+		}
+
+		return NewQueryResult(apiEntities, result.GetMetaData()), nil
 	})
 }
 
-type ModelListF func(rc *response.RequestContext, queryOptions *model.QueryOptions) (*QueryResult, error)
+type ModelListF func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error)
 
 func List(rc *response.RequestContext, f ModelListF) {
 	qo, err := GetModelQueryOptionsFromRequest(rc.Request)
@@ -231,11 +239,7 @@ func Create(rc *response.RequestContext, rr response.RequestResponder, sc *gojso
 	rr.RespondWithCreatedId(id, lb(id))
 }
 
-type baseLoader interface {
-	BaseLoad(id string) (network.Entity, error)
-}
-
-func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, loader baseLoader, mapper ModelToApiMapper, idType response.IdType) {
+func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, loader network.EntityLoader, mapper ModelToApiMapper, idType response.IdType) {
 	Detail(rc, idType, func(rc *response.RequestContext, id string) (interface{}, error) {
 		entity, err := loader.BaseLoad(id)
 		if err != nil {

@@ -25,12 +25,9 @@ import (
 	"go.etcd.io/bbolt"
 )
 
-func NewServiceHandler(env Env) *EdgeServiceHandler {
+func NewEdgeServiceHandler(env Env) *EdgeServiceHandler {
 	handler := &EdgeServiceHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().EdgeService,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().EdgeService),
 	}
 	handler.impl = handler
 	return handler
@@ -92,13 +89,13 @@ func (handler *EdgeServiceHandler) ReadForIdentityInTx(tx *bbolt.Tx, id string, 
 	query := `id = "%v" and not isEmpty(from servicePolicies where (type = %v and anyOf(identities.id) = "%v"))`
 
 	dialQuery := fmt.Sprintf(query, id, persistence.PolicyTypeDial, identityId)
-	_, dialCount, err := handler.store.QueryIds(tx, dialQuery)
+	_, dialCount, err := handler.GetStore().QueryIds(tx, dialQuery)
 	if err != nil {
 		return nil, err
 	}
 
 	bindQuery := fmt.Sprintf(query, id, persistence.PolicyTypeBind, identityId)
-	_, bindCount, err := handler.store.QueryIds(tx, bindQuery)
+	_, bindCount, err := handler.GetStore().QueryIds(tx, bindQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -107,12 +104,12 @@ func (handler *EdgeServiceHandler) ReadForIdentityInTx(tx *bbolt.Tx, id string, 
 		return nil, err
 	}
 	if result == nil {
-		return nil, boltz.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
+		return nil, boltz.NewNotFoundError(handler.GetStore().GetSingularEntityType(), "id", id)
 	}
 	if bindCount > 0 {
 		result.Permissions = append(result.Permissions, persistence.PolicyTypeBindName)
 	} else if dialCount == 0 {
-		return nil, boltz.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
+		return nil, boltz.NewNotFoundError(handler.GetStore().GetSingularEntityType(), "id", id)
 	}
 
 	if dialCount > 0 {
@@ -133,36 +130,25 @@ func (handler *EdgeServiceHandler) Patch(service *Service, checker boltz.FieldCh
 	return handler.patchEntity(service, checker)
 }
 
-func (handler *EdgeServiceHandler) PublicQueryForIdentity(sessionIdentity *Identity, configTypes map[string]struct{}, queryOptions *QueryOptions) (*ServiceListResult, error) {
+func (handler *EdgeServiceHandler) PublicQueryForIdentity(sessionIdentity *Identity, configTypes map[string]struct{}, query string) (*ServiceListResult, error) {
 	if sessionIdentity.IsAdmin {
-		return handler.listServices(queryOptions, sessionIdentity.Id, configTypes, true)
+		return handler.queryServices(query, sessionIdentity.Id, configTypes, true)
 	}
-	query := queryOptions.Predicate
 	if query != "" {
 		query = "(" + query + ") and "
 	}
 	query += fmt.Sprintf(`not isEmpty(from servicePolicies where anyOf(identities) = "%v")`, sessionIdentity.Id)
-	queryOptions.finalQuery = query
-	return handler.listServices(queryOptions, sessionIdentity.Id, configTypes, false)
+	return handler.queryServices(query, sessionIdentity.Id, configTypes, false)
 }
 
-func (handler *EdgeServiceHandler) queryServices(tx *bbolt.Tx, query string) (*ServiceListResult, error) {
-	result := &ServiceListResult{handler: handler}
-	err := handler.listWithTx(tx, query, result.collect)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-func (handler *EdgeServiceHandler) listServices(queryOptions *QueryOptions, identityId string, configTypes map[string]struct{}, isAdmin bool) (*ServiceListResult, error) {
+func (handler *EdgeServiceHandler) queryServices(query string, identityId string, configTypes map[string]struct{}, isAdmin bool) (*ServiceListResult, error) {
 	result := &ServiceListResult{
 		handler:     handler,
 		identityId:  identityId,
 		configTypes: configTypes,
 		isAdmin:     isAdmin,
 	}
-	err := handler.parseAndList(queryOptions, result.collect)
+	err := handler.list(query, result.collect)
 	if err != nil {
 		return nil, err
 	}

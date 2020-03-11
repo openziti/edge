@@ -31,10 +31,7 @@ type EnrollmentHandler struct {
 
 func NewEnrollmentHandler(env Env) *EnrollmentHandler {
 	handler := &EnrollmentHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().Enrollment,
-		},
+		baseHandler:     newBaseHandler(env, env.GetStores().Enrollment),
 		enrollmentStore: env.GetStores().Enrollment,
 	}
 

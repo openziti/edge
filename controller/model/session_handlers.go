@@ -26,10 +26,7 @@ import (
 
 func NewSessionHandler(env Env) *SessionHandler {
 	handler := &SessionHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().Session,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().Session),
 	}
 	handler.impl = handler
 	return handler
@@ -63,7 +60,7 @@ func (handler *SessionHandler) ReadForIdentity(id string, identityId string) (*S
 		return nil, err
 	}
 	if len(result.Sessions) == 0 {
-		return nil, boltz.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
+		return nil, boltz.NewNotFoundError(handler.GetStore().GetSingularEntityType(), "id", id)
 	}
 	return result.Sessions[0], nil
 }
@@ -90,7 +87,7 @@ func (handler *SessionHandler) DeleteForIdentity(id, identityId string) error {
 		return err
 	}
 	if session == nil {
-		return boltz.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
+		return boltz.NewNotFoundError(handler.GetStore().GetSingularEntityType(), "id", id)
 	}
 	return handler.deleteEntity(id)
 }
@@ -99,17 +96,15 @@ func (handler *SessionHandler) Delete(id string) error {
 	return handler.deleteEntity(id)
 }
 
-func (handler *SessionHandler) PublicQueryForIdentity(sessionIdentity *Identity, queryOptions *QueryOptions) (*SessionListResult, error) {
+func (handler *SessionHandler) PublicQueryForIdentity(sessionIdentity *Identity, query string) (*SessionListResult, error) {
 	if sessionIdentity.IsAdmin {
-		return handler.parseAndListSessions(queryOptions)
+		return handler.querySessions(query)
 	}
-	query := queryOptions.Predicate
 	if query != "" {
 		query = "(" + query + ") and "
 	}
 	query += fmt.Sprintf(`apiSession.identity = "%v"`, sessionIdentity.Id)
-	queryOptions.finalQuery = query
-	return handler.parseAndListSessions(queryOptions)
+	return handler.querySessions(query)
 }
 
 func (handler *SessionHandler) ReadSessionCerts(sessionId string) ([]*SessionCert, error) {
@@ -144,9 +139,9 @@ func (handler *SessionHandler) Query(query string) (*SessionListResult, error) {
 	return result, nil
 }
 
-func (handler *SessionHandler) parseAndListSessions(queryOptions *QueryOptions) (*SessionListResult, error) {
+func (handler *SessionHandler) querySessions(query string) (*SessionListResult, error) {
 	result := &SessionListResult{handler: handler}
-	err := handler.parseAndList(queryOptions, result.collect)
+	err := handler.list(query, result.collect)
 	if err != nil {
 		return nil, err
 	}

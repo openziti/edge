@@ -14,12 +14,14 @@
 	limitations under the License.
 */
 
-package model
+package routes
 
 import (
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/predicate"
+	"github.com/netfoundry/ziti-foundation/storage/ast"
+	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"strconv"
 	"strings"
 )
@@ -31,19 +33,10 @@ const (
 	OffsetDefault = 0
 )
 
-func NewQueryOptions(predicate string, paging *predicate.Paging, sort string) *QueryOptions {
-	return &QueryOptions{
-		Predicate: predicate,
-		Paging:    paging,
-		Sort:      sort,
-	}
-}
-
 type QueryOptions struct {
-	Predicate  string
-	Sort       string
-	Paging     *predicate.Paging
-	finalQuery string
+	Predicate string
+	Sort      string
+	Paging    *predicate.Paging
 }
 
 func (qo *QueryOptions) String() string {
@@ -79,41 +72,64 @@ func (qo *QueryOptions) ValidateAndCorrect() {
 	}
 }
 
-func (qo *QueryOptions) getOriginalFullQuery() string {
-	return qo.getFullQuery(qo.Predicate)
-}
-
-func (qo *QueryOptions) getFinalFullQuery() string {
-	if qo.finalQuery != "" {
-		return qo.getFullQuery(qo.finalQuery)
+func (qo *QueryOptions) getFullQuery(store boltz.CrudStore) (string, error) {
+	if qo.Predicate == "" {
+		qo.Predicate = "true"
 	}
-	return qo.getFullQuery(qo.Predicate)
-}
 
-func (qo *QueryOptions) getFullQuery(predicate string) string {
-	qo.ValidateAndCorrect()
+	query, err := ast.Parse(store, qo.Predicate)
+	if err != nil {
+		return "", err
+	}
+
+	if err = boltz.ValidateSymbolsArePublic(query, store); err != nil {
+		return "", err
+	}
+
 	pfxlog.Logger().Debugf("query: %v", qo)
-	queryBuilder := strings.Builder{}
-	if predicate == "" {
-		queryBuilder.WriteString("true")
-	} else {
-		queryBuilder.WriteString(predicate)
-	}
-
-	if qo.Sort != "" {
-		queryBuilder.WriteString(" sort by ")
-		queryBuilder.WriteString(qo.Sort)
-	}
 
 	if qo.Paging != nil {
-		queryBuilder.WriteString(" skip ")
-		queryBuilder.WriteString(strconv.FormatInt(qo.Paging.Offset, 10))
-		queryBuilder.WriteString(" limit ")
-		if qo.Paging.ReturnAll {
-			queryBuilder.WriteString("none")
-		} else {
-			queryBuilder.WriteString(strconv.FormatInt(qo.Paging.Limit, 10))
+		if query.GetLimit() == nil {
+			if qo.Paging.ReturnAll {
+				query.SetLimit(-1)
+			} else {
+				query.SetLimit(qo.Paging.Limit)
+			}
+		}
+		if query.GetSkip() == nil {
+			query.SetSkip(qo.Paging.Offset)
 		}
 	}
-	return queryBuilder.String()
+	builder := &strings.Builder{}
+	builder.WriteString(query.GetPredicate().String())
+
+	// sort out sorts
+	sortFields := query.GetSortFields()
+	if len(sortFields) > 0 {
+		builder.WriteString(" sort by ")
+		builder.WriteString(sortFields[0].String())
+		for _, sortField := range sortFields[1:] {
+			builder.WriteString(", ")
+			builder.WriteString(sortField.String())
+		}
+	} else if qo.Sort != "" {
+		builder.WriteString(" sort by ")
+		builder.WriteString(qo.Sort)
+	}
+
+	if query.GetSkip() != nil {
+		builder.WriteString(" skip ")
+		builder.WriteString(strconv.FormatInt(*query.GetSkip(), 10))
+	}
+
+	if query.GetLimit() != nil {
+		builder.WriteString(" limit ")
+		if *query.GetLimit() == -1 {
+			builder.WriteString("none")
+		} else {
+			builder.WriteString(strconv.FormatInt(*query.GetLimit(), 10))
+		}
+	}
+
+	return builder.String(), nil
 }

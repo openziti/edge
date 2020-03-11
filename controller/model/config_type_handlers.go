@@ -29,10 +29,7 @@ const (
 
 func NewConfigTypeHandler(env Env) *ConfigTypeHandler {
 	handler := &ConfigTypeHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().ConfigType,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().ConfigType),
 	}
 	handler.impl = handler
 	return handler

@@ -22,7 +22,6 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/internal/permissions"
-	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/predicate"
 	"github.com/netfoundry/ziti-edge/controller/response"
 	"github.com/netfoundry/ziti-edge/migration"
@@ -70,7 +69,7 @@ type ReadUpdateRouter interface {
 
 type ModelToApiMapper func(*env.AppEnv, *response.RequestContext, network.Entity) (BaseApiEntity, error)
 
-func GetModelQueryOptionsFromRequest(r *http.Request) (*model.QueryOptions, error) {
+func GetModelQueryOptionsFromRequest(r *http.Request) (*QueryOptions, error) {
 	filter := r.URL.Query().Get("filter")
 	sort := r.URL.Query().Get("sort")
 
@@ -80,7 +79,7 @@ func GetModelQueryOptionsFromRequest(r *http.Request) (*model.QueryOptions, erro
 		return nil, err
 	}
 
-	return &model.QueryOptions{
+	return &QueryOptions{
 		Predicate: filter,
 		Sort:      sort,
 		Paging:    pg,

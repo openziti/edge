@@ -25,10 +25,7 @@ import (
 
 func NewServiceEdgeRouterPolicyHandler(env Env) *ServiceEdgeRouterPolicyHandler {
 	handler := &ServiceEdgeRouterPolicyHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().ServiceEdgeRouterPolicy,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().ServiceEdgeRouterPolicy),
 	}
 	handler.impl = handler
 	return handler

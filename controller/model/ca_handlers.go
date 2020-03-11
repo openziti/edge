@@ -26,10 +26,7 @@ import (
 
 func NewCaHandler(env Env) *CaHandler {
 	handler := &CaHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().Ca,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().Ca),
 	}
 	handler.impl = handler
 	return handler

@@ -25,7 +25,6 @@ import (
 
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/internal/permissions"
-	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/response"
 )
 
@@ -74,7 +73,7 @@ func (ir *ServiceRouter) Register(ae *env.AppEnv) {
 
 func (ir *ServiceRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
 	// ListWithHandler won't do search limiting by logged in user
-	List(rc, func(rc *response.RequestContext, queryOptions *model.QueryOptions) (*QueryResult, error) {
+	List(rc, func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error) {
 		identity := rc.Identity
 		if rc.Identity.IsAdmin {
 			if asId := rc.Request.URL.Query().Get("asIdentity"); asId != "" {
@@ -95,7 +94,12 @@ func (ir *ServiceRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
 			configTypes = mapConfigTypeNamesToIds(ae, strings.Split(requestedConfigTypes, ","), identity.Id)
 		}
 
-		result, err := ae.Handlers.EdgeService.PublicQueryForIdentity(identity, configTypes, queryOptions)
+		queryString, err := queryOptions.getFullQuery(ae.Handlers.EdgeService.GetStore())
+		if err != nil {
+			return nil, err
+		}
+
+		result, err := ae.Handlers.EdgeService.PublicQueryForIdentity(identity, configTypes, queryString)
 		if err != nil {
 			pfxlog.Logger().Errorf("error executing list query: %+v", err)
 			return nil, err

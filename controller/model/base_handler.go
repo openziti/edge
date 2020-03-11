@@ -23,7 +23,6 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/validation"
 	"github.com/netfoundry/ziti-fabric/controller/controllers"
 	network "github.com/netfoundry/ziti-fabric/controller/network"
-	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -31,22 +30,32 @@ import (
 )
 
 type Handler interface {
-	BaseList(queryOptions *QueryOptions) (*EntityListResult, error)
-	BaseLoad(id string) (network.Entity, error)
+	network.EntityLoader
+	network.EntityLister
+
 	GetEnv() Env
 
 	newModelEntity() boltEntitySink
 	readEntityInTx(tx *bbolt.Tx, id string, modelEntity boltEntitySink) error
 }
 
-type baseHandler struct {
-	store persistence.Store
-	env   Env
-	impl  Handler
+func newBaseHandler(env Env, store boltz.CrudStore) baseHandler {
+	return baseHandler{
+		BaseController: network.BaseController{
+			Store: store,
+		},
+		env: env,
+	}
 }
 
-func (handler *baseHandler) GetStore() persistence.Store {
-	return handler.store
+type baseHandler struct {
+	network.BaseController
+	env  Env
+	impl Handler
+}
+
+func (handler *baseHandler) GetStore() boltz.CrudStore {
+	return handler.Store
 }
 
 func (handler *baseHandler) GetDb() boltz.Db {
@@ -57,15 +66,6 @@ func (handler *baseHandler) GetEnv() Env {
 	return handler.env
 }
 
-func (handler *baseHandler) BaseList(queryOptions *QueryOptions) (*EntityListResult, error) {
-	result := &EntityListResult{handler: handler}
-	err := handler.parseAndList(queryOptions, result.collect)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
 func (handler *baseHandler) BaseLoad(id string) (network.Entity, error) {
 	entity := handler.impl.newModelEntity()
 	if err := handler.readEntity(id, entity); err != nil {
@@ -74,23 +74,21 @@ func (handler *baseHandler) BaseLoad(id string) (network.Entity, error) {
 	return entity, nil
 }
 
-type EntityListResult struct {
-	handler  *baseHandler
-	Entities []network.Entity
-	network.QueryMetaData
+func (handler *baseHandler) BaseLoadInTx(tx *bbolt.Tx, id string) (network.Entity, error) {
+	entity := handler.impl.newModelEntity()
+	if err := handler.readEntityInTx(tx, id, entity); err != nil {
+		return nil, err
+	}
+	return entity, nil
 }
 
-func (result *EntityListResult) collect(tx *bbolt.Tx, ids []string, queryMetaData *network.QueryMetaData) error {
-	result.QueryMetaData = *queryMetaData
-	for _, key := range ids {
-		entity := result.handler.impl.newModelEntity()
-		err := result.handler.readEntityInTx(tx, key, entity)
-		if err != nil {
-			return err
-		}
-		result.Entities = append(result.Entities, entity)
+func (handler *baseHandler) BaseList(query string) (*network.EntityListResult, error) {
+	result := &network.EntityListResult{Loader: handler}
+	err := handler.list(query, result.Collect)
+	if err != nil {
+		return nil, err
 	}
-	return nil
+	return result, nil
 }
 
 func (handler *baseHandler) createEntity(modelEntity boltEntitySource) (string, error) {
@@ -108,7 +106,7 @@ func (handler *baseHandler) createEntity(modelEntity boltEntitySource) (string, 
 
 func (handler *baseHandler) createEntityInTx(ctx boltz.MutateContext, modelEntity boltEntitySource) (string, error) {
 	if modelEntity == nil {
-		return "", errors.Errorf("can't create %v with nil value", handler.store.GetEntityType())
+		return "", errors.Errorf("can't create %v with nil value", handler.Store.GetEntityType())
 	}
 	if modelEntity.GetId() == "" {
 		modelEntity.SetId(uuid.New().String())
@@ -135,7 +133,7 @@ func (handler *baseHandler) createEntityInTx(ctx boltz.MutateContext, modelEntit
 	}
 
 	if err := store.Create(ctx, boltEntity); err != nil {
-		pfxlog.Logger().WithError(err).Errorf("could not create %v in bolt storage", handler.store.GetEntityType())
+		pfxlog.Logger().WithError(err).Errorf("could not create %v in bolt storage", handler.GetStore().GetSingularEntityType())
 		return "", err
 	}
 
@@ -153,8 +151,8 @@ func (handler *baseHandler) patchEntity(modelEntity boltEntitySource, checker bo
 func (handler *baseHandler) updateGeneral(modelEntity boltEntitySource, checker boltz.FieldChecker, patch bool) error {
 	return handler.GetDb().Update(func(tx *bbolt.Tx) error {
 		ctx := boltz.NewMutateContext(tx)
-		existing := handler.store.NewStoreEntity()
-		found, err := handler.store.BaseLoadOneById(tx, modelEntity.GetId(), existing)
+		existing := handler.GetStore().NewStoreEntity()
+		found, err := handler.GetStore().BaseLoadOneById(tx, modelEntity.GetId(), existing)
 		if err != nil {
 			return err
 		}
@@ -178,7 +176,7 @@ func (handler *baseHandler) updateGeneral(modelEntity boltEntitySource, checker 
 				if namedEntity.GetName() == "" {
 					return validation.NewFieldError("name is required", "name", namedEntity.GetName())
 				}
-				if nameIndexStore, ok := handler.store.(persistence.NameIndexedStore); ok {
+				if nameIndexStore, ok := handler.GetStore().(persistence.NameIndexedStore); ok {
 					if nameIndexStore.GetNameIndex().Read(ctx.Tx(), []byte(namedEntity.GetName())) != nil {
 						return validation.NewFieldError("name is must be unique", "name", namedEntity.GetName())
 					}
@@ -188,11 +186,11 @@ func (handler *baseHandler) updateGeneral(modelEntity boltEntitySource, checker 
 			}
 		}
 
-		if err := handler.store.Update(ctx, boltEntity, checker); err != nil {
+		if err := handler.GetStore().Update(ctx, boltEntity, checker); err != nil {
 			if patch {
-				pfxlog.Logger().WithError(err).Errorf("could not patch %v entity", handler.store.GetEntityType())
+				pfxlog.Logger().WithError(err).Errorf("could not patch %v entity", handler.GetStore().GetEntityType())
 			} else {
-				pfxlog.Logger().WithError(err).Errorf("could not update %v entity", handler.store.GetEntityType())
+				pfxlog.Logger().WithError(err).Errorf("could not update %v entity", handler.GetStore().GetEntityType())
 			}
 			return err
 		}
@@ -207,13 +205,13 @@ func (handler *baseHandler) readEntity(id string, modelEntity boltEntitySink) er
 }
 
 func (handler *baseHandler) readEntityInTx(tx *bbolt.Tx, id string, modelEntity boltEntitySink) error {
-	boltEntity := handler.store.NewStoreEntity()
-	found, err := handler.store.BaseLoadOneById(tx, id, boltEntity)
+	boltEntity := handler.GetStore().NewStoreEntity()
+	found, err := handler.GetStore().BaseLoadOneById(tx, id, boltEntity)
 	if err != nil {
 		return err
 	}
 	if !found {
-		return boltz.NewNotFoundError(handler.store.GetSingularEntityType(), "id", id)
+		return boltz.NewNotFoundError(handler.GetStore().GetSingularEntityType(), "id", id)
 	}
 
 	return modelEntity.fillFrom(handler.impl, tx, boltEntity)
@@ -228,18 +226,18 @@ func (handler *baseHandler) readEntityWithIndex(name string, key []byte, index b
 func (handler *baseHandler) readEntityInTxWithIndex(name string, tx *bbolt.Tx, key []byte, index boltz.ReadIndex, modelEntity boltEntitySink) error {
 	id := index.Read(tx, key)
 	if id == nil {
-		return boltz.NewNotFoundError(handler.store.GetSingularEntityType(), name, string(key))
+		return boltz.NewNotFoundError(handler.GetStore().GetSingularEntityType(), name, string(key))
 	}
 	return handler.readEntityInTx(tx, string(id), modelEntity)
 }
 
 func (handler *baseHandler) readEntityByQuery(query string) (network.Entity, error) {
-	result, err := handler.BaseList(NewQueryOptions(query, nil, ""))
+	result, err := handler.BaseList(query)
 	if err != nil {
 		return nil, err
 	}
-	if len(result.Entities) > 0 {
-		return result.Entities[0], nil
+	if len(result.GetEntities()) > 0 {
+		return result.GetEntities()[0], nil
 	}
 	return nil, nil
 }
@@ -248,47 +246,10 @@ func (handler *baseHandler) deleteEntity(id string) error {
 	return controllers.DeleteEntityById(handler.GetStore(), handler.GetDb(), id)
 }
 
-type queryResultHandler func(tx *bbolt.Tx, ids []string, qmd *network.QueryMetaData) error
-
-func (handler *baseHandler) parseAndList(queryOptions *QueryOptions, resultHandler queryResultHandler) error {
-	// validate that the submitted query is only using public symbols. The query options may contain an final
-	// query which has been modified with additional filters
-	queryString := queryOptions.getOriginalFullQuery()
-	query, err := ast.Parse(handler.GetStore(), queryString)
-	if err != nil {
-		return err
-	}
-
-	if err = boltz.ValidateSymbolsArePublic(query, handler.store); err != nil {
-		return err
-	}
-
-	return handler.list(queryOptions.getFinalFullQuery(), resultHandler)
-}
-
-func (handler *baseHandler) list(queryString string, resultHandler queryResultHandler) error {
+func (handler *baseHandler) list(queryString string, resultHandler network.ListResultHandler) error {
 	return handler.GetDb().View(func(tx *bbolt.Tx) error {
-		return handler.listWithTx(tx, queryString, resultHandler)
+		return handler.ListWithTx(tx, queryString, resultHandler)
 	})
-}
-
-func (handler *baseHandler) listWithTx(tx *bbolt.Tx, queryString string, resultHandler queryResultHandler) error {
-	query, err := ast.Parse(handler.GetStore(), queryString)
-	if err != nil {
-		return err
-	}
-
-	keys, count, err := handler.GetStore().QueryIdsC(tx, query)
-	if err != nil {
-		return err
-	}
-	qmd := &network.QueryMetaData{
-		Count:            count,
-		Limit:            *query.GetLimit(),
-		Offset:           *query.GetSkip(),
-		FilterableFields: handler.GetStore().GetPublicSymbols(),
-	}
-	return resultHandler(tx, keys, qmd)
 }
 
 func (handler *baseHandler) collectAssociated(id string, field string, relatedHandler Handler, collector func(entity network.Entity)) error {
@@ -297,7 +258,7 @@ func (handler *baseHandler) collectAssociated(id string, field string, relatedHa
 		if err := handler.readEntityInTx(tx, id, entity); err != nil {
 			return err
 		}
-		relatedEntityIds := handler.store.GetRelatedEntitiesIdList(tx, id, field)
+		relatedEntityIds := handler.GetStore().GetRelatedEntitiesIdList(tx, id, field)
 		for _, relatedEntityId := range relatedEntityIds {
 			relatedEntity := relatedHandler.newModelEntity()
 			if err := relatedHandler.readEntityInTx(tx, relatedEntityId, relatedEntity); err != nil {

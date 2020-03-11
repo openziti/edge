@@ -35,10 +35,7 @@ type IdentityHandler struct {
 
 func NewIdentityHandler(env Env) *IdentityHandler {
 	handler := &IdentityHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().Identity,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().Identity),
 		allowedFieldsChecker: boltz.MapFieldChecker{
 			persistence.FieldName:                   struct{}{},
 			persistence.FieldIdentityIsDefaultAdmin: struct{}{},
@@ -102,7 +99,7 @@ func (handler *IdentityHandler) CreateWithEnrollments(identityModel *Identity, e
 			return err
 		}
 		if err := handler.GetStore().Create(ctx, boltEntity); err != nil {
-			pfxlog.Logger().WithError(err).Errorf("could not create %v in bolt storage", handler.store.GetEntityType())
+			pfxlog.Logger().WithError(err).Errorf("could not create %v in bolt storage", handler.GetStore().GetSingularEntityType())
 			return err
 		}
 
@@ -281,7 +278,7 @@ func (handler *IdentityHandler) CollectAuthenticators(id string, collector func(
 		if err != nil {
 			return err
 		}
-		authenticatorIds := handler.store.GetRelatedEntitiesIdList(tx, id, persistence.FieldIdentityAuthenticators)
+		authenticatorIds := handler.GetStore().GetRelatedEntitiesIdList(tx, id, persistence.FieldIdentityAuthenticators)
 		for _, authenticatorId := range authenticatorIds {
 			authenticator := &Authenticator{}
 			err := handler.env.GetHandlers().Authenticator.readEntity(authenticatorId, authenticator)
@@ -308,7 +305,7 @@ func (handler *IdentityHandler) collectEnrollmentsInTx(tx *bbolt.Tx, id string, 
 		return err
 	}
 
-	associationIds := handler.store.GetRelatedEntitiesIdList(tx, id, persistence.FieldIdentityEnrollments)
+	associationIds := handler.GetStore().GetRelatedEntitiesIdList(tx, id, persistence.FieldIdentityEnrollments)
 	for _, enrollmentId := range associationIds {
 		enrollment, err := handler.env.GetHandlers().Enrollment.readInTx(tx, enrollmentId)
 		if err != nil {

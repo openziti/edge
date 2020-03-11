@@ -63,7 +63,7 @@ func InitHandlers(env Env) *Handlers {
 	handlers.GeoRegion = NewGeoRegionHandler(env)
 	handlers.Identity = NewIdentityHandler(env)
 	handlers.IdentityType = NewIdentityTypeHandler(env)
-	handlers.EdgeService = NewServiceHandler(env)
+	handlers.EdgeService = NewEdgeServiceHandler(env)
 	handlers.ServiceEdgeRouterPolicy = NewServiceEdgeRouterPolicyHandler(env)
 	handlers.ServicePolicy = NewServicePolicyHandler(env)
 	handlers.Session = NewSessionHandler(env)

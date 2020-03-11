@@ -18,10 +18,7 @@ package model
 
 func NewGeoRegionHandler(env Env) *GeoRegionHandler {
 	handler := &GeoRegionHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().GeoRegion,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().GeoRegion),
 	}
 	handler.impl = handler
 	return handler

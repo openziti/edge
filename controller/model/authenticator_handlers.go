@@ -22,6 +22,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/crypto"
+	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 	"reflect"
@@ -43,11 +44,8 @@ func (handler AuthenticatorHandler) IsUpdated(field string) bool {
 
 func NewAuthenticatorHandler(env Env) *AuthenticatorHandler {
 	handler := &AuthenticatorHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().Authenticator,
-		},
-		authStore: env.GetStores().Authenticator,
+		baseHandler: newBaseHandler(env, env.GetStores().Authenticator),
+		authStore:   env.GetStores().Authenticator,
 	}
 
 	handler.impl = handler
@@ -104,18 +102,14 @@ func (handler *AuthenticatorHandler) Read(id string) (*Authenticator, error) {
 }
 
 func (handler *AuthenticatorHandler) Create(authenticator *Authenticator) (string, error) {
-	result, err := handler.ListForIdentity(authenticator.IdentityId, &QueryOptions{
-		Predicate:  fmt.Sprintf(`method = "%s"`, authenticator.Method),
-		Sort:       "",
-		Paging:     nil,
-		finalQuery: "",
-	})
+	query := fmt.Sprintf(`method = "%s"`, authenticator.Method)
+	result, err := handler.ListForIdentity(authenticator.IdentityId, query)
 
 	if err != nil {
 		return "", err
 	}
 
-	if result.Count > 0 {
+	if result.GetMetaData().Count > 0 {
 		return "", apierror.NewAuthenticatorMethodMax()
 	}
 
@@ -296,14 +290,12 @@ func (handler AuthenticatorHandler) ReHashPassword(password string, salt []byte)
 	}
 }
 
-func (handler AuthenticatorHandler) ListForIdentity(identityId string, options *QueryOptions) (*AuthenticatorListQueryResult, error) {
-	query := options.Predicate
+func (handler AuthenticatorHandler) ListForIdentity(identityId string, query string) (*AuthenticatorListQueryResult, error) {
 	if query != "" {
 		query = "(" + query + ") and "
 	}
 	query += fmt.Sprintf(`(identity = "%s")`, identityId)
-	options.Predicate = query
-	result, err := handler.BaseList(options)
+	result, err := handler.BaseList(query)
 
 	if err != nil {
 		return nil, err
@@ -311,7 +303,7 @@ func (handler AuthenticatorHandler) ListForIdentity(identityId string, options *
 
 	var authenticators []*Authenticator
 
-	for _, entity := range result.Entities {
+	for _, entity := range result.GetEntities() {
 		if auth, ok := entity.(*Authenticator); ok {
 			authenticators = append(authenticators, auth)
 		}
@@ -344,6 +336,6 @@ type HashedPassword struct {
 }
 
 type AuthenticatorListQueryResult struct {
-	*EntityListResult
+	*network.EntityListResult
 	Authenticators []*Authenticator
 }

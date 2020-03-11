@@ -23,10 +23,7 @@ import (
 
 func NewApiSessionHandler(env Env) *ApiSessionHandler {
 	handler := &ApiSessionHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().ApiSession,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().ApiSession),
 	}
 	handler.impl = handler
 	return handler

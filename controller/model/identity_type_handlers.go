@@ -22,10 +22,7 @@ import (
 
 func NewIdentityTypeHandler(env Env) *IdentityTypeHandler {
 	handler := &IdentityTypeHandler{
-		baseHandler: baseHandler{
-			env:   env,
-			store: env.GetStores().IdentityType,
-		},
+		baseHandler: newBaseHandler(env, env.GetStores().IdentityType),
 	}
 	handler.impl = handler
 	return handler
