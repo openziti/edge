@@ -100,7 +100,9 @@ func (ctx *TestContext) Init() {
 	ctx.DbProvider.db, err = db.Open(ctx.dbFile.Name())
 	ctx.NoError(err)
 
-	ctx.DbProvider.fabricStores = db.InitStores()
+	fabricStores, err := db.InitStores(ctx.GetDb())
+	ctx.NoError(err)
+	ctx.DbProvider.fabricStores = fabricStores
 	ctx.DbProvider.controllers = network.NewControllers(ctx.DbProvider.db, ctx.DbProvider.fabricStores)
 	ctx.stores, err = NewBoltStores(ctx.DbProvider)
 

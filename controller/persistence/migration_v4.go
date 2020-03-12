@@ -31,7 +31,7 @@ const (
 var clientConfigV1TypeId = "f2dd2df0-9c04-4b84-a91e-71437ac229f1"
 var serverConfigV1TypeId = "cea49285-6c07-42cf-9f52-09a9b115c783"
 
-func createInitialTunnelerConfigTypes(mtx *MigrationContext) error {
+func (m *Migrations) createInitialTunnelerConfigTypes(step *boltz.MigrationStep) {
 	clientConfigTypeV1 := &ConfigType{
 		BaseExtEntity: boltz.BaseExtEntity{Id: clientConfigV1TypeId},
 		Name:          "ziti-tunneler-client.v1",
@@ -56,9 +56,7 @@ func createInitialTunnelerConfigTypes(mtx *MigrationContext) error {
 			},
 		},
 	}
-	if err := mtx.Stores.ConfigType.Create(mtx.Ctx, clientConfigTypeV1); err != nil {
-		return err
-	}
+	step.SetError(m.stores.ConfigType.Create(step.Ctx, clientConfigTypeV1))
 
 	serverConfigTypeV1 := &ConfigType{
 		BaseExtEntity: boltz.BaseExtEntity{Id: serverConfigV1TypeId},
@@ -93,38 +91,33 @@ func createInitialTunnelerConfigTypes(mtx *MigrationContext) error {
 			},
 		},
 	}
-	return mtx.Stores.ConfigType.Create(mtx.Ctx, serverConfigTypeV1)
+	step.SetError(m.stores.ConfigType.Create(step.Ctx, serverConfigTypeV1))
 }
 
-func createInitialTunnelerConfigs(mtx *MigrationContext) error {
-	ids, _, err := mtx.Stores.EdgeService.QueryIds(mtx.Ctx.Tx(), "true")
-	if err != nil {
-		return err
-	}
+func (m *Migrations) createInitialTunnelerConfigs(step *boltz.MigrationStep) {
+	ids, _, err := m.stores.EdgeService.QueryIds(step.Ctx.Tx(), "true")
+	step.SetError(err)
 
-	hostnameSymbol := mtx.Stores.EdgeService.NewEntitySymbol(FieldServiceDnsHostname, ast.NodeTypeString)
-	portSymbol := mtx.Stores.EdgeService.NewEntitySymbol(FieldServiceDnsPort, ast.NodeTypeInt64)
+	hostnameSymbol := m.stores.EdgeService.NewEntitySymbol(FieldServiceDnsHostname, ast.NodeTypeString)
+	portSymbol := m.stores.EdgeService.NewEntitySymbol(FieldServiceDnsPort, ast.NodeTypeInt64)
 
 	for _, id := range ids {
-		service, err := mtx.Stores.EdgeService.LoadOneById(mtx.Ctx.Tx(), id)
-		if err != nil {
-			return err
+		service, err := m.stores.EdgeService.LoadOneById(step.Ctx.Tx(), id)
+		if step.SetError(err) {
+			return
 		}
 
-		fieldType, val := hostnameSymbol.Eval(mtx.Ctx.Tx(), []byte(id))
+		fieldType, val := hostnameSymbol.Eval(step.Ctx.Tx(), []byte(id))
 		hostname := boltz.FieldToString(fieldType, val)
 
-		fieldType, val = portSymbol.Eval(mtx.Ctx.Tx(), []byte(id))
+		fieldType, val = portSymbol.Eval(step.Ctx.Tx(), []byte(id))
 		port := boltz.FieldToInt64(fieldType, val)
 		finalPort := 0
 		if port != nil {
 			finalPort = int(*port)
 		}
-		if err := createServiceConfigs(mtx, service, hostname, finalPort); err != nil {
-			return err
-		}
+		step.SetError(m.createServiceConfigs(step, service, hostname, finalPort))
 	}
-	return nil
 }
 
 type migrationConfigUpdateFieldChecker struct{}
@@ -133,7 +126,7 @@ func (m migrationConfigUpdateFieldChecker) IsUpdated(field string) bool {
 	return field == EntityTypeConfigs
 }
 
-func createServiceConfigs(mtx *MigrationContext, service *EdgeService, hostname *string, port int) error {
+func (m *Migrations) createServiceConfigs(step *boltz.MigrationStep, service *EdgeService, hostname *string, port int) error {
 	if hostname == nil {
 		return nil
 	}
@@ -147,9 +140,9 @@ func createServiceConfigs(mtx *MigrationContext, service *EdgeService, hostname 
 		Type:          clientConfigV1TypeId,
 		Data:          clientConfigData,
 	}
-	if err := mtx.Stores.Config.Create(mtx.Ctx, config); err != nil {
+	if err := m.stores.Config.Create(step.Ctx, config); err != nil {
 		return err
 	}
 	service.Configs = append(service.Configs, config.Id)
-	return mtx.Stores.EdgeService.Update(mtx.Ctx, service, &migrationConfigUpdateFieldChecker{})
+	return m.stores.EdgeService.Update(step.Ctx, service, &migrationConfigUpdateFieldChecker{})
 }

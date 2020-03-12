@@ -86,8 +86,6 @@ type ServiceApiList struct {
 	*env.BaseApi
 	Name             *string                           `json:"name"`
 	EndpointStrategy *string                           `json:"endpointStrategy"`
-	EndpointAddress  *string                           `json:"endpointAddress"`
-	EgressRouter     *string                           `json:"egressRouter"`
 	RoleAttributes   []string                          `json:"roleAttributes"`
 	Permissions      []string                          `json:"permissions"`
 	Configs          []string                          `json:"configs"`

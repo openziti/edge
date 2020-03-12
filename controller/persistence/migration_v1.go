@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 NetFoundry, Inc.
+	Copyright 2020 NetFoundry, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -17,6 +17,25 @@
 package persistence
 
 import "github.com/netfoundry/ziti-foundation/storage/boltz"
+
+func (m *Migrations) initialize(step *boltz.MigrationStep) int {
+	versionBucket := boltz.GetOrCreatePath(step.Ctx.Tx(), boltz.RootBucket)
+	if step.SetError(versionBucket.GetError()) {
+		return 0
+	}
+	version := versionBucket.GetInt64(FieldVersion)
+	if version != nil && *version > 0 {
+		return int(*version)
+	}
+
+	m.createGeoRegionsV1(step)
+	m.createIdentityTypesV1(step)
+
+	if m.dbStores != nil {
+		m.upgradeToV1FromPG(step)
+	}
+	return 1
+}
 
 var geoRegionsV1 = map[string]string{
 	"a0e2c29f-9922-4435-a8a7-5dbf7bd92377": "Canada Central",
@@ -38,21 +57,13 @@ var geoRegionsV1 = map[string]string{
 	"5d0042bb-6fd5-4959-90a7-6bca70e23f76": "US Central",
 }
 
-func createGeoRegionsV1(mtx *MigrationContext) error {
+func (m *Migrations) createGeoRegionsV1(step *boltz.MigrationStep) {
 	for id, name := range geoRegionsV1 {
-		geoRegion := &GeoRegion{
+		step.SetError(m.stores.GeoRegion.Create(step.Ctx, &GeoRegion{
 			BaseExtEntity: *boltz.NewExtEntity(id, nil),
 			Name:          name,
-		}
-
-		err := mtx.Stores.GeoRegion.Create(mtx.Ctx, geoRegion)
-
-		if err != nil {
-			return err
-		}
+		}))
 	}
-
-	return nil
 }
 
 var IdentityTypesV1 = map[string]string{
@@ -61,19 +72,11 @@ var IdentityTypesV1 = map[string]string{
 	"c4d66f9d-fe18-4143-85d3-74329c54282b": "Service",
 }
 
-func createIdentityTypesV1(mtx *MigrationContext) error {
+func (m *Migrations) createIdentityTypesV1(step *boltz.MigrationStep) {
 	for id, name := range IdentityTypesV1 {
-		identityType := &IdentityType{
+		step.SetError(m.stores.IdentityType.Create(step.Ctx, &IdentityType{
 			BaseExtEntity: *boltz.NewExtEntity(id, nil),
 			Name:          name,
-		}
-
-		err := mtx.Stores.IdentityType.Create(mtx.Ctx, identityType)
-
-		if err != nil {
-			return err
-		}
+		}))
 	}
-
-	return nil
 }
