@@ -94,12 +94,12 @@ func (ir *ServiceRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
 			configTypes = mapConfigTypeNamesToIds(ae, strings.Split(requestedConfigTypes, ","), identity.Id)
 		}
 
-		queryString, err := queryOptions.getFullQuery(ae.Handlers.EdgeService.GetStore())
+		query, err := queryOptions.getFullQuery(ae.Handlers.EdgeService.GetStore())
 		if err != nil {
 			return nil, err
 		}
 
-		result, err := ae.Handlers.EdgeService.PublicQueryForIdentity(identity, configTypes, queryString)
+		result, err := ae.Handlers.EdgeService.PublicQueryForIdentity(identity, configTypes, query)
 		if err != nil {
 			pfxlog.Logger().Errorf("error executing list query: %+v", err)
 			return nil, err

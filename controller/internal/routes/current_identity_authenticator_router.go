@@ -47,12 +47,12 @@ func (ir *CurrentIdentityAuthenticatorRouter) Register(ae *env.AppEnv) {
 
 func (ir *CurrentIdentityAuthenticatorRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
 	List(rc, func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error) {
-		queryString, err := queryOptions.getFullQuery(ae.Handlers.Authenticator.GetStore())
+		query, err := queryOptions.getFullQuery(ae.Handlers.Authenticator.GetStore())
 		if err != nil {
 			return nil, err
 		}
 
-		result, err := ae.Handlers.Authenticator.ListForIdentity(rc.Identity.Id, queryString)
+		result, err := ae.Handlers.Authenticator.ListForIdentity(rc.Identity.Id, query)
 		if err != nil {
 			pfxlog.Logger().Errorf("error executing list query: %+v", err)
 			return nil, err

@@ -19,6 +19,7 @@ package model
 import (
 	"fmt"
 	"github.com/netfoundry/ziti-fabric/controller/models"
+	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 
 	"go.etcd.io/bbolt"
@@ -96,14 +97,16 @@ func (handler *SessionHandler) Delete(id string) error {
 	return handler.deleteEntity(id)
 }
 
-func (handler *SessionHandler) PublicQueryForIdentity(sessionIdentity *Identity, query string) (*SessionListResult, error) {
+func (handler *SessionHandler) PublicQueryForIdentity(sessionIdentity *Identity, query ast.Query) (*SessionListResult, error) {
 	if sessionIdentity.IsAdmin {
 		return handler.querySessions(query)
 	}
-	if query != "" {
-		query = "(" + query + ") and "
+	identityFilterString := fmt.Sprintf(`apiSession.identity = "%v"`, sessionIdentity.Id)
+	identityFilter, err := ast.Parse(handler.Store, identityFilterString)
+	if err != nil {
+		return nil, err
 	}
-	query += fmt.Sprintf(`apiSession.identity = "%v"`, sessionIdentity.Id)
+	query.SetPredicate(ast.NewAndExprNode(query.GetPredicate(), identityFilter))
 	return handler.querySessions(query)
 }
 
@@ -139,9 +142,9 @@ func (handler *SessionHandler) Query(query string) (*SessionListResult, error) {
 	return result, nil
 }
 
-func (handler *SessionHandler) querySessions(query string) (*SessionListResult, error) {
+func (handler *SessionHandler) querySessions(query ast.Query) (*SessionListResult, error) {
 	result := &SessionListResult{handler: handler}
-	err := handler.list(query, result.collect)
+	err := handler.preparedList(query, result.collect)
 	if err != nil {
 		return nil, err
 	}

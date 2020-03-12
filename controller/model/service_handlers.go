@@ -21,6 +21,7 @@ import (
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-fabric/controller/models"
+	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 )
@@ -130,25 +131,29 @@ func (handler *EdgeServiceHandler) Patch(service *Service, checker boltz.FieldCh
 	return handler.patchEntity(service, checker)
 }
 
-func (handler *EdgeServiceHandler) PublicQueryForIdentity(sessionIdentity *Identity, configTypes map[string]struct{}, query string) (*ServiceListResult, error) {
+func (handler *EdgeServiceHandler) PublicQueryForIdentity(sessionIdentity *Identity, configTypes map[string]struct{}, query ast.Query) (*ServiceListResult, error) {
 	if sessionIdentity.IsAdmin {
 		return handler.queryServices(query, sessionIdentity.Id, configTypes, true)
 	}
-	if query != "" {
-		query = "(" + query + ") and "
+	idFilterQueryString := fmt.Sprintf(`not isEmpty(from servicePolicies where anyOf(identities) = "%v")`, sessionIdentity.Id)
+	idFilterQuery, err := ast.Parse(handler.Store, idFilterQueryString)
+	if err != nil {
+		return nil, err
 	}
-	query += fmt.Sprintf(`not isEmpty(from servicePolicies where anyOf(identities) = "%v")`, sessionIdentity.Id)
+
+	query.SetPredicate(ast.NewAndExprNode(query.GetPredicate(), idFilterQuery.GetPredicate()))
+
 	return handler.queryServices(query, sessionIdentity.Id, configTypes, false)
 }
 
-func (handler *EdgeServiceHandler) queryServices(query string, identityId string, configTypes map[string]struct{}, isAdmin bool) (*ServiceListResult, error) {
+func (handler *EdgeServiceHandler) queryServices(query ast.Query, identityId string, configTypes map[string]struct{}, isAdmin bool) (*ServiceListResult, error) {
 	result := &ServiceListResult{
 		handler:     handler,
 		identityId:  identityId,
 		configTypes: configTypes,
 		isAdmin:     isAdmin,
 	}
-	err := handler.list(query, result.collect)
+	err := handler.preparedList(query, result.collect)
 	if err != nil {
 		return nil, err
 	}

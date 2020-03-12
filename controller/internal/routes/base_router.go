@@ -129,12 +129,12 @@ func ListWithHandler(ae *env.AppEnv, rc *response.RequestContext, lister models.
 	List(rc, func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error) {
 		// validate that the submitted query is only using public symbols. The query options may contain an final
 		// query which has been modified with additional filters
-		queryString, err := queryOptions.getFullQuery(lister.GetStore())
+		query, err := queryOptions.getFullQuery(lister.GetStore())
 		if err != nil {
 			return nil, err
 		}
 
-		result, err := lister.BaseList(queryString)
+		result, err := lister.BasePreparedList(query)
 		if err != nil {
 			return nil, err
 		}

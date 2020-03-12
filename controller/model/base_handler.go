@@ -23,6 +23,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/validation"
 	"github.com/netfoundry/ziti-fabric/controller/controllers"
 	"github.com/netfoundry/ziti-fabric/controller/models"
+	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -89,6 +90,21 @@ func (handler *baseHandler) BaseList(query string) (*models.EntityListResult, er
 		return nil, err
 	}
 	return result, nil
+}
+
+func (handler *baseHandler) BasePreparedList(query ast.Query) (*models.EntityListResult, error) {
+	result := &models.EntityListResult{Loader: handler}
+	err := handler.preparedList(query, result.Collect)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (handler *baseHandler) preparedList(query ast.Query, resultHandler models.ListResultHandler) error {
+	return handler.GetDb().View(func(tx *bbolt.Tx) error {
+		return handler.PreparedListWithTx(tx, query, resultHandler)
+	})
 }
 
 func (handler *baseHandler) createEntity(modelEntity boltEntitySource) (string, error) {

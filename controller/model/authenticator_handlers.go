@@ -23,6 +23,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/crypto"
 	"github.com/netfoundry/ziti-fabric/controller/models"
+	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
 	"reflect"
@@ -102,7 +103,11 @@ func (handler *AuthenticatorHandler) Read(id string) (*Authenticator, error) {
 }
 
 func (handler *AuthenticatorHandler) Create(authenticator *Authenticator) (string, error) {
-	query := fmt.Sprintf(`method = "%s"`, authenticator.Method)
+	queryString := fmt.Sprintf(`method = "%s"`, authenticator.Method)
+	query, err := ast.Parse(handler.GetStore(), queryString)
+	if err != nil {
+		return "", err
+	}
 	result, err := handler.ListForIdentity(authenticator.IdentityId, query)
 
 	if err != nil {
@@ -290,12 +295,14 @@ func (handler AuthenticatorHandler) ReHashPassword(password string, salt []byte)
 	}
 }
 
-func (handler AuthenticatorHandler) ListForIdentity(identityId string, query string) (*AuthenticatorListQueryResult, error) {
-	if query != "" {
-		query = "(" + query + ") and "
+func (handler AuthenticatorHandler) ListForIdentity(identityId string, query ast.Query) (*AuthenticatorListQueryResult, error) {
+	filterString := fmt.Sprintf(`identity = "%s"`, identityId)
+	filter, err := ast.Parse(handler.Store, filterString)
+	if err != nil {
+		return nil, err
 	}
-	query += fmt.Sprintf(`(identity = "%s")`, identityId)
-	result, err := handler.BaseList(query)
+	query.SetPredicate(ast.NewAndExprNode(query.GetPredicate(), filter))
+	result, err := handler.BasePreparedList(query)
 
 	if err != nil {
 		return nil, err

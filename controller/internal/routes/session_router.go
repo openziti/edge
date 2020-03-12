@@ -62,12 +62,12 @@ func (ir *SessionRouter) Register(ae *env.AppEnv) {
 func (ir *SessionRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
 	// ListWithHandler won't do search limiting by logged in user
 	List(rc, func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error) {
-		queryString, err := queryOptions.getFullQuery(ae.Handlers.Session.GetStore())
+		query, err := queryOptions.getFullQuery(ae.Handlers.Session.GetStore())
 		if err != nil {
 			return nil, err
 		}
 
-		result, err := ae.Handlers.Session.PublicQueryForIdentity(rc.Identity, queryString)
+		result, err := ae.Handlers.Session.PublicQueryForIdentity(rc.Identity, query)
 		if err != nil {
 			return nil, err
 		}

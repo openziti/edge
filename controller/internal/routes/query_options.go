@@ -22,8 +22,6 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/predicate"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
-	"strconv"
-	"strings"
 )
 
 const (
@@ -72,18 +70,18 @@ func (qo *QueryOptions) ValidateAndCorrect() {
 	}
 }
 
-func (qo *QueryOptions) getFullQuery(store boltz.CrudStore) (string, error) {
+func (qo *QueryOptions) getFullQuery(store boltz.CrudStore) (ast.Query, error) {
 	if qo.Predicate == "" {
 		qo.Predicate = "true"
 	}
 
 	query, err := ast.Parse(store, qo.Predicate)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	if err = boltz.ValidateSymbolsArePublic(query, store); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	pfxlog.Logger().Debugf("query: %v", qo)
@@ -100,36 +98,25 @@ func (qo *QueryOptions) getFullQuery(store boltz.CrudStore) (string, error) {
 			query.SetSkip(qo.Paging.Offset)
 		}
 	}
-	builder := &strings.Builder{}
-	builder.WriteString(query.GetPredicate().String())
 
 	// sort out sorts
 	sortFields := query.GetSortFields()
-	if len(sortFields) > 0 {
-		builder.WriteString(" sort by ")
-		builder.WriteString(sortFields[0].String())
-		for _, sortField := range sortFields[1:] {
-			builder.WriteString(", ")
-			builder.WriteString(sortField.String())
+	if len(sortFields) == 0 && qo.Sort != "" {
+		sortQueryString := "true sort by " + qo.Sort
+
+		sortQuery, err := ast.Parse(store, sortQueryString)
+		if err != nil {
+			return nil, err
 		}
-	} else if qo.Sort != "" {
-		builder.WriteString(" sort by ")
-		builder.WriteString(qo.Sort)
-	}
 
-	if query.GetSkip() != nil {
-		builder.WriteString(" skip ")
-		builder.WriteString(strconv.FormatInt(*query.GetSkip(), 10))
-	}
+		if err = boltz.ValidateSymbolsArePublic(sortQuery, store); err != nil {
+			return nil, err
+		}
 
-	if query.GetLimit() != nil {
-		builder.WriteString(" limit ")
-		if *query.GetLimit() == -1 {
-			builder.WriteString("none")
-		} else {
-			builder.WriteString(strconv.FormatInt(*query.GetLimit(), 10))
+		if err = query.AdoptSortFields(sortQuery); err != nil {
+			return nil, err
 		}
 	}
 
-	return builder.String(), nil
+	return query, nil
 }
