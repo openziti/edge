@@ -48,10 +48,6 @@ func (ctx *TestContext) GetEnrollmentJwtGenerator() jwt.EnrollmentGenerator {
 	return ctx
 }
 
-func (ctx *TestContext) GetDbProvider() persistence.DbProvider {
-	return ctx.DbProvider
-}
-
 func (ctx *TestContext) GetAuthRegistry() AuthRegistry {
 	panic("implement me")
 }

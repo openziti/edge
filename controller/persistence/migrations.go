@@ -31,13 +31,13 @@ type Migrations struct {
 	dbStores *migration.Stores
 }
 
-func RunMigrations(dbProvider DbProvider, stores *Stores, dbStores *migration.Stores) error {
+func RunMigrations(db boltz.Db, stores *Stores, dbStores *migration.Stores) error {
 	migrations := &Migrations{
 		stores:   stores,
 		dbStores: dbStores,
 	}
 
-	mm := boltz.NewMigratorManager(dbProvider.GetDb())
+	mm := boltz.NewMigratorManager(db)
 	return mm.Migrate("edge", migrations.migrate)
 }
 

@@ -47,7 +47,7 @@ func (ctx *TestContext) testServiceParentChild(_ *testing.T) {
 		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
 	}
 
-	ctx.requireCreate(fabricService)
+	ctx.RequireCreate(fabricService)
 	err := ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		ctx.False(ctx.stores.EdgeService.IsEntityPresent(tx, fabricService.GetId()))
 
@@ -63,7 +63,7 @@ func (ctx *TestContext) testServiceParentChild(_ *testing.T) {
 		Name:    uuid.New().String(),
 	}
 
-	ctx.requireCreate(edgeService)
+	ctx.RequireCreate(edgeService)
 
 	err = ctx.GetDb().View(func(tx *bbolt.Tx) error {
 		query := fmt.Sprintf(`id = "%v" and name = "%v"`, fabricService.Id, edgeService.Name)
@@ -83,7 +83,7 @@ func (ctx *TestContext) testCreateInvalidServices(_ *testing.T) {
 
 	identity := ctx.requireNewIdentity("test-user", false)
 	apiSession := NewApiSession(identity.Id)
-	ctx.requireCreate(apiSession)
+	ctx.RequireCreate(apiSession)
 
 	edgeService := &EdgeService{
 		Service: db.Service{
@@ -92,9 +92,9 @@ func (ctx *TestContext) testCreateInvalidServices(_ *testing.T) {
 		Name: uuid.New().String(),
 	}
 
-	ctx.requireCreate(edgeService)
-	err := ctx.create(edgeService)
-	ctx.EqualError(err, fmt.Sprintf("an entity of type services already exists with id %v", edgeService.Id))
+	ctx.RequireCreate(edgeService)
+	err := ctx.Create(edgeService)
+	ctx.EqualError(err, fmt.Sprintf("an entity of type service already exists with id %v", edgeService.Id))
 }
 
 func (ctx *TestContext) testCreateServices(_ *testing.T) {
@@ -106,8 +106,8 @@ func (ctx *TestContext) testCreateServices(_ *testing.T) {
 		},
 		Name: uuid.New().String(),
 	}
-	ctx.requireCreate(edgeService)
-	ctx.validateBaseline(edgeService)
+	ctx.RequireCreate(edgeService)
+	ctx.ValidateBaseline(edgeService)
 }
 
 type serviceTestEntities struct {
@@ -127,7 +127,7 @@ func (ctx *TestContext) createServiceTestEntities() *serviceTestEntities {
 
 	role := uuid.New().String()
 
-	ctx.requireCreate(apiSession1)
+	ctx.RequireCreate(apiSession1)
 	servicePolicy := ctx.requireNewServicePolicy(PolicyTypeDial, ss(), ss(roleRef(role)))
 
 	service1 := &EdgeService{
@@ -138,14 +138,14 @@ func (ctx *TestContext) createServiceTestEntities() *serviceTestEntities {
 		RoleAttributes: []string{role},
 	}
 
-	ctx.requireCreate(service1)
+	ctx.RequireCreate(service1)
 	service2 := ctx.requireNewService(uuid.New().String())
 
 	session1 := NewSession(apiSession1.Id, service1.Id)
-	ctx.requireCreate(session1)
+	ctx.RequireCreate(session1)
 
 	session2 := NewSession(apiSession1.Id, service2.Id)
-	ctx.requireCreate(session2)
+	ctx.RequireCreate(session2)
 
 	return &serviceTestEntities{
 		servicePolicy: servicePolicy,
@@ -211,7 +211,7 @@ func (ctx *TestContext) testUpdateServices(_ *testing.T) {
 		ctx.NoError(err)
 		ctx.NotNil(service)
 
-		tags := ctx.createTags()
+		tags := ctx.CreateTags()
 		now := time.Now()
 		service.Name = uuid.New().String()
 		service.UpdatedAt = earlier
@@ -236,6 +236,6 @@ func (ctx *TestContext) testUpdateServices(_ *testing.T) {
 func (ctx *TestContext) testDeleteServices(_ *testing.T) {
 	ctx.cleanupAll()
 	entities := ctx.createServiceTestEntities()
-	ctx.requireDelete(entities.service1)
-	ctx.requireDelete(entities.service2)
+	ctx.RequireDelete(entities.service1)
+	ctx.RequireDelete(entities.service2)
 }

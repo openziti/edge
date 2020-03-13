@@ -246,7 +246,7 @@ func (ae *AppEnv) InitPersistence() error {
 
 	ae.BoltStores, err = persistence.NewBoltStores(ae.HostController.GetNetwork())
 	if err == nil {
-		err = persistence.RunMigrations(ae.HostController.GetNetwork(), ae.BoltStores, dbStores)
+		err = persistence.RunMigrations(ae.GetDbProvider().GetDb(), ae.BoltStores, dbStores)
 	}
 
 	if err == nil {

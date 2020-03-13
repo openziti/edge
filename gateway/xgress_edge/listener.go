@@ -75,18 +75,6 @@ type ingressProxy struct {
 }
 
 func (proxy *ingressProxy) HandleClose(_ channel2.Channel) {
-	proxy.msgMux.Event(&ingressChannelCloseEvent{proxy: proxy})
-}
-
-type ingressChannelCloseEvent struct {
-	proxy *ingressProxy
-}
-
-func (event *ingressChannelCloseEvent) Handle(_ *edge.MsgMux) {
-	event.proxy.close()
-}
-
-func (proxy *ingressProxy) close() {
 	log := pfxlog.ContextLogger(proxy.ch.Label())
 	log.Debugf("closing")
 	listeners := proxy.listener.factory.hostedServices.cleanupServices(proxy)
@@ -95,7 +83,7 @@ func (proxy *ingressProxy) close() {
 			log.Warnf("failed to remove endpoint on service %v for hostToken %v on channel close", listener.service, listener.token)
 		}
 	}
-	proxy.msgMux.ExecuteClose()
+	proxy.msgMux.Close()
 }
 
 func (proxy *ingressProxy) ContentType() int32 {

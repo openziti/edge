@@ -26,6 +26,7 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 		clientConfigTypeId = string(ctx.stores.ConfigType.GetNameIndex().Read(tx, []byte("ziti-tunneler-client.v1")))
 		return nil
 	})
+	ctx.NoError(err)
 
 	serverConfigTypeId := ""
 	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
@@ -37,19 +38,19 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 		"hostname": "foo.yourcompany.com",
 		"port":     int64(22),
 	})
-	ctx.requireCreate(config)
+	ctx.RequireCreate(config)
 
 	config2 := newConfig(uuid.New().String(), clientConfigTypeId, map[string]interface{}{
 		"hostname": "bar.yourcompany.com",
 		"port":     int64(23),
 	})
-	ctx.requireCreate(config2)
+	ctx.RequireCreate(config2)
 
 	config3 := newConfig(uuid.New().String(), serverConfigTypeId, map[string]interface{}{
 		"hostname": "baz.yourcompany.com",
 		"port":     int64(24),
 	})
-	ctx.requireCreate(config3)
+	ctx.RequireCreate(config3)
 
 	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		err := ctx.stores.Identity.AssignServiceConfigs(tx, identity.Id,
@@ -91,14 +92,14 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 		return nil
 	})
 
-	ctx.requireDelete(config)
+	ctx.RequireDelete(config)
 	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		serviceConfigs := ctx.getServiceConfigs(tx, identity.Id, "all")
 		ctx.Equal(0, len(serviceConfigs))
 		return nil
 	})
 
-	ctx.requireCreate(config)
+	ctx.RequireCreate(config)
 
 	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		err := ctx.stores.Identity.AssignServiceConfigs(tx, identity.Id,
@@ -131,7 +132,7 @@ func (ctx *TestContext) testIdentityServiceConfigs(_ *testing.T) {
 		return nil
 	})
 
-	ctx.requireDelete(identity)
+	ctx.RequireDelete(identity)
 
 	err = ctx.GetDb().Update(func(tx *bbolt.Tx) error {
 		identityServices := ctx.getIdentityServices(tx, config.Id)
