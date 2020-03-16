@@ -23,7 +23,8 @@ import (
 )
 
 const (
-	FieldVersion = "version"
+	CurrentDbVersion = 4
+	FieldVersion     = "version"
 )
 
 type Migrations struct {
@@ -38,7 +39,7 @@ func RunMigrations(db boltz.Db, stores *Stores, dbStores *migration.Stores) erro
 	}
 
 	mm := boltz.NewMigratorManager(db)
-	return mm.Migrate("edge", migrations.migrate)
+	return mm.Migrate("edge", CurrentDbVersion, migrations.migrate)
 }
 
 func (m *Migrations) migrate(step *boltz.MigrationStep) int {
