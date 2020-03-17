@@ -40,8 +40,8 @@ func (i *EndpointApi) ToModel(id string) *network.Endpoint {
 	result.Id = id
 	result.Service = stringz.OrEmpty(i.Service)
 	result.Router = stringz.OrEmpty(i.Router)
-	result.Binding = stringz.OrEmpty(i.Service)
-	result.Address = stringz.OrEmpty(i.Service)
+	result.Binding = stringz.OrEmpty(i.Binding)
+	result.Address = stringz.OrEmpty(i.Address)
 
 	return result
 }

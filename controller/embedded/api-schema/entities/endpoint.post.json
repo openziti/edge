@@ -22,6 +22,10 @@
     },
     "address": {
       "type": "string"
+    },
+    "tags": {
+      "default": {},
+      "$ref": "definitions.all.json#/definitions/tags-null"
     }
   }
 }
