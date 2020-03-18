@@ -26,17 +26,17 @@ import (
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 )
 
-const EntityNameEndpoint = "endpoints"
+const EntityNameTerminator = "terminators"
 
-type EndpointApi struct {
+type TerminatorApi struct {
 	Service *string `json:"service"`
 	Router  *string `json:"router"`
 	Binding *string `json:"binding"`
 	Address *string `json:"address"`
 }
 
-func (i *EndpointApi) ToModel(id string) *network.Endpoint {
-	result := &network.Endpoint{}
+func (i *TerminatorApi) ToModel(id string) *network.Terminator {
+	result := &network.Terminator{}
 	result.Id = id
 	result.Service = stringz.OrEmpty(i.Service)
 	result.Router = stringz.OrEmpty(i.Router)
@@ -46,23 +46,25 @@ func (i *EndpointApi) ToModel(id string) *network.Endpoint {
 	return result
 }
 
-type EndpointApiList struct {
+type TerminatorApiList struct {
 	*env.BaseApi
-	Service string `json:"service"`
-	Router  string `json:"router"`
-	Binding string `json:"binding"`
-	Address string `json:"address"`
+	ServiceId string        `json:"serviceId"`
+	Service   *EntityApiRef `json:"service"`
+	RouterId  string        `json:"routerId"`
+	Router    *EntityApiRef `json:"router"`
+	Binding   string        `json:"binding"`
+	Address   string        `json:"address"`
 }
 
-func (c *EndpointApiList) GetSelfLink() *response.Link {
+func (c *TerminatorApiList) GetSelfLink() *response.Link {
 	return c.BuildSelfLink(c.Id)
 }
 
-func (EndpointApiList) BuildSelfLink(id string) *response.Link {
-	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameEndpoint, id))
+func (TerminatorApiList) BuildSelfLink(id string) *response.Link {
+	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameTerminator, id))
 }
 
-func (c *EndpointApiList) PopulateLinks() {
+func (c *TerminatorApiList) PopulateLinks() {
 	if c.Links == nil {
 		self := c.GetSelfLink()
 		c.Links = &response.Links{
@@ -71,27 +73,27 @@ func (c *EndpointApiList) PopulateLinks() {
 	}
 }
 
-func (c *EndpointApiList) ToEntityApiRef() *EntityApiRef {
+func (c *TerminatorApiList) ToEntityApiRef() *EntityApiRef {
 	c.PopulateLinks()
 	return &EntityApiRef{
-		Entity: EntityNameEndpoint,
+		Entity: EntityNameTerminator,
 		Name:   nil,
 		Id:     c.Id,
 		Links:  c.Links,
 	}
 }
 
-func MapEndpointToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e models.Entity) (BaseApiEntity, error) {
-	i, ok := e.(*network.Endpoint)
+func MapTerminatorToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e models.Entity) (BaseApiEntity, error) {
+	i, ok := e.(*network.Terminator)
 
 	if !ok {
-		err := fmt.Errorf("entity is not a endpointuration \"%s\"", e.GetId())
+		err := fmt.Errorf("entity is not a terminator \"%s\"", e.GetId())
 		log := pfxlog.Logger()
 		log.Error(err)
 		return nil, err
 	}
 
-	al, err := MapEndpointToApiList(i)
+	al, err := MapTerminatorToApiList(ae, i)
 
 	if err != nil {
 		err := fmt.Errorf("could not convert to API entity \"%s\": %s", e.GetId(), err)
@@ -102,13 +104,25 @@ func MapEndpointToApiEntity(_ *env.AppEnv, _ *response.RequestContext, e models.
 	return al, nil
 }
 
-func MapEndpointToApiList(i *network.Endpoint) (*EndpointApiList, error) {
-	ret := &EndpointApiList{
-		BaseApi: env.FromBaseModelEntity(i),
-		Service: i.Service,
-		Router:  i.Router,
-		Binding: i.Binding,
-		Address: i.Address,
+func MapTerminatorToApiList(ae *env.AppEnv, i *network.Terminator) (*TerminatorApiList, error) {
+	service, err := ae.Handlers.EdgeService.Read(i.Service)
+	if err != nil {
+		return nil, err
+	}
+
+	router, err := ae.Handlers.EdgeRouter.Read(i.Router)
+	if err != nil {
+		return nil, err
+	}
+
+	ret := &TerminatorApiList{
+		BaseApi:   env.FromBaseModelEntity(i),
+		ServiceId: i.Service,
+		Service:   NewServiceEntityRef(service),
+		RouterId:  i.Router,
+		Router:    NewEdgeRouterEntityRef(router),
+		Binding:   i.Binding,
+		Address:   i.Address,
 	}
 
 	ret.PopulateLinks()

@@ -149,14 +149,6 @@ func (handler *EdgeRouterHandler) ListForIdentityAndServiceWithTx(tx *bbolt.Tx, 
 	return result, nil
 }
 
-func (handler *EdgeRouterHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeServiceEdgeRouterPolicies, handler.env.GetHandlers().ServiceEdgeRouterPolicy, collector)
-}
-
-func (handler *EdgeRouterHandler) CollectEdgeRouterPolicies(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
-}
-
 type EdgeRouterListResult struct {
 	handler     *EdgeRouterHandler
 	EdgeRouters []*EdgeRouter

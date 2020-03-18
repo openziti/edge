@@ -33,6 +33,23 @@ const (
 	EntityNameGateway    = "gateways"
 )
 
+func NewEdgeRouterEntityRef(entity *model.EdgeRouter) *EntityApiRef {
+	links := &response.Links{
+		"self": NewEdgeRouterLink(entity.Id),
+	}
+
+	return &EntityApiRef{
+		Entity: EntityNameEdgeRouter,
+		Id:     entity.Id,
+		Name:   &entity.Name,
+		Links:  links,
+	}
+}
+
+func NewEdgeRouterLink(edgeRouterId string) *response.Link {
+	return response.NewLink(fmt.Sprintf("./%s/%s", EntityNameEdgeRouter, edgeRouterId))
+}
+
 type EdgeRouterEntityApiRef struct {
 	*EntityApiRef
 	Url *string `json:"url"`

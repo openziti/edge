@@ -172,7 +172,7 @@ func Test_Services(t *testing.T) {
 
 		time.Sleep(time.Millisecond * 10)
 		now = time.Now()
-		service.endpointStrategy = uuid.New().String()
+		service.terminatorStrategy = uuid.New().String()
 		ctx.AdminSession.requireUpdateEntity(service)
 
 		result := ctx.AdminSession.requireQuery("services/" + service.id)

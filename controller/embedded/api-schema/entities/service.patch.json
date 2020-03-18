@@ -8,7 +8,7 @@
     "name": {
       "$ref": "definitions.all.json#/definitions/name-null"
     },
-    "endpointStrategy": {
+    "terminatorStrategy": {
       "type": [
         "string",
         "null"

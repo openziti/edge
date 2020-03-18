@@ -28,9 +28,9 @@ type Stores struct {
 	DbProvider DbProvider
 
 	// fabric stores
-	Endpoint db.EndpointStore
-	Router   db.RouterStore
-	Service  db.ServiceStore
+	Router     db.RouterStore
+	Service    db.ServiceStore
+	Terminator db.TerminatorStore
 
 	ApiSession              ApiSessionStore
 	Appwan                  AppwanStore
@@ -85,9 +85,9 @@ type stores struct {
 	DbProvider DbProvider
 
 	// fabric stores
-	Endpoint db.EndpointStore
-	Router   db.RouterStore
-	Service  db.ServiceStore
+	Router     db.RouterStore
+	Service    db.ServiceStore
+	Terminator db.TerminatorStore
 
 	apiSession              *apiSessionStoreImpl
 	appwan                  *appwanStoreImpl
@@ -116,7 +116,7 @@ func NewBoltStores(dbProvider DbProvider) (*Stores, error) {
 		DbProvider: dbProvider,
 	}
 
-	internalStores.Endpoint = dbProvider.GetStores().Endpoint
+	internalStores.Terminator = dbProvider.GetStores().Terminator
 	internalStores.Router = dbProvider.GetStores().Router
 	internalStores.Service = dbProvider.GetStores().Service
 
@@ -142,9 +142,9 @@ func NewBoltStores(dbProvider DbProvider) (*Stores, error) {
 	externalStores := &Stores{
 		DbProvider: dbProvider,
 
-		Endpoint: dbProvider.GetStores().Endpoint,
-		Router:   dbProvider.GetStores().Router,
-		Service:  dbProvider.GetStores().Service,
+		Terminator: dbProvider.GetStores().Terminator,
+		Router:     dbProvider.GetStores().Router,
+		Service:    dbProvider.GetStores().Service,
 
 		ApiSession:              internalStores.apiSession,
 		Appwan:                  internalStores.appwan,

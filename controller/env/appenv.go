@@ -144,7 +144,6 @@ type Schemes struct {
 	Ca                      *BasicEntitySchema
 	Config                  *BasicEntitySchema
 	ConfigType              *BasicEntitySchema
-	Endpoint                *BasicEntitySchema
 	Enroller                *BasicEntitySchema
 	EnrollEr                *BasicEntitySchema
 	EnrollUpdb              *BasicEntitySchema
@@ -155,6 +154,7 @@ type Schemes struct {
 	ServiceEdgeRouterPolicy *BasicEntitySchema
 	ServicePolicy           *BasicEntitySchema
 	Session                 *BasicEntitySchema
+	Terminator              *BasicEntitySchema
 }
 
 func (s Schemes) GetEnrollErPost() *gojsonschema.Schema {

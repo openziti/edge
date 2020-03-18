@@ -79,8 +79,8 @@ func (proxy *ingressProxy) HandleClose(_ channel2.Channel) {
 	log.Debugf("closing")
 	listeners := proxy.listener.factory.hostedServices.cleanupServices(proxy)
 	for _, listener := range listeners {
-		if err := xgress.RemoveEndpoint(proxy.listener.factory, listener.token); err != nil {
-			log.Warnf("failed to remove endpoint on service %v for hostToken %v on channel close", listener.service, listener.token)
+		if err := xgress.RemoveTerminator(proxy.listener.factory, listener.token); err != nil {
+			log.Warnf("failed to remove terminator on service %v for hostToken %v on channel close", listener.service, listener.token)
 		}
 	}
 	proxy.msgMux.Close()
@@ -197,7 +197,7 @@ func (proxy *ingressProxy) processBind(req *channel2.Message, ch channel2.Channe
 		hostData[edge.PublicKeyHeader] = pubKey
 	}
 
-	if err := xgress.AddEndpoint(proxy.listener.factory, token, ns.Service.Id, "edge", "hosted:"+token, hostData); err != nil {
+	if err := xgress.AddTerminator(proxy.listener.factory, token, ns.Service.Id, "edge", "hosted:"+token, hostData); err != nil {
 		proxy.sendStateClosedReply(err.Error(), req)
 		return
 	}
@@ -254,7 +254,7 @@ func (proxy *ingressProxy) processUnbind(req *channel2.Message, ch channel2.Chan
 	}
 
 	defer proxy.listener.factory.hostedServices.Delete(token)
-	if err := xgress.RemoveEndpoint(proxy.listener.factory, token); err != nil {
+	if err := xgress.RemoveTerminator(proxy.listener.factory, token); err != nil {
 		proxy.sendStateClosedReply(err.Error(), req)
 	} else {
 		proxy.sendStateClosedReply("unbind successful", req)

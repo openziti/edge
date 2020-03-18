@@ -17,8 +17,6 @@
 package model
 
 import (
-	"github.com/netfoundry/ziti-edge/controller/persistence"
-	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 )
 
@@ -60,12 +58,4 @@ func (handler *ServicePolicyHandler) Patch(servicePolicy *ServicePolicy, checker
 
 func (handler *ServicePolicyHandler) Delete(id string) error {
 	return handler.deleteEntity(id)
-}
-
-func (handler *ServicePolicyHandler) CollectServices(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeServices, handler.env.GetHandlers().EdgeService, collector)
-}
-
-func (handler *ServicePolicyHandler) CollectIdentities(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeIdentities, handler.env.GetHandlers().Identity, collector)
 }

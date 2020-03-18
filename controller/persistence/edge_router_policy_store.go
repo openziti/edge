@@ -79,7 +79,7 @@ func (entity *EdgeRouterPolicy) GetEntityType() string {
 }
 
 type EdgeRouterPolicyStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*EdgeRouterPolicy, error)
 	LoadOneByName(tx *bbolt.Tx, id string) (*EdgeRouterPolicy, error)
 }
@@ -108,6 +108,10 @@ type edgeRouterPolicyStoreImpl struct {
 
 func (store *edgeRouterPolicyStoreImpl) NewStoreEntity() boltz.Entity {
 	return &EdgeRouterPolicy{}
+}
+
+func (store *edgeRouterPolicyStoreImpl) GetNameIndex() boltz.ReadIndex {
+	return store.indexName
 }
 
 func (store *edgeRouterPolicyStoreImpl) initializeLocal() {

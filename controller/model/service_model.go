@@ -26,15 +26,14 @@ import (
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 	"reflect"
-	"time"
 )
 
 type Service struct {
 	models.BaseEntity
-	Name             string   `json:"name"`
-	EndpointStrategy string   `json:"endpointStrategy"`
-	RoleAttributes   []string `json:"roleAttributes"`
-	Configs          []string `json:"configs"`
+	Name               string   `json:"name"`
+	TerminatorStrategy string   `json:"terminatorStrategy"`
+	RoleAttributes     []string `json:"roleAttributes"`
+	Configs            []string `json:"configs"`
 }
 
 func (entity *Service) toBoltEntity(tx *bbolt.Tx, handler Handler) (boltz.Entity, error) {
@@ -44,8 +43,8 @@ func (entity *Service) toBoltEntity(tx *bbolt.Tx, handler Handler) (boltz.Entity
 
 	edgeService := &persistence.EdgeService{
 		Service: db.Service{
-			BaseExtEntity:    *boltz.NewExtEntity(entity.Id, entity.Tags),
-			EndpointStrategy: entity.EndpointStrategy,
+			BaseExtEntity:      *boltz.NewExtEntity(entity.Id, entity.Tags),
+			TerminatorStrategy: entity.TerminatorStrategy,
 		},
 		Name:           entity.Name,
 		RoleAttributes: entity.RoleAttributes,
@@ -103,7 +102,7 @@ func (entity *Service) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.Entity)
 	}
 	entity.FillCommon(boltService)
 	entity.Name = boltService.Name
-	entity.EndpointStrategy = boltService.EndpointStrategy
+	entity.TerminatorStrategy = boltService.TerminatorStrategy
 	entity.RoleAttributes = boltService.RoleAttributes
 	entity.Configs = boltService.Configs
 	return nil
@@ -111,49 +110,24 @@ func (entity *Service) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.Entity)
 
 type ServiceDetail struct {
 	models.BaseEntity
-	Name             string                            `json:"name"`
-	EndpointStrategy string                            `json:"endpointStrategy"`
-	Endpoints        []*ServiceEndpointDetail          `json:"endpoints"`
-	RoleAttributes   []string                          `json:"roleAttributes"`
-	Permissions      []string                          `json:"permissions"`
-	Configs          []string                          `json:"configs"`
-	Config           map[string]map[string]interface{} `json:"config"`
+	Name               string                            `json:"name"`
+	TerminatorStrategy string                            `json:"terminatorStrategy"`
+	RoleAttributes     []string                          `json:"roleAttributes"`
+	Permissions        []string                          `json:"permissions"`
+	Configs            []string                          `json:"configs"`
+	Config             map[string]map[string]interface{} `json:"config"`
 }
 
-type ServiceEndpointDetail struct {
-	Id        string
-	Binding   string
-	Router    string
-	Address   string
-	CreatedAt time.Time
-}
-
-func (entity *ServiceDetail) fillFrom(handler Handler, tx *bbolt.Tx, boltEntity boltz.Entity) error {
+func (entity *ServiceDetail) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.Entity) error {
 	boltService, ok := boltEntity.(*persistence.EdgeService)
 	if !ok {
 		return errors.Errorf("unexpected type %v when filling model service", reflect.TypeOf(boltEntity))
 	}
 	entity.FillCommon(boltService)
 	entity.Name = boltService.Name
-	entity.EndpointStrategy = boltService.EndpointStrategy
+	entity.TerminatorStrategy = boltService.TerminatorStrategy
 	entity.RoleAttributes = boltService.RoleAttributes
 	entity.Configs = boltService.Configs
-
-	endpointIds := handler.GetEnv().GetStores().Service.GetRelatedEntitiesIdList(tx, entity.Id, db.EntityTypeEndpoints)
-	endpointStore := handler.GetEnv().GetStores().Endpoint
-	for _, endpointId := range endpointIds {
-		endpoint, err := endpointStore.LoadOneById(tx, endpointId)
-		if err != nil {
-			return err
-		}
-		entity.Endpoints = append(entity.Endpoints, &ServiceEndpointDetail{
-			Id:        endpoint.Id,
-			Router:    endpoint.Router,
-			Binding:   endpoint.Binding,
-			Address:   endpoint.Address,
-			CreatedAt: endpoint.CreatedAt,
-		})
-	}
 
 	return nil
 }

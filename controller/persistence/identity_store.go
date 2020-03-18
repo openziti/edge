@@ -107,7 +107,7 @@ func (entity *Identity) GetName() string {
 }
 
 type IdentityStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*Identity, error)
 	LoadOneByName(tx *bbolt.Tx, id string) (*Identity, error)
 	LoadOneByQuery(tx *bbolt.Tx, query string) (*Identity, error)

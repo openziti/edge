@@ -86,10 +86,9 @@ func (entity *EdgeService) GetName() string {
 }
 
 type EdgeServiceStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*EdgeService, error)
 	LoadOneByName(tx *bbolt.Tx, id string) (*EdgeService, error)
-	GetNameIndex() boltz.ReadIndex
 }
 
 func newEdgeServiceStore(stores *stores) *edgeServiceStoreImpl {

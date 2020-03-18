@@ -19,6 +19,7 @@ package routes
 import (
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
+	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"net/http"
 	"strings"
@@ -55,20 +56,24 @@ func (ir *ServiceRouter) Register(ae *env.AppEnv) {
 	})
 
 	serviceEdgeRouterPolicyUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameServiceEdgeRouterPolicy)
-	serviceEdgeRouterPolicyListHandler := ae.WrapHandler(ir.ListServiceEdgeRouterPolicies, permissions.IsAdmin())
+	serviceEdgeRouterPolicyListHandler := ae.WrapHandler(ir.listServiceEdgeRouterPolicies, permissions.IsAdmin())
 	sr.HandleFunc(serviceEdgeRouterPolicyUrl, serviceEdgeRouterPolicyListHandler).Methods(http.MethodGet)
 	sr.HandleFunc(serviceEdgeRouterPolicyUrl+"/", serviceEdgeRouterPolicyListHandler).Methods(http.MethodGet)
 
 	servicePolicyUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameServicePolicy)
-	servicePoliciesListHandler := ae.WrapHandler(ir.ListServicePolicies, permissions.IsAdmin())
-
+	servicePoliciesListHandler := ae.WrapHandler(ir.listServicePolicies, permissions.IsAdmin())
 	sr.HandleFunc(servicePolicyUrl, servicePoliciesListHandler).Methods(http.MethodGet)
 	sr.HandleFunc(servicePolicyUrl+"/", servicePoliciesListHandler).Methods(http.MethodGet)
 
 	configsUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameConfig)
-	configsListHandler := ae.WrapHandler(ir.ListConfigs, permissions.IsAdmin())
+	configsListHandler := ae.WrapHandler(ir.listConfigs, permissions.IsAdmin())
 	sr.HandleFunc(configsUrl, configsListHandler).Methods(http.MethodGet)
 	sr.HandleFunc(configsUrl+"/", configsListHandler).Methods(http.MethodGet)
+
+	terminatorsUrl := fmt.Sprintf("/{%s}/%s", response.IdPropertyName, EntityNameTerminator)
+	terminatorsListHandler := ae.WrapHandler(ir.listTerminators, permissions.IsAdmin())
+	sr.HandleFunc(terminatorsUrl, terminatorsListHandler).Methods(http.MethodGet)
+	sr.HandleFunc(terminatorsUrl+"/", terminatorsListHandler).Methods(http.MethodGet)
 }
 
 func (ir *ServiceRouter) List(ae *env.AppEnv, rc *response.RequestContext) {
@@ -148,14 +153,22 @@ func (ir *ServiceRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 	})
 }
 
-func (ir *ServiceRouter) ListServiceEdgeRouterPolicies(ae *env.AppEnv, rc *response.RequestContext) {
-	ListAssociations(ae, rc, ir.IdType, ae.Handlers.EdgeService.CollectServiceEdgeRouterPolicies, MapServiceEdgeRouterPolicyToApiEntity)
+func (ir *ServiceRouter) listServiceEdgeRouterPolicies(ae *env.AppEnv, rc *response.RequestContext) {
+	ir.listAssociations(ae, rc, ae.Handlers.ServiceEdgeRouterPolicy, MapServiceEdgeRouterPolicyToApiEntity)
 }
 
-func (ir *ServiceRouter) ListServicePolicies(ae *env.AppEnv, rc *response.RequestContext) {
-	ListAssociations(ae, rc, ir.IdType, ae.Handlers.EdgeService.CollectServicePolicies, MapServicePolicyToApiEntity)
+func (ir *ServiceRouter) listServicePolicies(ae *env.AppEnv, rc *response.RequestContext) {
+	ir.listAssociations(ae, rc, ae.Handlers.ServicePolicy, MapServicePolicyToApiEntity)
 }
 
-func (ir *ServiceRouter) ListConfigs(ae *env.AppEnv, rc *response.RequestContext) {
-	ListAssociations(ae, rc, ir.IdType, ae.Handlers.EdgeService.CollectConfigs, MapConfigToApiEntity)
+func (ir *ServiceRouter) listConfigs(ae *env.AppEnv, rc *response.RequestContext) {
+	ir.listAssociations(ae, rc, ae.Handlers.Config, MapConfigToApiEntity)
+}
+
+func (ir *ServiceRouter) listTerminators(ae *env.AppEnv, rc *response.RequestContext) {
+	ir.listAssociations(ae, rc, ae.Handlers.Terminator, MapTerminatorToApiEntity)
+}
+
+func (ir *ServiceRouter) listAssociations(ae *env.AppEnv, rc *response.RequestContext, associationLoader models.EntityRetriever, mapper ModelToApiMapper) {
+	ListAssociationWithHandler(ae, rc, ir.IdType, ae.Handlers.EdgeService, associationLoader, mapper)
 }

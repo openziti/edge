@@ -125,7 +125,7 @@ func modelToApi(ae *env.AppEnv, rc *response.RequestContext, mapper ModelToApiMa
 	return apiEntities, nil
 }
 
-func ListWithHandler(ae *env.AppEnv, rc *response.RequestContext, lister models.EntityLister, mapper ModelToApiMapper) {
+func ListWithHandler(ae *env.AppEnv, rc *response.RequestContext, lister models.EntityRetriever, mapper ModelToApiMapper) {
 	List(rc, func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error) {
 		// validate that the submitted query is only using public symbols. The query options may contain an final
 		// query which has been modified with additional filters
@@ -239,7 +239,7 @@ func Create(rc *response.RequestContext, rr response.RequestResponder, sc *gojso
 	rr.RespondWithCreatedId(id, lb(id))
 }
 
-func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, loader models.EntityLoader, mapper ModelToApiMapper, idType response.IdType) {
+func DetailWithHandler(ae *env.AppEnv, rc *response.RequestContext, loader models.EntityRetriever, mapper ModelToApiMapper, idType response.IdType) {
 	Detail(rc, idType, func(rc *response.RequestContext, id string) (interface{}, error) {
 		entity, err := loader.BaseLoad(id)
 		if err != nil {
@@ -485,9 +485,33 @@ func listWithId(rc *response.RequestContext, idType response.IdType, f func(id s
 	rc.RequestResponder.RespondWithOk(results, meta)
 }
 
-type ListAssocF func(string, func(models.Entity)) error
+// type ListAssocF func(string, func(models.Entity)) error
+type listAssocF func(rc *response.RequestContext, id string, queryOptions *QueryOptions) (*QueryResult, error)
 
-func ListAssociations(ae *env.AppEnv, rc *response.RequestContext, idType response.IdType, listF ListAssocF, converter ModelToApiMapper) {
+func ListAssociationWithHandler(ae *env.AppEnv, rc *response.RequestContext, idType response.IdType, lister models.EntityRetriever, associationLoader models.EntityRetriever, mapper ModelToApiMapper) {
+	ListAssociations(rc, idType, func(rc *response.RequestContext, id string, queryOptions *QueryOptions) (*QueryResult, error) {
+		// validate that the submitted query is only using public symbols. The query options may contain an final
+		// query which has been modified with additional filters
+		query, err := queryOptions.getFullQuery(associationLoader.GetStore())
+		if err != nil {
+			return nil, err
+		}
+
+		result, err := lister.BasePreparedListAssociated(id, associationLoader, query)
+		if err != nil {
+			return nil, err
+		}
+
+		apiEntities, err := modelToApi(ae, rc, mapper, result.GetEntities())
+		if err != nil {
+			return nil, err
+		}
+
+		return NewQueryResult(apiEntities, result.GetMetaData()), nil
+	})
+}
+
+func ListAssociations(rc *response.RequestContext, idType response.IdType, listF listAssocF) {
 	id, err := rc.GetIdFromRequest(idType)
 
 	if err != nil {
@@ -498,10 +522,12 @@ func ListAssociations(ae *env.AppEnv, rc *response.RequestContext, idType respon
 		return
 	}
 
-	var modelResults []models.Entity
-	err = listF(id, func(entity models.Entity) {
-		modelResults = append(modelResults, entity)
-	})
+	filter := rc.Request.URL.Query().Get("filter")
+	queryOptions := &QueryOptions{
+		Predicate: filter,
+	}
+
+	result, err := listF(rc, id, queryOptions)
 
 	if err != nil {
 		if boltz.IsErrNotFoundErr(err) {
@@ -510,28 +536,23 @@ func ListAssociations(ae *env.AppEnv, rc *response.RequestContext, idType respon
 		}
 
 		log := pfxlog.Logger()
-		log.WithField("id", id).WithError(err).Error("could not load associations by id")
+		log.WithField("cause", err).Error("could not convert list")
 		rc.RequestResponder.RespondWithError(err)
 		return
 	}
 
-	subApiEs, err := modelToApi(ae, rc, converter, modelResults)
-
-	if err != nil {
-		rc.RequestResponder.RespondWithError(err)
-		return
+	if result.Result == nil {
+		result.Result = []BaseApiEntity{}
 	}
-
-	count := len(modelResults)
 
 	meta := &response.Meta{
 		"pagination": map[string]interface{}{
-			"limit":      count,
-			"offset":     0,
-			"totalCount": count,
+			"limit":      result.Limit,
+			"offset":     result.Offset,
+			"totalCount": result.Count,
 		},
-		"filterableFields": []string{},
+		"filterableFields": result.FilterableFields,
 	}
 
-	rc.RequestResponder.RespondWithOk(subApiEs, meta)
+	rc.RequestResponder.RespondWithOk(result.Result, meta)
 }

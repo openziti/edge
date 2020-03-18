@@ -17,7 +17,6 @@
 package model
 
 import (
-	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-fabric/controller/models"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"go.etcd.io/bbolt"
@@ -69,26 +68,6 @@ func (handler *ServiceEdgeRouterPolicyHandler) Patch(edgeRouterPolicy *ServiceEd
 
 func (handler *ServiceEdgeRouterPolicyHandler) Delete(id string) error {
 	return handler.deleteEntity(id)
-}
-
-func (handler *ServiceEdgeRouterPolicyHandler) ListEdgeRouters(id string) ([]*EdgeRouter, error) {
-	var result []*EdgeRouter
-	err := handler.CollectEdgeRouters(id, func(entity models.Entity) {
-		result = append(result, entity.(*EdgeRouter))
-	})
-
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-func (handler *ServiceEdgeRouterPolicyHandler) CollectEdgeRouters(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeEdgeRouters, handler.env.GetHandlers().EdgeRouter, collector)
-}
-
-func (handler *ServiceEdgeRouterPolicyHandler) CollectServices(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeServices, handler.env.GetHandlers().EdgeService, collector)
 }
 
 type ServiceEdgeRouterPolicyListResult struct {

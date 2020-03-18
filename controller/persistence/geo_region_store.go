@@ -45,7 +45,7 @@ func (entity *GeoRegion) GetEntityType() string {
 }
 
 type GeoRegionStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*GeoRegion, error)
 	LoadOneByName(tx *bbolt.Tx, id string) (*GeoRegion, error)
 }
@@ -61,6 +61,10 @@ func newGeoRegionStore(stores *stores) *geoRegionStoreImpl {
 type geoRegionStoreImpl struct {
 	*baseStore
 	indexName boltz.ReadIndex
+}
+
+func (store *geoRegionStoreImpl) GetNameIndex() boltz.ReadIndex {
+	return store.indexName
 }
 
 func (store *geoRegionStoreImpl) NewStoreEntity() boltz.Entity {

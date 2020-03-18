@@ -95,9 +95,9 @@ func (ir *EdgeRouterRouter) Patch(ae *env.AppEnv, rc *response.RequestContext) {
 }
 
 func (ir *EdgeRouterRouter) ListServiceEdgeRouterPolicies(ae *env.AppEnv, rc *response.RequestContext) {
-	ListAssociations(ae, rc, ir.IdType, ae.Handlers.EdgeRouter.CollectServiceEdgeRouterPolicies, MapServiceEdgeRouterPolicyToApiEntity)
+	ListAssociationWithHandler(ae, rc, ir.IdType, ae.Handlers.EdgeRouter, ae.Handlers.ServiceEdgeRouterPolicy, MapServiceEdgeRouterPolicyToApiEntity)
 }
 
 func (ir *EdgeRouterRouter) ListEdgeRouterPolicies(ae *env.AppEnv, rc *response.RequestContext) {
-	ListAssociations(ae, rc, ir.IdType, ae.Handlers.EdgeRouter.CollectEdgeRouterPolicies, MapEdgeRouterPolicyToApiEntity)
+	ListAssociationWithHandler(ae, rc, ir.IdType, ae.Handlers.EdgeRouter, ae.Handlers.EdgeRouterPolicy, MapEdgeRouterPolicyToApiEntity)
 }

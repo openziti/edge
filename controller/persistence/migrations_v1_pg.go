@@ -196,8 +196,8 @@ func (m *Migrations) migrateServicesFromPG(step *boltz.MigrationStep) error {
 
 		edgeService := &EdgeService{
 			Service: db.Service{
-				BaseExtEntity:    *toBaseBoltEntity(&pgService.BaseDbEntity),
-				EndpointStrategy: "",
+				BaseExtEntity:      *toBaseBoltEntity(&pgService.BaseDbEntity),
+				TerminatorStrategy: "",
 			},
 			Name: *pgService.Name,
 		}
@@ -206,7 +206,7 @@ func (m *Migrations) migrateServicesFromPG(step *boltz.MigrationStep) error {
 			return err
 		}
 
-		endpoint := &db.Endpoint{
+		terminator := &db.Terminator{
 			BaseExtEntity: *boltz.NewExtEntity(uuid.New().String(), nil),
 			Service:       edgeService.Id,
 			Router:        stringz.OrEmpty(pgService.EgressRouter),
@@ -215,7 +215,7 @@ func (m *Migrations) migrateServicesFromPG(step *boltz.MigrationStep) error {
 			PeerData:      nil,
 		}
 
-		if err = m.stores.Endpoint.Create(step.Ctx, endpoint); err != nil {
+		if err = m.stores.Terminator.Create(step.Ctx, terminator); err != nil {
 			return err
 		}
 

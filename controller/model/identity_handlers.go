@@ -378,14 +378,6 @@ func (handler *IdentityHandler) CreateWithAuthenticator(identity *Identity, auth
 	return identity.Id, authenticator.Id, nil
 }
 
-func (handler *IdentityHandler) CollectEdgeRouterPolicies(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeEdgeRouterPolicies, handler.env.GetHandlers().EdgeRouterPolicy, collector)
-}
-
-func (handler *IdentityHandler) CollectServicePolicies(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
-}
-
 func (handler *IdentityHandler) GetServiceConfigs(id string) ([]ServiceConfig, error) {
 	var result []ServiceConfig
 	err := handler.GetDb().Update(func(tx *bbolt.Tx) error {

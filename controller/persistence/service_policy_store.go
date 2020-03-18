@@ -93,7 +93,7 @@ func (entity *ServicePolicy) GetEntityType() string {
 }
 
 type ServicePolicyStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*ServicePolicy, error)
 	LoadOneByName(tx *bbolt.Tx, id string) (*ServicePolicy, error)
 }
@@ -118,6 +118,10 @@ type servicePolicyStoreImpl struct {
 
 	identityCollection boltz.LinkCollection
 	serviceCollection  boltz.LinkCollection
+}
+
+func (store *servicePolicyStoreImpl) GetNameIndex() boltz.ReadIndex {
+	return store.indexName
 }
 
 func (store *servicePolicyStoreImpl) NewStoreEntity() boltz.Entity {

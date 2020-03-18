@@ -45,10 +45,9 @@ func (entity *IdentityType) GetEntityType() string {
 }
 
 type IdentityTypeStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*IdentityType, error)
 	LoadOneByName(tx *bbolt.Tx, id string) (*IdentityType, error)
-	GetNameIndex() boltz.ReadIndex
 }
 
 func newIdentityTypeStore(stores *stores) *IdentityTypeStoreImpl {

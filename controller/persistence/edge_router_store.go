@@ -118,11 +118,10 @@ func (entity *EdgeRouter) GetName() string {
 }
 
 type EdgeRouterStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*EdgeRouter, error)
 	LoadOneByName(tx *bbolt.Tx, id string) (*EdgeRouter, error)
 	LoadOneByQuery(tx *bbolt.Tx, query string) (*EdgeRouter, error)
-	GetNameIndex() boltz.ReadIndex
 }
 
 func newEdgeRouterStore(stores *stores) *edgeRouterStoreImpl {

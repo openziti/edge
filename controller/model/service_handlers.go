@@ -160,18 +160,6 @@ func (handler *EdgeServiceHandler) queryServices(query ast.Query, identityId str
 	return result, nil
 }
 
-func (handler *EdgeServiceHandler) CollectServiceEdgeRouterPolicies(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeServiceEdgeRouterPolicies, handler.env.GetHandlers().ServiceEdgeRouterPolicy, collector)
-}
-
-func (handler *EdgeServiceHandler) CollectServicePolicies(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeServicePolicies, handler.env.GetHandlers().ServicePolicy, collector)
-}
-
-func (handler *EdgeServiceHandler) CollectConfigs(id string, collector func(entity models.Entity)) error {
-	return handler.collectAssociated(id, persistence.EntityTypeConfigs, handler.env.GetHandlers().Config, collector)
-}
-
 func (handler *EdgeServiceHandler) GetRoleAttributes() []string {
 	//handler.GetDb().View(func(tx *bbolt.Tx) error {
 	//	return nil

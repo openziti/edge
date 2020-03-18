@@ -1,5 +1,5 @@
 {
-  "$id": "http://ziti-edge.netfoundry.io/schemas/endpoint.post.json",
+  "$id": "http://ziti-edge.netfoundry.io/schemas/terminator.post.json",
   "type": "object",
   "additionalProperties": false,
   "required": [

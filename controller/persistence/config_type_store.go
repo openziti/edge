@@ -77,10 +77,9 @@ func (entity *ConfigType) GetEntityType() string {
 }
 
 type ConfigTypeStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*ConfigType, error)
 	LoadOneByName(tx *bbolt.Tx, name string) (*ConfigType, error)
-	GetNameIndex() boltz.ReadIndex
 	GetName(tx *bbolt.Tx, id string) *string
 }
 

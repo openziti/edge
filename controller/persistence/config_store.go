@@ -68,10 +68,9 @@ func (entity *Config) GetEntityType() string {
 }
 
 type ConfigStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*Config, error)
 	LoadOneByName(tx *bbolt.Tx, name string) (*Config, error)
-	GetNameIndex() boltz.ReadIndex
 }
 
 func newConfigsStore(stores *stores) *configStoreImpl {

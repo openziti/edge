@@ -20,9 +20,9 @@ import "github.com/netfoundry/ziti-fabric/controller/network"
 
 type Handlers struct {
 	// fabric
-	Endpoint *network.EndpointController
-	Router   *network.RouterController
-	Service  *network.ServiceController
+	Router     *network.RouterController
+	Service    *network.ServiceController
+	Terminator *network.TerminatorController
 
 	// edge
 	ApiSession              *ApiSessionHandler
@@ -47,9 +47,9 @@ type Handlers struct {
 func InitHandlers(env Env) *Handlers {
 	handlers := &Handlers{}
 
-	handlers.Endpoint = env.GetDbProvider().GetControllers().Endpoints
 	handlers.Router = env.GetDbProvider().GetControllers().Routers
 	handlers.Service = env.GetDbProvider().GetControllers().Services
+	handlers.Terminator = env.GetDbProvider().GetControllers().Terminators
 
 	handlers.ApiSession = NewApiSessionHandler(env)
 	handlers.Authenticator = NewAuthenticatorHandler(env)

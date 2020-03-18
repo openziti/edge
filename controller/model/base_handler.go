@@ -31,8 +31,7 @@ import (
 )
 
 type Handler interface {
-	models.EntityLoader
-	models.EntityLister
+	models.EntityRetriever
 
 	GetEnv() Env
 
@@ -105,6 +104,19 @@ func (handler *baseHandler) preparedList(query ast.Query, resultHandler models.L
 	return handler.GetDb().View(func(tx *bbolt.Tx) error {
 		return handler.PreparedListWithTx(tx, query, resultHandler)
 	})
+}
+
+func (handler *baseHandler) BasePreparedListAssociated(id string, typeLoader models.EntityRetriever, query ast.Query) (*models.EntityListResult, error) {
+	result := &models.EntityListResult{Loader: typeLoader}
+	err := handler.GetDb().View(func(tx *bbolt.Tx) error {
+		store := typeLoader.GetStore()
+		return handler.PreparedListAssociatedWithTx(tx, id, store.GetEntityType(), store, query, result.Collect)
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func (handler *baseHandler) createEntity(modelEntity boltEntitySource) (string, error) {
@@ -265,24 +277,6 @@ func (handler *baseHandler) deleteEntity(id string) error {
 func (handler *baseHandler) list(queryString string, resultHandler models.ListResultHandler) error {
 	return handler.GetDb().View(func(tx *bbolt.Tx) error {
 		return handler.ListWithTx(tx, queryString, resultHandler)
-	})
-}
-
-func (handler *baseHandler) collectAssociated(id string, field string, relatedHandler Handler, collector func(entity models.Entity)) error {
-	return handler.GetDb().View(func(tx *bbolt.Tx) error {
-		entity := handler.impl.newModelEntity()
-		if err := handler.readEntityInTx(tx, id, entity); err != nil {
-			return err
-		}
-		relatedEntityIds := handler.GetStore().GetRelatedEntitiesIdList(tx, id, field)
-		for _, relatedEntityId := range relatedEntityIds {
-			relatedEntity := relatedHandler.newModelEntity()
-			if err := relatedHandler.readEntityInTx(tx, relatedEntityId, relatedEntity); err != nil {
-				return err
-			}
-			collector(relatedEntity)
-		}
-		return nil
 	})
 }
 
