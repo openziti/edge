@@ -1,7 +1,7 @@
 // +build apitests
 
 /*
-	Copyright 2019 NetFoundry, Inc.
+	Copyright 2020 NetFoundry, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -158,7 +160,16 @@ func (ctx *TestContext) NewClientComponents() (*resty.Client, *http.Client, *htt
 func (ctx *TestContext) startServer() {
 	log := pfxlog.Logger()
 	_ = os.Mkdir("testdata", os.FileMode(0755))
-	_ = os.Remove("testdata/ctrl.db")
+	err := filepath.Walk("testdata", func(path string, info os.FileInfo, err error) error {
+		if err == nil {
+			if !info.IsDir() && strings.HasPrefix(info.Name(), "ctrl.db") {
+				pfxlog.Logger().Infof("removing test bolt file or backup: %v", path)
+				err = os.Remove(path)
+			}
+		}
+		return err
+	})
+	ctx.req.NoError(err)
 
 	log.Info("loading config")
 	config, err := controller.LoadConfig("ats-ctrl.yml")
@@ -328,12 +339,10 @@ func (ctx *TestContext) validateDateFieldsForCreate(start time.Time, jsonEntity 
 
 func (ctx *TestContext) newService(roleAttributes, configs []string) *service {
 	return &service{
-		name:            uuid.New().String(),
-		egressRouter:    uuid.New().String(),
-		endpointAddress: uuid.New().String(),
-		roleAttributes:  roleAttributes,
-		configs:         configs,
-		tags:            nil,
+		name:           uuid.New().String(),
+		roleAttributes: roleAttributes,
+		configs:        configs,
+		tags:           nil,
 	}
 }
 

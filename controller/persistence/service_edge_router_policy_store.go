@@ -12,17 +12,21 @@ import (
 
 func newServiceEdgeRouterPolicy(name string) *ServiceEdgeRouterPolicy {
 	return &ServiceEdgeRouterPolicy{
-		BaseEdgeEntityImpl: BaseEdgeEntityImpl{Id: uuid.New().String()},
-		Name:               name,
+		BaseExtEntity: boltz.BaseExtEntity{Id: uuid.New().String()},
+		Name:          name,
 	}
 }
 
 type ServiceEdgeRouterPolicy struct {
-	BaseEdgeEntityImpl
+	boltz.BaseExtEntity
 	Name            string
 	Semantic        string
 	ServiceRoles    []string
 	EdgeRouterRoles []string
+}
+
+func (entity *ServiceEdgeRouterPolicy) GetName() string {
+	return entity.Name
 }
 
 func (entity *ServiceEdgeRouterPolicy) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucket) {
@@ -75,7 +79,7 @@ func (entity *ServiceEdgeRouterPolicy) GetEntityType() string {
 }
 
 type ServiceEdgeRouterPolicyStore interface {
-	Store
+	NameIndexedStore
 	LoadOneById(tx *bbolt.Tx, id string) (*ServiceEdgeRouterPolicy, error)
 	LoadOneByName(tx *bbolt.Tx, id string) (*ServiceEdgeRouterPolicy, error)
 }
@@ -102,12 +106,16 @@ type serviceEdgeRouterPolicyStoreImpl struct {
 	edgeRouterCollection boltz.LinkCollection
 }
 
-func (store *serviceEdgeRouterPolicyStoreImpl) NewStoreEntity() boltz.BaseEntity {
+func (store *serviceEdgeRouterPolicyStoreImpl) GetNameIndex() boltz.ReadIndex {
+	return store.indexName
+}
+
+func (store *serviceEdgeRouterPolicyStoreImpl) NewStoreEntity() boltz.Entity {
 	return &ServiceEdgeRouterPolicy{}
 }
 
 func (store *serviceEdgeRouterPolicyStoreImpl) initializeLocal() {
-	store.addBaseFields()
+	store.AddExtEntitySymbols()
 
 	store.indexName = store.addUniqueNameField()
 	store.symbolSemantic = store.AddSymbol(FieldSemantic, ast.NodeTypeString)

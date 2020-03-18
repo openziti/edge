@@ -3,7 +3,9 @@ module github.com/netfoundry/ziti-edge
 go 1.13
 
 // replace github.com/netfoundry/ziti-foundation => ../ziti-foundation
+
 // replace github.com/netfoundry/ziti-fabric => ../ziti-fabric
+
 // replace github.com/netfoundry/ziti-sdk-golang => ../ziti-sdk-golang
 
 require (
@@ -21,7 +23,7 @@ require (
 	github.com/gobuffalo/packr v1.30.1
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/golang/protobuf v1.3.2
-	github.com/google/go-cmp v0.3.1
+	github.com/google/go-cmp v0.4.0
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.3
@@ -33,8 +35,8 @@ require (
 	github.com/michaelquigley/pfxlog v0.0.0-20190813191113-2be43bd0dccc
 	github.com/miekg/dns v1.1.22
 	github.com/mitchellh/mapstructure v1.1.2
-	github.com/netfoundry/ziti-fabric v0.10.1
-	github.com/netfoundry/ziti-foundation v0.6.5
+	github.com/netfoundry/ziti-fabric v0.10.2-0.20200318160529-c32cfdcfe80e
+	github.com/netfoundry/ziti-foundation v0.6.6-0.20200318155519-965a34b3cb17
 	github.com/netfoundry/ziti-sdk-golang v0.11.0
 	github.com/oleiade/reflections v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
