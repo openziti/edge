@@ -120,7 +120,7 @@ func (store *apiSessionStoreImpl) LoadOneByToken(tx *bbolt.Tx, token string) (*A
 	if id != nil {
 		return store.LoadOneById(tx, string(id))
 	}
-	return nil, nil
+	return nil, boltz.NewNotFoundError(store.GetSingularEntityType(), "token", token)
 }
 
 func (store *apiSessionStoreImpl) LoadOneByQuery(tx *bbolt.Tx, query string) (*ApiSession, error) {
