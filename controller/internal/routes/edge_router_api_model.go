@@ -30,7 +30,6 @@ import (
 
 const (
 	EntityNameEdgeRouter = "edge-routers"
-	EntityNameGateway    = "gateways"
 )
 
 func NewEdgeRouterEntityRef(entity *model.EdgeRouter) *EntityApiRef {

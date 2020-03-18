@@ -27,7 +27,6 @@ import (
 )
 
 const EntityNameSession = "sessions"
-const EntityNameSessionLegacy = "network-sessions"
 
 type SessionApiPost struct {
 	ServiceId *string                `json:"serviceId"`

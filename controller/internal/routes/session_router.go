@@ -30,28 +30,19 @@ func init() {
 }
 
 type SessionRouter struct {
-	BasePath       string
-	LegacyBasePath string
-	IdType         response.IdType
+	BasePath string
+	IdType   response.IdType
 }
 
 func NewSessionRouter() *SessionRouter {
 	return &SessionRouter{
-		BasePath:       "/" + EntityNameSession,
-		LegacyBasePath: "/" + EntityNameSessionLegacy,
-		IdType:         response.IdTypeUuid,
+		BasePath: "/" + EntityNameSession,
+		IdType:   response.IdTypeUuid,
 	}
 }
 
 func (ir *SessionRouter) Register(ae *env.AppEnv) {
 	registerCreateReadDeleteRouter(ae, ae.RootRouter, ir.BasePath, ir, &crudResolvers{
-		Create:  permissions.IsAuthenticated(),
-		Read:    permissions.IsAuthenticated(),
-		Delete:  permissions.IsAuthenticated(),
-		Default: permissions.IsAdmin(),
-	})
-
-	registerCreateReadDeleteRouter(ae, ae.RootRouter, ir.LegacyBasePath, ir, &crudResolvers{
 		Create:  permissions.IsAuthenticated(),
 		Read:    permissions.IsAuthenticated(),
 		Delete:  permissions.IsAuthenticated(),
