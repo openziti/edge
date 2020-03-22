@@ -449,14 +449,14 @@ func (crs *crudResolvers) IsAllowed(args ...string) bool {
 }
 
 type QueryResult struct {
-	Result           []BaseApiEntity
+	Result           interface{}
 	Count            int64
 	Limit            int64
 	Offset           int64
 	FilterableFields []string
 }
 
-func NewQueryResult(result []BaseApiEntity, metadata *models.QueryMetaData) *QueryResult {
+func NewQueryResult(result interface{}, metadata *models.QueryMetaData) *QueryResult {
 	return &QueryResult{
 		Result:           result,
 		Count:            metadata.Count,
@@ -464,4 +464,12 @@ func NewQueryResult(result []BaseApiEntity, metadata *models.QueryMetaData) *Que
 		Offset:           metadata.Offset,
 		FilterableFields: metadata.FilterableFields,
 	}
+}
+
+type GenericQueryResult struct {
+	Result           []interface{}
+	Count            int64
+	Limit            int64
+	Offset           int64
+	FilterableFields []string
 }
