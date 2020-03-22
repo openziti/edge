@@ -465,11 +465,3 @@ func NewQueryResult(result interface{}, metadata *models.QueryMetaData) *QueryRe
 		FilterableFields: metadata.FilterableFields,
 	}
 }
-
-type GenericQueryResult struct {
-	Result           []interface{}
-	Count            int64
-	Limit            int64
-	Offset           int64
-	FilterableFields []string
-}
