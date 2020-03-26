@@ -264,3 +264,38 @@ func (store *baseStore) GetName(tx *bbolt.Tx, id string) *string {
 	}
 	return nil
 }
+
+func (store *baseStore) getRoleAttributesCursorProvider(index boltz.SetReadIndex, values []string, semantic string) (ast.SetCursorProvider, error) {
+	if semantic == "" {
+		semantic = SemanticAllOf
+	}
+
+	if !stringz.Contains(validSemantics, semantic) {
+		return nil, validation.NewFieldError("invalid semantic", FieldSemantic, semantic)
+	}
+
+	roles, ids, err := splitRolesAndIds(values)
+	if err != nil {
+		return nil, err
+	}
+
+	return func(tx *bbolt.Tx, forward bool) ast.SetCursor {
+		validIds := ast.NewTreeSet(forward)
+		for _, id := range ids {
+			if store.IsEntityPresent(tx, id) {
+				validIds.Add([]byte(id))
+			}
+		}
+
+		var rolesCursor ast.SetCursor
+		if semantic == SemanticAllOf {
+			rolesCursor = store.IteratorMatchingAllOf(index, roles)(tx, forward)
+		} else {
+			rolesCursor = store.IteratorMatchingAnyOf(index, roles)(tx, forward)
+		}
+		if validIds.Size() == 0 {
+			return rolesCursor
+		}
+		return ast.NewUnionSetCursor(rolesCursor, validIds.ToCursor(), forward)
+	}, nil
+}
