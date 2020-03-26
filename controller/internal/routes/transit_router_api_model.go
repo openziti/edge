@@ -101,7 +101,8 @@ func MapTransitRouterToApiEntity(appEnv *env.AppEnv, context *response.RequestCo
 		IsOnline:    appEnv.GetDbProvider().GetControllers().Routers.IsConnected(txRouter.Id),
 	}
 
-	if !txRouter.IsVerified {
+
+	if !txRouter.IsBase && !txRouter.IsVerified {
 		var enrollments []*model.Enrollment
 
 		err := appEnv.GetHandlers().TransitRouter.CollectEnrollments(txRouter.Id, func(entity *model.Enrollment) error {

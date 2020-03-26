@@ -31,6 +31,7 @@ type TransitRouter struct {
 	Name        string
 	Fingerprint string
 	IsVerified  bool
+	IsBase      bool
 }
 
 func (entity *TransitRouter) toBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (boltz.Entity, error) {
@@ -69,6 +70,8 @@ func (entity *TransitRouter) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.E
 	entity.FillCommon(boltTransitRouter)
 	entity.Name = boltTransitRouter.Name
 	entity.IsVerified = boltTransitRouter.IsVerified
+	entity.IsBase = boltTransitRouter.IsBase
+	entity.Fingerprint = boltTransitRouter.Fingerprint
 
 	return nil
 }

@@ -42,6 +42,7 @@ type TransitRouter struct {
 	Name        string
 	IsVerified  bool
 	Enrollments []string
+	IsBase      bool
 }
 
 func (entity *TransitRouter) GetId() string {
@@ -65,6 +66,11 @@ func (entity *TransitRouter) LoadValues(store boltz.CrudStore, bucket *boltz.Typ
 	_, err := store.GetParentStore().BaseLoadOneById(bucket.Tx(), entity.Id, &entity.Router)
 	bucket.SetError(err)
 
+	if bucket.Bucket == nil {
+		entity.IsVerified = true
+		entity.IsBase = true
+		return
+	}
 	entity.LoadBaseValues(bucket)
 	entity.Name = bucket.GetStringOrError(FieldName)
 	entity.IsVerified = bucket.GetBoolWithDefault(FieldTransitRouterIsVerified, false)
@@ -75,8 +81,6 @@ func (entity *TransitRouter) SetValues(ctx *boltz.PersistContext) {
 	entity.Router.SetValues(ctx.GetParentContext())
 	entity.SetBaseValues(ctx)
 	ctx.SetString(FieldName, entity.Name)
-	ctx.SetBool(FieldTransitRouterIsVerified, entity.IsVerified)
-	ctx.SetLinkedIds(FieldTransitRouterEnrollments, entity.Enrollments)
 }
 
 func (entity *TransitRouter) GetEntityType() string {
@@ -95,7 +99,7 @@ type TransitRouterStore interface {
 
 func newTransitRouterStore(stores *stores) *transitRouterStoreImpl {
 	store := &transitRouterStoreImpl{
-		baseStore: newChildBaseStore(stores, stores.Router, EntityTypeTransitRouters),
+		baseStore: newExtendedBaseStore(stores, stores.Router, EntityTypeTransitRouters),
 	}
 	store.InitImpl(store)
 	return store
