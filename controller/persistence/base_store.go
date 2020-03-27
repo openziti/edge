@@ -28,6 +28,7 @@ import (
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
+	"strings"
 )
 
 type DbProvider interface {
@@ -156,9 +157,9 @@ func (store *baseStore) getEntityIdsForRoleSet(tx *bbolt.Tx, field string, roleS
 		return nil, err
 	}
 	var roleIds []string
-	if semantic == SemanticAllOf {
+	if strings.EqualFold(semantic, SemanticAllOf) {
 		roleIds = store.FindMatching(tx, index, roles)
-	} else if semantic == SemanticAnyOf {
+	} else if strings.EqualFold(semantic, SemanticAnyOf) {
 		roleIds = store.FindMatchingAnyOf(tx, index, roles)
 	} else {
 		return nil, errors.Errorf("unsupported policy semantic %v", semantic)
@@ -222,9 +223,9 @@ func UpdateRelatedRoles(store NameIndexedStore, tx *bbolt.Tx, entityId string, r
 
 		if stringz.Contains(ids, entityId) || stringz.Contains(roles, "all") {
 			err = linkCollection.AddLinks(tx, id, entityId)
-		} else if semantic == SemanticAllOf && len(roles) > 0 && stringz.ContainsAll(entityRoles, roles...) {
+		} else if strings.EqualFold(semantic, SemanticAllOf) && len(roles) > 0 && stringz.ContainsAll(entityRoles, roles...) {
 			err = linkCollection.AddLinks(tx, id, entityId)
-		} else if semantic == SemanticAnyOf && len(roles) > 0 && stringz.ContainsAny(entityRoles, roles...) {
+		} else if strings.EqualFold(semantic, SemanticAnyOf) && len(roles) > 0 && stringz.ContainsAny(entityRoles, roles...) {
 			err = linkCollection.AddLinks(tx, id, entityId)
 		} else {
 			err = linkCollection.RemoveLinks(tx, id, entityId)
@@ -270,7 +271,7 @@ func (store *baseStore) getRoleAttributesCursorProvider(index boltz.SetReadIndex
 		semantic = SemanticAllOf
 	}
 
-	if !stringz.Contains(validSemantics, semantic) {
+	if !isSemanticValid(semantic) {
 		return nil, validation.NewFieldError("invalid semantic", FieldSemantic, semantic)
 	}
 
@@ -288,7 +289,7 @@ func (store *baseStore) getRoleAttributesCursorProvider(index boltz.SetReadIndex
 		}
 
 		var rolesCursor ast.SetCursor
-		if semantic == SemanticAllOf {
+		if strings.EqualFold(semantic, SemanticAllOf) {
 			rolesCursor = store.IteratorMatchingAllOf(index, roles)(tx, forward)
 		} else {
 			rolesCursor = store.IteratorMatchingAnyOf(index, roles)(tx, forward)
