@@ -36,6 +36,7 @@ type Handlers struct {
 	GeoRegion               *GeoRegionHandler
 	Identity                *IdentityHandler
 	IdentityType            *IdentityTypeHandler
+	PolicyAdvisor           *PolicyAdvisor
 	ServiceEdgeRouterPolicy *ServiceEdgeRouterPolicyHandler
 	ServicePolicy           *ServicePolicyHandler
 	Session                 *SessionHandler
@@ -58,12 +59,13 @@ func InitHandlers(env Env) *Handlers {
 	handlers.ConfigType = NewConfigTypeHandler(env)
 	handlers.EdgeRouter = NewEdgeRouterHandler(env)
 	handlers.EdgeRouterPolicy = NewEdgeRouterPolicyHandler(env)
+	handlers.EdgeService = NewEdgeServiceHandler(env)
 	handlers.Enrollment = NewEnrollmentHandler(env)
 	handlers.EventLog = NewEventLogHandler(env)
 	handlers.GeoRegion = NewGeoRegionHandler(env)
 	handlers.Identity = NewIdentityHandler(env)
 	handlers.IdentityType = NewIdentityTypeHandler(env)
-	handlers.EdgeService = NewEdgeServiceHandler(env)
+	handlers.PolicyAdvisor = NewPolicyAdvisor(env)
 	handlers.ServiceEdgeRouterPolicy = NewServiceEdgeRouterPolicyHandler(env)
 	handlers.ServicePolicy = NewServicePolicyHandler(env)
 	handlers.Session = NewSessionHandler(env)
