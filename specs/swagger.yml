@@ -2488,6 +2488,68 @@ paths:
         '409':
           $ref: '#/responses/cannotDeleteReferencedResourceResponse'
 
+  ###################################################################
+  # List Role Attributes in Use
+  ##################################################################
+  '/edge-router-role-attributes':
+    get:
+      summary: List role attributes in use by edge routers
+      description: |
+        Retrieves a list of role attributes in use by edge routers; supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Role Attributes
+      operationId: listEdgeRouterRoleAttributes
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/filter'
+      responses:
+        '200':
+          $ref: '#/responses/listRoleAttributes'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
+
+  '/identity-role-attributes':
+    get:
+      summary: List role attributes in use by identities
+      description: |
+        Retrieves a list of role attributes in use by identities; supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Role Attributes
+      operationId: listIdentityRoleAttributes
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/filter'
+      responses:
+        '200':
+          $ref: '#/responses/listRoleAttributes'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
+
+  '/service-role-attributes':
+    get:
+      summary: List role attributes in use by services
+      description: |
+        Retrieves a list of role attributes in use by services; supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Role Attributes
+      operationId: listServiceRoleAttributes
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/filter'
+      responses:
+        '200':
+          $ref: '#/responses/listRoleAttributes'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
 #######################################################################################################################
 #
 # Parameters - Reusable parameters
@@ -2962,6 +3024,14 @@ responses:
     description: Returns the document that represents the specification
     schema:
       $ref: '#/definitions/detailSpecBodyEnvelope'
+  ###################################################################
+  # Role Attributes
+  ##################################################################
+  listRoleAttributes:
+    description: A list of specifications
+    schema:
+      $ref: '#/definitions/listRoleAttributesEnvelope'
+
 #######################################################################################################################
 #
 # Definitions - In & Out Models Only
@@ -4802,3 +4872,17 @@ definitions:
 
   specBodyDetail:
     type: string
+
+  listRoleAttributesEnvelope:
+    type: object
+    properties:
+      meta:
+        $ref: '#/definitions/meta'
+      data:
+        $ref: '#/definitions/roleAttributesList'
+
+  roleAttributesList:
+    description: An array of role attributes
+    type: array
+    items:
+      type: string
