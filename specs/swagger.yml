@@ -1131,11 +1131,13 @@ paths:
         - ztSession: []
       tags:
         - Edge Router
-      operationId: lisgEdgeRouters
+      operationId: listEdgeRouters
       parameters:
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/filter'
+        - $ref: '#/parameters/roleFilter'
+        - $ref: '#/parameters/roleSemantic'
       responses:
         '200':
           $ref: '#/responses/listEdgeRouters'
@@ -1515,6 +1517,8 @@ paths:
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/filter'
+        - $ref: '#/parameters/roleFilter'
+        - $ref: '#/parameters/roleSemantic'
       responses:
         '200':
           $ref: '#/responses/listIdentities'
@@ -2162,6 +2166,8 @@ paths:
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/filter'
+        - $ref: '#/parameters/roleFilter'
+        - $ref: '#/parameters/roleSemantic'
       responses:
         '200':
           $ref: '#/responses/listServices'
@@ -2712,6 +2718,17 @@ parameters:
     enum:
       - password
       - cert
+  roleFilter:
+    name: roleFilter
+    type: array
+    in: query
+    collectionFormat: multi
+    items:
+      type: string
+  roleSemantic:
+    name: roleSemantic
+    type: string
+    in: query
 
 #######################################################################################################################
 #
