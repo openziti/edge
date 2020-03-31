@@ -1264,6 +1264,25 @@ paths:
           $ref: '#/responses/notFoundResponse'
         '401':
           $ref: '#/responses/unauthorizedResponse'
+  '/edge-routers/{id}/identities':
+    parameters:
+      - $ref: '#/parameters/id'
+    get:
+      summary: List associated identities
+      description: |
+        Retrieves a list of identities that may access services via the given edge router. Supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Edge Router
+      operationId: listEdgeRoutersIdentities
+      responses:
+        '200':
+          $ref: '#/responses/listIdentities'
+        '404':
+          $ref: '#/responses/notFoundResponse'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
   '/edge-routers/{id}/service-edge-router-policies':
     parameters:
       - $ref: '#/parameters/id'
@@ -1278,6 +1297,26 @@ paths:
       responses:
         '200':
           $ref: '#/responses/listServicePolicies'
+        '404':
+          $ref: '#/responses/notFoundResponse'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
+
+  '/edge-routers/{id}/services':
+    parameters:
+      - $ref: '#/parameters/id'
+    get:
+      summary: List associated services
+      description: |
+        Retrieves a list of services that may be accessed via the given edge router. Supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Edge Router
+      operationId: listEdgeRoutersServices
+      responses:
+        '200':
+          $ref: '#/responses/listServices'
         '404':
           $ref: '#/responses/notFoundResponse'
         '401':
@@ -1689,6 +1728,45 @@ paths:
         '401':
           $ref: '#/responses/unauthorizedResponse'
 
+  '/identities/{id}/edge-routers':
+    parameters:
+      - $ref: '#/parameters/id'
+    get:
+      summary: List accessible edge-routers
+      description: |
+        Retrieves a list of edge-routers that the given identity may use to access services. Supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Identity
+      operationId: listIdentityEdgeRouters
+      responses:
+        '200':
+          $ref: '#/responses/listEdgeRouters'
+        '404':
+          $ref: '#/responses/notFoundResponse'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
+
+  '/identities/{id}/services':
+    parameters:
+      - $ref: '#/parameters/id'
+    get:
+      summary: List accessible services
+      description: |
+        Retrieves a list of services that the given identity has access to. Supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Identity
+      operationId: listIdentityServices
+      responses:
+        '200':
+          $ref: '#/responses/listEdgeRouters'
+        '404':
+          $ref: '#/responses/notFoundResponse'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
   ###################################################################
   # Identity-Types
   ##################################################################
@@ -2257,6 +2335,51 @@ paths:
           $ref: '#/responses/listServicePolicies'
         '401':
           $ref: '#/responses/unauthorizedResponse'
+
+  '/services/{id}/identities':
+    parameters:
+      - $ref: '#/parameters/id'
+    get:
+      summary: List identities with access
+      description: |
+        Retrieves a list of identities that have access to this service. Supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Service
+      operationId: listServiceIdentities
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/filter'
+      responses:
+        '200':
+          $ref: '#/responses/listIdentities'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
+
+  '/services/{id}/edge-routers':
+    parameters:
+      - $ref: '#/parameters/id'
+    get:
+      summary: List accessible edge-routers
+      description: |
+        Retrieves a list of edge-routers that may be used to access the given service. Supports filtering, sorting, and pagination. Requires admin access.
+      security:
+        - ztSession: []
+      tags:
+        - Service
+      operationId: listServiceEdgeRouters
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/filter'
+      responses:
+        '200':
+          $ref: '#/responses/listEdgeRouters'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
+
   '/services/{id}/terminators':
     parameters:
       - $ref: '#/parameters/id'
