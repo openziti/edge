@@ -2713,14 +2713,12 @@ parameters:
     name: id
     required: true
     type: string
-    format: uuid
     in: path
     description: The id of the requested resource
   serviceId:
     name: serviceId
     required: true
     type: string
-    format: uuid
     in: path
     description: The id of a service
   limit:
@@ -3337,7 +3335,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -3426,7 +3423,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -3474,7 +3470,6 @@ definitions:
         description: The type of authenticator to create; which will dictate which properties on this object are required.
       identityId:
         type: string
-        format: uuid
         description: The id of an existing identity that will be assigned this authenticator
       tags:
         $ref: '#/definitions/tags'
@@ -3489,7 +3484,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -3502,7 +3496,6 @@ definitions:
         type: string
       identityId:
         type: string
-        format: uuid
       certPem:
         type: string
       fingerprint:
@@ -3540,7 +3533,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -3710,7 +3702,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
         example: cea49285-6c07-42cf-9f52-09a9b115c783
       createdAt:
         type: string
@@ -3786,7 +3777,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -3819,7 +3809,6 @@ definitions:
         example: default.ziti-tunneler-server.v1
       type:
         type: string
-        format: uuid
         description: The id of a config-type that the data section will match
       data:
         type: object
@@ -3879,7 +3868,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -3976,7 +3964,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -4092,7 +4079,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -4127,7 +4113,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -4217,7 +4202,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -4257,7 +4241,6 @@ definitions:
         type: array
         items:
           type: string
-          format: uuid
       tags:
         $ref: '#/definitions/tags'
   serviceUpdate:
@@ -4280,7 +4263,6 @@ definitions:
         type: array
         items:
           type: string
-          format: uuid
       tags:
         $ref: '#/definitions/tags'
   servicePatch:
@@ -4298,7 +4280,6 @@ definitions:
         type: array
         items:
           type: string
-          format: uuid
       tags:
         $ref: '#/definitions/tags'
   ###################################################################
@@ -4313,7 +4294,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -4338,7 +4318,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -4385,10 +4364,8 @@ definitions:
     properties:
       service:
         type: string
-        format: uuid
       config:
         type: string
-        format: uuid
   serviceConfigs:
     type: array
     items:
@@ -4405,7 +4382,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
@@ -4479,7 +4455,6 @@ definitions:
     properties:
       serviceId:
         type: string
-        format: uuid
       type:
         $ref: '#/definitions/dialBind'
       tags:
@@ -4493,7 +4468,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       createdAt:
         type: string
         format: date-time
