@@ -39,6 +39,7 @@ type Handlers struct {
 	PolicyAdvisor           *PolicyAdvisor
 	ServiceEdgeRouterPolicy *ServiceEdgeRouterPolicyHandler
 	ServicePolicy           *ServicePolicyHandler
+	TransitRouter           *TransitRouterHandler
 	Session                 *SessionHandler
 
 	Authenticator *AuthenticatorHandler
@@ -69,6 +70,7 @@ func InitHandlers(env Env) *Handlers {
 	handlers.ServiceEdgeRouterPolicy = NewServiceEdgeRouterPolicyHandler(env)
 	handlers.ServicePolicy = NewServicePolicyHandler(env)
 	handlers.Session = NewSessionHandler(env)
+	handlers.TransitRouter = NewTransitRouterHandler(env)
 
 	return handlers
 }
