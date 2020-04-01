@@ -320,7 +320,7 @@ func (entity IdentityServiceConfig) toModel() model.ServiceConfig {
 
 type AdvisorEdgeRouter struct {
 	*EntityApiRef
-	Online bool `json:"isOnline"`
+	IsOnline bool `json:"isOnline"`
 }
 
 type AdvisorServiceReachability struct {
@@ -342,7 +342,7 @@ func MapAdvisorServiceReachabilityToApiEntity(entity *model.AdvisorServiceReacha
 	for _, router := range entity.CommonRouters {
 		commonRouters = append(commonRouters, &AdvisorEdgeRouter{
 			EntityApiRef: NewEdgeRouterEntityRef(router.Router),
-			Online:       router.Online,
+			IsOnline:     router.IsOnline,
 		})
 	}
 

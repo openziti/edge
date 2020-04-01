@@ -18,8 +18,8 @@ type PolicyAdvisor struct {
 }
 
 type AdvisorEdgeRouter struct {
-	Router *EdgeRouter
-	Online bool
+	Router   *EdgeRouter
+	IsOnline bool
 }
 
 type AdvisorServiceReachability struct {
@@ -109,8 +109,8 @@ func (advisor *PolicyAdvisor) getIdentityEdgeRouters(identityId string) (map[str
 					return err
 				}
 				commonRouter = &AdvisorEdgeRouter{
-					Router: edgeRouter,
-					Online: advisor.env.IsEdgeRouterOnline(edgeRouter.Id),
+					Router:   edgeRouter,
+					IsOnline: advisor.env.IsEdgeRouterOnline(edgeRouter.Id),
 				}
 				edgeRouters[edgeRouterId] = commonRouter
 			}
