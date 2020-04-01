@@ -3199,7 +3199,7 @@ responses:
   # Role Attributes
   ##################################################################
   listRoleAttributes:
-    description: A list of specifications
+    description: A list of role attributes
     schema:
       $ref: '#/definitions/listRoleAttributesEnvelope'
 
@@ -3207,7 +3207,7 @@ responses:
   # Policy Advisor
   ##################################################################
   getIdentityPolicyAdvice:
-    description: Returns the document that represents the specification
+    description: Returns the document that represents the policy advice
     schema:
       $ref: '#/definitions/getIdentityPolicyAdviceEnvelope'
 
@@ -5076,16 +5076,6 @@ definitions:
 
   policyAdvice:
     type: "object"
-    required:
-      - "identityId"
-      - "identity"
-      - "serviceId"
-      - "service"
-      - "isBindAllowed"
-      - "isDialAllowed"
-      - "identityRouterCount"
-      - "serviceRouterCount"
-      - "commonRouters"
     properties:
       identityId:
         type: "string"
