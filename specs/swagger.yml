@@ -1258,7 +1258,7 @@ paths:
         - ztSession: []
       tags:
         - Edge Router
-      operationId: listEdgeRoutersEdgeRouterPolicies
+      operationId: listEdgeRouterEdgeRouterPolicies
       responses:
         '200':
           $ref: '#/responses/listEdgeRouterPolicies'
@@ -1277,7 +1277,7 @@ paths:
         - ztSession: []
       tags:
         - Edge Router
-      operationId: listEdgeRoutersIdentities
+      operationId: listEdgeRouterIdentities
       responses:
         '200':
           $ref: '#/responses/listIdentities'
@@ -1295,7 +1295,7 @@ paths:
         - ztSession: []
       tags:
         - Edge Router
-      operationId: listEdgeRoutersServicePolicies
+      operationId: listEdgeRouterServicePolicies
       responses:
         '200':
           $ref: '#/responses/listServicePolicies'
@@ -1315,7 +1315,7 @@ paths:
         - ztSession: []
       tags:
         - Edge Router
-      operationId: listEdgeRoutersServices
+      operationId: listEdgeRouterServices
       responses:
         '200':
           $ref: '#/responses/listServices'
