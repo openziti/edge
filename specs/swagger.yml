@@ -4134,7 +4134,7 @@ definitions:
     properties:
       name:
         type: string
-      terminatorStartegy:
+      terminatorStrategy:
         type: string
       roleAttributes:
         type: array
