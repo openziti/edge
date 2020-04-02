@@ -1,7 +1,7 @@
 ---
 swagger: '2.0'
 info:
-  version: 0.12.0
+  version: 0.13.0
   title: Ziti Edge
   contact: {}
 host: demo.ziti.dev
@@ -5183,27 +5183,17 @@ definitions:
         type: "array"
         items:
           type: "object"
-          properties:
-            entity:
-              type: "string"
-            id:
-              type: "string"
-            name:
-              type: "string"
-            _links:
-              required:
-                - "self"
-              properties:
-                self:
-                  required:
-                    - "href"
-                  properties:
-                    href:
-                      type: "string"
-                  type: "object"
-              type: "object"
-            isOnline:
-              type: "boolean"
+          items:
+            $ref: '#/definitions/routerEntityRef'
+
+  routerEntityRef:
+    type: object
+    allOf:
+      - $ref: '#/definitions/entityRef'
+      - type: object
+        properties:
+          isOnline:
+            type: boolean
 
   ###################################################################
   # Transit Routers
