@@ -20,9 +20,7 @@ rm -rf "$clientPath"
 mkdir -p "$clientPath"
 
 echo "...generating server"
-# initialism for "Ca" keeps go-swagger from outputting the CA packages as c_a and mangling
-# type/function names in the same way.
-swagger generate server --exclude-main -f "$swagSpec" -s rest_server -t "$zitiEdgeDir" -q -r "$copyrightFile" --additional-initialism=Ca
+swagger generate server --exclude-main -f "$swagSpec" -s rest_server -t "$zitiEdgeDir" -q -r "$copyrightFile"
 exit_status=$?
 if [ ${exit_status} -ne 0 ]; then
   echo "Failed to generate server. See above."
@@ -30,7 +28,7 @@ if [ ${exit_status} -ne 0 ]; then
 fi
 
 echo "...generating client"
-swagger generate client -f "$swagSpec"  -c rest_client -t "$zitiEdgeDir" -q -r "$copyrightFile" --additional-initialism=Ca
+swagger generate client -f "$swagSpec"  -c rest_client -t "$zitiEdgeDir" -q -r "$copyrightFile"
 exit_status=$?
 if [ ${exit_status} -ne 0 ]; then
   echo "Failed to generate client. See above."
