@@ -36,18 +36,18 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// NewPostEnrollCAParams creates a new PostEnrollCAParams object
+// NewPostEnrollCaParams creates a new PostEnrollCaParams object
 // no default values defined in spec.
-func NewPostEnrollCAParams() PostEnrollCAParams {
+func NewPostEnrollCaParams() PostEnrollCaParams {
 
-	return PostEnrollCAParams{}
+	return PostEnrollCaParams{}
 }
 
-// PostEnrollCAParams contains all the bound params for the post enroll CA operation
+// PostEnrollCaParams contains all the bound params for the post enroll ca operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters PostEnrollCA
-type PostEnrollCAParams struct {
+// swagger:parameters PostEnrollCa
+type PostEnrollCaParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -56,8 +56,8 @@ type PostEnrollCAParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewPostEnrollCAParams() beforehand.
-func (o *PostEnrollCAParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewPostEnrollCaParams() beforehand.
+func (o *PostEnrollCaParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r

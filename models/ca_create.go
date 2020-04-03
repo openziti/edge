@@ -36,10 +36,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CACreate A create Certificate Authority (CA) object
+// CaCreate A create Certificate Authority (CA) object
 //
 // swagger:model caCreate
-type CACreate struct {
+type CaCreate struct {
 
 	// cert pem
 	// Required: true
@@ -48,11 +48,11 @@ type CACreate struct {
 	// is auth enabled
 	IsAuthEnabled bool `json:"isAuthEnabled,omitempty"`
 
-	// is auto Ca enrollment enabled
-	IsAutoCAEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
+	// is auto ca enrollment enabled
+	IsAutoCaEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
 
-	// is ott Ca enrollment enabled
-	IsOttCAEnrollmentEnabled bool `json:"isOttCaEnrollmentEnabled,omitempty"`
+	// is ott ca enrollment enabled
+	IsOttCaEnrollmentEnabled bool `json:"isOttCaEnrollmentEnabled,omitempty"`
 
 	// name
 	// Required: true
@@ -63,7 +63,7 @@ type CACreate struct {
 }
 
 // Validate validates this ca create
-func (m *CACreate) Validate(formats strfmt.Registry) error {
+func (m *CaCreate) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCertPem(formats); err != nil {
@@ -80,7 +80,7 @@ func (m *CACreate) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CACreate) validateCertPem(formats strfmt.Registry) error {
+func (m *CaCreate) validateCertPem(formats strfmt.Registry) error {
 
 	if err := validate.Required("certPem", "body", m.CertPem); err != nil {
 		return err
@@ -89,7 +89,7 @@ func (m *CACreate) validateCertPem(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CACreate) validateName(formats strfmt.Registry) error {
+func (m *CaCreate) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
 		return err
@@ -99,7 +99,7 @@ func (m *CACreate) validateName(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (m *CACreate) MarshalBinary() ([]byte, error) {
+func (m *CaCreate) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -107,8 +107,8 @@ func (m *CACreate) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *CACreate) UnmarshalBinary(b []byte) error {
-	var res CACreate
+func (m *CaCreate) UnmarshalBinary(b []byte) error {
+	var res CaCreate
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

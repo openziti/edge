@@ -40,89 +40,89 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewPostEnrollCAParams creates a new PostEnrollCAParams object
+// NewPostEnrollCaParams creates a new PostEnrollCaParams object
 // with the default values initialized.
-func NewPostEnrollCAParams() *PostEnrollCAParams {
+func NewPostEnrollCaParams() *PostEnrollCaParams {
 
-	return &PostEnrollCAParams{
+	return &PostEnrollCaParams{
 
 		timeout: cr.DefaultTimeout,
 	}
 }
 
-// NewPostEnrollCAParamsWithTimeout creates a new PostEnrollCAParams object
+// NewPostEnrollCaParamsWithTimeout creates a new PostEnrollCaParams object
 // with the default values initialized, and the ability to set a timeout on a request
-func NewPostEnrollCAParamsWithTimeout(timeout time.Duration) *PostEnrollCAParams {
+func NewPostEnrollCaParamsWithTimeout(timeout time.Duration) *PostEnrollCaParams {
 
-	return &PostEnrollCAParams{
+	return &PostEnrollCaParams{
 
 		timeout: timeout,
 	}
 }
 
-// NewPostEnrollCAParamsWithContext creates a new PostEnrollCAParams object
+// NewPostEnrollCaParamsWithContext creates a new PostEnrollCaParams object
 // with the default values initialized, and the ability to set a context for a request
-func NewPostEnrollCAParamsWithContext(ctx context.Context) *PostEnrollCAParams {
+func NewPostEnrollCaParamsWithContext(ctx context.Context) *PostEnrollCaParams {
 
-	return &PostEnrollCAParams{
+	return &PostEnrollCaParams{
 
 		Context: ctx,
 	}
 }
 
-// NewPostEnrollCAParamsWithHTTPClient creates a new PostEnrollCAParams object
+// NewPostEnrollCaParamsWithHTTPClient creates a new PostEnrollCaParams object
 // with the default values initialized, and the ability to set a custom HTTPClient for a request
-func NewPostEnrollCAParamsWithHTTPClient(client *http.Client) *PostEnrollCAParams {
+func NewPostEnrollCaParamsWithHTTPClient(client *http.Client) *PostEnrollCaParams {
 
-	return &PostEnrollCAParams{
+	return &PostEnrollCaParams{
 		HTTPClient: client,
 	}
 }
 
-/*PostEnrollCAParams contains all the parameters to send to the API endpoint
-for the post enroll CA operation typically these are written to a http.Request
+/*PostEnrollCaParams contains all the parameters to send to the API endpoint
+for the post enroll ca operation typically these are written to a http.Request
 */
-type PostEnrollCAParams struct {
+type PostEnrollCaParams struct {
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
 }
 
-// WithTimeout adds the timeout to the post enroll CA params
-func (o *PostEnrollCAParams) WithTimeout(timeout time.Duration) *PostEnrollCAParams {
+// WithTimeout adds the timeout to the post enroll ca params
+func (o *PostEnrollCaParams) WithTimeout(timeout time.Duration) *PostEnrollCaParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the post enroll CA params
-func (o *PostEnrollCAParams) SetTimeout(timeout time.Duration) {
+// SetTimeout adds the timeout to the post enroll ca params
+func (o *PostEnrollCaParams) SetTimeout(timeout time.Duration) {
 	o.timeout = timeout
 }
 
-// WithContext adds the context to the post enroll CA params
-func (o *PostEnrollCAParams) WithContext(ctx context.Context) *PostEnrollCAParams {
+// WithContext adds the context to the post enroll ca params
+func (o *PostEnrollCaParams) WithContext(ctx context.Context) *PostEnrollCaParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the post enroll CA params
-func (o *PostEnrollCAParams) SetContext(ctx context.Context) {
+// SetContext adds the context to the post enroll ca params
+func (o *PostEnrollCaParams) SetContext(ctx context.Context) {
 	o.Context = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the post enroll CA params
-func (o *PostEnrollCAParams) WithHTTPClient(client *http.Client) *PostEnrollCAParams {
+// WithHTTPClient adds the HTTPClient to the post enroll ca params
+func (o *PostEnrollCaParams) WithHTTPClient(client *http.Client) *PostEnrollCaParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the post enroll CA params
-func (o *PostEnrollCAParams) SetHTTPClient(client *http.Client) {
+// SetHTTPClient adds the HTTPClient to the post enroll ca params
+func (o *PostEnrollCaParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
 // WriteToRequest writes these params to a swagger request
-func (o *PostEnrollCAParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
+func (o *PostEnrollCaParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
 	if err := r.SetTimeout(o.timeout); err != nil {
 		return err

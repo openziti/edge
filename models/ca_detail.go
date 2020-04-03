@@ -36,10 +36,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CADetail A Certificate Authority (CA) resource
+// CaDetail A Certificate Authority (CA) resource
 //
 // swagger:model caDetail
-type CADetail struct {
+type CaDetail struct {
 
 	// links
 	Links Links `json:"_links,omitempty"`
@@ -61,11 +61,11 @@ type CADetail struct {
 	// is auth enabled
 	IsAuthEnabled bool `json:"isAuthEnabled,omitempty"`
 
-	// is auto Ca enrollment enabled
-	IsAutoCAEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
+	// is auto ca enrollment enabled
+	IsAutoCaEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
 
-	// is ott Ca enrollment enabled
-	IsOttCAEnrollmentEnabled bool `json:"isOttCaEnrollmentEnabled,omitempty"`
+	// is ott ca enrollment enabled
+	IsOttCaEnrollmentEnabled bool `json:"isOttCaEnrollmentEnabled,omitempty"`
 
 	// is verified
 	IsVerified bool `json:"isVerified,omitempty"`
@@ -86,7 +86,7 @@ type CADetail struct {
 }
 
 // Validate validates this ca detail
-func (m *CADetail) Validate(formats strfmt.Registry) error {
+func (m *CaDetail) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateLinks(formats); err != nil {
@@ -115,7 +115,7 @@ func (m *CADetail) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CADetail) validateLinks(formats strfmt.Registry) error {
+func (m *CaDetail) validateLinks(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Links) { // not required
 		return nil
@@ -131,7 +131,7 @@ func (m *CADetail) validateLinks(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CADetail) validateCreatedAt(formats strfmt.Registry) error {
+func (m *CaDetail) validateCreatedAt(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
@@ -144,7 +144,7 @@ func (m *CADetail) validateCreatedAt(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CADetail) validateID(formats strfmt.Registry) error {
+func (m *CaDetail) validateID(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.ID) { // not required
 		return nil
@@ -157,7 +157,7 @@ func (m *CADetail) validateID(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CADetail) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *CaDetail) validateUpdatedAt(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
@@ -170,7 +170,7 @@ func (m *CADetail) validateUpdatedAt(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CADetail) validateVerificationToken(formats strfmt.Registry) error {
+func (m *CaDetail) validateVerificationToken(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.VerificationToken) { // not required
 		return nil
@@ -184,7 +184,7 @@ func (m *CADetail) validateVerificationToken(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (m *CADetail) MarshalBinary() ([]byte, error) {
+func (m *CaDetail) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -192,8 +192,8 @@ func (m *CADetail) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *CADetail) UnmarshalBinary(b []byte) error {
-	var res CADetail
+func (m *CaDetail) UnmarshalBinary(b []byte) error {
+	var res CaDetail
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

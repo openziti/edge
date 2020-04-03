@@ -35,25 +35,25 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// PostEnrollCAHandlerFunc turns a function with the right signature into a post enroll CA handler
-type PostEnrollCAHandlerFunc func(PostEnrollCAParams) middleware.Responder
+// PostEnrollCaHandlerFunc turns a function with the right signature into a post enroll ca handler
+type PostEnrollCaHandlerFunc func(PostEnrollCaParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PostEnrollCAHandlerFunc) Handle(params PostEnrollCAParams) middleware.Responder {
+func (fn PostEnrollCaHandlerFunc) Handle(params PostEnrollCaParams) middleware.Responder {
 	return fn(params)
 }
 
-// PostEnrollCAHandler interface for that can handle valid post enroll CA params
-type PostEnrollCAHandler interface {
-	Handle(PostEnrollCAParams) middleware.Responder
+// PostEnrollCaHandler interface for that can handle valid post enroll ca params
+type PostEnrollCaHandler interface {
+	Handle(PostEnrollCaParams) middleware.Responder
 }
 
-// NewPostEnrollCA creates a new http.Handler for the post enroll CA operation
-func NewPostEnrollCA(ctx *middleware.Context, handler PostEnrollCAHandler) *PostEnrollCA {
-	return &PostEnrollCA{Context: ctx, Handler: handler}
+// NewPostEnrollCa creates a new http.Handler for the post enroll ca operation
+func NewPostEnrollCa(ctx *middleware.Context, handler PostEnrollCaHandler) *PostEnrollCa {
+	return &PostEnrollCa{Context: ctx, Handler: handler}
 }
 
-/*PostEnrollCA swagger:route POST /enroll/ca Enroll postEnrollCa
+/*PostEnrollCa swagger:route POST /enroll/ca Enroll postEnrollCa
 
 Enroll an identity with a pre-exchanged certificate
 
@@ -65,17 +65,17 @@ During this process no CSRs are requires as the client should already be in poss
 
 
 */
-type PostEnrollCA struct {
+type PostEnrollCa struct {
 	Context *middleware.Context
-	Handler PostEnrollCAHandler
+	Handler PostEnrollCaHandler
 }
 
-func (o *PostEnrollCA) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *PostEnrollCa) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		r = rCtx
 	}
-	var Params = NewPostEnrollCAParams()
+	var Params = NewPostEnrollCaParams()
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)

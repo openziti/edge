@@ -34,19 +34,19 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CAPatch ca patch
+// CaPatch ca patch
 //
 // swagger:model caPatch
-type CAPatch struct {
+type CaPatch struct {
 
 	// is auth enabled
 	IsAuthEnabled bool `json:"isAuthEnabled,omitempty"`
 
-	// is auto Ca enrollment enabled
-	IsAutoCAEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
+	// is auto ca enrollment enabled
+	IsAutoCaEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
 
-	// is ott Ca enrollment enabled
-	IsOttCAEnrollmentEnabled bool `json:"isOttCaEnrollmentEnabled,omitempty"`
+	// is ott ca enrollment enabled
+	IsOttCaEnrollmentEnabled bool `json:"isOttCaEnrollmentEnabled,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -56,12 +56,12 @@ type CAPatch struct {
 }
 
 // Validate validates this ca patch
-func (m *CAPatch) Validate(formats strfmt.Registry) error {
+func (m *CaPatch) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *CAPatch) MarshalBinary() ([]byte, error) {
+func (m *CaPatch) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -69,8 +69,8 @@ func (m *CAPatch) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *CAPatch) UnmarshalBinary(b []byte) error {
-	var res CAPatch
+func (m *CaPatch) UnmarshalBinary(b []byte) error {
+	var res CaPatch
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

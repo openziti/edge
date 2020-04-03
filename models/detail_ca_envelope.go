@@ -35,20 +35,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// DetailCAEnvelope detail CA envelope
+// DetailCaEnvelope detail ca envelope
 //
-// swagger:model detailCAEnvelope
-type DetailCAEnvelope struct {
+// swagger:model detailCaEnvelope
+type DetailCaEnvelope struct {
 
 	// data
-	Data *CADetail `json:"data,omitempty"`
+	Data *CaDetail `json:"data,omitempty"`
 
 	// meta
 	Meta *Meta `json:"meta,omitempty"`
 }
 
-// Validate validates this detail CA envelope
-func (m *DetailCAEnvelope) Validate(formats strfmt.Registry) error {
+// Validate validates this detail ca envelope
+func (m *DetailCaEnvelope) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateData(formats); err != nil {
@@ -65,7 +65,7 @@ func (m *DetailCAEnvelope) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *DetailCAEnvelope) validateData(formats strfmt.Registry) error {
+func (m *DetailCaEnvelope) validateData(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Data) { // not required
 		return nil
@@ -83,7 +83,7 @@ func (m *DetailCAEnvelope) validateData(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *DetailCAEnvelope) validateMeta(formats strfmt.Registry) error {
+func (m *DetailCaEnvelope) validateMeta(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Meta) { // not required
 		return nil
@@ -102,7 +102,7 @@ func (m *DetailCAEnvelope) validateMeta(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (m *DetailCAEnvelope) MarshalBinary() ([]byte, error) {
+func (m *DetailCaEnvelope) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -110,8 +110,8 @@ func (m *DetailCAEnvelope) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *DetailCAEnvelope) UnmarshalBinary(b []byte) error {
-	var res DetailCAEnvelope
+func (m *DetailCaEnvelope) UnmarshalBinary(b []byte) error {
+	var res DetailCaEnvelope
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

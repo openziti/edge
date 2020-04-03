@@ -57,7 +57,7 @@ type ClientService interface {
 }
 
 /*
-  ListWellKnownCas gets CA cert store
+  ListWellKnownCas gets c a cert store
 
   This endpoint is used during enrollments to bootstrap trust between enrolling clients and the Ziti Edge API.
 This endpoint returns a base64 encoded PKCS7 store. The content can be base64 decoded and parsed by any library

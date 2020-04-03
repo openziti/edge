@@ -410,7 +410,7 @@ func init() {
           "CA"
         ],
         "summary": "List CAs",
-        "operationId": "listCA",
+        "operationId": "listCas",
         "parameters": [
           {
             "$ref": "#/parameters/limit"
@@ -424,7 +424,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/listCAs"
+            "$ref": "#/responses/listCas"
           }
         }
       },
@@ -439,7 +439,7 @@ func init() {
           "CA"
         ],
         "summary": "Creates a CA",
-        "operationId": "createCA",
+        "operationId": "createCa",
         "parameters": [
           {
             "description": "A CA to create",
@@ -476,10 +476,10 @@ func init() {
           "CA"
         ],
         "summary": "Retrieves a single CA",
-        "operationId": "detailCA",
+        "operationId": "detailCa",
         "responses": {
           "200": {
-            "$ref": "#/responses/detailCA"
+            "$ref": "#/responses/detailCa"
           },
           "401": {
             "$ref": "#/responses/unauthorizedResponse"
@@ -500,7 +500,7 @@ func init() {
           "CA"
         ],
         "summary": "Update all fields on a CA",
-        "operationId": "updateCA",
+        "operationId": "updateCa",
         "parameters": [
           {
             "description": "A CA update object",
@@ -562,7 +562,7 @@ func init() {
           "CA"
         ],
         "summary": "Update the supplied fields on a CA",
-        "operationId": "patchCA",
+        "operationId": "patchCa",
         "parameters": [
           {
             "description": "A CA patch object",
@@ -4752,7 +4752,7 @@ func init() {
         }
       }
     },
-    "detailCAEnvelope": {
+    "detailCaEnvelope": {
       "type": "object",
       "properties": {
         "data": {
@@ -5598,7 +5598,7 @@ func init() {
         }
       }
     },
-    "listCAsEnvelope": {
+    "listCasEnvelope": {
       "type": "object",
       "properties": {
         "data": {
@@ -6769,10 +6769,10 @@ func init() {
         "$ref": "#/definitions/detailAuthenticatorEnvelope"
       }
     },
-    "detailCA": {
+    "detailCa": {
       "description": "A singular Certificate Authority (CA) resource",
       "schema": {
-        "$ref": "#/definitions/detailCAEnvelope"
+        "$ref": "#/definitions/detailCaEnvelope"
       }
     },
     "detailConfig": {
@@ -7011,10 +7011,10 @@ func init() {
         "$ref": "#/definitions/listAuthenticatorsEnvelope"
       }
     },
-    "listCAs": {
+    "listCas": {
       "description": "A list of Certificate Authorities (CAs)",
       "schema": {
-        "$ref": "#/definitions/listCAsEnvelope"
+        "$ref": "#/definitions/listCasEnvelope"
       }
     },
     "listConfigTypes": {
@@ -8113,7 +8113,7 @@ func init() {
           "CA"
         ],
         "summary": "List CAs",
-        "operationId": "listCA",
+        "operationId": "listCas",
         "parameters": [
           {
             "type": "integer",
@@ -8135,7 +8135,7 @@ func init() {
           "200": {
             "description": "A list of Certificate Authorities (CAs)",
             "schema": {
-              "$ref": "#/definitions/listCAsEnvelope"
+              "$ref": "#/definitions/listCasEnvelope"
             }
           }
         }
@@ -8151,7 +8151,7 @@ func init() {
           "CA"
         ],
         "summary": "Creates a CA",
-        "operationId": "createCA",
+        "operationId": "createCa",
         "parameters": [
           {
             "description": "A CA to create",
@@ -8246,12 +8246,12 @@ func init() {
           "CA"
         ],
         "summary": "Retrieves a single CA",
-        "operationId": "detailCA",
+        "operationId": "detailCa",
         "responses": {
           "200": {
             "description": "A singular Certificate Authority (CA) resource",
             "schema": {
-              "$ref": "#/definitions/detailCAEnvelope"
+              "$ref": "#/definitions/detailCaEnvelope"
             }
           },
           "401": {
@@ -8317,7 +8317,7 @@ func init() {
           "CA"
         ],
         "summary": "Update all fields on a CA",
-        "operationId": "updateCA",
+        "operationId": "updateCa",
         "parameters": [
           {
             "description": "A CA update object",
@@ -8518,7 +8518,7 @@ func init() {
           "CA"
         ],
         "summary": "Update the supplied fields on a CA",
-        "operationId": "patchCA",
+        "operationId": "patchCa",
         "parameters": [
           {
             "description": "A CA patch object",
@@ -18645,7 +18645,7 @@ func init() {
         }
       }
     },
-    "detailCAEnvelope": {
+    "detailCaEnvelope": {
       "type": "object",
       "properties": {
         "data": {
@@ -19491,7 +19491,7 @@ func init() {
         }
       }
     },
-    "listCAsEnvelope": {
+    "listCasEnvelope": {
       "type": "object",
       "properties": {
         "data": {
@@ -20662,10 +20662,10 @@ func init() {
         "$ref": "#/definitions/detailAuthenticatorEnvelope"
       }
     },
-    "detailCA": {
+    "detailCa": {
       "description": "A singular Certificate Authority (CA) resource",
       "schema": {
-        "$ref": "#/definitions/detailCAEnvelope"
+        "$ref": "#/definitions/detailCaEnvelope"
       }
     },
     "detailConfig": {
@@ -20904,10 +20904,10 @@ func init() {
         "$ref": "#/definitions/listAuthenticatorsEnvelope"
       }
     },
-    "listCAs": {
+    "listCas": {
       "description": "A list of Certificate Authorities (CAs)",
       "schema": {
-        "$ref": "#/definitions/listCAsEnvelope"
+        "$ref": "#/definitions/listCasEnvelope"
       }
     },
     "listConfigTypes": {

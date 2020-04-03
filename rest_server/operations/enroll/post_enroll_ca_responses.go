@@ -37,14 +37,14 @@ import (
 	"github.com/netfoundry/ziti-edge/models"
 )
 
-// PostEnrollCAOKCode is the HTTP code returned for type PostEnrollCAOK
-const PostEnrollCAOKCode int = 200
+// PostEnrollCaOKCode is the HTTP code returned for type PostEnrollCaOK
+const PostEnrollCaOKCode int = 200
 
-/*PostEnrollCAOK Base empty response
+/*PostEnrollCaOK Base empty response
 
 swagger:response postEnrollCaOK
 */
-type PostEnrollCAOK struct {
+type PostEnrollCaOK struct {
 
 	/*
 	  In: Body
@@ -52,25 +52,25 @@ type PostEnrollCAOK struct {
 	Payload *models.Empty `json:"body,omitempty"`
 }
 
-// NewPostEnrollCAOK creates PostEnrollCAOK with default headers values
-func NewPostEnrollCAOK() *PostEnrollCAOK {
+// NewPostEnrollCaOK creates PostEnrollCaOK with default headers values
+func NewPostEnrollCaOK() *PostEnrollCaOK {
 
-	return &PostEnrollCAOK{}
+	return &PostEnrollCaOK{}
 }
 
-// WithPayload adds the payload to the post enroll Ca o k response
-func (o *PostEnrollCAOK) WithPayload(payload *models.Empty) *PostEnrollCAOK {
+// WithPayload adds the payload to the post enroll ca o k response
+func (o *PostEnrollCaOK) WithPayload(payload *models.Empty) *PostEnrollCaOK {
 	o.Payload = payload
 	return o
 }
 
-// SetPayload sets the payload to the post enroll Ca o k response
-func (o *PostEnrollCAOK) SetPayload(payload *models.Empty) {
+// SetPayload sets the payload to the post enroll ca o k response
+func (o *PostEnrollCaOK) SetPayload(payload *models.Empty) {
 	o.Payload = payload
 }
 
 // WriteResponse to the client
-func (o *PostEnrollCAOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+func (o *PostEnrollCaOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {

@@ -39,16 +39,16 @@ import (
 	"github.com/netfoundry/ziti-edge/models"
 )
 
-// PostEnrollCAReader is a Reader for the PostEnrollCA structure.
-type PostEnrollCAReader struct {
+// PostEnrollCaReader is a Reader for the PostEnrollCa structure.
+type PostEnrollCaReader struct {
 	formats strfmt.Registry
 }
 
 // ReadResponse reads a server response into the received o.
-func (o *PostEnrollCAReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
+func (o *PostEnrollCaReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
 	case 200:
-		result := NewPostEnrollCAOK()
+		result := NewPostEnrollCaOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -59,28 +59,28 @@ func (o *PostEnrollCAReader) ReadResponse(response runtime.ClientResponse, consu
 	}
 }
 
-// NewPostEnrollCAOK creates a PostEnrollCAOK with default headers values
-func NewPostEnrollCAOK() *PostEnrollCAOK {
-	return &PostEnrollCAOK{}
+// NewPostEnrollCaOK creates a PostEnrollCaOK with default headers values
+func NewPostEnrollCaOK() *PostEnrollCaOK {
+	return &PostEnrollCaOK{}
 }
 
-/*PostEnrollCAOK handles this case with default header values.
+/*PostEnrollCaOK handles this case with default header values.
 
 Base empty response
 */
-type PostEnrollCAOK struct {
+type PostEnrollCaOK struct {
 	Payload *models.Empty
 }
 
-func (o *PostEnrollCAOK) Error() string {
+func (o *PostEnrollCaOK) Error() string {
 	return fmt.Sprintf("[POST /enroll/ca][%d] postEnrollCaOK  %+v", 200, o.Payload)
 }
 
-func (o *PostEnrollCAOK) GetPayload() *models.Empty {
+func (o *PostEnrollCaOK) GetPayload() *models.Empty {
 	return o.Payload
 }
 
-func (o *PostEnrollCAOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *PostEnrollCaOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Empty)
 

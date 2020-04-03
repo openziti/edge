@@ -40,7 +40,7 @@ import (
 type Erott struct {
 
 	// A PEM encoded set of CA certificates to trust
-	CA string `json:"ca,omitempty"`
+	Ca string `json:"ca,omitempty"`
 
 	// A PEM encoded cert for the server
 	Cert string `json:"cert,omitempty"`

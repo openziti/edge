@@ -37,13 +37,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CAList An array of Certificate Authority (CA) resources
+// CaList An array of Certificate Authority (CA) resources
 //
 // swagger:model caList
-type CAList []*CADetail
+type CaList []*CaDetail
 
 // Validate validates this ca list
-func (m CAList) Validate(formats strfmt.Registry) error {
+func (m CaList) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {

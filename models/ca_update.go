@@ -36,22 +36,22 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CAUpdate ca update
+// CaUpdate ca update
 //
 // swagger:model caUpdate
-type CAUpdate struct {
+type CaUpdate struct {
 
 	// is auth enabled
 	// Required: true
 	IsAuthEnabled *bool `json:"isAuthEnabled"`
 
-	// is auto Ca enrollment enabled
+	// is auto ca enrollment enabled
 	// Required: true
-	IsAutoCAEnrollmentEnabled *bool `json:"isAutoCaEnrollmentEnabled"`
+	IsAutoCaEnrollmentEnabled *bool `json:"isAutoCaEnrollmentEnabled"`
 
-	// is ott Ca enrollment enabled
+	// is ott ca enrollment enabled
 	// Required: true
-	IsOttCAEnrollmentEnabled *bool `json:"isOttCaEnrollmentEnabled"`
+	IsOttCaEnrollmentEnabled *bool `json:"isOttCaEnrollmentEnabled"`
 
 	// name
 	// Required: true
@@ -62,18 +62,18 @@ type CAUpdate struct {
 }
 
 // Validate validates this ca update
-func (m *CAUpdate) Validate(formats strfmt.Registry) error {
+func (m *CaUpdate) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateIsAuthEnabled(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateIsAutoCAEnrollmentEnabled(formats); err != nil {
+	if err := m.validateIsAutoCaEnrollmentEnabled(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateIsOttCAEnrollmentEnabled(formats); err != nil {
+	if err := m.validateIsOttCaEnrollmentEnabled(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -87,7 +87,7 @@ func (m *CAUpdate) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CAUpdate) validateIsAuthEnabled(formats strfmt.Registry) error {
+func (m *CaUpdate) validateIsAuthEnabled(formats strfmt.Registry) error {
 
 	if err := validate.Required("isAuthEnabled", "body", m.IsAuthEnabled); err != nil {
 		return err
@@ -96,25 +96,25 @@ func (m *CAUpdate) validateIsAuthEnabled(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CAUpdate) validateIsAutoCAEnrollmentEnabled(formats strfmt.Registry) error {
+func (m *CaUpdate) validateIsAutoCaEnrollmentEnabled(formats strfmt.Registry) error {
 
-	if err := validate.Required("isAutoCaEnrollmentEnabled", "body", m.IsAutoCAEnrollmentEnabled); err != nil {
+	if err := validate.Required("isAutoCaEnrollmentEnabled", "body", m.IsAutoCaEnrollmentEnabled); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *CAUpdate) validateIsOttCAEnrollmentEnabled(formats strfmt.Registry) error {
+func (m *CaUpdate) validateIsOttCaEnrollmentEnabled(formats strfmt.Registry) error {
 
-	if err := validate.Required("isOttCaEnrollmentEnabled", "body", m.IsOttCAEnrollmentEnabled); err != nil {
+	if err := validate.Required("isOttCaEnrollmentEnabled", "body", m.IsOttCaEnrollmentEnabled); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *CAUpdate) validateName(formats strfmt.Registry) error {
+func (m *CaUpdate) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
 		return err
@@ -124,7 +124,7 @@ func (m *CAUpdate) validateName(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (m *CAUpdate) MarshalBinary() ([]byte, error) {
+func (m *CaUpdate) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -132,8 +132,8 @@ func (m *CAUpdate) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *CAUpdate) UnmarshalBinary(b []byte) error {
-	var res CAUpdate
+func (m *CaUpdate) UnmarshalBinary(b []byte) error {
+	var res CaUpdate
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

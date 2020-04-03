@@ -25,15 +25,13 @@ try
     New-Item -ItemType "directory" -Path $clientPath -ErrorAction "SilentlyContinue" | Out-Null
 
     "...generating server"
-    # initialism for "Ca" keeps go-swagger from outputting the CA packages as c_a and mangling
-    # type/function names in the same way.
-    swagger generate server --exclude-main -f $swagSpec -s rest_server -t $zitiEdgeDir -q -r $copyrightFile --additional-initialism=Ca
+    swagger generate server --exclude-main -f $swagSpec -s rest_server -t $zitiEdgeDir -q -r $copyrightFile
     if (-not$?)
     {
         throw "Failed to generate server. See above."
     }
     "...generating client"
-    swagger generate client -f $swagSpec  -c rest_client -t $zitiEdgeDir -q -r $copyrightFile --additional-initialism=Ca
+    swagger generate client -f $swagSpec  -c rest_client -t $zitiEdgeDir -q -r $copyrightFile
     if (-not$?)
     {
         throw "Failed to generate client. See above."

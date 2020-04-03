@@ -37,7 +37,7 @@ import (
 	"github.com/netfoundry/ziti-edge/rest_client/api_session"
 	"github.com/netfoundry/ziti-edge/rest_client/authentication"
 	"github.com/netfoundry/ziti-edge/rest_client/authenticator"
-	"github.com/netfoundry/ziti-edge/rest_client/ca"
+	"github.com/netfoundry/ziti-edge/rest_client/c_a"
 	"github.com/netfoundry/ziti-edge/rest_client/config"
 	"github.com/netfoundry/ziti-edge/rest_client/current_api_session"
 	"github.com/netfoundry/ziti-edge/rest_client/edge_router"
@@ -101,7 +101,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *ZitiEdge {
 	cli.APISession = api_session.New(transport, formats)
 	cli.Authentication = authentication.New(transport, formats)
 	cli.Authenticator = authenticator.New(transport, formats)
-	cli.CA = ca.New(transport, formats)
+	cli.Ca = c_a.New(transport, formats)
 	cli.Config = config.New(transport, formats)
 	cli.CurrentAPISession = current_api_session.New(transport, formats)
 	cli.EdgeRouter = edge_router.New(transport, formats)
@@ -168,7 +168,7 @@ type ZitiEdge struct {
 
 	Authenticator authenticator.ClientService
 
-	CA ca.ClientService
+	Ca c_a.ClientService
 
 	Config config.ClientService
 
@@ -211,7 +211,7 @@ func (c *ZitiEdge) SetTransport(transport runtime.ClientTransport) {
 	c.APISession.SetTransport(transport)
 	c.Authentication.SetTransport(transport)
 	c.Authenticator.SetTransport(transport)
-	c.CA.SetTransport(transport)
+	c.Ca.SetTransport(transport)
 	c.Config.SetTransport(transport)
 	c.CurrentAPISession.SetTransport(transport)
 	c.EdgeRouter.SetTransport(transport)
