@@ -31,13 +31,13 @@ try
 
 
     "...generating server"
-    swagger generate server --exclude-main -f $swagSpec -s rest_server -t $zitiEdgeDir -q -r $copyrightFile
+    swagger generate server --exclude-main -f $swagSpec -s rest_server -t $zitiEdgeDir -q -r $copyrightFile -m "rest_model"
     if (-not$?)
     {
         throw "Failed to generate server. See above."
     }
     "...generating client"
-    swagger generate client -f $swagSpec  -c rest_client -t $zitiEdgeDir -q -r $copyrightFile
+    swagger generate client -f $swagSpec  -c rest_client -t $zitiEdgeDir -q -r $copyrightFile -m "rest_model"
     if (-not$?)
     {
         throw "Failed to generate client. See above."
