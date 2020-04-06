@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteTerminatorOKCode is the HTTP code returned for type DeleteTerminatorOK
@@ -49,7 +49,7 @@ type DeleteTerminatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteTerminatorOK creates DeleteTerminatorOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteTerminatorOK() *DeleteTerminatorOK {
 }
 
 // WithPayload adds the payload to the delete terminator o k response
-func (o *DeleteTerminatorOK) WithPayload(payload *models.Empty) *DeleteTerminatorOK {
+func (o *DeleteTerminatorOK) WithPayload(payload *rest_model.Empty) *DeleteTerminatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete terminator o k response
-func (o *DeleteTerminatorOK) SetPayload(payload *models.Empty) {
+func (o *DeleteTerminatorOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteTerminatorBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteTerminatorBadRequest creates DeleteTerminatorBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteTerminatorBadRequest() *DeleteTerminatorBadRequest {
 }
 
 // WithPayload adds the payload to the delete terminator bad request response
-func (o *DeleteTerminatorBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteTerminatorBadRequest {
+func (o *DeleteTerminatorBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteTerminatorBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete terminator bad request response
-func (o *DeleteTerminatorBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteTerminatorBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteTerminatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteTerminatorUnauthorized creates DeleteTerminatorUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteTerminatorUnauthorized() *DeleteTerminatorUnauthorized {
 }
 
 // WithPayload adds the payload to the delete terminator unauthorized response
-func (o *DeleteTerminatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteTerminatorUnauthorized {
+func (o *DeleteTerminatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteTerminatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete terminator unauthorized response
-func (o *DeleteTerminatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteTerminatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteTerminatorConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteTerminatorConflict creates DeleteTerminatorConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteTerminatorConflict() *DeleteTerminatorConflict {
 }
 
 // WithPayload adds the payload to the delete terminator conflict response
-func (o *DeleteTerminatorConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteTerminatorConflict {
+func (o *DeleteTerminatorConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteTerminatorConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete terminator conflict response
-func (o *DeleteTerminatorConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteTerminatorConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

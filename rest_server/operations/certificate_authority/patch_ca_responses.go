@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchCaOKCode is the HTTP code returned for type PatchCaOK
@@ -49,7 +49,7 @@ type PatchCaOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPatchCaOK creates PatchCaOK with default headers values
@@ -59,13 +59,13 @@ func NewPatchCaOK() *PatchCaOK {
 }
 
 // WithPayload adds the payload to the patch ca o k response
-func (o *PatchCaOK) WithPayload(payload *models.Empty) *PatchCaOK {
+func (o *PatchCaOK) WithPayload(payload *rest_model.Empty) *PatchCaOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch ca o k response
-func (o *PatchCaOK) SetPayload(payload *models.Empty) {
+func (o *PatchCaOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PatchCaBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchCaBadRequest creates PatchCaBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPatchCaBadRequest() *PatchCaBadRequest {
 }
 
 // WithPayload adds the payload to the patch ca bad request response
-func (o *PatchCaBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PatchCaBadRequest {
+func (o *PatchCaBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchCaBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch ca bad request response
-func (o *PatchCaBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchCaBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PatchCaUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchCaUnauthorized creates PatchCaUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPatchCaUnauthorized() *PatchCaUnauthorized {
 }
 
 // WithPayload adds the payload to the patch ca unauthorized response
-func (o *PatchCaUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PatchCaUnauthorized {
+func (o *PatchCaUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchCaUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch ca unauthorized response
-func (o *PatchCaUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchCaUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PatchCaNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchCaNotFound creates PatchCaNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPatchCaNotFound() *PatchCaNotFound {
 }
 
 // WithPayload adds the payload to the patch ca not found response
-func (o *PatchCaNotFound) WithPayload(payload *models.APIErrorEnvelope) *PatchCaNotFound {
+func (o *PatchCaNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchCaNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch ca not found response
-func (o *PatchCaNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchCaNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

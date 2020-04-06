@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewPatchCurrentIdentityAuthenticatorParams creates a new PatchCurrentIdentityAuthenticatorParams object
@@ -90,7 +90,7 @@ type PatchCurrentIdentityAuthenticatorParams struct {
 	  An authenticator patch object
 
 	*/
-	Body *models.AuthenticatorPatch
+	Body *rest_model.AuthenticatorPatch
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *PatchCurrentIdentityAuthenticatorParams) SetHTTPClient(client *http.Cli
 }
 
 // WithBody adds the body to the patch current identity authenticator params
-func (o *PatchCurrentIdentityAuthenticatorParams) WithBody(body *models.AuthenticatorPatch) *PatchCurrentIdentityAuthenticatorParams {
+func (o *PatchCurrentIdentityAuthenticatorParams) WithBody(body *rest_model.AuthenticatorPatch) *PatchCurrentIdentityAuthenticatorParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the patch current identity authenticator params
-func (o *PatchCurrentIdentityAuthenticatorParams) SetBody(body *models.AuthenticatorPatch) {
+func (o *PatchCurrentIdentityAuthenticatorParams) SetBody(body *rest_model.AuthenticatorPatch) {
 	o.Body = body
 }
 

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteServiceOKCode is the HTTP code returned for type DeleteServiceOK
@@ -49,7 +49,7 @@ type DeleteServiceOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteServiceOK creates DeleteServiceOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteServiceOK() *DeleteServiceOK {
 }
 
 // WithPayload adds the payload to the delete service o k response
-func (o *DeleteServiceOK) WithPayload(payload *models.Empty) *DeleteServiceOK {
+func (o *DeleteServiceOK) WithPayload(payload *rest_model.Empty) *DeleteServiceOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service o k response
-func (o *DeleteServiceOK) SetPayload(payload *models.Empty) {
+func (o *DeleteServiceOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteServiceBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServiceBadRequest creates DeleteServiceBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteServiceBadRequest() *DeleteServiceBadRequest {
 }
 
 // WithPayload adds the payload to the delete service bad request response
-func (o *DeleteServiceBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteServiceBadRequest {
+func (o *DeleteServiceBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServiceBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service bad request response
-func (o *DeleteServiceBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServiceBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteServiceUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServiceUnauthorized creates DeleteServiceUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteServiceUnauthorized() *DeleteServiceUnauthorized {
 }
 
 // WithPayload adds the payload to the delete service unauthorized response
-func (o *DeleteServiceUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteServiceUnauthorized {
+func (o *DeleteServiceUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServiceUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service unauthorized response
-func (o *DeleteServiceUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServiceUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteServiceConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServiceConflict creates DeleteServiceConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteServiceConflict() *DeleteServiceConflict {
 }
 
 // WithPayload adds the payload to the delete service conflict response
-func (o *DeleteServiceConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteServiceConflict {
+func (o *DeleteServiceConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServiceConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service conflict response
-func (o *DeleteServiceConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServiceConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

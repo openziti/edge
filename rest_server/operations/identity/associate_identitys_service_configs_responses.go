@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // AssociateIdentitysServiceConfigsOKCode is the HTTP code returned for type AssociateIdentitysServiceConfigsOK
@@ -49,7 +49,7 @@ type AssociateIdentitysServiceConfigsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewAssociateIdentitysServiceConfigsOK creates AssociateIdentitysServiceConfigsOK with default headers values
@@ -59,13 +59,13 @@ func NewAssociateIdentitysServiceConfigsOK() *AssociateIdentitysServiceConfigsOK
 }
 
 // WithPayload adds the payload to the associate identitys service configs o k response
-func (o *AssociateIdentitysServiceConfigsOK) WithPayload(payload *models.Empty) *AssociateIdentitysServiceConfigsOK {
+func (o *AssociateIdentitysServiceConfigsOK) WithPayload(payload *rest_model.Empty) *AssociateIdentitysServiceConfigsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the associate identitys service configs o k response
-func (o *AssociateIdentitysServiceConfigsOK) SetPayload(payload *models.Empty) {
+func (o *AssociateIdentitysServiceConfigsOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type AssociateIdentitysServiceConfigsBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewAssociateIdentitysServiceConfigsBadRequest creates AssociateIdentitysServiceConfigsBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewAssociateIdentitysServiceConfigsBadRequest() *AssociateIdentitysServiceC
 }
 
 // WithPayload adds the payload to the associate identitys service configs bad request response
-func (o *AssociateIdentitysServiceConfigsBadRequest) WithPayload(payload *models.APIErrorEnvelope) *AssociateIdentitysServiceConfigsBadRequest {
+func (o *AssociateIdentitysServiceConfigsBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *AssociateIdentitysServiceConfigsBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the associate identitys service configs bad request response
-func (o *AssociateIdentitysServiceConfigsBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *AssociateIdentitysServiceConfigsBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type AssociateIdentitysServiceConfigsUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewAssociateIdentitysServiceConfigsUnauthorized creates AssociateIdentitysServiceConfigsUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewAssociateIdentitysServiceConfigsUnauthorized() *AssociateIdentitysServic
 }
 
 // WithPayload adds the payload to the associate identitys service configs unauthorized response
-func (o *AssociateIdentitysServiceConfigsUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *AssociateIdentitysServiceConfigsUnauthorized {
+func (o *AssociateIdentitysServiceConfigsUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *AssociateIdentitysServiceConfigsUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the associate identitys service configs unauthorized response
-func (o *AssociateIdentitysServiceConfigsUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *AssociateIdentitysServiceConfigsUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type AssociateIdentitysServiceConfigsNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewAssociateIdentitysServiceConfigsNotFound creates AssociateIdentitysServiceConfigsNotFound with default headers values
@@ -191,13 +191,13 @@ func NewAssociateIdentitysServiceConfigsNotFound() *AssociateIdentitysServiceCon
 }
 
 // WithPayload adds the payload to the associate identitys service configs not found response
-func (o *AssociateIdentitysServiceConfigsNotFound) WithPayload(payload *models.APIErrorEnvelope) *AssociateIdentitysServiceConfigsNotFound {
+func (o *AssociateIdentitysServiceConfigsNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *AssociateIdentitysServiceConfigsNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the associate identitys service configs not found response
-func (o *AssociateIdentitysServiceConfigsNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *AssociateIdentitysServiceConfigsNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

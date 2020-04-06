@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // GetIdentityPolicyAdviceReader is a Reader for the GetIdentityPolicyAdvice structure.
@@ -81,20 +81,20 @@ func NewGetIdentityPolicyAdviceOK() *GetIdentityPolicyAdviceOK {
 Returns the document that represents the policy advice
 */
 type GetIdentityPolicyAdviceOK struct {
-	Payload *models.GetIdentityPolicyAdviceEnvelope
+	Payload *rest_model.GetIdentityPolicyAdviceEnvelope
 }
 
 func (o *GetIdentityPolicyAdviceOK) Error() string {
 	return fmt.Sprintf("[GET /identities/{id}/policy-advice/{serviceId}][%d] getIdentityPolicyAdviceOK  %+v", 200, o.Payload)
 }
 
-func (o *GetIdentityPolicyAdviceOK) GetPayload() *models.GetIdentityPolicyAdviceEnvelope {
+func (o *GetIdentityPolicyAdviceOK) GetPayload() *rest_model.GetIdentityPolicyAdviceEnvelope {
 	return o.Payload
 }
 
 func (o *GetIdentityPolicyAdviceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.GetIdentityPolicyAdviceEnvelope)
+	o.Payload = new(rest_model.GetIdentityPolicyAdviceEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewGetIdentityPolicyAdviceUnauthorized() *GetIdentityPolicyAdviceUnauthoriz
 The currently supplied session does not have the correct access rights to request this resource
 */
 type GetIdentityPolicyAdviceUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *GetIdentityPolicyAdviceUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /identities/{id}/policy-advice/{serviceId}][%d] getIdentityPolicyAdviceUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *GetIdentityPolicyAdviceUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *GetIdentityPolicyAdviceUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *GetIdentityPolicyAdviceUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewGetIdentityPolicyAdviceNotFound() *GetIdentityPolicyAdviceNotFound {
 The requested resource does not exist
 */
 type GetIdentityPolicyAdviceNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *GetIdentityPolicyAdviceNotFound) Error() string {
 	return fmt.Sprintf("[GET /identities/{id}/policy-advice/{serviceId}][%d] getIdentityPolicyAdviceNotFound  %+v", 404, o.Payload)
 }
 
-func (o *GetIdentityPolicyAdviceNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *GetIdentityPolicyAdviceNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *GetIdentityPolicyAdviceNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

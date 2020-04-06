@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewPatchEdgeRouterParams creates a new PatchEdgeRouterParams object
@@ -90,7 +90,7 @@ type PatchEdgeRouterParams struct {
 	  An edge router patch object
 
 	*/
-	Body *models.EdgeRouterPatch
+	Body *rest_model.EdgeRouterPatch
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *PatchEdgeRouterParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the patch edge router params
-func (o *PatchEdgeRouterParams) WithBody(body *models.EdgeRouterPatch) *PatchEdgeRouterParams {
+func (o *PatchEdgeRouterParams) WithBody(body *rest_model.EdgeRouterPatch) *PatchEdgeRouterParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the patch edge router params
-func (o *PatchEdgeRouterParams) SetBody(body *models.EdgeRouterPatch) {
+func (o *PatchEdgeRouterParams) SetBody(body *rest_model.EdgeRouterPatch) {
 	o.Body = body
 }
 

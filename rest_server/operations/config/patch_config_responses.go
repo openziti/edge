@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchConfigOKCode is the HTTP code returned for type PatchConfigOK
@@ -49,7 +49,7 @@ type PatchConfigOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPatchConfigOK creates PatchConfigOK with default headers values
@@ -59,13 +59,13 @@ func NewPatchConfigOK() *PatchConfigOK {
 }
 
 // WithPayload adds the payload to the patch config o k response
-func (o *PatchConfigOK) WithPayload(payload *models.Empty) *PatchConfigOK {
+func (o *PatchConfigOK) WithPayload(payload *rest_model.Empty) *PatchConfigOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch config o k response
-func (o *PatchConfigOK) SetPayload(payload *models.Empty) {
+func (o *PatchConfigOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PatchConfigBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchConfigBadRequest creates PatchConfigBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPatchConfigBadRequest() *PatchConfigBadRequest {
 }
 
 // WithPayload adds the payload to the patch config bad request response
-func (o *PatchConfigBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PatchConfigBadRequest {
+func (o *PatchConfigBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchConfigBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch config bad request response
-func (o *PatchConfigBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchConfigBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PatchConfigUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchConfigUnauthorized creates PatchConfigUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPatchConfigUnauthorized() *PatchConfigUnauthorized {
 }
 
 // WithPayload adds the payload to the patch config unauthorized response
-func (o *PatchConfigUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PatchConfigUnauthorized {
+func (o *PatchConfigUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchConfigUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch config unauthorized response
-func (o *PatchConfigUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchConfigUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PatchConfigNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchConfigNotFound creates PatchConfigNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPatchConfigNotFound() *PatchConfigNotFound {
 }
 
 // WithPayload adds the payload to the patch config not found response
-func (o *PatchConfigNotFound) WithPayload(payload *models.APIErrorEnvelope) *PatchConfigNotFound {
+func (o *PatchConfigNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchConfigNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch config not found response
-func (o *PatchConfigNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchConfigNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchEdgeRouterPolicyReader is a Reader for the PatchEdgeRouterPolicy structure.
@@ -87,20 +87,20 @@ func NewPatchEdgeRouterPolicyOK() *PatchEdgeRouterPolicyOK {
 The patch request was successful and the resource has been altered
 */
 type PatchEdgeRouterPolicyOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *PatchEdgeRouterPolicyOK) Error() string {
 	return fmt.Sprintf("[PATCH /edge-router-policies/{id}][%d] patchEdgeRouterPolicyOK  %+v", 200, o.Payload)
 }
 
-func (o *PatchEdgeRouterPolicyOK) GetPayload() *models.Empty {
+func (o *PatchEdgeRouterPolicyOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *PatchEdgeRouterPolicyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewPatchEdgeRouterPolicyBadRequest() *PatchEdgeRouterPolicyBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type PatchEdgeRouterPolicyBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchEdgeRouterPolicyBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /edge-router-policies/{id}][%d] patchEdgeRouterPolicyBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *PatchEdgeRouterPolicyBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchEdgeRouterPolicyBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchEdgeRouterPolicyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewPatchEdgeRouterPolicyUnauthorized() *PatchEdgeRouterPolicyUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type PatchEdgeRouterPolicyUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchEdgeRouterPolicyUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /edge-router-policies/{id}][%d] patchEdgeRouterPolicyUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *PatchEdgeRouterPolicyUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchEdgeRouterPolicyUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchEdgeRouterPolicyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewPatchEdgeRouterPolicyNotFound() *PatchEdgeRouterPolicyNotFound {
 The requested resource does not exist
 */
 type PatchEdgeRouterPolicyNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchEdgeRouterPolicyNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /edge-router-policies/{id}][%d] patchEdgeRouterPolicyNotFound  %+v", 404, o.Payload)
 }
 
-func (o *PatchEdgeRouterPolicyNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchEdgeRouterPolicyNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchEdgeRouterPolicyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateServiceEdgeRouterPolicyParams creates a new CreateServiceEdgeRouterPolicyParams object
@@ -90,7 +90,7 @@ type CreateServiceEdgeRouterPolicyParams struct {
 	  A service edge router policy to create
 
 	*/
-	Body *models.ServiceEdgeRouterPolicyCreate
+	Body *rest_model.ServiceEdgeRouterPolicyCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateServiceEdgeRouterPolicyParams) SetHTTPClient(client *http.Client)
 }
 
 // WithBody adds the body to the create service edge router policy params
-func (o *CreateServiceEdgeRouterPolicyParams) WithBody(body *models.ServiceEdgeRouterPolicyCreate) *CreateServiceEdgeRouterPolicyParams {
+func (o *CreateServiceEdgeRouterPolicyParams) WithBody(body *rest_model.ServiceEdgeRouterPolicyCreate) *CreateServiceEdgeRouterPolicyParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create service edge router policy params
-func (o *CreateServiceEdgeRouterPolicyParams) SetBody(body *models.ServiceEdgeRouterPolicyCreate) {
+func (o *CreateServiceEdgeRouterPolicyParams) SetBody(body *rest_model.ServiceEdgeRouterPolicyCreate) {
 	o.Body = body
 }
 

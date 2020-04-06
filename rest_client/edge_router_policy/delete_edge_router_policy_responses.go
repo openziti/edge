@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteEdgeRouterPolicyReader is a Reader for the DeleteEdgeRouterPolicy structure.
@@ -87,20 +87,20 @@ func NewDeleteEdgeRouterPolicyOK() *DeleteEdgeRouterPolicyOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteEdgeRouterPolicyOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteEdgeRouterPolicyOK) Error() string {
 	return fmt.Sprintf("[DELETE /edge-router-policies/{id}][%d] deleteEdgeRouterPolicyOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteEdgeRouterPolicyOK) GetPayload() *models.Empty {
+func (o *DeleteEdgeRouterPolicyOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteEdgeRouterPolicyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewDeleteEdgeRouterPolicyBadRequest() *DeleteEdgeRouterPolicyBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteEdgeRouterPolicyBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteEdgeRouterPolicyBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /edge-router-policies/{id}][%d] deleteEdgeRouterPolicyBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteEdgeRouterPolicyBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteEdgeRouterPolicyBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteEdgeRouterPolicyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewDeleteEdgeRouterPolicyUnauthorized() *DeleteEdgeRouterPolicyUnauthorized
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteEdgeRouterPolicyUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteEdgeRouterPolicyUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /edge-router-policies/{id}][%d] deleteEdgeRouterPolicyUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteEdgeRouterPolicyUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteEdgeRouterPolicyUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteEdgeRouterPolicyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewDeleteEdgeRouterPolicyConflict() *DeleteEdgeRouterPolicyConflict {
 The resource requested to be removed/altered cannot be as it is referenced by another object.
 */
 type DeleteEdgeRouterPolicyConflict struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteEdgeRouterPolicyConflict) Error() string {
 	return fmt.Sprintf("[DELETE /edge-router-policies/{id}][%d] deleteEdgeRouterPolicyConflict  %+v", 409, o.Payload)
 }
 
-func (o *DeleteEdgeRouterPolicyConflict) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteEdgeRouterPolicyConflict) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteEdgeRouterPolicyConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

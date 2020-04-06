@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateConfigTypeReader is a Reader for the UpdateConfigType structure.
@@ -87,20 +87,20 @@ func NewUpdateConfigTypeOK() *UpdateConfigTypeOK {
 The update request was successful and the resource has been altered
 */
 type UpdateConfigTypeOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *UpdateConfigTypeOK) Error() string {
 	return fmt.Sprintf("[PUT /config-types/{id}][%d] updateConfigTypeOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateConfigTypeOK) GetPayload() *models.Empty {
+func (o *UpdateConfigTypeOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *UpdateConfigTypeOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewUpdateConfigTypeBadRequest() *UpdateConfigTypeBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type UpdateConfigTypeBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateConfigTypeBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /config-types/{id}][%d] updateConfigTypeBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *UpdateConfigTypeBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateConfigTypeBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateConfigTypeBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewUpdateConfigTypeUnauthorized() *UpdateConfigTypeUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type UpdateConfigTypeUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateConfigTypeUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /config-types/{id}][%d] updateConfigTypeUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *UpdateConfigTypeUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateConfigTypeUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateConfigTypeUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewUpdateConfigTypeNotFound() *UpdateConfigTypeNotFound {
 The requested resource does not exist
 */
 type UpdateConfigTypeNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateConfigTypeNotFound) Error() string {
 	return fmt.Sprintf("[PUT /config-types/{id}][%d] updateConfigTypeNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateConfigTypeNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateConfigTypeNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateConfigTypeNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

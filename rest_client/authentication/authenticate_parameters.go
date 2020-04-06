@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewAuthenticateParams creates a new AuthenticateParams object
@@ -87,7 +87,7 @@ for the authenticate operation typically these are written to a http.Request
 type AuthenticateParams struct {
 
 	/*Body*/
-	Body *models.Authenticate
+	Body *rest_model.Authenticate
 	/*Method*/
 	Method string
 
@@ -130,13 +130,13 @@ func (o *AuthenticateParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the authenticate params
-func (o *AuthenticateParams) WithBody(body *models.Authenticate) *AuthenticateParams {
+func (o *AuthenticateParams) WithBody(body *rest_model.Authenticate) *AuthenticateParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the authenticate params
-func (o *AuthenticateParams) SetBody(body *models.Authenticate) {
+func (o *AuthenticateParams) SetBody(body *rest_model.Authenticate) {
 	o.Body = body
 }
 

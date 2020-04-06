@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateConfigTypeParams creates a new CreateConfigTypeParams object
@@ -90,7 +90,7 @@ type CreateConfigTypeParams struct {
 	  A config-type to create
 
 	*/
-	Body *models.ConfigTypeCreate
+	Body *rest_model.ConfigTypeCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateConfigTypeParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create config type params
-func (o *CreateConfigTypeParams) WithBody(body *models.ConfigTypeCreate) *CreateConfigTypeParams {
+func (o *CreateConfigTypeParams) WithBody(body *rest_model.ConfigTypeCreate) *CreateConfigTypeParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create config type params
-func (o *CreateConfigTypeParams) SetBody(body *models.ConfigTypeCreate) {
+func (o *CreateConfigTypeParams) SetBody(body *rest_model.ConfigTypeCreate) {
 	o.Body = body
 }
 

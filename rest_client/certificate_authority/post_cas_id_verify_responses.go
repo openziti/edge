@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PostCasIDVerifyReader is a Reader for the PostCasIDVerify structure.
@@ -87,20 +87,20 @@ func NewPostCasIDVerifyOK() *PostCasIDVerifyOK {
 Base empty response
 */
 type PostCasIDVerifyOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *PostCasIDVerifyOK) Error() string {
 	return fmt.Sprintf("[POST /cas/{id}/verify][%d] postCasIdVerifyOK  %+v", 200, o.Payload)
 }
 
-func (o *PostCasIDVerifyOK) GetPayload() *models.Empty {
+func (o *PostCasIDVerifyOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *PostCasIDVerifyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewPostCasIDVerifyBadRequest() *PostCasIDVerifyBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type PostCasIDVerifyBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PostCasIDVerifyBadRequest) Error() string {
 	return fmt.Sprintf("[POST /cas/{id}/verify][%d] postCasIdVerifyBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *PostCasIDVerifyBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *PostCasIDVerifyBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PostCasIDVerifyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewPostCasIDVerifyUnauthorized() *PostCasIDVerifyUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type PostCasIDVerifyUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PostCasIDVerifyUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /cas/{id}/verify][%d] postCasIdVerifyUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *PostCasIDVerifyUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *PostCasIDVerifyUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PostCasIDVerifyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewPostCasIDVerifyNotFound() *PostCasIDVerifyNotFound {
 The requested resource does not exist
 */
 type PostCasIDVerifyNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PostCasIDVerifyNotFound) Error() string {
 	return fmt.Sprintf("[POST /cas/{id}/verify][%d] postCasIdVerifyNotFound  %+v", 404, o.Payload)
 }
 
-func (o *PostCasIDVerifyNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *PostCasIDVerifyNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PostCasIDVerifyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

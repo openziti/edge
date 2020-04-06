@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchTransitRouterOKCode is the HTTP code returned for type PatchTransitRouterOK
@@ -49,7 +49,7 @@ type PatchTransitRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPatchTransitRouterOK creates PatchTransitRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewPatchTransitRouterOK() *PatchTransitRouterOK {
 }
 
 // WithPayload adds the payload to the patch transit router o k response
-func (o *PatchTransitRouterOK) WithPayload(payload *models.Empty) *PatchTransitRouterOK {
+func (o *PatchTransitRouterOK) WithPayload(payload *rest_model.Empty) *PatchTransitRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch transit router o k response
-func (o *PatchTransitRouterOK) SetPayload(payload *models.Empty) {
+func (o *PatchTransitRouterOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PatchTransitRouterBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchTransitRouterBadRequest creates PatchTransitRouterBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPatchTransitRouterBadRequest() *PatchTransitRouterBadRequest {
 }
 
 // WithPayload adds the payload to the patch transit router bad request response
-func (o *PatchTransitRouterBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PatchTransitRouterBadRequest {
+func (o *PatchTransitRouterBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchTransitRouterBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch transit router bad request response
-func (o *PatchTransitRouterBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchTransitRouterBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PatchTransitRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchTransitRouterUnauthorized creates PatchTransitRouterUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPatchTransitRouterUnauthorized() *PatchTransitRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the patch transit router unauthorized response
-func (o *PatchTransitRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PatchTransitRouterUnauthorized {
+func (o *PatchTransitRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchTransitRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch transit router unauthorized response
-func (o *PatchTransitRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchTransitRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PatchTransitRouterNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchTransitRouterNotFound creates PatchTransitRouterNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPatchTransitRouterNotFound() *PatchTransitRouterNotFound {
 }
 
 // WithPayload adds the payload to the patch transit router not found response
-func (o *PatchTransitRouterNotFound) WithPayload(payload *models.APIErrorEnvelope) *PatchTransitRouterNotFound {
+func (o *PatchTransitRouterNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchTransitRouterNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch transit router not found response
-func (o *PatchTransitRouterNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchTransitRouterNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

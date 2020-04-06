@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PostEnrollOttcaReader is a Reader for the PostEnrollOttca structure.
@@ -69,20 +69,20 @@ func NewPostEnrollOttcaOK() *PostEnrollOttcaOK {
 Base empty response
 */
 type PostEnrollOttcaOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *PostEnrollOttcaOK) Error() string {
 	return fmt.Sprintf("[POST /enroll/ottca][%d] postEnrollOttcaOK  %+v", 200, o.Payload)
 }
 
-func (o *PostEnrollOttcaOK) GetPayload() *models.Empty {
+func (o *PostEnrollOttcaOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *PostEnrollOttcaOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

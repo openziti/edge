@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailServicePolicyOKCode is the HTTP code returned for type DetailServicePolicyOK
@@ -49,7 +49,7 @@ type DetailServicePolicyOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailServicePolicyEnvelop `json:"body,omitempty"`
+	Payload *rest_model.DetailServicePolicyEnvelop `json:"body,omitempty"`
 }
 
 // NewDetailServicePolicyOK creates DetailServicePolicyOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailServicePolicyOK() *DetailServicePolicyOK {
 }
 
 // WithPayload adds the payload to the detail service policy o k response
-func (o *DetailServicePolicyOK) WithPayload(payload *models.DetailServicePolicyEnvelop) *DetailServicePolicyOK {
+func (o *DetailServicePolicyOK) WithPayload(payload *rest_model.DetailServicePolicyEnvelop) *DetailServicePolicyOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail service policy o k response
-func (o *DetailServicePolicyOK) SetPayload(payload *models.DetailServicePolicyEnvelop) {
+func (o *DetailServicePolicyOK) SetPayload(payload *rest_model.DetailServicePolicyEnvelop) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailServicePolicyUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailServicePolicyUnauthorized creates DetailServicePolicyUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailServicePolicyUnauthorized() *DetailServicePolicyUnauthorized {
 }
 
 // WithPayload adds the payload to the detail service policy unauthorized response
-func (o *DetailServicePolicyUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailServicePolicyUnauthorized {
+func (o *DetailServicePolicyUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailServicePolicyUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail service policy unauthorized response
-func (o *DetailServicePolicyUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailServicePolicyUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailServicePolicyNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailServicePolicyNotFound creates DetailServicePolicyNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailServicePolicyNotFound() *DetailServicePolicyNotFound {
 }
 
 // WithPayload adds the payload to the detail service policy not found response
-func (o *DetailServicePolicyNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailServicePolicyNotFound {
+func (o *DetailServicePolicyNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailServicePolicyNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail service policy not found response
-func (o *DetailServicePolicyNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailServicePolicyNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

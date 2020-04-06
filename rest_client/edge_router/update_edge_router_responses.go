@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateEdgeRouterReader is a Reader for the UpdateEdgeRouter structure.
@@ -87,20 +87,20 @@ func NewUpdateEdgeRouterOK() *UpdateEdgeRouterOK {
 The update request was successful and the resource has been altered
 */
 type UpdateEdgeRouterOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *UpdateEdgeRouterOK) Error() string {
 	return fmt.Sprintf("[PUT /edge-routers/{id}][%d] updateEdgeRouterOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateEdgeRouterOK) GetPayload() *models.Empty {
+func (o *UpdateEdgeRouterOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *UpdateEdgeRouterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewUpdateEdgeRouterBadRequest() *UpdateEdgeRouterBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type UpdateEdgeRouterBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateEdgeRouterBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /edge-routers/{id}][%d] updateEdgeRouterBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *UpdateEdgeRouterBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateEdgeRouterBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateEdgeRouterBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewUpdateEdgeRouterUnauthorized() *UpdateEdgeRouterUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type UpdateEdgeRouterUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateEdgeRouterUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /edge-routers/{id}][%d] updateEdgeRouterUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *UpdateEdgeRouterUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateEdgeRouterUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateEdgeRouterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewUpdateEdgeRouterNotFound() *UpdateEdgeRouterNotFound {
 The requested resource does not exist
 */
 type UpdateEdgeRouterNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateEdgeRouterNotFound) Error() string {
 	return fmt.Sprintf("[PUT /edge-routers/{id}][%d] updateEdgeRouterNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateEdgeRouterNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateEdgeRouterNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateEdgeRouterNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateIdentityOKCode is the HTTP code returned for type CreateIdentityOK
@@ -49,7 +49,7 @@ type CreateIdentityOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Create `json:"body,omitempty"`
+	Payload *rest_model.Create `json:"body,omitempty"`
 }
 
 // NewCreateIdentityOK creates CreateIdentityOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateIdentityOK() *CreateIdentityOK {
 }
 
 // WithPayload adds the payload to the create identity o k response
-func (o *CreateIdentityOK) WithPayload(payload *models.Create) *CreateIdentityOK {
+func (o *CreateIdentityOK) WithPayload(payload *rest_model.Create) *CreateIdentityOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create identity o k response
-func (o *CreateIdentityOK) SetPayload(payload *models.Create) {
+func (o *CreateIdentityOK) SetPayload(payload *rest_model.Create) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type CreateIdentityBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateIdentityBadRequest creates CreateIdentityBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewCreateIdentityBadRequest() *CreateIdentityBadRequest {
 }
 
 // WithPayload adds the payload to the create identity bad request response
-func (o *CreateIdentityBadRequest) WithPayload(payload *models.APIErrorEnvelope) *CreateIdentityBadRequest {
+func (o *CreateIdentityBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateIdentityBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create identity bad request response
-func (o *CreateIdentityBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateIdentityBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type CreateIdentityUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateIdentityUnauthorized creates CreateIdentityUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewCreateIdentityUnauthorized() *CreateIdentityUnauthorized {
 }
 
 // WithPayload adds the payload to the create identity unauthorized response
-func (o *CreateIdentityUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *CreateIdentityUnauthorized {
+func (o *CreateIdentityUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateIdentityUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create identity unauthorized response
-func (o *CreateIdentityUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateIdentityUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

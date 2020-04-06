@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PostCasIDVerifyOKCode is the HTTP code returned for type PostCasIDVerifyOK
@@ -49,7 +49,7 @@ type PostCasIDVerifyOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPostCasIDVerifyOK creates PostCasIDVerifyOK with default headers values
@@ -59,13 +59,13 @@ func NewPostCasIDVerifyOK() *PostCasIDVerifyOK {
 }
 
 // WithPayload adds the payload to the post cas Id verify o k response
-func (o *PostCasIDVerifyOK) WithPayload(payload *models.Empty) *PostCasIDVerifyOK {
+func (o *PostCasIDVerifyOK) WithPayload(payload *rest_model.Empty) *PostCasIDVerifyOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post cas Id verify o k response
-func (o *PostCasIDVerifyOK) SetPayload(payload *models.Empty) {
+func (o *PostCasIDVerifyOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PostCasIDVerifyBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPostCasIDVerifyBadRequest creates PostCasIDVerifyBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPostCasIDVerifyBadRequest() *PostCasIDVerifyBadRequest {
 }
 
 // WithPayload adds the payload to the post cas Id verify bad request response
-func (o *PostCasIDVerifyBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PostCasIDVerifyBadRequest {
+func (o *PostCasIDVerifyBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PostCasIDVerifyBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post cas Id verify bad request response
-func (o *PostCasIDVerifyBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PostCasIDVerifyBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PostCasIDVerifyUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPostCasIDVerifyUnauthorized creates PostCasIDVerifyUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPostCasIDVerifyUnauthorized() *PostCasIDVerifyUnauthorized {
 }
 
 // WithPayload adds the payload to the post cas Id verify unauthorized response
-func (o *PostCasIDVerifyUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PostCasIDVerifyUnauthorized {
+func (o *PostCasIDVerifyUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PostCasIDVerifyUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post cas Id verify unauthorized response
-func (o *PostCasIDVerifyUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PostCasIDVerifyUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PostCasIDVerifyNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPostCasIDVerifyNotFound creates PostCasIDVerifyNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPostCasIDVerifyNotFound() *PostCasIDVerifyNotFound {
 }
 
 // WithPayload adds the payload to the post cas Id verify not found response
-func (o *PostCasIDVerifyNotFound) WithPayload(payload *models.APIErrorEnvelope) *PostCasIDVerifyNotFound {
+func (o *PostCasIDVerifyNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PostCasIDVerifyNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post cas Id verify not found response
-func (o *PostCasIDVerifyNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PostCasIDVerifyNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

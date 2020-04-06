@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateCaParams creates a new CreateCaParams object
@@ -90,7 +90,7 @@ type CreateCaParams struct {
 	  A CA to create
 
 	*/
-	Body *models.CaCreate
+	Body *rest_model.CaCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateCaParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create ca params
-func (o *CreateCaParams) WithBody(body *models.CaCreate) *CreateCaParams {
+func (o *CreateCaParams) WithBody(body *rest_model.CaCreate) *CreateCaParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create ca params
-func (o *CreateCaParams) SetBody(body *models.CaCreate) {
+func (o *CreateCaParams) SetBody(body *rest_model.CaCreate) {
 	o.Body = body
 }
 

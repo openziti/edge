@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewUpdateConfigTypeParams creates a new UpdateConfigTypeParams object
@@ -90,7 +90,7 @@ type UpdateConfigTypeParams struct {
 	  A config-type update object
 
 	*/
-	Body *models.ConfigTypeUpdate
+	Body *rest_model.ConfigTypeUpdate
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *UpdateConfigTypeParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update config type params
-func (o *UpdateConfigTypeParams) WithBody(body *models.ConfigTypeUpdate) *UpdateConfigTypeParams {
+func (o *UpdateConfigTypeParams) WithBody(body *rest_model.ConfigTypeUpdate) *UpdateConfigTypeParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update config type params
-func (o *UpdateConfigTypeParams) SetBody(body *models.ConfigTypeUpdate) {
+func (o *UpdateConfigTypeParams) SetBody(body *rest_model.ConfigTypeUpdate) {
 	o.Body = body
 }
 

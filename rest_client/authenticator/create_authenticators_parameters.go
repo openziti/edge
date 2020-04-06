@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateAuthenticatorsParams creates a new CreateAuthenticatorsParams object
@@ -90,7 +90,7 @@ type CreateAuthenticatorsParams struct {
 	  A Authenticators create object
 
 	*/
-	Body *models.AuthenticatorCreate
+	Body *rest_model.AuthenticatorCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateAuthenticatorsParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create authenticators params
-func (o *CreateAuthenticatorsParams) WithBody(body *models.AuthenticatorCreate) *CreateAuthenticatorsParams {
+func (o *CreateAuthenticatorsParams) WithBody(body *rest_model.AuthenticatorCreate) *CreateAuthenticatorsParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create authenticators params
-func (o *CreateAuthenticatorsParams) SetBody(body *models.AuthenticatorCreate) {
+func (o *CreateAuthenticatorsParams) SetBody(body *rest_model.AuthenticatorCreate) {
 	o.Body = body
 }
 

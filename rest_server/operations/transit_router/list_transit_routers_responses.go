@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListTransitRoutersOKCode is the HTTP code returned for type ListTransitRoutersOK
@@ -49,7 +49,7 @@ type ListTransitRoutersOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListTransitRoutersEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListTransitRoutersEnvelope `json:"body,omitempty"`
 }
 
 // NewListTransitRoutersOK creates ListTransitRoutersOK with default headers values
@@ -59,13 +59,13 @@ func NewListTransitRoutersOK() *ListTransitRoutersOK {
 }
 
 // WithPayload adds the payload to the list transit routers o k response
-func (o *ListTransitRoutersOK) WithPayload(payload *models.ListTransitRoutersEnvelope) *ListTransitRoutersOK {
+func (o *ListTransitRoutersOK) WithPayload(payload *rest_model.ListTransitRoutersEnvelope) *ListTransitRoutersOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list transit routers o k response
-func (o *ListTransitRoutersOK) SetPayload(payload *models.ListTransitRoutersEnvelope) {
+func (o *ListTransitRoutersOK) SetPayload(payload *rest_model.ListTransitRoutersEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListTransitRoutersUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListTransitRoutersUnauthorized creates ListTransitRoutersUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListTransitRoutersUnauthorized() *ListTransitRoutersUnauthorized {
 }
 
 // WithPayload adds the payload to the list transit routers unauthorized response
-func (o *ListTransitRoutersUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListTransitRoutersUnauthorized {
+func (o *ListTransitRoutersUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListTransitRoutersUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list transit routers unauthorized response
-func (o *ListTransitRoutersUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListTransitRoutersUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

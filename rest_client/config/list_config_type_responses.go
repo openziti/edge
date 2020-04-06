@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListConfigTypeReader is a Reader for the ListConfigType structure.
@@ -69,20 +69,20 @@ func NewListConfigTypeOK() *ListConfigTypeOK {
 A list of config-types
 */
 type ListConfigTypeOK struct {
-	Payload *models.ListConfigTypesEnvelope
+	Payload *rest_model.ListConfigTypesEnvelope
 }
 
 func (o *ListConfigTypeOK) Error() string {
 	return fmt.Sprintf("[GET /config-types][%d] listConfigTypeOK  %+v", 200, o.Payload)
 }
 
-func (o *ListConfigTypeOK) GetPayload() *models.ListConfigTypesEnvelope {
+func (o *ListConfigTypeOK) GetPayload() *rest_model.ListConfigTypesEnvelope {
 	return o.Payload
 }
 
 func (o *ListConfigTypeOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListConfigTypesEnvelope)
+	o.Payload = new(rest_model.ListConfigTypesEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

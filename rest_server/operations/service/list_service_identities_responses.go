@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServiceIdentitiesOKCode is the HTTP code returned for type ListServiceIdentitiesOK
@@ -49,7 +49,7 @@ type ListServiceIdentitiesOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListIdentitiesEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListIdentitiesEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceIdentitiesOK creates ListServiceIdentitiesOK with default headers values
@@ -59,13 +59,13 @@ func NewListServiceIdentitiesOK() *ListServiceIdentitiesOK {
 }
 
 // WithPayload adds the payload to the list service identities o k response
-func (o *ListServiceIdentitiesOK) WithPayload(payload *models.ListIdentitiesEnvelope) *ListServiceIdentitiesOK {
+func (o *ListServiceIdentitiesOK) WithPayload(payload *rest_model.ListIdentitiesEnvelope) *ListServiceIdentitiesOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service identities o k response
-func (o *ListServiceIdentitiesOK) SetPayload(payload *models.ListIdentitiesEnvelope) {
+func (o *ListServiceIdentitiesOK) SetPayload(payload *rest_model.ListIdentitiesEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListServiceIdentitiesUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceIdentitiesUnauthorized creates ListServiceIdentitiesUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListServiceIdentitiesUnauthorized() *ListServiceIdentitiesUnauthorized {
 }
 
 // WithPayload adds the payload to the list service identities unauthorized response
-func (o *ListServiceIdentitiesUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListServiceIdentitiesUnauthorized {
+func (o *ListServiceIdentitiesUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListServiceIdentitiesUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service identities unauthorized response
-func (o *ListServiceIdentitiesUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListServiceIdentitiesUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailAuthenticatorReader is a Reader for the DetailAuthenticator structure.
@@ -81,20 +81,20 @@ func NewDetailAuthenticatorOK() *DetailAuthenticatorOK {
 A singular authenticator resource
 */
 type DetailAuthenticatorOK struct {
-	Payload *models.DetailAuthenticatorEnvelope
+	Payload *rest_model.DetailAuthenticatorEnvelope
 }
 
 func (o *DetailAuthenticatorOK) Error() string {
 	return fmt.Sprintf("[GET /authenticators/{id}][%d] detailAuthenticatorOK  %+v", 200, o.Payload)
 }
 
-func (o *DetailAuthenticatorOK) GetPayload() *models.DetailAuthenticatorEnvelope {
+func (o *DetailAuthenticatorOK) GetPayload() *rest_model.DetailAuthenticatorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailAuthenticatorOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.DetailAuthenticatorEnvelope)
+	o.Payload = new(rest_model.DetailAuthenticatorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewDetailAuthenticatorUnauthorized() *DetailAuthenticatorUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DetailAuthenticatorUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailAuthenticatorUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /authenticators/{id}][%d] detailAuthenticatorUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DetailAuthenticatorUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailAuthenticatorUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailAuthenticatorUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewDetailAuthenticatorNotFound() *DetailAuthenticatorNotFound {
 The requested resource does not exist
 */
 type DetailAuthenticatorNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailAuthenticatorNotFound) Error() string {
 	return fmt.Sprintf("[GET /authenticators/{id}][%d] detailAuthenticatorNotFound  %+v", 404, o.Payload)
 }
 
-func (o *DetailAuthenticatorNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailAuthenticatorNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailAuthenticatorNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

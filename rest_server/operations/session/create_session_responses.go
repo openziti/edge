@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateSessionOKCode is the HTTP code returned for type CreateSessionOK
@@ -49,7 +49,7 @@ type CreateSessionOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Create `json:"body,omitempty"`
+	Payload *rest_model.Create `json:"body,omitempty"`
 }
 
 // NewCreateSessionOK creates CreateSessionOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateSessionOK() *CreateSessionOK {
 }
 
 // WithPayload adds the payload to the create session o k response
-func (o *CreateSessionOK) WithPayload(payload *models.Create) *CreateSessionOK {
+func (o *CreateSessionOK) WithPayload(payload *rest_model.Create) *CreateSessionOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create session o k response
-func (o *CreateSessionOK) SetPayload(payload *models.Create) {
+func (o *CreateSessionOK) SetPayload(payload *rest_model.Create) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type CreateSessionBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateSessionBadRequest creates CreateSessionBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewCreateSessionBadRequest() *CreateSessionBadRequest {
 }
 
 // WithPayload adds the payload to the create session bad request response
-func (o *CreateSessionBadRequest) WithPayload(payload *models.APIErrorEnvelope) *CreateSessionBadRequest {
+func (o *CreateSessionBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateSessionBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create session bad request response
-func (o *CreateSessionBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateSessionBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type CreateSessionUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateSessionUnauthorized creates CreateSessionUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewCreateSessionUnauthorized() *CreateSessionUnauthorized {
 }
 
 // WithPayload adds the payload to the create session unauthorized response
-func (o *CreateSessionUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *CreateSessionUnauthorized {
+func (o *CreateSessionUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateSessionUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create session unauthorized response
-func (o *CreateSessionUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateSessionUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

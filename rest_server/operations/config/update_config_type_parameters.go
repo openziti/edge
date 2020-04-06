@@ -38,7 +38,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewUpdateConfigTypeParams creates a new UpdateConfigTypeParams object
@@ -61,7 +61,7 @@ type UpdateConfigTypeParams struct {
 	  Required: true
 	  In: body
 	*/
-	Body *models.ConfigTypeUpdate
+	Body *rest_model.ConfigTypeUpdate
 	/*The id of the requested resource
 	  Required: true
 	  In: path
@@ -80,7 +80,7 @@ func (o *UpdateConfigTypeParams) BindRequest(r *http.Request, route *middleware.
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.ConfigTypeUpdate
+		var body rest_model.ConfigTypeUpdate
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

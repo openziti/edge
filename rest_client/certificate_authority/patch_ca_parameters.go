@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewPatchCaParams creates a new PatchCaParams object
@@ -90,7 +90,7 @@ type PatchCaParams struct {
 	  A CA patch object
 
 	*/
-	Body *models.CaPatch
+	Body *rest_model.CaPatch
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *PatchCaParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the patch ca params
-func (o *PatchCaParams) WithBody(body *models.CaPatch) *PatchCaParams {
+func (o *PatchCaParams) WithBody(body *rest_model.CaPatch) *PatchCaParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the patch ca params
-func (o *PatchCaParams) SetBody(body *models.CaPatch) {
+func (o *PatchCaParams) SetBody(body *rest_model.CaPatch) {
 	o.Body = body
 }
 

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServicesOKCode is the HTTP code returned for type ListServicesOK
@@ -49,7 +49,7 @@ type ListServicesOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListServicesEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListServicesEnvelope `json:"body,omitempty"`
 }
 
 // NewListServicesOK creates ListServicesOK with default headers values
@@ -59,13 +59,13 @@ func NewListServicesOK() *ListServicesOK {
 }
 
 // WithPayload adds the payload to the list services o k response
-func (o *ListServicesOK) WithPayload(payload *models.ListServicesEnvelope) *ListServicesOK {
+func (o *ListServicesOK) WithPayload(payload *rest_model.ListServicesEnvelope) *ListServicesOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list services o k response
-func (o *ListServicesOK) SetPayload(payload *models.ListServicesEnvelope) {
+func (o *ListServicesOK) SetPayload(payload *rest_model.ListServicesEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListServicesUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListServicesUnauthorized creates ListServicesUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListServicesUnauthorized() *ListServicesUnauthorized {
 }
 
 // WithPayload adds the payload to the list services unauthorized response
-func (o *ListServicesUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListServicesUnauthorized {
+func (o *ListServicesUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListServicesUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list services unauthorized response
-func (o *ListServicesUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListServicesUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateTransitRouterParams creates a new CreateTransitRouterParams object
@@ -90,7 +90,7 @@ type CreateTransitRouterParams struct {
 	  A transit router to create
 
 	*/
-	Body *models.TransitRouterCreate
+	Body *rest_model.TransitRouterCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateTransitRouterParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create transit router params
-func (o *CreateTransitRouterParams) WithBody(body *models.TransitRouterCreate) *CreateTransitRouterParams {
+func (o *CreateTransitRouterParams) WithBody(body *rest_model.TransitRouterCreate) *CreateTransitRouterParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create transit router params
-func (o *CreateTransitRouterParams) SetBody(body *models.TransitRouterCreate) {
+func (o *CreateTransitRouterParams) SetBody(body *rest_model.TransitRouterCreate) {
 	o.Body = body
 }
 

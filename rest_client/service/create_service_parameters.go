@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateServiceParams creates a new CreateServiceParams object
@@ -90,7 +90,7 @@ type CreateServiceParams struct {
 	  A service to create
 
 	*/
-	Body *models.ServiceCreate
+	Body *rest_model.ServiceCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateServiceParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create service params
-func (o *CreateServiceParams) WithBody(body *models.ServiceCreate) *CreateServiceParams {
+func (o *CreateServiceParams) WithBody(body *rest_model.ServiceCreate) *CreateServiceParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create service params
-func (o *CreateServiceParams) SetBody(body *models.ServiceCreate) {
+func (o *CreateServiceParams) SetBody(body *rest_model.ServiceCreate) {
 	o.Body = body
 }
 

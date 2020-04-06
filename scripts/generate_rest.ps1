@@ -24,6 +24,12 @@ try
     Remove-Item $clientPath -Recurse -Force -ErrorAction "SilentlyContinue" | Out-Null
     New-Item -ItemType "directory" -Path $clientPath -ErrorAction "SilentlyContinue" | Out-Null
 
+    $modelPath = Join-Path $zitiEdgeDir "/rest_model"
+    "...removing any existing model from $modelPath"
+    Remove-Item $modelPath -Recurse -Force -ErrorAction "SilentlyContinue" | Out-Null
+    New-Item -ItemType "directory" -Path $modelPath -ErrorAction "SilentlyContinue" | Out-Null
+
+
     "...generating server"
     swagger generate server --exclude-main -f $swagSpec -s rest_server -t $zitiEdgeDir -q -r $copyrightFile
     if (-not$?)

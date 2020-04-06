@@ -39,7 +39,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/validate"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewAuthenticateParams creates a new AuthenticateParams object
@@ -62,7 +62,7 @@ type AuthenticateParams struct {
 	  Required: true
 	  In: body
 	*/
-	Body *models.Authenticate
+	Body *rest_model.Authenticate
 	/*
 	  Required: true
 	  In: query
@@ -83,7 +83,7 @@ func (o *AuthenticateParams) BindRequest(r *http.Request, route *middleware.Matc
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.Authenticate
+		var body rest_model.Authenticate
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

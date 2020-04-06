@@ -38,7 +38,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewPatchServiceParams creates a new PatchServiceParams object
@@ -61,7 +61,7 @@ type PatchServiceParams struct {
 	  Required: true
 	  In: body
 	*/
-	Body *models.ServicePatch
+	Body *rest_model.ServicePatch
 	/*The id of the requested resource
 	  Required: true
 	  In: path
@@ -80,7 +80,7 @@ func (o *PatchServiceParams) BindRequest(r *http.Request, route *middleware.Matc
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.ServicePatch
+		var body rest_model.ServicePatch
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

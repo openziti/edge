@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // GetCasIDJwtOKCode is the HTTP code returned for type GetCasIDJwtOK
@@ -91,7 +91,7 @@ type GetCasIDJwtUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewGetCasIDJwtUnauthorized creates GetCasIDJwtUnauthorized with default headers values
@@ -101,13 +101,13 @@ func NewGetCasIDJwtUnauthorized() *GetCasIDJwtUnauthorized {
 }
 
 // WithPayload adds the payload to the get cas Id jwt unauthorized response
-func (o *GetCasIDJwtUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *GetCasIDJwtUnauthorized {
+func (o *GetCasIDJwtUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *GetCasIDJwtUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get cas Id jwt unauthorized response
-func (o *GetCasIDJwtUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *GetCasIDJwtUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -135,7 +135,7 @@ type GetCasIDJwtNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewGetCasIDJwtNotFound creates GetCasIDJwtNotFound with default headers values
@@ -145,13 +145,13 @@ func NewGetCasIDJwtNotFound() *GetCasIDJwtNotFound {
 }
 
 // WithPayload adds the payload to the get cas Id jwt not found response
-func (o *GetCasIDJwtNotFound) WithPayload(payload *models.APIErrorEnvelope) *GetCasIDJwtNotFound {
+func (o *GetCasIDJwtNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *GetCasIDJwtNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get cas Id jwt not found response
-func (o *GetCasIDJwtNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *GetCasIDJwtNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

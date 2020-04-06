@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteEdgeRouterOKCode is the HTTP code returned for type DeleteEdgeRouterOK
@@ -49,7 +49,7 @@ type DeleteEdgeRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteEdgeRouterOK creates DeleteEdgeRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteEdgeRouterOK() *DeleteEdgeRouterOK {
 }
 
 // WithPayload adds the payload to the delete edge router o k response
-func (o *DeleteEdgeRouterOK) WithPayload(payload *models.Empty) *DeleteEdgeRouterOK {
+func (o *DeleteEdgeRouterOK) WithPayload(payload *rest_model.Empty) *DeleteEdgeRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete edge router o k response
-func (o *DeleteEdgeRouterOK) SetPayload(payload *models.Empty) {
+func (o *DeleteEdgeRouterOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteEdgeRouterBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteEdgeRouterBadRequest creates DeleteEdgeRouterBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteEdgeRouterBadRequest() *DeleteEdgeRouterBadRequest {
 }
 
 // WithPayload adds the payload to the delete edge router bad request response
-func (o *DeleteEdgeRouterBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteEdgeRouterBadRequest {
+func (o *DeleteEdgeRouterBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteEdgeRouterBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete edge router bad request response
-func (o *DeleteEdgeRouterBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteEdgeRouterBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteEdgeRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteEdgeRouterUnauthorized creates DeleteEdgeRouterUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteEdgeRouterUnauthorized() *DeleteEdgeRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the delete edge router unauthorized response
-func (o *DeleteEdgeRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteEdgeRouterUnauthorized {
+func (o *DeleteEdgeRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteEdgeRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete edge router unauthorized response
-func (o *DeleteEdgeRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteEdgeRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteEdgeRouterConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteEdgeRouterConflict creates DeleteEdgeRouterConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteEdgeRouterConflict() *DeleteEdgeRouterConflict {
 }
 
 // WithPayload adds the payload to the delete edge router conflict response
-func (o *DeleteEdgeRouterConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteEdgeRouterConflict {
+func (o *DeleteEdgeRouterConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteEdgeRouterConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete edge router conflict response
-func (o *DeleteEdgeRouterConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteEdgeRouterConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteCaReader is a Reader for the DeleteCa structure.
@@ -81,20 +81,20 @@ func NewDeleteCaOK() *DeleteCaOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteCaOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteCaOK) Error() string {
 	return fmt.Sprintf("[DELETE /cas/{id}][%d] deleteCaOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteCaOK) GetPayload() *models.Empty {
+func (o *DeleteCaOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteCaOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewDeleteCaBadRequest() *DeleteCaBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteCaBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteCaBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /cas/{id}][%d] deleteCaBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteCaBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteCaBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteCaBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewDeleteCaUnauthorized() *DeleteCaUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteCaUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteCaUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /cas/{id}][%d] deleteCaUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteCaUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteCaUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteCaUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteServicePolicyOKCode is the HTTP code returned for type DeleteServicePolicyOK
@@ -49,7 +49,7 @@ type DeleteServicePolicyOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteServicePolicyOK creates DeleteServicePolicyOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteServicePolicyOK() *DeleteServicePolicyOK {
 }
 
 // WithPayload adds the payload to the delete service policy o k response
-func (o *DeleteServicePolicyOK) WithPayload(payload *models.Empty) *DeleteServicePolicyOK {
+func (o *DeleteServicePolicyOK) WithPayload(payload *rest_model.Empty) *DeleteServicePolicyOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service policy o k response
-func (o *DeleteServicePolicyOK) SetPayload(payload *models.Empty) {
+func (o *DeleteServicePolicyOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteServicePolicyBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServicePolicyBadRequest creates DeleteServicePolicyBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteServicePolicyBadRequest() *DeleteServicePolicyBadRequest {
 }
 
 // WithPayload adds the payload to the delete service policy bad request response
-func (o *DeleteServicePolicyBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteServicePolicyBadRequest {
+func (o *DeleteServicePolicyBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServicePolicyBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service policy bad request response
-func (o *DeleteServicePolicyBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServicePolicyBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteServicePolicyUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServicePolicyUnauthorized creates DeleteServicePolicyUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteServicePolicyUnauthorized() *DeleteServicePolicyUnauthorized {
 }
 
 // WithPayload adds the payload to the delete service policy unauthorized response
-func (o *DeleteServicePolicyUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteServicePolicyUnauthorized {
+func (o *DeleteServicePolicyUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServicePolicyUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service policy unauthorized response
-func (o *DeleteServicePolicyUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServicePolicyUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteServicePolicyConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServicePolicyConflict creates DeleteServicePolicyConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteServicePolicyConflict() *DeleteServicePolicyConflict {
 }
 
 // WithPayload adds the payload to the delete service policy conflict response
-func (o *DeleteServicePolicyConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteServicePolicyConflict {
+func (o *DeleteServicePolicyConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServicePolicyConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service policy conflict response
-func (o *DeleteServicePolicyConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServicePolicyConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

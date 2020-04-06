@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateServiceReader is a Reader for the CreateService structure.
@@ -81,20 +81,20 @@ func NewCreateServiceOK() *CreateServiceOK {
 The create request was successful and the resource has been added at the following location
 */
 type CreateServiceOK struct {
-	Payload *models.Create
+	Payload *rest_model.Create
 }
 
 func (o *CreateServiceOK) Error() string {
 	return fmt.Sprintf("[POST /services][%d] createServiceOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateServiceOK) GetPayload() *models.Create {
+func (o *CreateServiceOK) GetPayload() *rest_model.Create {
 	return o.Payload
 }
 
 func (o *CreateServiceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Create)
+	o.Payload = new(rest_model.Create)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewCreateServiceBadRequest() *CreateServiceBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type CreateServiceBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *CreateServiceBadRequest) Error() string {
 	return fmt.Sprintf("[POST /services][%d] createServiceBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *CreateServiceBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *CreateServiceBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *CreateServiceBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewCreateServiceUnauthorized() *CreateServiceUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type CreateServiceUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *CreateServiceUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /services][%d] createServiceUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *CreateServiceUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *CreateServiceUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *CreateServiceUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

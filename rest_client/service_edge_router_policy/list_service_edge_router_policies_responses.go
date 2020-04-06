@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServiceEdgeRouterPoliciesReader is a Reader for the ListServiceEdgeRouterPolicies structure.
@@ -75,20 +75,20 @@ func NewListServiceEdgeRouterPoliciesOK() *ListServiceEdgeRouterPoliciesOK {
 A list of service edge router policies
 */
 type ListServiceEdgeRouterPoliciesOK struct {
-	Payload *models.ListServiceEdgeRouterPoliciesEnvelope
+	Payload *rest_model.ListServiceEdgeRouterPoliciesEnvelope
 }
 
 func (o *ListServiceEdgeRouterPoliciesOK) Error() string {
 	return fmt.Sprintf("[GET /service-edge-router-policies][%d] listServiceEdgeRouterPoliciesOK  %+v", 200, o.Payload)
 }
 
-func (o *ListServiceEdgeRouterPoliciesOK) GetPayload() *models.ListServiceEdgeRouterPoliciesEnvelope {
+func (o *ListServiceEdgeRouterPoliciesOK) GetPayload() *rest_model.ListServiceEdgeRouterPoliciesEnvelope {
 	return o.Payload
 }
 
 func (o *ListServiceEdgeRouterPoliciesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListServiceEdgeRouterPoliciesEnvelope)
+	o.Payload = new(rest_model.ListServiceEdgeRouterPoliciesEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -108,20 +108,20 @@ func NewListServiceEdgeRouterPoliciesUnauthorized() *ListServiceEdgeRouterPolici
 The currently supplied session does not have the correct access rights to request this resource
 */
 type ListServiceEdgeRouterPoliciesUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListServiceEdgeRouterPoliciesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /service-edge-router-policies][%d] listServiceEdgeRouterPoliciesUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *ListServiceEdgeRouterPoliciesUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *ListServiceEdgeRouterPoliciesUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListServiceEdgeRouterPoliciesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

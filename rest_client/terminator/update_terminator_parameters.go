@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewUpdateTerminatorParams creates a new UpdateTerminatorParams object
@@ -90,7 +90,7 @@ type UpdateTerminatorParams struct {
 	  A terminator update object
 
 	*/
-	Body *models.TerminatorUpdate
+	Body *rest_model.TerminatorUpdate
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *UpdateTerminatorParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update terminator params
-func (o *UpdateTerminatorParams) WithBody(body *models.TerminatorUpdate) *UpdateTerminatorParams {
+func (o *UpdateTerminatorParams) WithBody(body *rest_model.TerminatorUpdate) *UpdateTerminatorParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update terminator params
-func (o *UpdateTerminatorParams) SetBody(body *models.TerminatorUpdate) {
+func (o *UpdateTerminatorParams) SetBody(body *rest_model.TerminatorUpdate) {
 	o.Body = body
 }
 

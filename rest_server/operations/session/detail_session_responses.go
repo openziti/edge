@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailSessionOKCode is the HTTP code returned for type DetailSessionOK
@@ -49,7 +49,7 @@ type DetailSessionOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailSessionEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailSessionEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailSessionOK creates DetailSessionOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailSessionOK() *DetailSessionOK {
 }
 
 // WithPayload adds the payload to the detail session o k response
-func (o *DetailSessionOK) WithPayload(payload *models.DetailSessionEnvelope) *DetailSessionOK {
+func (o *DetailSessionOK) WithPayload(payload *rest_model.DetailSessionEnvelope) *DetailSessionOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail session o k response
-func (o *DetailSessionOK) SetPayload(payload *models.DetailSessionEnvelope) {
+func (o *DetailSessionOK) SetPayload(payload *rest_model.DetailSessionEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailSessionUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailSessionUnauthorized creates DetailSessionUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailSessionUnauthorized() *DetailSessionUnauthorized {
 }
 
 // WithPayload adds the payload to the detail session unauthorized response
-func (o *DetailSessionUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailSessionUnauthorized {
+func (o *DetailSessionUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailSessionUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail session unauthorized response
-func (o *DetailSessionUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailSessionUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailSessionNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailSessionNotFound creates DetailSessionNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailSessionNotFound() *DetailSessionNotFound {
 }
 
 // WithPayload adds the payload to the detail session not found response
-func (o *DetailSessionNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailSessionNotFound {
+func (o *DetailSessionNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailSessionNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail session not found response
-func (o *DetailSessionNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailSessionNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

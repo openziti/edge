@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailCurrentIdentityAuthenticatorOKCode is the HTTP code returned for type DetailCurrentIdentityAuthenticatorOK
@@ -49,7 +49,7 @@ type DetailCurrentIdentityAuthenticatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailAuthenticatorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailAuthenticatorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailCurrentIdentityAuthenticatorOK creates DetailCurrentIdentityAuthenticatorOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailCurrentIdentityAuthenticatorOK() *DetailCurrentIdentityAuthenticat
 }
 
 // WithPayload adds the payload to the detail current identity authenticator o k response
-func (o *DetailCurrentIdentityAuthenticatorOK) WithPayload(payload *models.DetailAuthenticatorEnvelope) *DetailCurrentIdentityAuthenticatorOK {
+func (o *DetailCurrentIdentityAuthenticatorOK) WithPayload(payload *rest_model.DetailAuthenticatorEnvelope) *DetailCurrentIdentityAuthenticatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail current identity authenticator o k response
-func (o *DetailCurrentIdentityAuthenticatorOK) SetPayload(payload *models.DetailAuthenticatorEnvelope) {
+func (o *DetailCurrentIdentityAuthenticatorOK) SetPayload(payload *rest_model.DetailAuthenticatorEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailCurrentIdentityAuthenticatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailCurrentIdentityAuthenticatorUnauthorized creates DetailCurrentIdentityAuthenticatorUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailCurrentIdentityAuthenticatorUnauthorized() *DetailCurrentIdentityA
 }
 
 // WithPayload adds the payload to the detail current identity authenticator unauthorized response
-func (o *DetailCurrentIdentityAuthenticatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailCurrentIdentityAuthenticatorUnauthorized {
+func (o *DetailCurrentIdentityAuthenticatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailCurrentIdentityAuthenticatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail current identity authenticator unauthorized response
-func (o *DetailCurrentIdentityAuthenticatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailCurrentIdentityAuthenticatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailCurrentIdentityAuthenticatorNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailCurrentIdentityAuthenticatorNotFound creates DetailCurrentIdentityAuthenticatorNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailCurrentIdentityAuthenticatorNotFound() *DetailCurrentIdentityAuthe
 }
 
 // WithPayload adds the payload to the detail current identity authenticator not found response
-func (o *DetailCurrentIdentityAuthenticatorNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailCurrentIdentityAuthenticatorNotFound {
+func (o *DetailCurrentIdentityAuthenticatorNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailCurrentIdentityAuthenticatorNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail current identity authenticator not found response
-func (o *DetailCurrentIdentityAuthenticatorNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailCurrentIdentityAuthenticatorNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

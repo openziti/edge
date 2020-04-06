@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteConfigTypeOKCode is the HTTP code returned for type DeleteConfigTypeOK
@@ -49,7 +49,7 @@ type DeleteConfigTypeOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteConfigTypeOK creates DeleteConfigTypeOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteConfigTypeOK() *DeleteConfigTypeOK {
 }
 
 // WithPayload adds the payload to the delete config type o k response
-func (o *DeleteConfigTypeOK) WithPayload(payload *models.Empty) *DeleteConfigTypeOK {
+func (o *DeleteConfigTypeOK) WithPayload(payload *rest_model.Empty) *DeleteConfigTypeOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete config type o k response
-func (o *DeleteConfigTypeOK) SetPayload(payload *models.Empty) {
+func (o *DeleteConfigTypeOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteConfigTypeBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteConfigTypeBadRequest creates DeleteConfigTypeBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteConfigTypeBadRequest() *DeleteConfigTypeBadRequest {
 }
 
 // WithPayload adds the payload to the delete config type bad request response
-func (o *DeleteConfigTypeBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteConfigTypeBadRequest {
+func (o *DeleteConfigTypeBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteConfigTypeBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete config type bad request response
-func (o *DeleteConfigTypeBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteConfigTypeBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteConfigTypeUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteConfigTypeUnauthorized creates DeleteConfigTypeUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteConfigTypeUnauthorized() *DeleteConfigTypeUnauthorized {
 }
 
 // WithPayload adds the payload to the delete config type unauthorized response
-func (o *DeleteConfigTypeUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteConfigTypeUnauthorized {
+func (o *DeleteConfigTypeUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteConfigTypeUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete config type unauthorized response
-func (o *DeleteConfigTypeUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteConfigTypeUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteConfigTypeConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteConfigTypeConflict creates DeleteConfigTypeConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteConfigTypeConflict() *DeleteConfigTypeConflict {
 }
 
 // WithPayload adds the payload to the delete config type conflict response
-func (o *DeleteConfigTypeConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteConfigTypeConflict {
+func (o *DeleteConfigTypeConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteConfigTypeConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete config type conflict response
-func (o *DeleteConfigTypeConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteConfigTypeConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

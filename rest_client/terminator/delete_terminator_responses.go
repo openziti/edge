@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteTerminatorReader is a Reader for the DeleteTerminator structure.
@@ -87,20 +87,20 @@ func NewDeleteTerminatorOK() *DeleteTerminatorOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteTerminatorOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteTerminatorOK) Error() string {
 	return fmt.Sprintf("[DELETE /terminators/{id}][%d] deleteTerminatorOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteTerminatorOK) GetPayload() *models.Empty {
+func (o *DeleteTerminatorOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteTerminatorOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewDeleteTerminatorBadRequest() *DeleteTerminatorBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteTerminatorBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteTerminatorBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /terminators/{id}][%d] deleteTerminatorBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteTerminatorBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteTerminatorBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteTerminatorBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewDeleteTerminatorUnauthorized() *DeleteTerminatorUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteTerminatorUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteTerminatorUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /terminators/{id}][%d] deleteTerminatorUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteTerminatorUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteTerminatorUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteTerminatorUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewDeleteTerminatorConflict() *DeleteTerminatorConflict {
 The resource requested to be removed/altered cannot be as it is referenced by another object.
 */
 type DeleteTerminatorConflict struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteTerminatorConflict) Error() string {
 	return fmt.Sprintf("[DELETE /terminators/{id}][%d] deleteTerminatorConflict  %+v", 409, o.Payload)
 }
 
-func (o *DeleteTerminatorConflict) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteTerminatorConflict) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteTerminatorConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

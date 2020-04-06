@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListAPISessionsOKCode is the HTTP code returned for type ListAPISessionsOK
@@ -49,7 +49,7 @@ type ListAPISessionsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListAPISessionsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListAPISessionsEnvelope `json:"body,omitempty"`
 }
 
 // NewListAPISessionsOK creates ListAPISessionsOK with default headers values
@@ -59,13 +59,13 @@ func NewListAPISessionsOK() *ListAPISessionsOK {
 }
 
 // WithPayload adds the payload to the list Api sessions o k response
-func (o *ListAPISessionsOK) WithPayload(payload *models.ListAPISessionsEnvelope) *ListAPISessionsOK {
+func (o *ListAPISessionsOK) WithPayload(payload *rest_model.ListAPISessionsEnvelope) *ListAPISessionsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list Api sessions o k response
-func (o *ListAPISessionsOK) SetPayload(payload *models.ListAPISessionsEnvelope) {
+func (o *ListAPISessionsOK) SetPayload(payload *rest_model.ListAPISessionsEnvelope) {
 	o.Payload = payload
 }
 

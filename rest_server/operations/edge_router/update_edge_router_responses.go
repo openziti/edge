@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateEdgeRouterOKCode is the HTTP code returned for type UpdateEdgeRouterOK
@@ -49,7 +49,7 @@ type UpdateEdgeRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateEdgeRouterOK creates UpdateEdgeRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateEdgeRouterOK() *UpdateEdgeRouterOK {
 }
 
 // WithPayload adds the payload to the update edge router o k response
-func (o *UpdateEdgeRouterOK) WithPayload(payload *models.Empty) *UpdateEdgeRouterOK {
+func (o *UpdateEdgeRouterOK) WithPayload(payload *rest_model.Empty) *UpdateEdgeRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update edge router o k response
-func (o *UpdateEdgeRouterOK) SetPayload(payload *models.Empty) {
+func (o *UpdateEdgeRouterOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateEdgeRouterBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateEdgeRouterBadRequest creates UpdateEdgeRouterBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateEdgeRouterBadRequest() *UpdateEdgeRouterBadRequest {
 }
 
 // WithPayload adds the payload to the update edge router bad request response
-func (o *UpdateEdgeRouterBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateEdgeRouterBadRequest {
+func (o *UpdateEdgeRouterBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateEdgeRouterBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update edge router bad request response
-func (o *UpdateEdgeRouterBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateEdgeRouterBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateEdgeRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateEdgeRouterUnauthorized creates UpdateEdgeRouterUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateEdgeRouterUnauthorized() *UpdateEdgeRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the update edge router unauthorized response
-func (o *UpdateEdgeRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateEdgeRouterUnauthorized {
+func (o *UpdateEdgeRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateEdgeRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update edge router unauthorized response
-func (o *UpdateEdgeRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateEdgeRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateEdgeRouterNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateEdgeRouterNotFound creates UpdateEdgeRouterNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateEdgeRouterNotFound() *UpdateEdgeRouterNotFound {
 }
 
 // WithPayload adds the payload to the update edge router not found response
-func (o *UpdateEdgeRouterNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateEdgeRouterNotFound {
+func (o *UpdateEdgeRouterNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateEdgeRouterNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update edge router not found response
-func (o *UpdateEdgeRouterNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateEdgeRouterNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

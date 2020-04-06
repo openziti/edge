@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateIdentityParams creates a new CreateIdentityParams object
@@ -90,7 +90,7 @@ type CreateIdentityParams struct {
 	  An identity to create
 
 	*/
-	Body *models.IdentityCreate
+	Body *rest_model.IdentityCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateIdentityParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create identity params
-func (o *CreateIdentityParams) WithBody(body *models.IdentityCreate) *CreateIdentityParams {
+func (o *CreateIdentityParams) WithBody(body *rest_model.IdentityCreate) *CreateIdentityParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create identity params
-func (o *CreateIdentityParams) SetBody(body *models.IdentityCreate) {
+func (o *CreateIdentityParams) SetBody(body *rest_model.IdentityCreate) {
 	o.Body = body
 }
 

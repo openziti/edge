@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateServicePolicyOKCode is the HTTP code returned for type UpdateServicePolicyOK
@@ -49,7 +49,7 @@ type UpdateServicePolicyOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateServicePolicyOK creates UpdateServicePolicyOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateServicePolicyOK() *UpdateServicePolicyOK {
 }
 
 // WithPayload adds the payload to the update service policy o k response
-func (o *UpdateServicePolicyOK) WithPayload(payload *models.Empty) *UpdateServicePolicyOK {
+func (o *UpdateServicePolicyOK) WithPayload(payload *rest_model.Empty) *UpdateServicePolicyOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update service policy o k response
-func (o *UpdateServicePolicyOK) SetPayload(payload *models.Empty) {
+func (o *UpdateServicePolicyOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateServicePolicyBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateServicePolicyBadRequest creates UpdateServicePolicyBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateServicePolicyBadRequest() *UpdateServicePolicyBadRequest {
 }
 
 // WithPayload adds the payload to the update service policy bad request response
-func (o *UpdateServicePolicyBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateServicePolicyBadRequest {
+func (o *UpdateServicePolicyBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateServicePolicyBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update service policy bad request response
-func (o *UpdateServicePolicyBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateServicePolicyBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateServicePolicyUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateServicePolicyUnauthorized creates UpdateServicePolicyUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateServicePolicyUnauthorized() *UpdateServicePolicyUnauthorized {
 }
 
 // WithPayload adds the payload to the update service policy unauthorized response
-func (o *UpdateServicePolicyUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateServicePolicyUnauthorized {
+func (o *UpdateServicePolicyUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateServicePolicyUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update service policy unauthorized response
-func (o *UpdateServicePolicyUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateServicePolicyUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateServicePolicyNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateServicePolicyNotFound creates UpdateServicePolicyNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateServicePolicyNotFound() *UpdateServicePolicyNotFound {
 }
 
 // WithPayload adds the payload to the update service policy not found response
-func (o *UpdateServicePolicyNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateServicePolicyNotFound {
+func (o *UpdateServicePolicyNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateServicePolicyNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update service policy not found response
-func (o *UpdateServicePolicyNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateServicePolicyNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

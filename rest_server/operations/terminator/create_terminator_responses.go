@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateTerminatorOKCode is the HTTP code returned for type CreateTerminatorOK
@@ -49,7 +49,7 @@ type CreateTerminatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Create `json:"body,omitempty"`
+	Payload *rest_model.Create `json:"body,omitempty"`
 }
 
 // NewCreateTerminatorOK creates CreateTerminatorOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateTerminatorOK() *CreateTerminatorOK {
 }
 
 // WithPayload adds the payload to the create terminator o k response
-func (o *CreateTerminatorOK) WithPayload(payload *models.Create) *CreateTerminatorOK {
+func (o *CreateTerminatorOK) WithPayload(payload *rest_model.Create) *CreateTerminatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create terminator o k response
-func (o *CreateTerminatorOK) SetPayload(payload *models.Create) {
+func (o *CreateTerminatorOK) SetPayload(payload *rest_model.Create) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type CreateTerminatorBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateTerminatorBadRequest creates CreateTerminatorBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewCreateTerminatorBadRequest() *CreateTerminatorBadRequest {
 }
 
 // WithPayload adds the payload to the create terminator bad request response
-func (o *CreateTerminatorBadRequest) WithPayload(payload *models.APIErrorEnvelope) *CreateTerminatorBadRequest {
+func (o *CreateTerminatorBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateTerminatorBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create terminator bad request response
-func (o *CreateTerminatorBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateTerminatorBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type CreateTerminatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateTerminatorUnauthorized creates CreateTerminatorUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewCreateTerminatorUnauthorized() *CreateTerminatorUnauthorized {
 }
 
 // WithPayload adds the payload to the create terminator unauthorized response
-func (o *CreateTerminatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *CreateTerminatorUnauthorized {
+func (o *CreateTerminatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateTerminatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create terminator unauthorized response
-func (o *CreateTerminatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateTerminatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

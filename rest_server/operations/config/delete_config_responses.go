@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteConfigOKCode is the HTTP code returned for type DeleteConfigOK
@@ -49,7 +49,7 @@ type DeleteConfigOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteConfigOK creates DeleteConfigOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteConfigOK() *DeleteConfigOK {
 }
 
 // WithPayload adds the payload to the delete config o k response
-func (o *DeleteConfigOK) WithPayload(payload *models.Empty) *DeleteConfigOK {
+func (o *DeleteConfigOK) WithPayload(payload *rest_model.Empty) *DeleteConfigOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete config o k response
-func (o *DeleteConfigOK) SetPayload(payload *models.Empty) {
+func (o *DeleteConfigOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteConfigBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteConfigBadRequest creates DeleteConfigBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteConfigBadRequest() *DeleteConfigBadRequest {
 }
 
 // WithPayload adds the payload to the delete config bad request response
-func (o *DeleteConfigBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteConfigBadRequest {
+func (o *DeleteConfigBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteConfigBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete config bad request response
-func (o *DeleteConfigBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteConfigBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteConfigUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteConfigUnauthorized creates DeleteConfigUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteConfigUnauthorized() *DeleteConfigUnauthorized {
 }
 
 // WithPayload adds the payload to the delete config unauthorized response
-func (o *DeleteConfigUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteConfigUnauthorized {
+func (o *DeleteConfigUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteConfigUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete config unauthorized response
-func (o *DeleteConfigUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteConfigUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteConfigConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteConfigConflict creates DeleteConfigConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteConfigConflict() *DeleteConfigConflict {
 }
 
 // WithPayload adds the payload to the delete config conflict response
-func (o *DeleteConfigConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteConfigConflict {
+func (o *DeleteConfigConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteConfigConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete config conflict response
-func (o *DeleteConfigConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteConfigConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

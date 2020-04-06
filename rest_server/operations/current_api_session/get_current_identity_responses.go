@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // GetCurrentIdentityOKCode is the HTTP code returned for type GetCurrentIdentityOK
@@ -49,7 +49,7 @@ type GetCurrentIdentityOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.CurrentIdentityDetailEnvelope `json:"body,omitempty"`
+	Payload *rest_model.CurrentIdentityDetailEnvelope `json:"body,omitempty"`
 }
 
 // NewGetCurrentIdentityOK creates GetCurrentIdentityOK with default headers values
@@ -59,13 +59,13 @@ func NewGetCurrentIdentityOK() *GetCurrentIdentityOK {
 }
 
 // WithPayload adds the payload to the get current identity o k response
-func (o *GetCurrentIdentityOK) WithPayload(payload *models.CurrentIdentityDetailEnvelope) *GetCurrentIdentityOK {
+func (o *GetCurrentIdentityOK) WithPayload(payload *rest_model.CurrentIdentityDetailEnvelope) *GetCurrentIdentityOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get current identity o k response
-func (o *GetCurrentIdentityOK) SetPayload(payload *models.CurrentIdentityDetailEnvelope) {
+func (o *GetCurrentIdentityOK) SetPayload(payload *rest_model.CurrentIdentityDetailEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type GetCurrentIdentityUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewGetCurrentIdentityUnauthorized creates GetCurrentIdentityUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewGetCurrentIdentityUnauthorized() *GetCurrentIdentityUnauthorized {
 }
 
 // WithPayload adds the payload to the get current identity unauthorized response
-func (o *GetCurrentIdentityUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *GetCurrentIdentityUnauthorized {
+func (o *GetCurrentIdentityUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *GetCurrentIdentityUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get current identity unauthorized response
-func (o *GetCurrentIdentityUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *GetCurrentIdentityUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

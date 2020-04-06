@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServiceEdgeRouterPoliciesOKCode is the HTTP code returned for type ListServiceEdgeRouterPoliciesOK
@@ -49,7 +49,7 @@ type ListServiceEdgeRouterPoliciesOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListServiceEdgeRouterPoliciesEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListServiceEdgeRouterPoliciesEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceEdgeRouterPoliciesOK creates ListServiceEdgeRouterPoliciesOK with default headers values
@@ -59,13 +59,13 @@ func NewListServiceEdgeRouterPoliciesOK() *ListServiceEdgeRouterPoliciesOK {
 }
 
 // WithPayload adds the payload to the list service edge router policies o k response
-func (o *ListServiceEdgeRouterPoliciesOK) WithPayload(payload *models.ListServiceEdgeRouterPoliciesEnvelope) *ListServiceEdgeRouterPoliciesOK {
+func (o *ListServiceEdgeRouterPoliciesOK) WithPayload(payload *rest_model.ListServiceEdgeRouterPoliciesEnvelope) *ListServiceEdgeRouterPoliciesOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service edge router policies o k response
-func (o *ListServiceEdgeRouterPoliciesOK) SetPayload(payload *models.ListServiceEdgeRouterPoliciesEnvelope) {
+func (o *ListServiceEdgeRouterPoliciesOK) SetPayload(payload *rest_model.ListServiceEdgeRouterPoliciesEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListServiceEdgeRouterPoliciesUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceEdgeRouterPoliciesUnauthorized creates ListServiceEdgeRouterPoliciesUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListServiceEdgeRouterPoliciesUnauthorized() *ListServiceEdgeRouterPolici
 }
 
 // WithPayload adds the payload to the list service edge router policies unauthorized response
-func (o *ListServiceEdgeRouterPoliciesUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListServiceEdgeRouterPoliciesUnauthorized {
+func (o *ListServiceEdgeRouterPoliciesUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListServiceEdgeRouterPoliciesUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service edge router policies unauthorized response
-func (o *ListServiceEdgeRouterPoliciesUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListServiceEdgeRouterPoliciesUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

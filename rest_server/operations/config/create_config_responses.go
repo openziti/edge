@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateConfigOKCode is the HTTP code returned for type CreateConfigOK
@@ -49,7 +49,7 @@ type CreateConfigOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Create `json:"body,omitempty"`
+	Payload *rest_model.Create `json:"body,omitempty"`
 }
 
 // NewCreateConfigOK creates CreateConfigOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateConfigOK() *CreateConfigOK {
 }
 
 // WithPayload adds the payload to the create config o k response
-func (o *CreateConfigOK) WithPayload(payload *models.Create) *CreateConfigOK {
+func (o *CreateConfigOK) WithPayload(payload *rest_model.Create) *CreateConfigOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create config o k response
-func (o *CreateConfigOK) SetPayload(payload *models.Create) {
+func (o *CreateConfigOK) SetPayload(payload *rest_model.Create) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type CreateConfigBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateConfigBadRequest creates CreateConfigBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewCreateConfigBadRequest() *CreateConfigBadRequest {
 }
 
 // WithPayload adds the payload to the create config bad request response
-func (o *CreateConfigBadRequest) WithPayload(payload *models.APIErrorEnvelope) *CreateConfigBadRequest {
+func (o *CreateConfigBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateConfigBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create config bad request response
-func (o *CreateConfigBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateConfigBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type CreateConfigUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateConfigUnauthorized creates CreateConfigUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewCreateConfigUnauthorized() *CreateConfigUnauthorized {
 }
 
 // WithPayload adds the payload to the create config unauthorized response
-func (o *CreateConfigUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *CreateConfigUnauthorized {
+func (o *CreateConfigUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateConfigUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create config unauthorized response
-func (o *CreateConfigUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateConfigUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

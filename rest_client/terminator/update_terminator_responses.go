@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateTerminatorReader is a Reader for the UpdateTerminator structure.
@@ -87,20 +87,20 @@ func NewUpdateTerminatorOK() *UpdateTerminatorOK {
 The update request was successful and the resource has been altered
 */
 type UpdateTerminatorOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *UpdateTerminatorOK) Error() string {
 	return fmt.Sprintf("[PUT /terminators/{id}][%d] updateTerminatorOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateTerminatorOK) GetPayload() *models.Empty {
+func (o *UpdateTerminatorOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *UpdateTerminatorOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewUpdateTerminatorBadRequest() *UpdateTerminatorBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type UpdateTerminatorBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateTerminatorBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /terminators/{id}][%d] updateTerminatorBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *UpdateTerminatorBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateTerminatorBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateTerminatorBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewUpdateTerminatorUnauthorized() *UpdateTerminatorUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type UpdateTerminatorUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateTerminatorUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /terminators/{id}][%d] updateTerminatorUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *UpdateTerminatorUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateTerminatorUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateTerminatorUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewUpdateTerminatorNotFound() *UpdateTerminatorNotFound {
 The requested resource does not exist
 */
 type UpdateTerminatorNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateTerminatorNotFound) Error() string {
 	return fmt.Sprintf("[PUT /terminators/{id}][%d] updateTerminatorNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateTerminatorNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateTerminatorNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateTerminatorNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

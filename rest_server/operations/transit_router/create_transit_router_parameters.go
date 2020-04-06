@@ -37,7 +37,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateTransitRouterParams creates a new CreateTransitRouterParams object
@@ -60,7 +60,7 @@ type CreateTransitRouterParams struct {
 	  Required: true
 	  In: body
 	*/
-	Body *models.TransitRouterCreate
+	Body *rest_model.TransitRouterCreate
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -74,7 +74,7 @@ func (o *CreateTransitRouterParams) BindRequest(r *http.Request, route *middlewa
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.TransitRouterCreate
+		var body rest_model.TransitRouterCreate
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

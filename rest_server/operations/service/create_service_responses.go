@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateServiceOKCode is the HTTP code returned for type CreateServiceOK
@@ -49,7 +49,7 @@ type CreateServiceOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Create `json:"body,omitempty"`
+	Payload *rest_model.Create `json:"body,omitempty"`
 }
 
 // NewCreateServiceOK creates CreateServiceOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateServiceOK() *CreateServiceOK {
 }
 
 // WithPayload adds the payload to the create service o k response
-func (o *CreateServiceOK) WithPayload(payload *models.Create) *CreateServiceOK {
+func (o *CreateServiceOK) WithPayload(payload *rest_model.Create) *CreateServiceOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create service o k response
-func (o *CreateServiceOK) SetPayload(payload *models.Create) {
+func (o *CreateServiceOK) SetPayload(payload *rest_model.Create) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type CreateServiceBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateServiceBadRequest creates CreateServiceBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewCreateServiceBadRequest() *CreateServiceBadRequest {
 }
 
 // WithPayload adds the payload to the create service bad request response
-func (o *CreateServiceBadRequest) WithPayload(payload *models.APIErrorEnvelope) *CreateServiceBadRequest {
+func (o *CreateServiceBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateServiceBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create service bad request response
-func (o *CreateServiceBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateServiceBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type CreateServiceUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateServiceUnauthorized creates CreateServiceUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewCreateServiceUnauthorized() *CreateServiceUnauthorized {
 }
 
 // WithPayload adds the payload to the create service unauthorized response
-func (o *CreateServiceUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *CreateServiceUnauthorized {
+func (o *CreateServiceUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateServiceUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create service unauthorized response
-func (o *CreateServiceUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateServiceUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

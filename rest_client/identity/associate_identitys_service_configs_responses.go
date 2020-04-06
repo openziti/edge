@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // AssociateIdentitysServiceConfigsReader is a Reader for the AssociateIdentitysServiceConfigs structure.
@@ -87,20 +87,20 @@ func NewAssociateIdentitysServiceConfigsOK() *AssociateIdentitysServiceConfigsOK
 Base empty response
 */
 type AssociateIdentitysServiceConfigsOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *AssociateIdentitysServiceConfigsOK) Error() string {
 	return fmt.Sprintf("[POST /identities/{id}/service-configs][%d] associateIdentitysServiceConfigsOK  %+v", 200, o.Payload)
 }
 
-func (o *AssociateIdentitysServiceConfigsOK) GetPayload() *models.Empty {
+func (o *AssociateIdentitysServiceConfigsOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *AssociateIdentitysServiceConfigsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewAssociateIdentitysServiceConfigsBadRequest() *AssociateIdentitysServiceC
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type AssociateIdentitysServiceConfigsBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *AssociateIdentitysServiceConfigsBadRequest) Error() string {
 	return fmt.Sprintf("[POST /identities/{id}/service-configs][%d] associateIdentitysServiceConfigsBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *AssociateIdentitysServiceConfigsBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *AssociateIdentitysServiceConfigsBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *AssociateIdentitysServiceConfigsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewAssociateIdentitysServiceConfigsUnauthorized() *AssociateIdentitysServic
 The currently supplied session does not have the correct access rights to request this resource
 */
 type AssociateIdentitysServiceConfigsUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *AssociateIdentitysServiceConfigsUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /identities/{id}/service-configs][%d] associateIdentitysServiceConfigsUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *AssociateIdentitysServiceConfigsUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *AssociateIdentitysServiceConfigsUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *AssociateIdentitysServiceConfigsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewAssociateIdentitysServiceConfigsNotFound() *AssociateIdentitysServiceCon
 The requested resource does not exist
 */
 type AssociateIdentitysServiceConfigsNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *AssociateIdentitysServiceConfigsNotFound) Error() string {
 	return fmt.Sprintf("[POST /identities/{id}/service-configs][%d] associateIdentitysServiceConfigsNotFound  %+v", 404, o.Payload)
 }
 
-func (o *AssociateIdentitysServiceConfigsNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *AssociateIdentitysServiceConfigsNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *AssociateIdentitysServiceConfigsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

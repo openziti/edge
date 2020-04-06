@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteIdentityOKCode is the HTTP code returned for type DeleteIdentityOK
@@ -49,7 +49,7 @@ type DeleteIdentityOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteIdentityOK creates DeleteIdentityOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteIdentityOK() *DeleteIdentityOK {
 }
 
 // WithPayload adds the payload to the delete identity o k response
-func (o *DeleteIdentityOK) WithPayload(payload *models.Empty) *DeleteIdentityOK {
+func (o *DeleteIdentityOK) WithPayload(payload *rest_model.Empty) *DeleteIdentityOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete identity o k response
-func (o *DeleteIdentityOK) SetPayload(payload *models.Empty) {
+func (o *DeleteIdentityOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteIdentityBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteIdentityBadRequest creates DeleteIdentityBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteIdentityBadRequest() *DeleteIdentityBadRequest {
 }
 
 // WithPayload adds the payload to the delete identity bad request response
-func (o *DeleteIdentityBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteIdentityBadRequest {
+func (o *DeleteIdentityBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteIdentityBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete identity bad request response
-func (o *DeleteIdentityBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteIdentityBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteIdentityUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteIdentityUnauthorized creates DeleteIdentityUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteIdentityUnauthorized() *DeleteIdentityUnauthorized {
 }
 
 // WithPayload adds the payload to the delete identity unauthorized response
-func (o *DeleteIdentityUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteIdentityUnauthorized {
+func (o *DeleteIdentityUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteIdentityUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete identity unauthorized response
-func (o *DeleteIdentityUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteIdentityUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteIdentityConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteIdentityConflict creates DeleteIdentityConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteIdentityConflict() *DeleteIdentityConflict {
 }
 
 // WithPayload adds the payload to the delete identity conflict response
-func (o *DeleteIdentityConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteIdentityConflict {
+func (o *DeleteIdentityConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteIdentityConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete identity conflict response
-func (o *DeleteIdentityConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteIdentityConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

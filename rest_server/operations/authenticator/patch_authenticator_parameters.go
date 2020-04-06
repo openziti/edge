@@ -38,7 +38,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewPatchAuthenticatorParams creates a new PatchAuthenticatorParams object
@@ -61,7 +61,7 @@ type PatchAuthenticatorParams struct {
 	  Required: true
 	  In: body
 	*/
-	Body *models.AuthenticatorPatch
+	Body *rest_model.AuthenticatorPatch
 	/*The id of the requested resource
 	  Required: true
 	  In: path
@@ -80,7 +80,7 @@ func (o *PatchAuthenticatorParams) BindRequest(r *http.Request, route *middlewar
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.AuthenticatorPatch
+		var body rest_model.AuthenticatorPatch
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailConfigReader is a Reader for the DetailConfig structure.
@@ -81,20 +81,20 @@ func NewDetailConfigOK() *DetailConfigOK {
 A singular config resource
 */
 type DetailConfigOK struct {
-	Payload *models.DetailConfigEnvelope
+	Payload *rest_model.DetailConfigEnvelope
 }
 
 func (o *DetailConfigOK) Error() string {
 	return fmt.Sprintf("[GET /configs/{id}][%d] detailConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *DetailConfigOK) GetPayload() *models.DetailConfigEnvelope {
+func (o *DetailConfigOK) GetPayload() *rest_model.DetailConfigEnvelope {
 	return o.Payload
 }
 
 func (o *DetailConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.DetailConfigEnvelope)
+	o.Payload = new(rest_model.DetailConfigEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewDetailConfigUnauthorized() *DetailConfigUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DetailConfigUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /configs/{id}][%d] detailConfigUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DetailConfigUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailConfigUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailConfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewDetailConfigNotFound() *DetailConfigNotFound {
 The requested resource does not exist
 */
 type DetailConfigNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailConfigNotFound) Error() string {
 	return fmt.Sprintf("[GET /configs/{id}][%d] detailConfigNotFound  %+v", 404, o.Payload)
 }
 
-func (o *DetailConfigNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailConfigNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

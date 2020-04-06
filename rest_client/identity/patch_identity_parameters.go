@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewPatchIdentityParams creates a new PatchIdentityParams object
@@ -90,7 +90,7 @@ type PatchIdentityParams struct {
 	  An identity patch object
 
 	*/
-	Body *models.IdentityPatch
+	Body *rest_model.IdentityPatch
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *PatchIdentityParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the patch identity params
-func (o *PatchIdentityParams) WithBody(body *models.IdentityPatch) *PatchIdentityParams {
+func (o *PatchIdentityParams) WithBody(body *rest_model.IdentityPatch) *PatchIdentityParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the patch identity params
-func (o *PatchIdentityParams) SetBody(body *models.IdentityPatch) {
+func (o *PatchIdentityParams) SetBody(body *rest_model.IdentityPatch) {
 	o.Body = body
 }
 

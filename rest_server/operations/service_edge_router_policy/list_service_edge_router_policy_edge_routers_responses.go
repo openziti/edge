@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServiceEdgeRouterPolicyEdgeRoutersOKCode is the HTTP code returned for type ListServiceEdgeRouterPolicyEdgeRoutersOK
@@ -49,7 +49,7 @@ type ListServiceEdgeRouterPolicyEdgeRoutersOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListEdgeRoutersEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListEdgeRoutersEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceEdgeRouterPolicyEdgeRoutersOK creates ListServiceEdgeRouterPolicyEdgeRoutersOK with default headers values
@@ -59,13 +59,13 @@ func NewListServiceEdgeRouterPolicyEdgeRoutersOK() *ListServiceEdgeRouterPolicyE
 }
 
 // WithPayload adds the payload to the list service edge router policy edge routers o k response
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersOK) WithPayload(payload *models.ListEdgeRoutersEnvelope) *ListServiceEdgeRouterPolicyEdgeRoutersOK {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersOK) WithPayload(payload *rest_model.ListEdgeRoutersEnvelope) *ListServiceEdgeRouterPolicyEdgeRoutersOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service edge router policy edge routers o k response
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersOK) SetPayload(payload *models.ListEdgeRoutersEnvelope) {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersOK) SetPayload(payload *rest_model.ListEdgeRoutersEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceEdgeRouterPolicyEdgeRoutersUnauthorized creates ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListServiceEdgeRouterPolicyEdgeRoutersUnauthorized() *ListServiceEdgeRou
 }
 
 // WithPayload adds the payload to the list service edge router policy edge routers unauthorized response
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service edge router policy edge routers unauthorized response
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type ListServiceEdgeRouterPolicyEdgeRoutersNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceEdgeRouterPolicyEdgeRoutersNotFound creates ListServiceEdgeRouterPolicyEdgeRoutersNotFound with default headers values
@@ -147,13 +147,13 @@ func NewListServiceEdgeRouterPolicyEdgeRoutersNotFound() *ListServiceEdgeRouterP
 }
 
 // WithPayload adds the payload to the list service edge router policy edge routers not found response
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersNotFound) WithPayload(payload *models.APIErrorEnvelope) *ListServiceEdgeRouterPolicyEdgeRoutersNotFound {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *ListServiceEdgeRouterPolicyEdgeRoutersNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service edge router policy edge routers not found response
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

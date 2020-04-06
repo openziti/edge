@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServiceEdgeRouterPolicyEdgeRoutersReader is a Reader for the ListServiceEdgeRouterPolicyEdgeRouters structure.
@@ -81,20 +81,20 @@ func NewListServiceEdgeRouterPolicyEdgeRoutersOK() *ListServiceEdgeRouterPolicyE
 A list of edge routers
 */
 type ListServiceEdgeRouterPolicyEdgeRoutersOK struct {
-	Payload *models.ListEdgeRoutersEnvelope
+	Payload *rest_model.ListEdgeRoutersEnvelope
 }
 
 func (o *ListServiceEdgeRouterPolicyEdgeRoutersOK) Error() string {
 	return fmt.Sprintf("[GET /service-edge-router-policies/{id}/edge-routers][%d] listServiceEdgeRouterPolicyEdgeRoutersOK  %+v", 200, o.Payload)
 }
 
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersOK) GetPayload() *models.ListEdgeRoutersEnvelope {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersOK) GetPayload() *rest_model.ListEdgeRoutersEnvelope {
 	return o.Payload
 }
 
 func (o *ListServiceEdgeRouterPolicyEdgeRoutersOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListEdgeRoutersEnvelope)
+	o.Payload = new(rest_model.ListEdgeRoutersEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewListServiceEdgeRouterPolicyEdgeRoutersUnauthorized() *ListServiceEdgeRou
 The currently supplied session does not have the correct access rights to request this resource
 */
 type ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /service-edge-router-policies/{id}/edge-routers][%d] listServiceEdgeRouterPolicyEdgeRoutersUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListServiceEdgeRouterPolicyEdgeRoutersUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewListServiceEdgeRouterPolicyEdgeRoutersNotFound() *ListServiceEdgeRouterP
 The requested resource does not exist
 */
 type ListServiceEdgeRouterPolicyEdgeRoutersNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListServiceEdgeRouterPolicyEdgeRoutersNotFound) Error() string {
 	return fmt.Sprintf("[GET /service-edge-router-policies/{id}/edge-routers][%d] listServiceEdgeRouterPolicyEdgeRoutersNotFound  %+v", 404, o.Payload)
 }
 
-func (o *ListServiceEdgeRouterPolicyEdgeRoutersNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *ListServiceEdgeRouterPolicyEdgeRoutersNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListServiceEdgeRouterPolicyEdgeRoutersNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

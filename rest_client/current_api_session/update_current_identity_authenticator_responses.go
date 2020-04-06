@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateCurrentIdentityAuthenticatorReader is a Reader for the UpdateCurrentIdentityAuthenticator structure.
@@ -87,20 +87,20 @@ func NewUpdateCurrentIdentityAuthenticatorOK() *UpdateCurrentIdentityAuthenticat
 The update request was successful and the resource has been altered
 */
 type UpdateCurrentIdentityAuthenticatorOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *UpdateCurrentIdentityAuthenticatorOK) Error() string {
 	return fmt.Sprintf("[PUT /current-identity/authenticators/{id}][%d] updateCurrentIdentityAuthenticatorOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateCurrentIdentityAuthenticatorOK) GetPayload() *models.Empty {
+func (o *UpdateCurrentIdentityAuthenticatorOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *UpdateCurrentIdentityAuthenticatorOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewUpdateCurrentIdentityAuthenticatorBadRequest() *UpdateCurrentIdentityAut
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type UpdateCurrentIdentityAuthenticatorBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateCurrentIdentityAuthenticatorBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /current-identity/authenticators/{id}][%d] updateCurrentIdentityAuthenticatorBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *UpdateCurrentIdentityAuthenticatorBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateCurrentIdentityAuthenticatorBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateCurrentIdentityAuthenticatorBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewUpdateCurrentIdentityAuthenticatorUnauthorized() *UpdateCurrentIdentityA
 The currently supplied session does not have the correct access rights to request this resource
 */
 type UpdateCurrentIdentityAuthenticatorUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateCurrentIdentityAuthenticatorUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /current-identity/authenticators/{id}][%d] updateCurrentIdentityAuthenticatorUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *UpdateCurrentIdentityAuthenticatorUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateCurrentIdentityAuthenticatorUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateCurrentIdentityAuthenticatorUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewUpdateCurrentIdentityAuthenticatorNotFound() *UpdateCurrentIdentityAuthe
 The requested resource does not exist
 */
 type UpdateCurrentIdentityAuthenticatorNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateCurrentIdentityAuthenticatorNotFound) Error() string {
 	return fmt.Sprintf("[PUT /current-identity/authenticators/{id}][%d] updateCurrentIdentityAuthenticatorNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateCurrentIdentityAuthenticatorNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateCurrentIdentityAuthenticatorNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateCurrentIdentityAuthenticatorNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

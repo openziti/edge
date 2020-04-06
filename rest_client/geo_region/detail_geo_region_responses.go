@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailGeoRegionReader is a Reader for the DetailGeoRegion structure.
@@ -81,20 +81,20 @@ func NewDetailGeoRegionOK() *DetailGeoRegionOK {
 A single geo-region
 */
 type DetailGeoRegionOK struct {
-	Payload *models.DetailGeoRegionEnvelope
+	Payload *rest_model.DetailGeoRegionEnvelope
 }
 
 func (o *DetailGeoRegionOK) Error() string {
 	return fmt.Sprintf("[GET /geo-regions/{id}][%d] detailGeoRegionOK  %+v", 200, o.Payload)
 }
 
-func (o *DetailGeoRegionOK) GetPayload() *models.DetailGeoRegionEnvelope {
+func (o *DetailGeoRegionOK) GetPayload() *rest_model.DetailGeoRegionEnvelope {
 	return o.Payload
 }
 
 func (o *DetailGeoRegionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.DetailGeoRegionEnvelope)
+	o.Payload = new(rest_model.DetailGeoRegionEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewDetailGeoRegionUnauthorized() *DetailGeoRegionUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DetailGeoRegionUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailGeoRegionUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /geo-regions/{id}][%d] detailGeoRegionUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DetailGeoRegionUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailGeoRegionUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailGeoRegionUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewDetailGeoRegionNotFound() *DetailGeoRegionNotFound {
 The requested resource does not exist
 */
 type DetailGeoRegionNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailGeoRegionNotFound) Error() string {
 	return fmt.Sprintf("[GET /geo-regions/{id}][%d] detailGeoRegionNotFound  %+v", 404, o.Payload)
 }
 
-func (o *DetailGeoRegionNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailGeoRegionNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailGeoRegionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

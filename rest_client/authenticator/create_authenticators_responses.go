@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateAuthenticatorsReader is a Reader for the CreateAuthenticators structure.
@@ -81,20 +81,20 @@ func NewCreateAuthenticatorsOK() *CreateAuthenticatorsOK {
 The create was successful
 */
 type CreateAuthenticatorsOK struct {
-	Payload *models.AuthenticatorCreate
+	Payload *rest_model.AuthenticatorCreate
 }
 
 func (o *CreateAuthenticatorsOK) Error() string {
 	return fmt.Sprintf("[POST /authenticators][%d] createAuthenticatorsOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateAuthenticatorsOK) GetPayload() *models.AuthenticatorCreate {
+func (o *CreateAuthenticatorsOK) GetPayload() *rest_model.AuthenticatorCreate {
 	return o.Payload
 }
 
 func (o *CreateAuthenticatorsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.AuthenticatorCreate)
+	o.Payload = new(rest_model.AuthenticatorCreate)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewCreateAuthenticatorsBadRequest() *CreateAuthenticatorsBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type CreateAuthenticatorsBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *CreateAuthenticatorsBadRequest) Error() string {
 	return fmt.Sprintf("[POST /authenticators][%d] createAuthenticatorsBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *CreateAuthenticatorsBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *CreateAuthenticatorsBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *CreateAuthenticatorsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewCreateAuthenticatorsUnauthorized() *CreateAuthenticatorsUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type CreateAuthenticatorsUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *CreateAuthenticatorsUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /authenticators][%d] createAuthenticatorsUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *CreateAuthenticatorsUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *CreateAuthenticatorsUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *CreateAuthenticatorsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

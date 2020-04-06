@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchTerminatorReader is a Reader for the PatchTerminator structure.
@@ -87,20 +87,20 @@ func NewPatchTerminatorOK() *PatchTerminatorOK {
 The patch request was successful and the resource has been altered
 */
 type PatchTerminatorOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *PatchTerminatorOK) Error() string {
 	return fmt.Sprintf("[PATCH /terminators/{id}][%d] patchTerminatorOK  %+v", 200, o.Payload)
 }
 
-func (o *PatchTerminatorOK) GetPayload() *models.Empty {
+func (o *PatchTerminatorOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *PatchTerminatorOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewPatchTerminatorBadRequest() *PatchTerminatorBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type PatchTerminatorBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchTerminatorBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /terminators/{id}][%d] patchTerminatorBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *PatchTerminatorBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchTerminatorBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchTerminatorBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewPatchTerminatorUnauthorized() *PatchTerminatorUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type PatchTerminatorUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchTerminatorUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /terminators/{id}][%d] patchTerminatorUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *PatchTerminatorUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchTerminatorUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchTerminatorUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewPatchTerminatorNotFound() *PatchTerminatorNotFound {
 The requested resource does not exist
 */
 type PatchTerminatorNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchTerminatorNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /terminators/{id}][%d] patchTerminatorNotFound  %+v", 404, o.Payload)
 }
 
-func (o *PatchTerminatorNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchTerminatorNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchTerminatorNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

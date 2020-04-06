@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchServicePolicyOKCode is the HTTP code returned for type PatchServicePolicyOK
@@ -49,7 +49,7 @@ type PatchServicePolicyOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPatchServicePolicyOK creates PatchServicePolicyOK with default headers values
@@ -59,13 +59,13 @@ func NewPatchServicePolicyOK() *PatchServicePolicyOK {
 }
 
 // WithPayload adds the payload to the patch service policy o k response
-func (o *PatchServicePolicyOK) WithPayload(payload *models.Empty) *PatchServicePolicyOK {
+func (o *PatchServicePolicyOK) WithPayload(payload *rest_model.Empty) *PatchServicePolicyOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch service policy o k response
-func (o *PatchServicePolicyOK) SetPayload(payload *models.Empty) {
+func (o *PatchServicePolicyOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PatchServicePolicyBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchServicePolicyBadRequest creates PatchServicePolicyBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPatchServicePolicyBadRequest() *PatchServicePolicyBadRequest {
 }
 
 // WithPayload adds the payload to the patch service policy bad request response
-func (o *PatchServicePolicyBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PatchServicePolicyBadRequest {
+func (o *PatchServicePolicyBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchServicePolicyBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch service policy bad request response
-func (o *PatchServicePolicyBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchServicePolicyBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PatchServicePolicyUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchServicePolicyUnauthorized creates PatchServicePolicyUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPatchServicePolicyUnauthorized() *PatchServicePolicyUnauthorized {
 }
 
 // WithPayload adds the payload to the patch service policy unauthorized response
-func (o *PatchServicePolicyUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PatchServicePolicyUnauthorized {
+func (o *PatchServicePolicyUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchServicePolicyUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch service policy unauthorized response
-func (o *PatchServicePolicyUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchServicePolicyUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PatchServicePolicyNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchServicePolicyNotFound creates PatchServicePolicyNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPatchServicePolicyNotFound() *PatchServicePolicyNotFound {
 }
 
 // WithPayload adds the payload to the patch service policy not found response
-func (o *PatchServicePolicyNotFound) WithPayload(payload *models.APIErrorEnvelope) *PatchServicePolicyNotFound {
+func (o *PatchServicePolicyNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchServicePolicyNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch service policy not found response
-func (o *PatchServicePolicyNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchServicePolicyNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

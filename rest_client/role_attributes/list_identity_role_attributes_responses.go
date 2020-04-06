@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListIdentityRoleAttributesReader is a Reader for the ListIdentityRoleAttributes structure.
@@ -75,20 +75,20 @@ func NewListIdentityRoleAttributesOK() *ListIdentityRoleAttributesOK {
 A list of role attributes
 */
 type ListIdentityRoleAttributesOK struct {
-	Payload *models.ListRoleAttributesEnvelope
+	Payload *rest_model.ListRoleAttributesEnvelope
 }
 
 func (o *ListIdentityRoleAttributesOK) Error() string {
 	return fmt.Sprintf("[GET /identity-role-attributes][%d] listIdentityRoleAttributesOK  %+v", 200, o.Payload)
 }
 
-func (o *ListIdentityRoleAttributesOK) GetPayload() *models.ListRoleAttributesEnvelope {
+func (o *ListIdentityRoleAttributesOK) GetPayload() *rest_model.ListRoleAttributesEnvelope {
 	return o.Payload
 }
 
 func (o *ListIdentityRoleAttributesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListRoleAttributesEnvelope)
+	o.Payload = new(rest_model.ListRoleAttributesEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -108,20 +108,20 @@ func NewListIdentityRoleAttributesUnauthorized() *ListIdentityRoleAttributesUnau
 The currently supplied session does not have the correct access rights to request this resource
 */
 type ListIdentityRoleAttributesUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListIdentityRoleAttributesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /identity-role-attributes][%d] listIdentityRoleAttributesUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *ListIdentityRoleAttributesUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *ListIdentityRoleAttributesUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListIdentityRoleAttributesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

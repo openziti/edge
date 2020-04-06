@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteServiceReader is a Reader for the DeleteService structure.
@@ -87,20 +87,20 @@ func NewDeleteServiceOK() *DeleteServiceOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteServiceOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteServiceOK) Error() string {
 	return fmt.Sprintf("[DELETE /services/{id}][%d] deleteServiceOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteServiceOK) GetPayload() *models.Empty {
+func (o *DeleteServiceOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteServiceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewDeleteServiceBadRequest() *DeleteServiceBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteServiceBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteServiceBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /services/{id}][%d] deleteServiceBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteServiceBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteServiceBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteServiceBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewDeleteServiceUnauthorized() *DeleteServiceUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteServiceUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteServiceUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /services/{id}][%d] deleteServiceUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteServiceUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteServiceUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteServiceUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewDeleteServiceConflict() *DeleteServiceConflict {
 The resource requested to be removed/altered cannot be as it is referenced by another object.
 */
 type DeleteServiceConflict struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteServiceConflict) Error() string {
 	return fmt.Sprintf("[DELETE /services/{id}][%d] deleteServiceConflict  %+v", 409, o.Payload)
 }
 
-func (o *DeleteServiceConflict) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteServiceConflict) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteServiceConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

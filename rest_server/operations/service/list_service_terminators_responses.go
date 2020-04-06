@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServiceTerminatorsOKCode is the HTTP code returned for type ListServiceTerminatorsOK
@@ -49,7 +49,7 @@ type ListServiceTerminatorsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListTerminatorsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListTerminatorsEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceTerminatorsOK creates ListServiceTerminatorsOK with default headers values
@@ -59,13 +59,13 @@ func NewListServiceTerminatorsOK() *ListServiceTerminatorsOK {
 }
 
 // WithPayload adds the payload to the list service terminators o k response
-func (o *ListServiceTerminatorsOK) WithPayload(payload *models.ListTerminatorsEnvelope) *ListServiceTerminatorsOK {
+func (o *ListServiceTerminatorsOK) WithPayload(payload *rest_model.ListTerminatorsEnvelope) *ListServiceTerminatorsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service terminators o k response
-func (o *ListServiceTerminatorsOK) SetPayload(payload *models.ListTerminatorsEnvelope) {
+func (o *ListServiceTerminatorsOK) SetPayload(payload *rest_model.ListTerminatorsEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListServiceTerminatorsUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceTerminatorsUnauthorized creates ListServiceTerminatorsUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListServiceTerminatorsUnauthorized() *ListServiceTerminatorsUnauthorized
 }
 
 // WithPayload adds the payload to the list service terminators unauthorized response
-func (o *ListServiceTerminatorsUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListServiceTerminatorsUnauthorized {
+func (o *ListServiceTerminatorsUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListServiceTerminatorsUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service terminators unauthorized response
-func (o *ListServiceTerminatorsUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListServiceTerminatorsUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // AuthenticateReader is a Reader for the Authenticate structure.
@@ -81,20 +81,20 @@ func NewAuthenticateOK() *AuthenticateOK {
 The API session associated with the session used to issue the request
 */
 type AuthenticateOK struct {
-	Payload *models.CurrentAPISessionDetailEnvelope
+	Payload *rest_model.CurrentAPISessionDetailEnvelope
 }
 
 func (o *AuthenticateOK) Error() string {
 	return fmt.Sprintf("[POST /authenticate][%d] authenticateOK  %+v", 200, o.Payload)
 }
 
-func (o *AuthenticateOK) GetPayload() *models.CurrentAPISessionDetailEnvelope {
+func (o *AuthenticateOK) GetPayload() *rest_model.CurrentAPISessionDetailEnvelope {
 	return o.Payload
 }
 
 func (o *AuthenticateOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.CurrentAPISessionDetailEnvelope)
+	o.Payload = new(rest_model.CurrentAPISessionDetailEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewAuthenticateBadRequest() *AuthenticateBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type AuthenticateBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *AuthenticateBadRequest) Error() string {
 	return fmt.Sprintf("[POST /authenticate][%d] authenticateBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *AuthenticateBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *AuthenticateBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *AuthenticateBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewAuthenticateForbidden() *AuthenticateForbidden {
 The authentication request could not be processed as the credentials are invalid
 */
 type AuthenticateForbidden struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *AuthenticateForbidden) Error() string {
 	return fmt.Sprintf("[POST /authenticate][%d] authenticateForbidden  %+v", 403, o.Payload)
 }
 
-func (o *AuthenticateForbidden) GetPayload() *models.APIErrorEnvelope {
+func (o *AuthenticateForbidden) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *AuthenticateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

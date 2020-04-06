@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListVersionOKCode is the HTTP code returned for type ListVersionOK
@@ -49,7 +49,7 @@ type ListVersionOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListVersionEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListVersionEnvelope `json:"body,omitempty"`
 }
 
 // NewListVersionOK creates ListVersionOK with default headers values
@@ -59,13 +59,13 @@ func NewListVersionOK() *ListVersionOK {
 }
 
 // WithPayload adds the payload to the list version o k response
-func (o *ListVersionOK) WithPayload(payload *models.ListVersionEnvelope) *ListVersionOK {
+func (o *ListVersionOK) WithPayload(payload *rest_model.ListVersionEnvelope) *ListVersionOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list version o k response
-func (o *ListVersionOK) SetPayload(payload *models.ListVersionEnvelope) {
+func (o *ListVersionOK) SetPayload(payload *rest_model.ListVersionEnvelope) {
 	o.Payload = payload
 }
 

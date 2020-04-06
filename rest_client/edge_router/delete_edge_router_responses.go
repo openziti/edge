@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteEdgeRouterReader is a Reader for the DeleteEdgeRouter structure.
@@ -87,20 +87,20 @@ func NewDeleteEdgeRouterOK() *DeleteEdgeRouterOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteEdgeRouterOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteEdgeRouterOK) Error() string {
 	return fmt.Sprintf("[DELETE /edge-routers/{id}][%d] deleteEdgeRouterOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteEdgeRouterOK) GetPayload() *models.Empty {
+func (o *DeleteEdgeRouterOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteEdgeRouterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewDeleteEdgeRouterBadRequest() *DeleteEdgeRouterBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteEdgeRouterBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteEdgeRouterBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /edge-routers/{id}][%d] deleteEdgeRouterBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteEdgeRouterBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteEdgeRouterBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteEdgeRouterBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewDeleteEdgeRouterUnauthorized() *DeleteEdgeRouterUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteEdgeRouterUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteEdgeRouterUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /edge-routers/{id}][%d] deleteEdgeRouterUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteEdgeRouterUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteEdgeRouterUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteEdgeRouterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewDeleteEdgeRouterConflict() *DeleteEdgeRouterConflict {
 The resource requested to be removed/altered cannot be as it is referenced by another object.
 */
 type DeleteEdgeRouterConflict struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteEdgeRouterConflict) Error() string {
 	return fmt.Sprintf("[DELETE /edge-routers/{id}][%d] deleteEdgeRouterConflict  %+v", 409, o.Payload)
 }
 
-func (o *DeleteEdgeRouterConflict) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteEdgeRouterConflict) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteEdgeRouterConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

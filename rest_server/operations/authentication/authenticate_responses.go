@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // AuthenticateOKCode is the HTTP code returned for type AuthenticateOK
@@ -49,7 +49,7 @@ type AuthenticateOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.CurrentAPISessionDetailEnvelope `json:"body,omitempty"`
+	Payload *rest_model.CurrentAPISessionDetailEnvelope `json:"body,omitempty"`
 }
 
 // NewAuthenticateOK creates AuthenticateOK with default headers values
@@ -59,13 +59,13 @@ func NewAuthenticateOK() *AuthenticateOK {
 }
 
 // WithPayload adds the payload to the authenticate o k response
-func (o *AuthenticateOK) WithPayload(payload *models.CurrentAPISessionDetailEnvelope) *AuthenticateOK {
+func (o *AuthenticateOK) WithPayload(payload *rest_model.CurrentAPISessionDetailEnvelope) *AuthenticateOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the authenticate o k response
-func (o *AuthenticateOK) SetPayload(payload *models.CurrentAPISessionDetailEnvelope) {
+func (o *AuthenticateOK) SetPayload(payload *rest_model.CurrentAPISessionDetailEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type AuthenticateBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewAuthenticateBadRequest creates AuthenticateBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewAuthenticateBadRequest() *AuthenticateBadRequest {
 }
 
 // WithPayload adds the payload to the authenticate bad request response
-func (o *AuthenticateBadRequest) WithPayload(payload *models.APIErrorEnvelope) *AuthenticateBadRequest {
+func (o *AuthenticateBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *AuthenticateBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the authenticate bad request response
-func (o *AuthenticateBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *AuthenticateBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type AuthenticateForbidden struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewAuthenticateForbidden creates AuthenticateForbidden with default headers values
@@ -147,13 +147,13 @@ func NewAuthenticateForbidden() *AuthenticateForbidden {
 }
 
 // WithPayload adds the payload to the authenticate forbidden response
-func (o *AuthenticateForbidden) WithPayload(payload *models.APIErrorEnvelope) *AuthenticateForbidden {
+func (o *AuthenticateForbidden) WithPayload(payload *rest_model.APIErrorEnvelope) *AuthenticateForbidden {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the authenticate forbidden response
-func (o *AuthenticateForbidden) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *AuthenticateForbidden) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

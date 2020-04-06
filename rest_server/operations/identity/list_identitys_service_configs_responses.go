@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListIdentitysServiceConfigsOKCode is the HTTP code returned for type ListIdentitysServiceConfigsOK
@@ -49,7 +49,7 @@ type ListIdentitysServiceConfigsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListServiceConfigsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListServiceConfigsEnvelope `json:"body,omitempty"`
 }
 
 // NewListIdentitysServiceConfigsOK creates ListIdentitysServiceConfigsOK with default headers values
@@ -59,13 +59,13 @@ func NewListIdentitysServiceConfigsOK() *ListIdentitysServiceConfigsOK {
 }
 
 // WithPayload adds the payload to the list identitys service configs o k response
-func (o *ListIdentitysServiceConfigsOK) WithPayload(payload *models.ListServiceConfigsEnvelope) *ListIdentitysServiceConfigsOK {
+func (o *ListIdentitysServiceConfigsOK) WithPayload(payload *rest_model.ListServiceConfigsEnvelope) *ListIdentitysServiceConfigsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list identitys service configs o k response
-func (o *ListIdentitysServiceConfigsOK) SetPayload(payload *models.ListServiceConfigsEnvelope) {
+func (o *ListIdentitysServiceConfigsOK) SetPayload(payload *rest_model.ListServiceConfigsEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListIdentitysServiceConfigsUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListIdentitysServiceConfigsUnauthorized creates ListIdentitysServiceConfigsUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListIdentitysServiceConfigsUnauthorized() *ListIdentitysServiceConfigsUn
 }
 
 // WithPayload adds the payload to the list identitys service configs unauthorized response
-func (o *ListIdentitysServiceConfigsUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListIdentitysServiceConfigsUnauthorized {
+func (o *ListIdentitysServiceConfigsUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListIdentitysServiceConfigsUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list identitys service configs unauthorized response
-func (o *ListIdentitysServiceConfigsUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListIdentitysServiceConfigsUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type ListIdentitysServiceConfigsNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListIdentitysServiceConfigsNotFound creates ListIdentitysServiceConfigsNotFound with default headers values
@@ -147,13 +147,13 @@ func NewListIdentitysServiceConfigsNotFound() *ListIdentitysServiceConfigsNotFou
 }
 
 // WithPayload adds the payload to the list identitys service configs not found response
-func (o *ListIdentitysServiceConfigsNotFound) WithPayload(payload *models.APIErrorEnvelope) *ListIdentitysServiceConfigsNotFound {
+func (o *ListIdentitysServiceConfigsNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *ListIdentitysServiceConfigsNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list identitys service configs not found response
-func (o *ListIdentitysServiceConfigsNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListIdentitysServiceConfigsNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

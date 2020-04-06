@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailEdgeRouterPolicyOKCode is the HTTP code returned for type DetailEdgeRouterPolicyOK
@@ -49,7 +49,7 @@ type DetailEdgeRouterPolicyOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailEdgeRouterPolicyEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailEdgeRouterPolicyEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailEdgeRouterPolicyOK creates DetailEdgeRouterPolicyOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailEdgeRouterPolicyOK() *DetailEdgeRouterPolicyOK {
 }
 
 // WithPayload adds the payload to the detail edge router policy o k response
-func (o *DetailEdgeRouterPolicyOK) WithPayload(payload *models.DetailEdgeRouterPolicyEnvelope) *DetailEdgeRouterPolicyOK {
+func (o *DetailEdgeRouterPolicyOK) WithPayload(payload *rest_model.DetailEdgeRouterPolicyEnvelope) *DetailEdgeRouterPolicyOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail edge router policy o k response
-func (o *DetailEdgeRouterPolicyOK) SetPayload(payload *models.DetailEdgeRouterPolicyEnvelope) {
+func (o *DetailEdgeRouterPolicyOK) SetPayload(payload *rest_model.DetailEdgeRouterPolicyEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailEdgeRouterPolicyUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailEdgeRouterPolicyUnauthorized creates DetailEdgeRouterPolicyUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailEdgeRouterPolicyUnauthorized() *DetailEdgeRouterPolicyUnauthorized
 }
 
 // WithPayload adds the payload to the detail edge router policy unauthorized response
-func (o *DetailEdgeRouterPolicyUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailEdgeRouterPolicyUnauthorized {
+func (o *DetailEdgeRouterPolicyUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailEdgeRouterPolicyUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail edge router policy unauthorized response
-func (o *DetailEdgeRouterPolicyUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailEdgeRouterPolicyUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailEdgeRouterPolicyNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailEdgeRouterPolicyNotFound creates DetailEdgeRouterPolicyNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailEdgeRouterPolicyNotFound() *DetailEdgeRouterPolicyNotFound {
 }
 
 // WithPayload adds the payload to the detail edge router policy not found response
-func (o *DetailEdgeRouterPolicyNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailEdgeRouterPolicyNotFound {
+func (o *DetailEdgeRouterPolicyNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailEdgeRouterPolicyNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail edge router policy not found response
-func (o *DetailEdgeRouterPolicyNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailEdgeRouterPolicyNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

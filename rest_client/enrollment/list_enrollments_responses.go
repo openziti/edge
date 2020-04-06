@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListEnrollmentsReader is a Reader for the ListEnrollments structure.
@@ -75,20 +75,20 @@ func NewListEnrollmentsOK() *ListEnrollmentsOK {
 A list of enrollments
 */
 type ListEnrollmentsOK struct {
-	Payload *models.ListEnrollmentsEnvelope
+	Payload *rest_model.ListEnrollmentsEnvelope
 }
 
 func (o *ListEnrollmentsOK) Error() string {
 	return fmt.Sprintf("[GET /enrollments][%d] listEnrollmentsOK  %+v", 200, o.Payload)
 }
 
-func (o *ListEnrollmentsOK) GetPayload() *models.ListEnrollmentsEnvelope {
+func (o *ListEnrollmentsOK) GetPayload() *rest_model.ListEnrollmentsEnvelope {
 	return o.Payload
 }
 
 func (o *ListEnrollmentsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListEnrollmentsEnvelope)
+	o.Payload = new(rest_model.ListEnrollmentsEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -108,20 +108,20 @@ func NewListEnrollmentsUnauthorized() *ListEnrollmentsUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type ListEnrollmentsUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListEnrollmentsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /enrollments][%d] listEnrollmentsUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *ListEnrollmentsUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *ListEnrollmentsUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListEnrollmentsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

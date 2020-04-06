@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchAuthenticatorOKCode is the HTTP code returned for type PatchAuthenticatorOK
@@ -49,7 +49,7 @@ type PatchAuthenticatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPatchAuthenticatorOK creates PatchAuthenticatorOK with default headers values
@@ -59,13 +59,13 @@ func NewPatchAuthenticatorOK() *PatchAuthenticatorOK {
 }
 
 // WithPayload adds the payload to the patch authenticator o k response
-func (o *PatchAuthenticatorOK) WithPayload(payload *models.Empty) *PatchAuthenticatorOK {
+func (o *PatchAuthenticatorOK) WithPayload(payload *rest_model.Empty) *PatchAuthenticatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch authenticator o k response
-func (o *PatchAuthenticatorOK) SetPayload(payload *models.Empty) {
+func (o *PatchAuthenticatorOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PatchAuthenticatorBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchAuthenticatorBadRequest creates PatchAuthenticatorBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPatchAuthenticatorBadRequest() *PatchAuthenticatorBadRequest {
 }
 
 // WithPayload adds the payload to the patch authenticator bad request response
-func (o *PatchAuthenticatorBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PatchAuthenticatorBadRequest {
+func (o *PatchAuthenticatorBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchAuthenticatorBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch authenticator bad request response
-func (o *PatchAuthenticatorBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchAuthenticatorBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PatchAuthenticatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchAuthenticatorUnauthorized creates PatchAuthenticatorUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPatchAuthenticatorUnauthorized() *PatchAuthenticatorUnauthorized {
 }
 
 // WithPayload adds the payload to the patch authenticator unauthorized response
-func (o *PatchAuthenticatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PatchAuthenticatorUnauthorized {
+func (o *PatchAuthenticatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchAuthenticatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch authenticator unauthorized response
-func (o *PatchAuthenticatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchAuthenticatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PatchAuthenticatorNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchAuthenticatorNotFound creates PatchAuthenticatorNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPatchAuthenticatorNotFound() *PatchAuthenticatorNotFound {
 }
 
 // WithPayload adds the payload to the patch authenticator not found response
-func (o *PatchAuthenticatorNotFound) WithPayload(payload *models.APIErrorEnvelope) *PatchAuthenticatorNotFound {
+func (o *PatchAuthenticatorNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchAuthenticatorNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch authenticator not found response
-func (o *PatchAuthenticatorNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchAuthenticatorNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

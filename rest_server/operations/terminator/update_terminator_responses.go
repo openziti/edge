@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateTerminatorOKCode is the HTTP code returned for type UpdateTerminatorOK
@@ -49,7 +49,7 @@ type UpdateTerminatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateTerminatorOK creates UpdateTerminatorOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateTerminatorOK() *UpdateTerminatorOK {
 }
 
 // WithPayload adds the payload to the update terminator o k response
-func (o *UpdateTerminatorOK) WithPayload(payload *models.Empty) *UpdateTerminatorOK {
+func (o *UpdateTerminatorOK) WithPayload(payload *rest_model.Empty) *UpdateTerminatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update terminator o k response
-func (o *UpdateTerminatorOK) SetPayload(payload *models.Empty) {
+func (o *UpdateTerminatorOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateTerminatorBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateTerminatorBadRequest creates UpdateTerminatorBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateTerminatorBadRequest() *UpdateTerminatorBadRequest {
 }
 
 // WithPayload adds the payload to the update terminator bad request response
-func (o *UpdateTerminatorBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateTerminatorBadRequest {
+func (o *UpdateTerminatorBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateTerminatorBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update terminator bad request response
-func (o *UpdateTerminatorBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateTerminatorBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateTerminatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateTerminatorUnauthorized creates UpdateTerminatorUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateTerminatorUnauthorized() *UpdateTerminatorUnauthorized {
 }
 
 // WithPayload adds the payload to the update terminator unauthorized response
-func (o *UpdateTerminatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateTerminatorUnauthorized {
+func (o *UpdateTerminatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateTerminatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update terminator unauthorized response
-func (o *UpdateTerminatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateTerminatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateTerminatorNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateTerminatorNotFound creates UpdateTerminatorNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateTerminatorNotFound() *UpdateTerminatorNotFound {
 }
 
 // WithPayload adds the payload to the update terminator not found response
-func (o *UpdateTerminatorNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateTerminatorNotFound {
+func (o *UpdateTerminatorNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateTerminatorNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update terminator not found response
-func (o *UpdateTerminatorNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateTerminatorNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

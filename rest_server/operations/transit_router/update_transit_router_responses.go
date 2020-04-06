@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateTransitRouterOKCode is the HTTP code returned for type UpdateTransitRouterOK
@@ -49,7 +49,7 @@ type UpdateTransitRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateTransitRouterOK creates UpdateTransitRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateTransitRouterOK() *UpdateTransitRouterOK {
 }
 
 // WithPayload adds the payload to the update transit router o k response
-func (o *UpdateTransitRouterOK) WithPayload(payload *models.Empty) *UpdateTransitRouterOK {
+func (o *UpdateTransitRouterOK) WithPayload(payload *rest_model.Empty) *UpdateTransitRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update transit router o k response
-func (o *UpdateTransitRouterOK) SetPayload(payload *models.Empty) {
+func (o *UpdateTransitRouterOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateTransitRouterBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateTransitRouterBadRequest creates UpdateTransitRouterBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateTransitRouterBadRequest() *UpdateTransitRouterBadRequest {
 }
 
 // WithPayload adds the payload to the update transit router bad request response
-func (o *UpdateTransitRouterBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateTransitRouterBadRequest {
+func (o *UpdateTransitRouterBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateTransitRouterBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update transit router bad request response
-func (o *UpdateTransitRouterBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateTransitRouterBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateTransitRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateTransitRouterUnauthorized creates UpdateTransitRouterUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateTransitRouterUnauthorized() *UpdateTransitRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the update transit router unauthorized response
-func (o *UpdateTransitRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateTransitRouterUnauthorized {
+func (o *UpdateTransitRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateTransitRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update transit router unauthorized response
-func (o *UpdateTransitRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateTransitRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateTransitRouterNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateTransitRouterNotFound creates UpdateTransitRouterNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateTransitRouterNotFound() *UpdateTransitRouterNotFound {
 }
 
 // WithPayload adds the payload to the update transit router not found response
-func (o *UpdateTransitRouterNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateTransitRouterNotFound {
+func (o *UpdateTransitRouterNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateTransitRouterNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update transit router not found response
-func (o *UpdateTransitRouterNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateTransitRouterNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

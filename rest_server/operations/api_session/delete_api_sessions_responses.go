@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteAPISessionsOKCode is the HTTP code returned for type DeleteAPISessionsOK
@@ -49,7 +49,7 @@ type DeleteAPISessionsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteAPISessionsOK creates DeleteAPISessionsOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteAPISessionsOK() *DeleteAPISessionsOK {
 }
 
 // WithPayload adds the payload to the delete Api sessions o k response
-func (o *DeleteAPISessionsOK) WithPayload(payload *models.Empty) *DeleteAPISessionsOK {
+func (o *DeleteAPISessionsOK) WithPayload(payload *rest_model.Empty) *DeleteAPISessionsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete Api sessions o k response
-func (o *DeleteAPISessionsOK) SetPayload(payload *models.Empty) {
+func (o *DeleteAPISessionsOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteAPISessionsForbidden struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteAPISessionsForbidden creates DeleteAPISessionsForbidden with default headers values
@@ -103,13 +103,13 @@ func NewDeleteAPISessionsForbidden() *DeleteAPISessionsForbidden {
 }
 
 // WithPayload adds the payload to the delete Api sessions forbidden response
-func (o *DeleteAPISessionsForbidden) WithPayload(payload *models.APIErrorEnvelope) *DeleteAPISessionsForbidden {
+func (o *DeleteAPISessionsForbidden) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteAPISessionsForbidden {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete Api sessions forbidden response
-func (o *DeleteAPISessionsForbidden) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteAPISessionsForbidden) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteAPISessionsNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteAPISessionsNotFound creates DeleteAPISessionsNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDeleteAPISessionsNotFound() *DeleteAPISessionsNotFound {
 }
 
 // WithPayload adds the payload to the delete Api sessions not found response
-func (o *DeleteAPISessionsNotFound) WithPayload(payload *models.APIErrorEnvelope) *DeleteAPISessionsNotFound {
+func (o *DeleteAPISessionsNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteAPISessionsNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete Api sessions not found response
-func (o *DeleteAPISessionsNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteAPISessionsNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

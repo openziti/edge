@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateTransitRouterOKCode is the HTTP code returned for type CreateTransitRouterOK
@@ -49,7 +49,7 @@ type CreateTransitRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Create `json:"body,omitempty"`
+	Payload *rest_model.Create `json:"body,omitempty"`
 }
 
 // NewCreateTransitRouterOK creates CreateTransitRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateTransitRouterOK() *CreateTransitRouterOK {
 }
 
 // WithPayload adds the payload to the create transit router o k response
-func (o *CreateTransitRouterOK) WithPayload(payload *models.Create) *CreateTransitRouterOK {
+func (o *CreateTransitRouterOK) WithPayload(payload *rest_model.Create) *CreateTransitRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create transit router o k response
-func (o *CreateTransitRouterOK) SetPayload(payload *models.Create) {
+func (o *CreateTransitRouterOK) SetPayload(payload *rest_model.Create) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type CreateTransitRouterBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateTransitRouterBadRequest creates CreateTransitRouterBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewCreateTransitRouterBadRequest() *CreateTransitRouterBadRequest {
 }
 
 // WithPayload adds the payload to the create transit router bad request response
-func (o *CreateTransitRouterBadRequest) WithPayload(payload *models.APIErrorEnvelope) *CreateTransitRouterBadRequest {
+func (o *CreateTransitRouterBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateTransitRouterBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create transit router bad request response
-func (o *CreateTransitRouterBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateTransitRouterBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type CreateTransitRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateTransitRouterUnauthorized creates CreateTransitRouterUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewCreateTransitRouterUnauthorized() *CreateTransitRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the create transit router unauthorized response
-func (o *CreateTransitRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *CreateTransitRouterUnauthorized {
+func (o *CreateTransitRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateTransitRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create transit router unauthorized response
-func (o *CreateTransitRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateTransitRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

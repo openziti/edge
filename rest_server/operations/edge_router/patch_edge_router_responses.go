@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchEdgeRouterOKCode is the HTTP code returned for type PatchEdgeRouterOK
@@ -49,7 +49,7 @@ type PatchEdgeRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPatchEdgeRouterOK creates PatchEdgeRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewPatchEdgeRouterOK() *PatchEdgeRouterOK {
 }
 
 // WithPayload adds the payload to the patch edge router o k response
-func (o *PatchEdgeRouterOK) WithPayload(payload *models.Empty) *PatchEdgeRouterOK {
+func (o *PatchEdgeRouterOK) WithPayload(payload *rest_model.Empty) *PatchEdgeRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch edge router o k response
-func (o *PatchEdgeRouterOK) SetPayload(payload *models.Empty) {
+func (o *PatchEdgeRouterOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PatchEdgeRouterBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchEdgeRouterBadRequest creates PatchEdgeRouterBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPatchEdgeRouterBadRequest() *PatchEdgeRouterBadRequest {
 }
 
 // WithPayload adds the payload to the patch edge router bad request response
-func (o *PatchEdgeRouterBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PatchEdgeRouterBadRequest {
+func (o *PatchEdgeRouterBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchEdgeRouterBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch edge router bad request response
-func (o *PatchEdgeRouterBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchEdgeRouterBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PatchEdgeRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchEdgeRouterUnauthorized creates PatchEdgeRouterUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPatchEdgeRouterUnauthorized() *PatchEdgeRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the patch edge router unauthorized response
-func (o *PatchEdgeRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PatchEdgeRouterUnauthorized {
+func (o *PatchEdgeRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchEdgeRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch edge router unauthorized response
-func (o *PatchEdgeRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchEdgeRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PatchEdgeRouterNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchEdgeRouterNotFound creates PatchEdgeRouterNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPatchEdgeRouterNotFound() *PatchEdgeRouterNotFound {
 }
 
 // WithPayload adds the payload to the patch edge router not found response
-func (o *PatchEdgeRouterNotFound) WithPayload(payload *models.APIErrorEnvelope) *PatchEdgeRouterNotFound {
+func (o *PatchEdgeRouterNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchEdgeRouterNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch edge router not found response
-func (o *PatchEdgeRouterNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchEdgeRouterNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

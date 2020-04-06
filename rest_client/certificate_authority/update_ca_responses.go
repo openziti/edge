@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateCaReader is a Reader for the UpdateCa structure.
@@ -87,20 +87,20 @@ func NewUpdateCaOK() *UpdateCaOK {
 The update request was successful and the resource has been altered
 */
 type UpdateCaOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *UpdateCaOK) Error() string {
 	return fmt.Sprintf("[PUT /cas/{id}][%d] updateCaOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateCaOK) GetPayload() *models.Empty {
+func (o *UpdateCaOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *UpdateCaOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewUpdateCaBadRequest() *UpdateCaBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type UpdateCaBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateCaBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /cas/{id}][%d] updateCaBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *UpdateCaBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateCaBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateCaBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewUpdateCaUnauthorized() *UpdateCaUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type UpdateCaUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateCaUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /cas/{id}][%d] updateCaUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *UpdateCaUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateCaUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateCaUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewUpdateCaNotFound() *UpdateCaNotFound {
 The requested resource does not exist
 */
 type UpdateCaNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateCaNotFound) Error() string {
 	return fmt.Sprintf("[PUT /cas/{id}][%d] updateCaNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateCaNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateCaNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateCaNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

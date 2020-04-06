@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailServiceReader is a Reader for the DetailService structure.
@@ -81,20 +81,20 @@ func NewDetailServiceOK() *DetailServiceOK {
 A single service
 */
 type DetailServiceOK struct {
-	Payload *models.DetailServiceEnvelope
+	Payload *rest_model.DetailServiceEnvelope
 }
 
 func (o *DetailServiceOK) Error() string {
 	return fmt.Sprintf("[GET /services/{id}][%d] detailServiceOK  %+v", 200, o.Payload)
 }
 
-func (o *DetailServiceOK) GetPayload() *models.DetailServiceEnvelope {
+func (o *DetailServiceOK) GetPayload() *rest_model.DetailServiceEnvelope {
 	return o.Payload
 }
 
 func (o *DetailServiceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.DetailServiceEnvelope)
+	o.Payload = new(rest_model.DetailServiceEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewDetailServiceUnauthorized() *DetailServiceUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DetailServiceUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailServiceUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /services/{id}][%d] detailServiceUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DetailServiceUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailServiceUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailServiceUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewDetailServiceNotFound() *DetailServiceNotFound {
 The requested resource does not exist
 */
 type DetailServiceNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailServiceNotFound) Error() string {
 	return fmt.Sprintf("[GET /services/{id}][%d] detailServiceNotFound  %+v", 404, o.Payload)
 }
 
-func (o *DetailServiceNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailServiceNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailServiceNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteEnrollmentOKCode is the HTTP code returned for type DeleteEnrollmentOK
@@ -49,7 +49,7 @@ type DeleteEnrollmentOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteEnrollmentOK creates DeleteEnrollmentOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteEnrollmentOK() *DeleteEnrollmentOK {
 }
 
 // WithPayload adds the payload to the delete enrollment o k response
-func (o *DeleteEnrollmentOK) WithPayload(payload *models.Empty) *DeleteEnrollmentOK {
+func (o *DeleteEnrollmentOK) WithPayload(payload *rest_model.Empty) *DeleteEnrollmentOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete enrollment o k response
-func (o *DeleteEnrollmentOK) SetPayload(payload *models.Empty) {
+func (o *DeleteEnrollmentOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteEnrollmentBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteEnrollmentBadRequest creates DeleteEnrollmentBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteEnrollmentBadRequest() *DeleteEnrollmentBadRequest {
 }
 
 // WithPayload adds the payload to the delete enrollment bad request response
-func (o *DeleteEnrollmentBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteEnrollmentBadRequest {
+func (o *DeleteEnrollmentBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteEnrollmentBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete enrollment bad request response
-func (o *DeleteEnrollmentBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteEnrollmentBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteEnrollmentUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteEnrollmentUnauthorized creates DeleteEnrollmentUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteEnrollmentUnauthorized() *DeleteEnrollmentUnauthorized {
 }
 
 // WithPayload adds the payload to the delete enrollment unauthorized response
-func (o *DeleteEnrollmentUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteEnrollmentUnauthorized {
+func (o *DeleteEnrollmentUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteEnrollmentUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete enrollment unauthorized response
-func (o *DeleteEnrollmentUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteEnrollmentUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

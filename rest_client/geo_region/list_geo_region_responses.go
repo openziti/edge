@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListGeoRegionReader is a Reader for the ListGeoRegion structure.
@@ -75,20 +75,20 @@ func NewListGeoRegionOK() *ListGeoRegionOK {
 A list of geo-regions
 */
 type ListGeoRegionOK struct {
-	Payload *models.ListGeoRegionsEnvelope
+	Payload *rest_model.ListGeoRegionsEnvelope
 }
 
 func (o *ListGeoRegionOK) Error() string {
 	return fmt.Sprintf("[GET /geo-regions][%d] listGeoRegionOK  %+v", 200, o.Payload)
 }
 
-func (o *ListGeoRegionOK) GetPayload() *models.ListGeoRegionsEnvelope {
+func (o *ListGeoRegionOK) GetPayload() *rest_model.ListGeoRegionsEnvelope {
 	return o.Payload
 }
 
 func (o *ListGeoRegionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListGeoRegionsEnvelope)
+	o.Payload = new(rest_model.ListGeoRegionsEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -108,20 +108,20 @@ func NewListGeoRegionUnauthorized() *ListGeoRegionUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type ListGeoRegionUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListGeoRegionUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /geo-regions][%d] listGeoRegionUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *ListGeoRegionUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *ListGeoRegionUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListGeoRegionUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

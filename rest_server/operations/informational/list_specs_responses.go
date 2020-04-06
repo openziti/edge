@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListSpecsOKCode is the HTTP code returned for type ListSpecsOK
@@ -49,7 +49,7 @@ type ListSpecsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListSpecsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListSpecsEnvelope `json:"body,omitempty"`
 }
 
 // NewListSpecsOK creates ListSpecsOK with default headers values
@@ -59,13 +59,13 @@ func NewListSpecsOK() *ListSpecsOK {
 }
 
 // WithPayload adds the payload to the list specs o k response
-func (o *ListSpecsOK) WithPayload(payload *models.ListSpecsEnvelope) *ListSpecsOK {
+func (o *ListSpecsOK) WithPayload(payload *rest_model.ListSpecsEnvelope) *ListSpecsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list specs o k response
-func (o *ListSpecsOK) SetPayload(payload *models.ListSpecsEnvelope) {
+func (o *ListSpecsOK) SetPayload(payload *rest_model.ListSpecsEnvelope) {
 	o.Payload = payload
 }
 

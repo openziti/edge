@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListConfigOKCode is the HTTP code returned for type ListConfigOK
@@ -49,7 +49,7 @@ type ListConfigOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListConfigsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListConfigsEnvelope `json:"body,omitempty"`
 }
 
 // NewListConfigOK creates ListConfigOK with default headers values
@@ -59,13 +59,13 @@ func NewListConfigOK() *ListConfigOK {
 }
 
 // WithPayload adds the payload to the list config o k response
-func (o *ListConfigOK) WithPayload(payload *models.ListConfigsEnvelope) *ListConfigOK {
+func (o *ListConfigOK) WithPayload(payload *rest_model.ListConfigsEnvelope) *ListConfigOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list config o k response
-func (o *ListConfigOK) SetPayload(payload *models.ListConfigsEnvelope) {
+func (o *ListConfigOK) SetPayload(payload *rest_model.ListConfigsEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListConfigUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListConfigUnauthorized creates ListConfigUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListConfigUnauthorized() *ListConfigUnauthorized {
 }
 
 // WithPayload adds the payload to the list config unauthorized response
-func (o *ListConfigUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListConfigUnauthorized {
+func (o *ListConfigUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListConfigUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list config unauthorized response
-func (o *ListConfigUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListConfigUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

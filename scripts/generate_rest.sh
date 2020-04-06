@@ -1,6 +1,9 @@
 #!/bin/bash -e
 
-command -v swagger >/dev/null 2>&1 || { echo >&2 "Command 'swagger' not installed. See: https://github.com/go-swagger/go-swagger for installation"; exit 1; }
+command -v swagger >/dev/null 2>&1 || {
+  echo >&2 "Command 'swagger' not installed. See: https://github.com/go-swagger/go-swagger for installation"
+  exit 1
+}
 
 scriptPath=$(realpath $0)
 scriptDir=$(dirname "$scriptPath")
@@ -19,8 +22,13 @@ echo "...removing any existing client from $clientPath"
 rm -rf "$clientPath"
 mkdir -p "$clientPath"
 
+modelPath=$(realpath "$zitiEdgeDir/rest_model")
+echo "...removing any existing model from $modelPath"
+rm -rf "$modelPath"
+mkdir -p "$modelPath"
+
 echo "...generating server"
-swagger generate server --exclude-main -f "$swagSpec" -s rest_server -t "$zitiEdgeDir" -q -r "$copyrightFile"
+swagger generate server --exclude-main -f "$swagSpec" -s rest_server -t "$zitiEdgeDir" -q -r "$copyrightFile" -m "rest_model"
 exit_status=$?
 if [ ${exit_status} -ne 0 ]; then
   echo "Failed to generate server. See above."
@@ -28,10 +36,9 @@ if [ ${exit_status} -ne 0 ]; then
 fi
 
 echo "...generating client"
-swagger generate client -f "$swagSpec"  -c rest_client -t "$zitiEdgeDir" -q -r "$copyrightFile"
+swagger generate client -f "$swagSpec" -c rest_client -t "$zitiEdgeDir" -q -r "$copyrightFile" -m "rest_model"
 exit_status=$?
 if [ ${exit_status} -ne 0 ]; then
   echo "Failed to generate client. See above."
   exit "${exit_status}"
 fi
-

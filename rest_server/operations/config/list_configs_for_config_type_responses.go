@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListConfigsForConfigTypeOKCode is the HTTP code returned for type ListConfigsForConfigTypeOK
@@ -49,7 +49,7 @@ type ListConfigsForConfigTypeOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListConfigsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListConfigsEnvelope `json:"body,omitempty"`
 }
 
 // NewListConfigsForConfigTypeOK creates ListConfigsForConfigTypeOK with default headers values
@@ -59,13 +59,13 @@ func NewListConfigsForConfigTypeOK() *ListConfigsForConfigTypeOK {
 }
 
 // WithPayload adds the payload to the list configs for config type o k response
-func (o *ListConfigsForConfigTypeOK) WithPayload(payload *models.ListConfigsEnvelope) *ListConfigsForConfigTypeOK {
+func (o *ListConfigsForConfigTypeOK) WithPayload(payload *rest_model.ListConfigsEnvelope) *ListConfigsForConfigTypeOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list configs for config type o k response
-func (o *ListConfigsForConfigTypeOK) SetPayload(payload *models.ListConfigsEnvelope) {
+func (o *ListConfigsForConfigTypeOK) SetPayload(payload *rest_model.ListConfigsEnvelope) {
 	o.Payload = payload
 }
 

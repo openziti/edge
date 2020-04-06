@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListConfigReader is a Reader for the ListConfig structure.
@@ -75,20 +75,20 @@ func NewListConfigOK() *ListConfigOK {
 A list of configs
 */
 type ListConfigOK struct {
-	Payload *models.ListConfigsEnvelope
+	Payload *rest_model.ListConfigsEnvelope
 }
 
 func (o *ListConfigOK) Error() string {
 	return fmt.Sprintf("[GET /configs][%d] listConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *ListConfigOK) GetPayload() *models.ListConfigsEnvelope {
+func (o *ListConfigOK) GetPayload() *rest_model.ListConfigsEnvelope {
 	return o.Payload
 }
 
 func (o *ListConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListConfigsEnvelope)
+	o.Payload = new(rest_model.ListConfigsEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -108,20 +108,20 @@ func NewListConfigUnauthorized() *ListConfigUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type ListConfigUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /configs][%d] listConfigUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *ListConfigUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *ListConfigUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListConfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

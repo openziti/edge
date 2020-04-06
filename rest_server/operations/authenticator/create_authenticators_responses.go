@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateAuthenticatorsOKCode is the HTTP code returned for type CreateAuthenticatorsOK
@@ -49,7 +49,7 @@ type CreateAuthenticatorsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.AuthenticatorCreate `json:"body,omitempty"`
+	Payload *rest_model.AuthenticatorCreate `json:"body,omitempty"`
 }
 
 // NewCreateAuthenticatorsOK creates CreateAuthenticatorsOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateAuthenticatorsOK() *CreateAuthenticatorsOK {
 }
 
 // WithPayload adds the payload to the create authenticators o k response
-func (o *CreateAuthenticatorsOK) WithPayload(payload *models.AuthenticatorCreate) *CreateAuthenticatorsOK {
+func (o *CreateAuthenticatorsOK) WithPayload(payload *rest_model.AuthenticatorCreate) *CreateAuthenticatorsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create authenticators o k response
-func (o *CreateAuthenticatorsOK) SetPayload(payload *models.AuthenticatorCreate) {
+func (o *CreateAuthenticatorsOK) SetPayload(payload *rest_model.AuthenticatorCreate) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type CreateAuthenticatorsBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateAuthenticatorsBadRequest creates CreateAuthenticatorsBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewCreateAuthenticatorsBadRequest() *CreateAuthenticatorsBadRequest {
 }
 
 // WithPayload adds the payload to the create authenticators bad request response
-func (o *CreateAuthenticatorsBadRequest) WithPayload(payload *models.APIErrorEnvelope) *CreateAuthenticatorsBadRequest {
+func (o *CreateAuthenticatorsBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateAuthenticatorsBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create authenticators bad request response
-func (o *CreateAuthenticatorsBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateAuthenticatorsBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type CreateAuthenticatorsUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateAuthenticatorsUnauthorized creates CreateAuthenticatorsUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewCreateAuthenticatorsUnauthorized() *CreateAuthenticatorsUnauthorized {
 }
 
 // WithPayload adds the payload to the create authenticators unauthorized response
-func (o *CreateAuthenticatorsUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *CreateAuthenticatorsUnauthorized {
+func (o *CreateAuthenticatorsUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateAuthenticatorsUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create authenticators unauthorized response
-func (o *CreateAuthenticatorsUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateAuthenticatorsUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

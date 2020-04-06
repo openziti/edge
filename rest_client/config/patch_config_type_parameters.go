@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewPatchConfigTypeParams creates a new PatchConfigTypeParams object
@@ -90,7 +90,7 @@ type PatchConfigTypeParams struct {
 	  A config-type patch object
 
 	*/
-	Body *models.ConfigTypePatch
+	Body *rest_model.ConfigTypePatch
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *PatchConfigTypeParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the patch config type params
-func (o *PatchConfigTypeParams) WithBody(body *models.ConfigTypePatch) *PatchConfigTypeParams {
+func (o *PatchConfigTypeParams) WithBody(body *rest_model.ConfigTypePatch) *PatchConfigTypeParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the patch config type params
-func (o *PatchConfigTypeParams) SetBody(body *models.ConfigTypePatch) {
+func (o *PatchConfigTypeParams) SetBody(body *rest_model.ConfigTypePatch) {
 	o.Body = body
 }
 

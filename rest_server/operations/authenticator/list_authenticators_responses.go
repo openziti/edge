@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListAuthenticatorsOKCode is the HTTP code returned for type ListAuthenticatorsOK
@@ -49,7 +49,7 @@ type ListAuthenticatorsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListAuthenticatorsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListAuthenticatorsEnvelope `json:"body,omitempty"`
 }
 
 // NewListAuthenticatorsOK creates ListAuthenticatorsOK with default headers values
@@ -59,13 +59,13 @@ func NewListAuthenticatorsOK() *ListAuthenticatorsOK {
 }
 
 // WithPayload adds the payload to the list authenticators o k response
-func (o *ListAuthenticatorsOK) WithPayload(payload *models.ListAuthenticatorsEnvelope) *ListAuthenticatorsOK {
+func (o *ListAuthenticatorsOK) WithPayload(payload *rest_model.ListAuthenticatorsEnvelope) *ListAuthenticatorsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list authenticators o k response
-func (o *ListAuthenticatorsOK) SetPayload(payload *models.ListAuthenticatorsEnvelope) {
+func (o *ListAuthenticatorsOK) SetPayload(payload *rest_model.ListAuthenticatorsEnvelope) {
 	o.Payload = payload
 }
 

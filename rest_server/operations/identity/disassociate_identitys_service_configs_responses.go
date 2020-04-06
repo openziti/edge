@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DisassociateIdentitysServiceConfigsOKCode is the HTTP code returned for type DisassociateIdentitysServiceConfigsOK
@@ -49,7 +49,7 @@ type DisassociateIdentitysServiceConfigsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDisassociateIdentitysServiceConfigsOK creates DisassociateIdentitysServiceConfigsOK with default headers values
@@ -59,13 +59,13 @@ func NewDisassociateIdentitysServiceConfigsOK() *DisassociateIdentitysServiceCon
 }
 
 // WithPayload adds the payload to the disassociate identitys service configs o k response
-func (o *DisassociateIdentitysServiceConfigsOK) WithPayload(payload *models.Empty) *DisassociateIdentitysServiceConfigsOK {
+func (o *DisassociateIdentitysServiceConfigsOK) WithPayload(payload *rest_model.Empty) *DisassociateIdentitysServiceConfigsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the disassociate identitys service configs o k response
-func (o *DisassociateIdentitysServiceConfigsOK) SetPayload(payload *models.Empty) {
+func (o *DisassociateIdentitysServiceConfigsOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DisassociateIdentitysServiceConfigsBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDisassociateIdentitysServiceConfigsBadRequest creates DisassociateIdentitysServiceConfigsBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDisassociateIdentitysServiceConfigsBadRequest() *DisassociateIdentitysSe
 }
 
 // WithPayload adds the payload to the disassociate identitys service configs bad request response
-func (o *DisassociateIdentitysServiceConfigsBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DisassociateIdentitysServiceConfigsBadRequest {
+func (o *DisassociateIdentitysServiceConfigsBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DisassociateIdentitysServiceConfigsBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the disassociate identitys service configs bad request response
-func (o *DisassociateIdentitysServiceConfigsBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DisassociateIdentitysServiceConfigsBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DisassociateIdentitysServiceConfigsUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDisassociateIdentitysServiceConfigsUnauthorized creates DisassociateIdentitysServiceConfigsUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDisassociateIdentitysServiceConfigsUnauthorized() *DisassociateIdentitys
 }
 
 // WithPayload adds the payload to the disassociate identitys service configs unauthorized response
-func (o *DisassociateIdentitysServiceConfigsUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DisassociateIdentitysServiceConfigsUnauthorized {
+func (o *DisassociateIdentitysServiceConfigsUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DisassociateIdentitysServiceConfigsUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the disassociate identitys service configs unauthorized response
-func (o *DisassociateIdentitysServiceConfigsUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DisassociateIdentitysServiceConfigsUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DisassociateIdentitysServiceConfigsNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDisassociateIdentitysServiceConfigsNotFound creates DisassociateIdentitysServiceConfigsNotFound with default headers values
@@ -191,13 +191,13 @@ func NewDisassociateIdentitysServiceConfigsNotFound() *DisassociateIdentitysServ
 }
 
 // WithPayload adds the payload to the disassociate identitys service configs not found response
-func (o *DisassociateIdentitysServiceConfigsNotFound) WithPayload(payload *models.APIErrorEnvelope) *DisassociateIdentitysServiceConfigsNotFound {
+func (o *DisassociateIdentitysServiceConfigsNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DisassociateIdentitysServiceConfigsNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the disassociate identitys service configs not found response
-func (o *DisassociateIdentitysServiceConfigsNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DisassociateIdentitysServiceConfigsNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

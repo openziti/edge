@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListCurrentIdentityAuthenticatorsOKCode is the HTTP code returned for type ListCurrentIdentityAuthenticatorsOK
@@ -49,7 +49,7 @@ type ListCurrentIdentityAuthenticatorsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListAuthenticatorsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListAuthenticatorsEnvelope `json:"body,omitempty"`
 }
 
 // NewListCurrentIdentityAuthenticatorsOK creates ListCurrentIdentityAuthenticatorsOK with default headers values
@@ -59,13 +59,13 @@ func NewListCurrentIdentityAuthenticatorsOK() *ListCurrentIdentityAuthenticators
 }
 
 // WithPayload adds the payload to the list current identity authenticators o k response
-func (o *ListCurrentIdentityAuthenticatorsOK) WithPayload(payload *models.ListAuthenticatorsEnvelope) *ListCurrentIdentityAuthenticatorsOK {
+func (o *ListCurrentIdentityAuthenticatorsOK) WithPayload(payload *rest_model.ListAuthenticatorsEnvelope) *ListCurrentIdentityAuthenticatorsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list current identity authenticators o k response
-func (o *ListCurrentIdentityAuthenticatorsOK) SetPayload(payload *models.ListAuthenticatorsEnvelope) {
+func (o *ListCurrentIdentityAuthenticatorsOK) SetPayload(payload *rest_model.ListAuthenticatorsEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListCurrentIdentityAuthenticatorsUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListCurrentIdentityAuthenticatorsUnauthorized creates ListCurrentIdentityAuthenticatorsUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListCurrentIdentityAuthenticatorsUnauthorized() *ListCurrentIdentityAuth
 }
 
 // WithPayload adds the payload to the list current identity authenticators unauthorized response
-func (o *ListCurrentIdentityAuthenticatorsUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListCurrentIdentityAuthenticatorsUnauthorized {
+func (o *ListCurrentIdentityAuthenticatorsUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListCurrentIdentityAuthenticatorsUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list current identity authenticators unauthorized response
-func (o *ListCurrentIdentityAuthenticatorsUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListCurrentIdentityAuthenticatorsUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

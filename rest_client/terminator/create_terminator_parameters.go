@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateTerminatorParams creates a new CreateTerminatorParams object
@@ -90,7 +90,7 @@ type CreateTerminatorParams struct {
 	  A terminator to create
 
 	*/
-	Body *models.TerminatorCreate
+	Body *rest_model.TerminatorCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateTerminatorParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create terminator params
-func (o *CreateTerminatorParams) WithBody(body *models.TerminatorCreate) *CreateTerminatorParams {
+func (o *CreateTerminatorParams) WithBody(body *rest_model.TerminatorCreate) *CreateTerminatorParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create terminator params
-func (o *CreateTerminatorParams) SetBody(body *models.TerminatorCreate) {
+func (o *CreateTerminatorParams) SetBody(body *rest_model.TerminatorCreate) {
 	o.Body = body
 }
 

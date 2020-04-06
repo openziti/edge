@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListCurrentIdentityAuthenticatorsReader is a Reader for the ListCurrentIdentityAuthenticators structure.
@@ -75,20 +75,20 @@ func NewListCurrentIdentityAuthenticatorsOK() *ListCurrentIdentityAuthenticators
 A list of authenticators
 */
 type ListCurrentIdentityAuthenticatorsOK struct {
-	Payload *models.ListAuthenticatorsEnvelope
+	Payload *rest_model.ListAuthenticatorsEnvelope
 }
 
 func (o *ListCurrentIdentityAuthenticatorsOK) Error() string {
 	return fmt.Sprintf("[GET /current-identity/authenticators][%d] listCurrentIdentityAuthenticatorsOK  %+v", 200, o.Payload)
 }
 
-func (o *ListCurrentIdentityAuthenticatorsOK) GetPayload() *models.ListAuthenticatorsEnvelope {
+func (o *ListCurrentIdentityAuthenticatorsOK) GetPayload() *rest_model.ListAuthenticatorsEnvelope {
 	return o.Payload
 }
 
 func (o *ListCurrentIdentityAuthenticatorsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListAuthenticatorsEnvelope)
+	o.Payload = new(rest_model.ListAuthenticatorsEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -108,20 +108,20 @@ func NewListCurrentIdentityAuthenticatorsUnauthorized() *ListCurrentIdentityAuth
 The currently supplied session does not have the correct access rights to request this resource
 */
 type ListCurrentIdentityAuthenticatorsUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListCurrentIdentityAuthenticatorsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /current-identity/authenticators][%d] listCurrentIdentityAuthenticatorsUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *ListCurrentIdentityAuthenticatorsUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *ListCurrentIdentityAuthenticatorsUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListCurrentIdentityAuthenticatorsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

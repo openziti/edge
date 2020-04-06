@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PostEnrollOttcaOKCode is the HTTP code returned for type PostEnrollOttcaOK
@@ -49,7 +49,7 @@ type PostEnrollOttcaOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPostEnrollOttcaOK creates PostEnrollOttcaOK with default headers values
@@ -59,13 +59,13 @@ func NewPostEnrollOttcaOK() *PostEnrollOttcaOK {
 }
 
 // WithPayload adds the payload to the post enroll ottca o k response
-func (o *PostEnrollOttcaOK) WithPayload(payload *models.Empty) *PostEnrollOttcaOK {
+func (o *PostEnrollOttcaOK) WithPayload(payload *rest_model.Empty) *PostEnrollOttcaOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post enroll ottca o k response
-func (o *PostEnrollOttcaOK) SetPayload(payload *models.Empty) {
+func (o *PostEnrollOttcaOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 

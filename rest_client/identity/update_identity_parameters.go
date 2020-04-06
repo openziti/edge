@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewUpdateIdentityParams creates a new UpdateIdentityParams object
@@ -90,7 +90,7 @@ type UpdateIdentityParams struct {
 	  An identity update object
 
 	*/
-	Body *models.IdentityUpdate
+	Body *rest_model.IdentityUpdate
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *UpdateIdentityParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update identity params
-func (o *UpdateIdentityParams) WithBody(body *models.IdentityUpdate) *UpdateIdentityParams {
+func (o *UpdateIdentityParams) WithBody(body *rest_model.IdentityUpdate) *UpdateIdentityParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update identity params
-func (o *UpdateIdentityParams) SetBody(body *models.IdentityUpdate) {
+func (o *UpdateIdentityParams) SetBody(body *rest_model.IdentityUpdate) {
 	o.Body = body
 }
 

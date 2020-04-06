@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListIdentityRoleAttributesOKCode is the HTTP code returned for type ListIdentityRoleAttributesOK
@@ -49,7 +49,7 @@ type ListIdentityRoleAttributesOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListRoleAttributesEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListRoleAttributesEnvelope `json:"body,omitempty"`
 }
 
 // NewListIdentityRoleAttributesOK creates ListIdentityRoleAttributesOK with default headers values
@@ -59,13 +59,13 @@ func NewListIdentityRoleAttributesOK() *ListIdentityRoleAttributesOK {
 }
 
 // WithPayload adds the payload to the list identity role attributes o k response
-func (o *ListIdentityRoleAttributesOK) WithPayload(payload *models.ListRoleAttributesEnvelope) *ListIdentityRoleAttributesOK {
+func (o *ListIdentityRoleAttributesOK) WithPayload(payload *rest_model.ListRoleAttributesEnvelope) *ListIdentityRoleAttributesOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list identity role attributes o k response
-func (o *ListIdentityRoleAttributesOK) SetPayload(payload *models.ListRoleAttributesEnvelope) {
+func (o *ListIdentityRoleAttributesOK) SetPayload(payload *rest_model.ListRoleAttributesEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListIdentityRoleAttributesUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListIdentityRoleAttributesUnauthorized creates ListIdentityRoleAttributesUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListIdentityRoleAttributesUnauthorized() *ListIdentityRoleAttributesUnau
 }
 
 // WithPayload adds the payload to the list identity role attributes unauthorized response
-func (o *ListIdentityRoleAttributesUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListIdentityRoleAttributesUnauthorized {
+func (o *ListIdentityRoleAttributesUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListIdentityRoleAttributesUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list identity role attributes unauthorized response
-func (o *ListIdentityRoleAttributesUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListIdentityRoleAttributesUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

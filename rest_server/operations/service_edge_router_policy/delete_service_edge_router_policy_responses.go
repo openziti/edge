@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteServiceEdgeRouterPolicyOKCode is the HTTP code returned for type DeleteServiceEdgeRouterPolicyOK
@@ -49,7 +49,7 @@ type DeleteServiceEdgeRouterPolicyOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteServiceEdgeRouterPolicyOK creates DeleteServiceEdgeRouterPolicyOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteServiceEdgeRouterPolicyOK() *DeleteServiceEdgeRouterPolicyOK {
 }
 
 // WithPayload adds the payload to the delete service edge router policy o k response
-func (o *DeleteServiceEdgeRouterPolicyOK) WithPayload(payload *models.Empty) *DeleteServiceEdgeRouterPolicyOK {
+func (o *DeleteServiceEdgeRouterPolicyOK) WithPayload(payload *rest_model.Empty) *DeleteServiceEdgeRouterPolicyOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service edge router policy o k response
-func (o *DeleteServiceEdgeRouterPolicyOK) SetPayload(payload *models.Empty) {
+func (o *DeleteServiceEdgeRouterPolicyOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteServiceEdgeRouterPolicyBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServiceEdgeRouterPolicyBadRequest creates DeleteServiceEdgeRouterPolicyBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteServiceEdgeRouterPolicyBadRequest() *DeleteServiceEdgeRouterPolicy
 }
 
 // WithPayload adds the payload to the delete service edge router policy bad request response
-func (o *DeleteServiceEdgeRouterPolicyBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteServiceEdgeRouterPolicyBadRequest {
+func (o *DeleteServiceEdgeRouterPolicyBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServiceEdgeRouterPolicyBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service edge router policy bad request response
-func (o *DeleteServiceEdgeRouterPolicyBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServiceEdgeRouterPolicyBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteServiceEdgeRouterPolicyUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServiceEdgeRouterPolicyUnauthorized creates DeleteServiceEdgeRouterPolicyUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteServiceEdgeRouterPolicyUnauthorized() *DeleteServiceEdgeRouterPoli
 }
 
 // WithPayload adds the payload to the delete service edge router policy unauthorized response
-func (o *DeleteServiceEdgeRouterPolicyUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteServiceEdgeRouterPolicyUnauthorized {
+func (o *DeleteServiceEdgeRouterPolicyUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServiceEdgeRouterPolicyUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service edge router policy unauthorized response
-func (o *DeleteServiceEdgeRouterPolicyUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServiceEdgeRouterPolicyUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteServiceEdgeRouterPolicyConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteServiceEdgeRouterPolicyConflict creates DeleteServiceEdgeRouterPolicyConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteServiceEdgeRouterPolicyConflict() *DeleteServiceEdgeRouterPolicyCo
 }
 
 // WithPayload adds the payload to the delete service edge router policy conflict response
-func (o *DeleteServiceEdgeRouterPolicyConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteServiceEdgeRouterPolicyConflict {
+func (o *DeleteServiceEdgeRouterPolicyConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteServiceEdgeRouterPolicyConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete service edge router policy conflict response
-func (o *DeleteServiceEdgeRouterPolicyConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteServiceEdgeRouterPolicyConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

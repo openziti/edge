@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteTransitRouterOKCode is the HTTP code returned for type DeleteTransitRouterOK
@@ -49,7 +49,7 @@ type DeleteTransitRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteTransitRouterOK creates DeleteTransitRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteTransitRouterOK() *DeleteTransitRouterOK {
 }
 
 // WithPayload adds the payload to the delete transit router o k response
-func (o *DeleteTransitRouterOK) WithPayload(payload *models.Empty) *DeleteTransitRouterOK {
+func (o *DeleteTransitRouterOK) WithPayload(payload *rest_model.Empty) *DeleteTransitRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete transit router o k response
-func (o *DeleteTransitRouterOK) SetPayload(payload *models.Empty) {
+func (o *DeleteTransitRouterOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteTransitRouterBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteTransitRouterBadRequest creates DeleteTransitRouterBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteTransitRouterBadRequest() *DeleteTransitRouterBadRequest {
 }
 
 // WithPayload adds the payload to the delete transit router bad request response
-func (o *DeleteTransitRouterBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteTransitRouterBadRequest {
+func (o *DeleteTransitRouterBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteTransitRouterBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete transit router bad request response
-func (o *DeleteTransitRouterBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteTransitRouterBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteTransitRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteTransitRouterUnauthorized creates DeleteTransitRouterUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteTransitRouterUnauthorized() *DeleteTransitRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the delete transit router unauthorized response
-func (o *DeleteTransitRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteTransitRouterUnauthorized {
+func (o *DeleteTransitRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteTransitRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete transit router unauthorized response
-func (o *DeleteTransitRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteTransitRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type DeleteTransitRouterConflict struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteTransitRouterConflict creates DeleteTransitRouterConflict with default headers values
@@ -191,13 +191,13 @@ func NewDeleteTransitRouterConflict() *DeleteTransitRouterConflict {
 }
 
 // WithPayload adds the payload to the delete transit router conflict response
-func (o *DeleteTransitRouterConflict) WithPayload(payload *models.APIErrorEnvelope) *DeleteTransitRouterConflict {
+func (o *DeleteTransitRouterConflict) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteTransitRouterConflict {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete transit router conflict response
-func (o *DeleteTransitRouterConflict) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteTransitRouterConflict) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateAuthenticatorOKCode is the HTTP code returned for type UpdateAuthenticatorOK
@@ -49,7 +49,7 @@ type UpdateAuthenticatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateAuthenticatorOK creates UpdateAuthenticatorOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateAuthenticatorOK() *UpdateAuthenticatorOK {
 }
 
 // WithPayload adds the payload to the update authenticator o k response
-func (o *UpdateAuthenticatorOK) WithPayload(payload *models.Empty) *UpdateAuthenticatorOK {
+func (o *UpdateAuthenticatorOK) WithPayload(payload *rest_model.Empty) *UpdateAuthenticatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update authenticator o k response
-func (o *UpdateAuthenticatorOK) SetPayload(payload *models.Empty) {
+func (o *UpdateAuthenticatorOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateAuthenticatorBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateAuthenticatorBadRequest creates UpdateAuthenticatorBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateAuthenticatorBadRequest() *UpdateAuthenticatorBadRequest {
 }
 
 // WithPayload adds the payload to the update authenticator bad request response
-func (o *UpdateAuthenticatorBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateAuthenticatorBadRequest {
+func (o *UpdateAuthenticatorBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateAuthenticatorBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update authenticator bad request response
-func (o *UpdateAuthenticatorBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateAuthenticatorBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateAuthenticatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateAuthenticatorUnauthorized creates UpdateAuthenticatorUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateAuthenticatorUnauthorized() *UpdateAuthenticatorUnauthorized {
 }
 
 // WithPayload adds the payload to the update authenticator unauthorized response
-func (o *UpdateAuthenticatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateAuthenticatorUnauthorized {
+func (o *UpdateAuthenticatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateAuthenticatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update authenticator unauthorized response
-func (o *UpdateAuthenticatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateAuthenticatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateAuthenticatorNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateAuthenticatorNotFound creates UpdateAuthenticatorNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateAuthenticatorNotFound() *UpdateAuthenticatorNotFound {
 }
 
 // WithPayload adds the payload to the update authenticator not found response
-func (o *UpdateAuthenticatorNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateAuthenticatorNotFound {
+func (o *UpdateAuthenticatorNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateAuthenticatorNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update authenticator not found response
-func (o *UpdateAuthenticatorNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateAuthenticatorNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

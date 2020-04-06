@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // GetIdentityPolicyAdviceOKCode is the HTTP code returned for type GetIdentityPolicyAdviceOK
@@ -49,7 +49,7 @@ type GetIdentityPolicyAdviceOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.GetIdentityPolicyAdviceEnvelope `json:"body,omitempty"`
+	Payload *rest_model.GetIdentityPolicyAdviceEnvelope `json:"body,omitempty"`
 }
 
 // NewGetIdentityPolicyAdviceOK creates GetIdentityPolicyAdviceOK with default headers values
@@ -59,13 +59,13 @@ func NewGetIdentityPolicyAdviceOK() *GetIdentityPolicyAdviceOK {
 }
 
 // WithPayload adds the payload to the get identity policy advice o k response
-func (o *GetIdentityPolicyAdviceOK) WithPayload(payload *models.GetIdentityPolicyAdviceEnvelope) *GetIdentityPolicyAdviceOK {
+func (o *GetIdentityPolicyAdviceOK) WithPayload(payload *rest_model.GetIdentityPolicyAdviceEnvelope) *GetIdentityPolicyAdviceOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get identity policy advice o k response
-func (o *GetIdentityPolicyAdviceOK) SetPayload(payload *models.GetIdentityPolicyAdviceEnvelope) {
+func (o *GetIdentityPolicyAdviceOK) SetPayload(payload *rest_model.GetIdentityPolicyAdviceEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type GetIdentityPolicyAdviceUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewGetIdentityPolicyAdviceUnauthorized creates GetIdentityPolicyAdviceUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewGetIdentityPolicyAdviceUnauthorized() *GetIdentityPolicyAdviceUnauthoriz
 }
 
 // WithPayload adds the payload to the get identity policy advice unauthorized response
-func (o *GetIdentityPolicyAdviceUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *GetIdentityPolicyAdviceUnauthorized {
+func (o *GetIdentityPolicyAdviceUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *GetIdentityPolicyAdviceUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get identity policy advice unauthorized response
-func (o *GetIdentityPolicyAdviceUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *GetIdentityPolicyAdviceUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type GetIdentityPolicyAdviceNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewGetIdentityPolicyAdviceNotFound creates GetIdentityPolicyAdviceNotFound with default headers values
@@ -147,13 +147,13 @@ func NewGetIdentityPolicyAdviceNotFound() *GetIdentityPolicyAdviceNotFound {
 }
 
 // WithPayload adds the payload to the get identity policy advice not found response
-func (o *GetIdentityPolicyAdviceNotFound) WithPayload(payload *models.APIErrorEnvelope) *GetIdentityPolicyAdviceNotFound {
+func (o *GetIdentityPolicyAdviceNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *GetIdentityPolicyAdviceNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get identity policy advice not found response
-func (o *GetIdentityPolicyAdviceNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *GetIdentityPolicyAdviceNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

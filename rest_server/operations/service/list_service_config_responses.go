@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServiceConfigOKCode is the HTTP code returned for type ListServiceConfigOK
@@ -49,7 +49,7 @@ type ListServiceConfigOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListConfigsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListConfigsEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceConfigOK creates ListServiceConfigOK with default headers values
@@ -59,13 +59,13 @@ func NewListServiceConfigOK() *ListServiceConfigOK {
 }
 
 // WithPayload adds the payload to the list service config o k response
-func (o *ListServiceConfigOK) WithPayload(payload *models.ListConfigsEnvelope) *ListServiceConfigOK {
+func (o *ListServiceConfigOK) WithPayload(payload *rest_model.ListConfigsEnvelope) *ListServiceConfigOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service config o k response
-func (o *ListServiceConfigOK) SetPayload(payload *models.ListConfigsEnvelope) {
+func (o *ListServiceConfigOK) SetPayload(payload *rest_model.ListConfigsEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListServiceConfigUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListServiceConfigUnauthorized creates ListServiceConfigUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListServiceConfigUnauthorized() *ListServiceConfigUnauthorized {
 }
 
 // WithPayload adds the payload to the list service config unauthorized response
-func (o *ListServiceConfigUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListServiceConfigUnauthorized {
+func (o *ListServiceConfigUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListServiceConfigUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list service config unauthorized response
-func (o *ListServiceConfigUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListServiceConfigUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailCaOKCode is the HTTP code returned for type DetailCaOK
@@ -49,7 +49,7 @@ type DetailCaOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailCaEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailCaEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailCaOK creates DetailCaOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailCaOK() *DetailCaOK {
 }
 
 // WithPayload adds the payload to the detail ca o k response
-func (o *DetailCaOK) WithPayload(payload *models.DetailCaEnvelope) *DetailCaOK {
+func (o *DetailCaOK) WithPayload(payload *rest_model.DetailCaEnvelope) *DetailCaOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail ca o k response
-func (o *DetailCaOK) SetPayload(payload *models.DetailCaEnvelope) {
+func (o *DetailCaOK) SetPayload(payload *rest_model.DetailCaEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailCaUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailCaUnauthorized creates DetailCaUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailCaUnauthorized() *DetailCaUnauthorized {
 }
 
 // WithPayload adds the payload to the detail ca unauthorized response
-func (o *DetailCaUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailCaUnauthorized {
+func (o *DetailCaUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailCaUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail ca unauthorized response
-func (o *DetailCaUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailCaUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailCaNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailCaNotFound creates DetailCaNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailCaNotFound() *DetailCaNotFound {
 }
 
 // WithPayload adds the payload to the detail ca not found response
-func (o *DetailCaNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailCaNotFound {
+func (o *DetailCaNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailCaNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail ca not found response
-func (o *DetailCaNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailCaNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

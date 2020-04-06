@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateEdgeRouterPolicyReader is a Reader for the CreateEdgeRouterPolicy structure.
@@ -81,20 +81,20 @@ func NewCreateEdgeRouterPolicyOK() *CreateEdgeRouterPolicyOK {
 The create request was successful and the resource has been added at the following location
 */
 type CreateEdgeRouterPolicyOK struct {
-	Payload *models.Create
+	Payload *rest_model.Create
 }
 
 func (o *CreateEdgeRouterPolicyOK) Error() string {
 	return fmt.Sprintf("[POST /edge-router-policies][%d] createEdgeRouterPolicyOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateEdgeRouterPolicyOK) GetPayload() *models.Create {
+func (o *CreateEdgeRouterPolicyOK) GetPayload() *rest_model.Create {
 	return o.Payload
 }
 
 func (o *CreateEdgeRouterPolicyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Create)
+	o.Payload = new(rest_model.Create)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewCreateEdgeRouterPolicyBadRequest() *CreateEdgeRouterPolicyBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type CreateEdgeRouterPolicyBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *CreateEdgeRouterPolicyBadRequest) Error() string {
 	return fmt.Sprintf("[POST /edge-router-policies][%d] createEdgeRouterPolicyBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *CreateEdgeRouterPolicyBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *CreateEdgeRouterPolicyBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *CreateEdgeRouterPolicyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewCreateEdgeRouterPolicyUnauthorized() *CreateEdgeRouterPolicyUnauthorized
 The currently supplied session does not have the correct access rights to request this resource
 */
 type CreateEdgeRouterPolicyUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *CreateEdgeRouterPolicyUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /edge-router-policies][%d] createEdgeRouterPolicyUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *CreateEdgeRouterPolicyUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *CreateEdgeRouterPolicyUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *CreateEdgeRouterPolicyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

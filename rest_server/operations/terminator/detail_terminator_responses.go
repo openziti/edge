@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailTerminatorOKCode is the HTTP code returned for type DetailTerminatorOK
@@ -49,7 +49,7 @@ type DetailTerminatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailTerminatorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailTerminatorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailTerminatorOK creates DetailTerminatorOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailTerminatorOK() *DetailTerminatorOK {
 }
 
 // WithPayload adds the payload to the detail terminator o k response
-func (o *DetailTerminatorOK) WithPayload(payload *models.DetailTerminatorEnvelope) *DetailTerminatorOK {
+func (o *DetailTerminatorOK) WithPayload(payload *rest_model.DetailTerminatorEnvelope) *DetailTerminatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail terminator o k response
-func (o *DetailTerminatorOK) SetPayload(payload *models.DetailTerminatorEnvelope) {
+func (o *DetailTerminatorOK) SetPayload(payload *rest_model.DetailTerminatorEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailTerminatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailTerminatorUnauthorized creates DetailTerminatorUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailTerminatorUnauthorized() *DetailTerminatorUnauthorized {
 }
 
 // WithPayload adds the payload to the detail terminator unauthorized response
-func (o *DetailTerminatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailTerminatorUnauthorized {
+func (o *DetailTerminatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailTerminatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail terminator unauthorized response
-func (o *DetailTerminatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailTerminatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailTerminatorNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailTerminatorNotFound creates DetailTerminatorNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailTerminatorNotFound() *DetailTerminatorNotFound {
 }
 
 // WithPayload adds the payload to the detail terminator not found response
-func (o *DetailTerminatorNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailTerminatorNotFound {
+func (o *DetailTerminatorNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailTerminatorNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail terminator not found response
-func (o *DetailTerminatorNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailTerminatorNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

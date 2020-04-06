@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListCasOKCode is the HTTP code returned for type ListCasOK
@@ -49,7 +49,7 @@ type ListCasOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListCasEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListCasEnvelope `json:"body,omitempty"`
 }
 
 // NewListCasOK creates ListCasOK with default headers values
@@ -59,13 +59,13 @@ func NewListCasOK() *ListCasOK {
 }
 
 // WithPayload adds the payload to the list cas o k response
-func (o *ListCasOK) WithPayload(payload *models.ListCasEnvelope) *ListCasOK {
+func (o *ListCasOK) WithPayload(payload *rest_model.ListCasEnvelope) *ListCasOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list cas o k response
-func (o *ListCasOK) SetPayload(payload *models.ListCasEnvelope) {
+func (o *ListCasOK) SetPayload(payload *rest_model.ListCasEnvelope) {
 	o.Payload = payload
 }
 

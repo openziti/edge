@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateServiceOKCode is the HTTP code returned for type UpdateServiceOK
@@ -49,7 +49,7 @@ type UpdateServiceOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateServiceOK creates UpdateServiceOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateServiceOK() *UpdateServiceOK {
 }
 
 // WithPayload adds the payload to the update service o k response
-func (o *UpdateServiceOK) WithPayload(payload *models.Empty) *UpdateServiceOK {
+func (o *UpdateServiceOK) WithPayload(payload *rest_model.Empty) *UpdateServiceOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update service o k response
-func (o *UpdateServiceOK) SetPayload(payload *models.Empty) {
+func (o *UpdateServiceOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateServiceBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateServiceBadRequest creates UpdateServiceBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateServiceBadRequest() *UpdateServiceBadRequest {
 }
 
 // WithPayload adds the payload to the update service bad request response
-func (o *UpdateServiceBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateServiceBadRequest {
+func (o *UpdateServiceBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateServiceBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update service bad request response
-func (o *UpdateServiceBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateServiceBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateServiceUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateServiceUnauthorized creates UpdateServiceUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateServiceUnauthorized() *UpdateServiceUnauthorized {
 }
 
 // WithPayload adds the payload to the update service unauthorized response
-func (o *UpdateServiceUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateServiceUnauthorized {
+func (o *UpdateServiceUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateServiceUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update service unauthorized response
-func (o *UpdateServiceUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateServiceUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateServiceNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateServiceNotFound creates UpdateServiceNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateServiceNotFound() *UpdateServiceNotFound {
 }
 
 // WithPayload adds the payload to the update service not found response
-func (o *UpdateServiceNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateServiceNotFound {
+func (o *UpdateServiceNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateServiceNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update service not found response
-func (o *UpdateServiceNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateServiceNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

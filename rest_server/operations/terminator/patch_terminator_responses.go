@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchTerminatorOKCode is the HTTP code returned for type PatchTerminatorOK
@@ -49,7 +49,7 @@ type PatchTerminatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPatchTerminatorOK creates PatchTerminatorOK with default headers values
@@ -59,13 +59,13 @@ func NewPatchTerminatorOK() *PatchTerminatorOK {
 }
 
 // WithPayload adds the payload to the patch terminator o k response
-func (o *PatchTerminatorOK) WithPayload(payload *models.Empty) *PatchTerminatorOK {
+func (o *PatchTerminatorOK) WithPayload(payload *rest_model.Empty) *PatchTerminatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch terminator o k response
-func (o *PatchTerminatorOK) SetPayload(payload *models.Empty) {
+func (o *PatchTerminatorOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PatchTerminatorBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchTerminatorBadRequest creates PatchTerminatorBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPatchTerminatorBadRequest() *PatchTerminatorBadRequest {
 }
 
 // WithPayload adds the payload to the patch terminator bad request response
-func (o *PatchTerminatorBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PatchTerminatorBadRequest {
+func (o *PatchTerminatorBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchTerminatorBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch terminator bad request response
-func (o *PatchTerminatorBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchTerminatorBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PatchTerminatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchTerminatorUnauthorized creates PatchTerminatorUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPatchTerminatorUnauthorized() *PatchTerminatorUnauthorized {
 }
 
 // WithPayload adds the payload to the patch terminator unauthorized response
-func (o *PatchTerminatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PatchTerminatorUnauthorized {
+func (o *PatchTerminatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchTerminatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch terminator unauthorized response
-func (o *PatchTerminatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchTerminatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PatchTerminatorNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchTerminatorNotFound creates PatchTerminatorNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPatchTerminatorNotFound() *PatchTerminatorNotFound {
 }
 
 // WithPayload adds the payload to the patch terminator not found response
-func (o *PatchTerminatorNotFound) WithPayload(payload *models.APIErrorEnvelope) *PatchTerminatorNotFound {
+func (o *PatchTerminatorNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchTerminatorNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch terminator not found response
-func (o *PatchTerminatorNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchTerminatorNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

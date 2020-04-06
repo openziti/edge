@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateEdgeRouterOKCode is the HTTP code returned for type CreateEdgeRouterOK
@@ -49,7 +49,7 @@ type CreateEdgeRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Create `json:"body,omitempty"`
+	Payload *rest_model.Create `json:"body,omitempty"`
 }
 
 // NewCreateEdgeRouterOK creates CreateEdgeRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateEdgeRouterOK() *CreateEdgeRouterOK {
 }
 
 // WithPayload adds the payload to the create edge router o k response
-func (o *CreateEdgeRouterOK) WithPayload(payload *models.Create) *CreateEdgeRouterOK {
+func (o *CreateEdgeRouterOK) WithPayload(payload *rest_model.Create) *CreateEdgeRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create edge router o k response
-func (o *CreateEdgeRouterOK) SetPayload(payload *models.Create) {
+func (o *CreateEdgeRouterOK) SetPayload(payload *rest_model.Create) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type CreateEdgeRouterBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateEdgeRouterBadRequest creates CreateEdgeRouterBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewCreateEdgeRouterBadRequest() *CreateEdgeRouterBadRequest {
 }
 
 // WithPayload adds the payload to the create edge router bad request response
-func (o *CreateEdgeRouterBadRequest) WithPayload(payload *models.APIErrorEnvelope) *CreateEdgeRouterBadRequest {
+func (o *CreateEdgeRouterBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateEdgeRouterBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create edge router bad request response
-func (o *CreateEdgeRouterBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateEdgeRouterBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type CreateEdgeRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateEdgeRouterUnauthorized creates CreateEdgeRouterUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewCreateEdgeRouterUnauthorized() *CreateEdgeRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the create edge router unauthorized response
-func (o *CreateEdgeRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *CreateEdgeRouterUnauthorized {
+func (o *CreateEdgeRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *CreateEdgeRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create edge router unauthorized response
-func (o *CreateEdgeRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *CreateEdgeRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

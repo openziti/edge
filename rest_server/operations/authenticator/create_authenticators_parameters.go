@@ -37,7 +37,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateAuthenticatorsParams creates a new CreateAuthenticatorsParams object
@@ -60,7 +60,7 @@ type CreateAuthenticatorsParams struct {
 	  Required: true
 	  In: body
 	*/
-	Body *models.AuthenticatorCreate
+	Body *rest_model.AuthenticatorCreate
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -74,7 +74,7 @@ func (o *CreateAuthenticatorsParams) BindRequest(r *http.Request, route *middlew
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.AuthenticatorCreate
+		var body rest_model.AuthenticatorCreate
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

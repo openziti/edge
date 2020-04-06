@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateCurrentIdentityAuthenticatorOKCode is the HTTP code returned for type UpdateCurrentIdentityAuthenticatorOK
@@ -49,7 +49,7 @@ type UpdateCurrentIdentityAuthenticatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateCurrentIdentityAuthenticatorOK creates UpdateCurrentIdentityAuthenticatorOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateCurrentIdentityAuthenticatorOK() *UpdateCurrentIdentityAuthenticat
 }
 
 // WithPayload adds the payload to the update current identity authenticator o k response
-func (o *UpdateCurrentIdentityAuthenticatorOK) WithPayload(payload *models.Empty) *UpdateCurrentIdentityAuthenticatorOK {
+func (o *UpdateCurrentIdentityAuthenticatorOK) WithPayload(payload *rest_model.Empty) *UpdateCurrentIdentityAuthenticatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update current identity authenticator o k response
-func (o *UpdateCurrentIdentityAuthenticatorOK) SetPayload(payload *models.Empty) {
+func (o *UpdateCurrentIdentityAuthenticatorOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateCurrentIdentityAuthenticatorBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateCurrentIdentityAuthenticatorBadRequest creates UpdateCurrentIdentityAuthenticatorBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateCurrentIdentityAuthenticatorBadRequest() *UpdateCurrentIdentityAut
 }
 
 // WithPayload adds the payload to the update current identity authenticator bad request response
-func (o *UpdateCurrentIdentityAuthenticatorBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateCurrentIdentityAuthenticatorBadRequest {
+func (o *UpdateCurrentIdentityAuthenticatorBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateCurrentIdentityAuthenticatorBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update current identity authenticator bad request response
-func (o *UpdateCurrentIdentityAuthenticatorBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateCurrentIdentityAuthenticatorBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateCurrentIdentityAuthenticatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateCurrentIdentityAuthenticatorUnauthorized creates UpdateCurrentIdentityAuthenticatorUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateCurrentIdentityAuthenticatorUnauthorized() *UpdateCurrentIdentityA
 }
 
 // WithPayload adds the payload to the update current identity authenticator unauthorized response
-func (o *UpdateCurrentIdentityAuthenticatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateCurrentIdentityAuthenticatorUnauthorized {
+func (o *UpdateCurrentIdentityAuthenticatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateCurrentIdentityAuthenticatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update current identity authenticator unauthorized response
-func (o *UpdateCurrentIdentityAuthenticatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateCurrentIdentityAuthenticatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateCurrentIdentityAuthenticatorNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateCurrentIdentityAuthenticatorNotFound creates UpdateCurrentIdentityAuthenticatorNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateCurrentIdentityAuthenticatorNotFound() *UpdateCurrentIdentityAuthe
 }
 
 // WithPayload adds the payload to the update current identity authenticator not found response
-func (o *UpdateCurrentIdentityAuthenticatorNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateCurrentIdentityAuthenticatorNotFound {
+func (o *UpdateCurrentIdentityAuthenticatorNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateCurrentIdentityAuthenticatorNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update current identity authenticator not found response
-func (o *UpdateCurrentIdentityAuthenticatorNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateCurrentIdentityAuthenticatorNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

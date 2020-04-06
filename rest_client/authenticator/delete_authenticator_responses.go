@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteAuthenticatorReader is a Reader for the DeleteAuthenticator structure.
@@ -81,20 +81,20 @@ func NewDeleteAuthenticatorOK() *DeleteAuthenticatorOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteAuthenticatorOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteAuthenticatorOK) Error() string {
 	return fmt.Sprintf("[DELETE /authenticators/{id}][%d] deleteAuthenticatorOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteAuthenticatorOK) GetPayload() *models.Empty {
+func (o *DeleteAuthenticatorOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteAuthenticatorOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewDeleteAuthenticatorBadRequest() *DeleteAuthenticatorBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteAuthenticatorBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteAuthenticatorBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /authenticators/{id}][%d] deleteAuthenticatorBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteAuthenticatorBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteAuthenticatorBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteAuthenticatorBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewDeleteAuthenticatorUnauthorized() *DeleteAuthenticatorUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteAuthenticatorUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteAuthenticatorUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /authenticators/{id}][%d] deleteAuthenticatorUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteAuthenticatorUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteAuthenticatorUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteAuthenticatorUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

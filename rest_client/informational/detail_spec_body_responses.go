@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailSpecBodyReader is a Reader for the DetailSpecBody structure.
@@ -69,20 +69,20 @@ func NewDetailSpecBodyOK() *DetailSpecBodyOK {
 Returns the document that represents the specification
 */
 type DetailSpecBodyOK struct {
-	Payload *models.DetailSpecBodyEnvelope
+	Payload *rest_model.DetailSpecBodyEnvelope
 }
 
 func (o *DetailSpecBodyOK) Error() string {
 	return fmt.Sprintf("[GET /specs/{id}/spec][%d] detailSpecBodyOK  %+v", 200, o.Payload)
 }
 
-func (o *DetailSpecBodyOK) GetPayload() *models.DetailSpecBodyEnvelope {
+func (o *DetailSpecBodyOK) GetPayload() *rest_model.DetailSpecBodyEnvelope {
 	return o.Payload
 }
 
 func (o *DetailSpecBodyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.DetailSpecBodyEnvelope)
+	o.Payload = new(rest_model.DetailSpecBodyEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateServicePolicyReader is a Reader for the UpdateServicePolicy structure.
@@ -87,20 +87,20 @@ func NewUpdateServicePolicyOK() *UpdateServicePolicyOK {
 The update request was successful and the resource has been altered
 */
 type UpdateServicePolicyOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *UpdateServicePolicyOK) Error() string {
 	return fmt.Sprintf("[PUT /service-policies/{id}][%d] updateServicePolicyOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateServicePolicyOK) GetPayload() *models.Empty {
+func (o *UpdateServicePolicyOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *UpdateServicePolicyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewUpdateServicePolicyBadRequest() *UpdateServicePolicyBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type UpdateServicePolicyBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateServicePolicyBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /service-policies/{id}][%d] updateServicePolicyBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *UpdateServicePolicyBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateServicePolicyBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateServicePolicyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewUpdateServicePolicyUnauthorized() *UpdateServicePolicyUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type UpdateServicePolicyUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateServicePolicyUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /service-policies/{id}][%d] updateServicePolicyUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *UpdateServicePolicyUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateServicePolicyUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateServicePolicyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewUpdateServicePolicyNotFound() *UpdateServicePolicyNotFound {
 The requested resource does not exist
 */
 type UpdateServicePolicyNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateServicePolicyNotFound) Error() string {
 	return fmt.Sprintf("[PUT /service-policies/{id}][%d] updateServicePolicyNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateServicePolicyNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateServicePolicyNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateServicePolicyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateServiceEdgeRouterPolicyReader is a Reader for the UpdateServiceEdgeRouterPolicy structure.
@@ -87,20 +87,20 @@ func NewUpdateServiceEdgeRouterPolicyOK() *UpdateServiceEdgeRouterPolicyOK {
 The update request was successful and the resource has been altered
 */
 type UpdateServiceEdgeRouterPolicyOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *UpdateServiceEdgeRouterPolicyOK) Error() string {
 	return fmt.Sprintf("[PUT /service-edge-router-policies/{id}][%d] updateServiceEdgeRouterPolicyOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateServiceEdgeRouterPolicyOK) GetPayload() *models.Empty {
+func (o *UpdateServiceEdgeRouterPolicyOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *UpdateServiceEdgeRouterPolicyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewUpdateServiceEdgeRouterPolicyBadRequest() *UpdateServiceEdgeRouterPolicy
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type UpdateServiceEdgeRouterPolicyBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateServiceEdgeRouterPolicyBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /service-edge-router-policies/{id}][%d] updateServiceEdgeRouterPolicyBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *UpdateServiceEdgeRouterPolicyBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateServiceEdgeRouterPolicyBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateServiceEdgeRouterPolicyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewUpdateServiceEdgeRouterPolicyUnauthorized() *UpdateServiceEdgeRouterPoli
 The currently supplied session does not have the correct access rights to request this resource
 */
 type UpdateServiceEdgeRouterPolicyUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateServiceEdgeRouterPolicyUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /service-edge-router-policies/{id}][%d] updateServiceEdgeRouterPolicyUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *UpdateServiceEdgeRouterPolicyUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateServiceEdgeRouterPolicyUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateServiceEdgeRouterPolicyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewUpdateServiceEdgeRouterPolicyNotFound() *UpdateServiceEdgeRouterPolicyNo
 The requested resource does not exist
 */
 type UpdateServiceEdgeRouterPolicyNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateServiceEdgeRouterPolicyNotFound) Error() string {
 	return fmt.Sprintf("[PUT /service-edge-router-policies/{id}][%d] updateServiceEdgeRouterPolicyNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateServiceEdgeRouterPolicyNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateServiceEdgeRouterPolicyNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateServiceEdgeRouterPolicyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

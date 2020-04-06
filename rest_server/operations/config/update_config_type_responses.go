@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateConfigTypeOKCode is the HTTP code returned for type UpdateConfigTypeOK
@@ -49,7 +49,7 @@ type UpdateConfigTypeOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateConfigTypeOK creates UpdateConfigTypeOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateConfigTypeOK() *UpdateConfigTypeOK {
 }
 
 // WithPayload adds the payload to the update config type o k response
-func (o *UpdateConfigTypeOK) WithPayload(payload *models.Empty) *UpdateConfigTypeOK {
+func (o *UpdateConfigTypeOK) WithPayload(payload *rest_model.Empty) *UpdateConfigTypeOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update config type o k response
-func (o *UpdateConfigTypeOK) SetPayload(payload *models.Empty) {
+func (o *UpdateConfigTypeOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateConfigTypeBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateConfigTypeBadRequest creates UpdateConfigTypeBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateConfigTypeBadRequest() *UpdateConfigTypeBadRequest {
 }
 
 // WithPayload adds the payload to the update config type bad request response
-func (o *UpdateConfigTypeBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateConfigTypeBadRequest {
+func (o *UpdateConfigTypeBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateConfigTypeBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update config type bad request response
-func (o *UpdateConfigTypeBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateConfigTypeBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateConfigTypeUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateConfigTypeUnauthorized creates UpdateConfigTypeUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateConfigTypeUnauthorized() *UpdateConfigTypeUnauthorized {
 }
 
 // WithPayload adds the payload to the update config type unauthorized response
-func (o *UpdateConfigTypeUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateConfigTypeUnauthorized {
+func (o *UpdateConfigTypeUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateConfigTypeUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update config type unauthorized response
-func (o *UpdateConfigTypeUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateConfigTypeUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateConfigTypeNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateConfigTypeNotFound creates UpdateConfigTypeNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateConfigTypeNotFound() *UpdateConfigTypeNotFound {
 }
 
 // WithPayload adds the payload to the update config type not found response
-func (o *UpdateConfigTypeNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateConfigTypeNotFound {
+func (o *UpdateConfigTypeNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateConfigTypeNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update config type not found response
-func (o *UpdateConfigTypeNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateConfigTypeNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

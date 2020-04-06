@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteCaOKCode is the HTTP code returned for type DeleteCaOK
@@ -49,7 +49,7 @@ type DeleteCaOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteCaOK creates DeleteCaOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteCaOK() *DeleteCaOK {
 }
 
 // WithPayload adds the payload to the delete ca o k response
-func (o *DeleteCaOK) WithPayload(payload *models.Empty) *DeleteCaOK {
+func (o *DeleteCaOK) WithPayload(payload *rest_model.Empty) *DeleteCaOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete ca o k response
-func (o *DeleteCaOK) SetPayload(payload *models.Empty) {
+func (o *DeleteCaOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteCaBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteCaBadRequest creates DeleteCaBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteCaBadRequest() *DeleteCaBadRequest {
 }
 
 // WithPayload adds the payload to the delete ca bad request response
-func (o *DeleteCaBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteCaBadRequest {
+func (o *DeleteCaBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteCaBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete ca bad request response
-func (o *DeleteCaBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteCaBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteCaUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteCaUnauthorized creates DeleteCaUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteCaUnauthorized() *DeleteCaUnauthorized {
 }
 
 // WithPayload adds the payload to the delete ca unauthorized response
-func (o *DeleteCaUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteCaUnauthorized {
+func (o *DeleteCaUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteCaUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete ca unauthorized response
-func (o *DeleteCaUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteCaUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

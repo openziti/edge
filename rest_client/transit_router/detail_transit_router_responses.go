@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailTransitRouterReader is a Reader for the DetailTransitRouter structure.
@@ -81,20 +81,20 @@ func NewDetailTransitRouterOK() *DetailTransitRouterOK {
 A single transit router
 */
 type DetailTransitRouterOK struct {
-	Payload *models.DetailTransitRouterEnvelope
+	Payload *rest_model.DetailTransitRouterEnvelope
 }
 
 func (o *DetailTransitRouterOK) Error() string {
 	return fmt.Sprintf("[GET /transit-routers/{id}][%d] detailTransitRouterOK  %+v", 200, o.Payload)
 }
 
-func (o *DetailTransitRouterOK) GetPayload() *models.DetailTransitRouterEnvelope {
+func (o *DetailTransitRouterOK) GetPayload() *rest_model.DetailTransitRouterEnvelope {
 	return o.Payload
 }
 
 func (o *DetailTransitRouterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.DetailTransitRouterEnvelope)
+	o.Payload = new(rest_model.DetailTransitRouterEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewDetailTransitRouterUnauthorized() *DetailTransitRouterUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DetailTransitRouterUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailTransitRouterUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /transit-routers/{id}][%d] detailTransitRouterUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DetailTransitRouterUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailTransitRouterUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailTransitRouterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewDetailTransitRouterNotFound() *DetailTransitRouterNotFound {
 The requested resource does not exist
 */
 type DetailTransitRouterNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailTransitRouterNotFound) Error() string {
 	return fmt.Sprintf("[GET /transit-routers/{id}][%d] detailTransitRouterNotFound  %+v", 404, o.Payload)
 }
 
-func (o *DetailTransitRouterNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailTransitRouterNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailTransitRouterNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

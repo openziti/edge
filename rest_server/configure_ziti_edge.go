@@ -59,7 +59,7 @@ import (
 	"github.com/netfoundry/ziti-edge/rest_server/operations/well_known"
 )
 
-//go:generate swagger generate server --target ../../ziti-edge --name ZitiEdge --spec ../specs/swagger.yml --server-package rest_server --exclude-main
+//go:generate swagger generate server --target ../../ziti-edge --name ZitiEdge --spec ../specs/swagger.yml --model-package rest_model --server-package rest_server --exclude-main
 
 func configureFlags(api *operations.ZitiEdgeAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }

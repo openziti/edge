@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateTransitRouterReader is a Reader for the UpdateTransitRouter structure.
@@ -87,20 +87,20 @@ func NewUpdateTransitRouterOK() *UpdateTransitRouterOK {
 The update request was successful and the resource has been altered
 */
 type UpdateTransitRouterOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *UpdateTransitRouterOK) Error() string {
 	return fmt.Sprintf("[PUT /transit-routers/{id}][%d] updateTransitRouterOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateTransitRouterOK) GetPayload() *models.Empty {
+func (o *UpdateTransitRouterOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *UpdateTransitRouterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewUpdateTransitRouterBadRequest() *UpdateTransitRouterBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type UpdateTransitRouterBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateTransitRouterBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /transit-routers/{id}][%d] updateTransitRouterBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *UpdateTransitRouterBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateTransitRouterBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateTransitRouterBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewUpdateTransitRouterUnauthorized() *UpdateTransitRouterUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type UpdateTransitRouterUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateTransitRouterUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /transit-routers/{id}][%d] updateTransitRouterUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *UpdateTransitRouterUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateTransitRouterUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateTransitRouterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewUpdateTransitRouterNotFound() *UpdateTransitRouterNotFound {
 The requested resource does not exist
 */
 type UpdateTransitRouterNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *UpdateTransitRouterNotFound) Error() string {
 	return fmt.Sprintf("[PUT /transit-routers/{id}][%d] updateTransitRouterNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateTransitRouterNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *UpdateTransitRouterNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *UpdateTransitRouterNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

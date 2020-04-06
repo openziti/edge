@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListIdentitiesOKCode is the HTTP code returned for type ListIdentitiesOK
@@ -49,7 +49,7 @@ type ListIdentitiesOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListIdentitiesEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListIdentitiesEnvelope `json:"body,omitempty"`
 }
 
 // NewListIdentitiesOK creates ListIdentitiesOK with default headers values
@@ -59,13 +59,13 @@ func NewListIdentitiesOK() *ListIdentitiesOK {
 }
 
 // WithPayload adds the payload to the list identities o k response
-func (o *ListIdentitiesOK) WithPayload(payload *models.ListIdentitiesEnvelope) *ListIdentitiesOK {
+func (o *ListIdentitiesOK) WithPayload(payload *rest_model.ListIdentitiesEnvelope) *ListIdentitiesOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list identities o k response
-func (o *ListIdentitiesOK) SetPayload(payload *models.ListIdentitiesEnvelope) {
+func (o *ListIdentitiesOK) SetPayload(payload *rest_model.ListIdentitiesEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListIdentitiesUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListIdentitiesUnauthorized creates ListIdentitiesUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListIdentitiesUnauthorized() *ListIdentitiesUnauthorized {
 }
 
 // WithPayload adds the payload to the list identities unauthorized response
-func (o *ListIdentitiesUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListIdentitiesUnauthorized {
+func (o *ListIdentitiesUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListIdentitiesUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list identities unauthorized response
-func (o *ListIdentitiesUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListIdentitiesUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

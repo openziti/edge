@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailIdentityTypeOKCode is the HTTP code returned for type DetailIdentityTypeOK
@@ -49,7 +49,7 @@ type DetailIdentityTypeOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailIdentityTypeEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailIdentityTypeEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailIdentityTypeOK creates DetailIdentityTypeOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailIdentityTypeOK() *DetailIdentityTypeOK {
 }
 
 // WithPayload adds the payload to the detail identity type o k response
-func (o *DetailIdentityTypeOK) WithPayload(payload *models.DetailIdentityTypeEnvelope) *DetailIdentityTypeOK {
+func (o *DetailIdentityTypeOK) WithPayload(payload *rest_model.DetailIdentityTypeEnvelope) *DetailIdentityTypeOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail identity type o k response
-func (o *DetailIdentityTypeOK) SetPayload(payload *models.DetailIdentityTypeEnvelope) {
+func (o *DetailIdentityTypeOK) SetPayload(payload *rest_model.DetailIdentityTypeEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailIdentityTypeUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailIdentityTypeUnauthorized creates DetailIdentityTypeUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailIdentityTypeUnauthorized() *DetailIdentityTypeUnauthorized {
 }
 
 // WithPayload adds the payload to the detail identity type unauthorized response
-func (o *DetailIdentityTypeUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailIdentityTypeUnauthorized {
+func (o *DetailIdentityTypeUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailIdentityTypeUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail identity type unauthorized response
-func (o *DetailIdentityTypeUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailIdentityTypeUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailIdentityTypeNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailIdentityTypeNotFound creates DetailIdentityTypeNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailIdentityTypeNotFound() *DetailIdentityTypeNotFound {
 }
 
 // WithPayload adds the payload to the detail identity type not found response
-func (o *DetailIdentityTypeNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailIdentityTypeNotFound {
+func (o *DetailIdentityTypeNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailIdentityTypeNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail identity type not found response
-func (o *DetailIdentityTypeNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailIdentityTypeNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // GetCurrentIdentityReader is a Reader for the GetCurrentIdentity structure.
@@ -75,20 +75,20 @@ func NewGetCurrentIdentityOK() *GetCurrentIdentityOK {
 The identity associated with the API Session used to issue the request
 */
 type GetCurrentIdentityOK struct {
-	Payload *models.CurrentIdentityDetailEnvelope
+	Payload *rest_model.CurrentIdentityDetailEnvelope
 }
 
 func (o *GetCurrentIdentityOK) Error() string {
 	return fmt.Sprintf("[GET /current-identity][%d] getCurrentIdentityOK  %+v", 200, o.Payload)
 }
 
-func (o *GetCurrentIdentityOK) GetPayload() *models.CurrentIdentityDetailEnvelope {
+func (o *GetCurrentIdentityOK) GetPayload() *rest_model.CurrentIdentityDetailEnvelope {
 	return o.Payload
 }
 
 func (o *GetCurrentIdentityOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.CurrentIdentityDetailEnvelope)
+	o.Payload = new(rest_model.CurrentIdentityDetailEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -108,20 +108,20 @@ func NewGetCurrentIdentityUnauthorized() *GetCurrentIdentityUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type GetCurrentIdentityUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *GetCurrentIdentityUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /current-identity][%d] getCurrentIdentityUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *GetCurrentIdentityUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *GetCurrentIdentityUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *GetCurrentIdentityUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

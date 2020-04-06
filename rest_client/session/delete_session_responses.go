@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteSessionReader is a Reader for the DeleteSession structure.
@@ -87,20 +87,20 @@ func NewDeleteSessionOK() *DeleteSessionOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteSessionOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteSessionOK) Error() string {
 	return fmt.Sprintf("[DELETE /sessions/{id}][%d] deleteSessionOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteSessionOK) GetPayload() *models.Empty {
+func (o *DeleteSessionOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteSessionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewDeleteSessionBadRequest() *DeleteSessionBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteSessionBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteSessionBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /sessions/{id}][%d] deleteSessionBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteSessionBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteSessionBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteSessionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewDeleteSessionUnauthorized() *DeleteSessionUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteSessionUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteSessionUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /sessions/{id}][%d] deleteSessionUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteSessionUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteSessionUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteSessionUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewDeleteSessionConflict() *DeleteSessionConflict {
 The resource requested to be removed/altered cannot be as it is referenced by another object.
 */
 type DeleteSessionConflict struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteSessionConflict) Error() string {
 	return fmt.Sprintf("[DELETE /sessions/{id}][%d] deleteSessionConflict  %+v", 409, o.Payload)
 }
 
-func (o *DeleteSessionConflict) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteSessionConflict) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteSessionConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

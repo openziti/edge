@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewDisassociateIdentitysServiceConfigsParams creates a new DisassociateIdentitysServiceConfigsParams object
@@ -90,7 +90,7 @@ type DisassociateIdentitysServiceConfigsParams struct {
 	  An identity patch object
 
 	*/
-	Body models.ServiceConfigs
+	Body rest_model.ServiceConfigs
 	/*ID
 	  The id of the requested resource
 
@@ -136,13 +136,13 @@ func (o *DisassociateIdentitysServiceConfigsParams) SetHTTPClient(client *http.C
 }
 
 // WithBody adds the body to the disassociate identitys service configs params
-func (o *DisassociateIdentitysServiceConfigsParams) WithBody(body models.ServiceConfigs) *DisassociateIdentitysServiceConfigsParams {
+func (o *DisassociateIdentitysServiceConfigsParams) WithBody(body rest_model.ServiceConfigs) *DisassociateIdentitysServiceConfigsParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the disassociate identitys service configs params
-func (o *DisassociateIdentitysServiceConfigsParams) SetBody(body models.ServiceConfigs) {
+func (o *DisassociateIdentitysServiceConfigsParams) SetBody(body rest_model.ServiceConfigs) {
 	o.Body = body
 }
 

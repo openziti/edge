@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteConfigReader is a Reader for the DeleteConfig structure.
@@ -87,20 +87,20 @@ func NewDeleteConfigOK() *DeleteConfigOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteConfigOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteConfigOK) Error() string {
 	return fmt.Sprintf("[DELETE /configs/{id}][%d] deleteConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteConfigOK) GetPayload() *models.Empty {
+func (o *DeleteConfigOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewDeleteConfigBadRequest() *DeleteConfigBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteConfigBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteConfigBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /configs/{id}][%d] deleteConfigBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteConfigBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteConfigBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteConfigBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewDeleteConfigUnauthorized() *DeleteConfigUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteConfigUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /configs/{id}][%d] deleteConfigUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteConfigUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteConfigUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteConfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewDeleteConfigConflict() *DeleteConfigConflict {
 The resource requested to be removed/altered cannot be as it is referenced by another object.
 */
 type DeleteConfigConflict struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteConfigConflict) Error() string {
 	return fmt.Sprintf("[DELETE /configs/{id}][%d] deleteConfigConflict  %+v", 409, o.Payload)
 }
 
-func (o *DeleteConfigConflict) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteConfigConflict) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteConfigConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

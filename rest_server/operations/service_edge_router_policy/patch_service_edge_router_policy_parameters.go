@@ -38,7 +38,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewPatchServiceEdgeRouterPolicyParams creates a new PatchServiceEdgeRouterPolicyParams object
@@ -61,7 +61,7 @@ type PatchServiceEdgeRouterPolicyParams struct {
 	  Required: true
 	  In: body
 	*/
-	Body *models.ServiceEdgePolicyPatch
+	Body *rest_model.ServiceEdgePolicyPatch
 	/*The id of the requested resource
 	  Required: true
 	  In: path
@@ -80,7 +80,7 @@ func (o *PatchServiceEdgeRouterPolicyParams) BindRequest(r *http.Request, route 
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.ServiceEdgePolicyPatch
+		var body rest_model.ServiceEdgePolicyPatch
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

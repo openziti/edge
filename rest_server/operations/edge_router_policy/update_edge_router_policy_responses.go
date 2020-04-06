@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateEdgeRouterPolicyOKCode is the HTTP code returned for type UpdateEdgeRouterPolicyOK
@@ -49,7 +49,7 @@ type UpdateEdgeRouterPolicyOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateEdgeRouterPolicyOK creates UpdateEdgeRouterPolicyOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateEdgeRouterPolicyOK() *UpdateEdgeRouterPolicyOK {
 }
 
 // WithPayload adds the payload to the update edge router policy o k response
-func (o *UpdateEdgeRouterPolicyOK) WithPayload(payload *models.Empty) *UpdateEdgeRouterPolicyOK {
+func (o *UpdateEdgeRouterPolicyOK) WithPayload(payload *rest_model.Empty) *UpdateEdgeRouterPolicyOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update edge router policy o k response
-func (o *UpdateEdgeRouterPolicyOK) SetPayload(payload *models.Empty) {
+func (o *UpdateEdgeRouterPolicyOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateEdgeRouterPolicyBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateEdgeRouterPolicyBadRequest creates UpdateEdgeRouterPolicyBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateEdgeRouterPolicyBadRequest() *UpdateEdgeRouterPolicyBadRequest {
 }
 
 // WithPayload adds the payload to the update edge router policy bad request response
-func (o *UpdateEdgeRouterPolicyBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateEdgeRouterPolicyBadRequest {
+func (o *UpdateEdgeRouterPolicyBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateEdgeRouterPolicyBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update edge router policy bad request response
-func (o *UpdateEdgeRouterPolicyBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateEdgeRouterPolicyBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateEdgeRouterPolicyUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateEdgeRouterPolicyUnauthorized creates UpdateEdgeRouterPolicyUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateEdgeRouterPolicyUnauthorized() *UpdateEdgeRouterPolicyUnauthorized
 }
 
 // WithPayload adds the payload to the update edge router policy unauthorized response
-func (o *UpdateEdgeRouterPolicyUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateEdgeRouterPolicyUnauthorized {
+func (o *UpdateEdgeRouterPolicyUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateEdgeRouterPolicyUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update edge router policy unauthorized response
-func (o *UpdateEdgeRouterPolicyUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateEdgeRouterPolicyUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateEdgeRouterPolicyNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateEdgeRouterPolicyNotFound creates UpdateEdgeRouterPolicyNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateEdgeRouterPolicyNotFound() *UpdateEdgeRouterPolicyNotFound {
 }
 
 // WithPayload adds the payload to the update edge router policy not found response
-func (o *UpdateEdgeRouterPolicyNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateEdgeRouterPolicyNotFound {
+func (o *UpdateEdgeRouterPolicyNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateEdgeRouterPolicyNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update edge router policy not found response
-func (o *UpdateEdgeRouterPolicyNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateEdgeRouterPolicyNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

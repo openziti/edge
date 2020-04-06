@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // CreateConfigReader is a Reader for the CreateConfig structure.
@@ -81,20 +81,20 @@ func NewCreateConfigOK() *CreateConfigOK {
 The create request was successful and the resource has been added at the following location
 */
 type CreateConfigOK struct {
-	Payload *models.Create
+	Payload *rest_model.Create
 }
 
 func (o *CreateConfigOK) Error() string {
 	return fmt.Sprintf("[POST /configs][%d] createConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateConfigOK) GetPayload() *models.Create {
+func (o *CreateConfigOK) GetPayload() *rest_model.Create {
 	return o.Payload
 }
 
 func (o *CreateConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Create)
+	o.Payload = new(rest_model.Create)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewCreateConfigBadRequest() *CreateConfigBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type CreateConfigBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *CreateConfigBadRequest) Error() string {
 	return fmt.Sprintf("[POST /configs][%d] createConfigBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *CreateConfigBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *CreateConfigBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *CreateConfigBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewCreateConfigUnauthorized() *CreateConfigUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type CreateConfigUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *CreateConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /configs][%d] createConfigUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *CreateConfigUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *CreateConfigUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *CreateConfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

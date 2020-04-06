@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateEdgeRouterParams creates a new CreateEdgeRouterParams object
@@ -90,7 +90,7 @@ type CreateEdgeRouterParams struct {
 	  A config-type to create
 
 	*/
-	Body *models.EdgeRouterCreate
+	Body *rest_model.EdgeRouterCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateEdgeRouterParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create edge router params
-func (o *CreateEdgeRouterParams) WithBody(body *models.EdgeRouterCreate) *CreateEdgeRouterParams {
+func (o *CreateEdgeRouterParams) WithBody(body *rest_model.EdgeRouterCreate) *CreateEdgeRouterParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create edge router params
-func (o *CreateEdgeRouterParams) SetBody(body *models.EdgeRouterCreate) {
+func (o *CreateEdgeRouterParams) SetBody(body *rest_model.EdgeRouterCreate) {
 	o.Body = body
 }
 

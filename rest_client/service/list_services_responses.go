@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListServicesReader is a Reader for the ListServices structure.
@@ -75,20 +75,20 @@ func NewListServicesOK() *ListServicesOK {
 A list of services
 */
 type ListServicesOK struct {
-	Payload *models.ListServicesEnvelope
+	Payload *rest_model.ListServicesEnvelope
 }
 
 func (o *ListServicesOK) Error() string {
 	return fmt.Sprintf("[GET /services][%d] listServicesOK  %+v", 200, o.Payload)
 }
 
-func (o *ListServicesOK) GetPayload() *models.ListServicesEnvelope {
+func (o *ListServicesOK) GetPayload() *rest_model.ListServicesEnvelope {
 	return o.Payload
 }
 
 func (o *ListServicesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListServicesEnvelope)
+	o.Payload = new(rest_model.ListServicesEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -108,20 +108,20 @@ func NewListServicesUnauthorized() *ListServicesUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type ListServicesUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *ListServicesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /services][%d] listServicesUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *ListServicesUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *ListServicesUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *ListServicesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

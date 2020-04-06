@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListGeoRegionOKCode is the HTTP code returned for type ListGeoRegionOK
@@ -49,7 +49,7 @@ type ListGeoRegionOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListGeoRegionsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListGeoRegionsEnvelope `json:"body,omitempty"`
 }
 
 // NewListGeoRegionOK creates ListGeoRegionOK with default headers values
@@ -59,13 +59,13 @@ func NewListGeoRegionOK() *ListGeoRegionOK {
 }
 
 // WithPayload adds the payload to the list geo region o k response
-func (o *ListGeoRegionOK) WithPayload(payload *models.ListGeoRegionsEnvelope) *ListGeoRegionOK {
+func (o *ListGeoRegionOK) WithPayload(payload *rest_model.ListGeoRegionsEnvelope) *ListGeoRegionOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list geo region o k response
-func (o *ListGeoRegionOK) SetPayload(payload *models.ListGeoRegionsEnvelope) {
+func (o *ListGeoRegionOK) SetPayload(payload *rest_model.ListGeoRegionsEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListGeoRegionUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListGeoRegionUnauthorized creates ListGeoRegionUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListGeoRegionUnauthorized() *ListGeoRegionUnauthorized {
 }
 
 // WithPayload adds the payload to the list geo region unauthorized response
-func (o *ListGeoRegionUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListGeoRegionUnauthorized {
+func (o *ListGeoRegionUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListGeoRegionUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list geo region unauthorized response
-func (o *ListGeoRegionUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListGeoRegionUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // GetCurrentAPISessionOKCode is the HTTP code returned for type GetCurrentAPISessionOK
@@ -49,7 +49,7 @@ type GetCurrentAPISessionOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.CurrentAPISessionDetailEnvelope `json:"body,omitempty"`
+	Payload *rest_model.CurrentAPISessionDetailEnvelope `json:"body,omitempty"`
 }
 
 // NewGetCurrentAPISessionOK creates GetCurrentAPISessionOK with default headers values
@@ -59,13 +59,13 @@ func NewGetCurrentAPISessionOK() *GetCurrentAPISessionOK {
 }
 
 // WithPayload adds the payload to the get current Api session o k response
-func (o *GetCurrentAPISessionOK) WithPayload(payload *models.CurrentAPISessionDetailEnvelope) *GetCurrentAPISessionOK {
+func (o *GetCurrentAPISessionOK) WithPayload(payload *rest_model.CurrentAPISessionDetailEnvelope) *GetCurrentAPISessionOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get current Api session o k response
-func (o *GetCurrentAPISessionOK) SetPayload(payload *models.CurrentAPISessionDetailEnvelope) {
+func (o *GetCurrentAPISessionOK) SetPayload(payload *rest_model.CurrentAPISessionDetailEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type GetCurrentAPISessionUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewGetCurrentAPISessionUnauthorized creates GetCurrentAPISessionUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewGetCurrentAPISessionUnauthorized() *GetCurrentAPISessionUnauthorized {
 }
 
 // WithPayload adds the payload to the get current Api session unauthorized response
-func (o *GetCurrentAPISessionUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *GetCurrentAPISessionUnauthorized {
+func (o *GetCurrentAPISessionUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *GetCurrentAPISessionUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get current Api session unauthorized response
-func (o *GetCurrentAPISessionUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *GetCurrentAPISessionUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

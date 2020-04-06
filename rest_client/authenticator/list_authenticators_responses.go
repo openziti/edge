@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListAuthenticatorsReader is a Reader for the ListAuthenticators structure.
@@ -69,20 +69,20 @@ func NewListAuthenticatorsOK() *ListAuthenticatorsOK {
 A list of authenticators
 */
 type ListAuthenticatorsOK struct {
-	Payload *models.ListAuthenticatorsEnvelope
+	Payload *rest_model.ListAuthenticatorsEnvelope
 }
 
 func (o *ListAuthenticatorsOK) Error() string {
 	return fmt.Sprintf("[GET /authenticators][%d] listAuthenticatorsOK  %+v", 200, o.Payload)
 }
 
-func (o *ListAuthenticatorsOK) GetPayload() *models.ListAuthenticatorsEnvelope {
+func (o *ListAuthenticatorsOK) GetPayload() *rest_model.ListAuthenticatorsEnvelope {
 	return o.Payload
 }
 
 func (o *ListAuthenticatorsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ListAuthenticatorsEnvelope)
+	o.Payload = new(rest_model.ListAuthenticatorsEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailGeoRegionOKCode is the HTTP code returned for type DetailGeoRegionOK
@@ -49,7 +49,7 @@ type DetailGeoRegionOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailGeoRegionEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailGeoRegionEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailGeoRegionOK creates DetailGeoRegionOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailGeoRegionOK() *DetailGeoRegionOK {
 }
 
 // WithPayload adds the payload to the detail geo region o k response
-func (o *DetailGeoRegionOK) WithPayload(payload *models.DetailGeoRegionEnvelope) *DetailGeoRegionOK {
+func (o *DetailGeoRegionOK) WithPayload(payload *rest_model.DetailGeoRegionEnvelope) *DetailGeoRegionOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail geo region o k response
-func (o *DetailGeoRegionOK) SetPayload(payload *models.DetailGeoRegionEnvelope) {
+func (o *DetailGeoRegionOK) SetPayload(payload *rest_model.DetailGeoRegionEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailGeoRegionUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailGeoRegionUnauthorized creates DetailGeoRegionUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailGeoRegionUnauthorized() *DetailGeoRegionUnauthorized {
 }
 
 // WithPayload adds the payload to the detail geo region unauthorized response
-func (o *DetailGeoRegionUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailGeoRegionUnauthorized {
+func (o *DetailGeoRegionUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailGeoRegionUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail geo region unauthorized response
-func (o *DetailGeoRegionUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailGeoRegionUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailGeoRegionNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailGeoRegionNotFound creates DetailGeoRegionNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailGeoRegionNotFound() *DetailGeoRegionNotFound {
 }
 
 // WithPayload adds the payload to the detail geo region not found response
-func (o *DetailGeoRegionNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailGeoRegionNotFound {
+func (o *DetailGeoRegionNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailGeoRegionNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail geo region not found response
-func (o *DetailGeoRegionNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailGeoRegionNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

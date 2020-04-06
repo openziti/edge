@@ -37,7 +37,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateEdgeRouterParams creates a new CreateEdgeRouterParams object
@@ -60,7 +60,7 @@ type CreateEdgeRouterParams struct {
 	  Required: true
 	  In: body
 	*/
-	Body *models.EdgeRouterCreate
+	Body *rest_model.EdgeRouterCreate
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -74,7 +74,7 @@ func (o *CreateEdgeRouterParams) BindRequest(r *http.Request, route *middleware.
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.EdgeRouterCreate
+		var body rest_model.EdgeRouterCreate
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

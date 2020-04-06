@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailEnrollmentOKCode is the HTTP code returned for type DetailEnrollmentOK
@@ -49,7 +49,7 @@ type DetailEnrollmentOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailEnrollmentEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailEnrollmentEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailEnrollmentOK creates DetailEnrollmentOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailEnrollmentOK() *DetailEnrollmentOK {
 }
 
 // WithPayload adds the payload to the detail enrollment o k response
-func (o *DetailEnrollmentOK) WithPayload(payload *models.DetailEnrollmentEnvelope) *DetailEnrollmentOK {
+func (o *DetailEnrollmentOK) WithPayload(payload *rest_model.DetailEnrollmentEnvelope) *DetailEnrollmentOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail enrollment o k response
-func (o *DetailEnrollmentOK) SetPayload(payload *models.DetailEnrollmentEnvelope) {
+func (o *DetailEnrollmentOK) SetPayload(payload *rest_model.DetailEnrollmentEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailEnrollmentUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailEnrollmentUnauthorized creates DetailEnrollmentUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailEnrollmentUnauthorized() *DetailEnrollmentUnauthorized {
 }
 
 // WithPayload adds the payload to the detail enrollment unauthorized response
-func (o *DetailEnrollmentUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailEnrollmentUnauthorized {
+func (o *DetailEnrollmentUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailEnrollmentUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail enrollment unauthorized response
-func (o *DetailEnrollmentUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailEnrollmentUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailEnrollmentNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailEnrollmentNotFound creates DetailEnrollmentNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailEnrollmentNotFound() *DetailEnrollmentNotFound {
 }
 
 // WithPayload adds the payload to the detail enrollment not found response
-func (o *DetailEnrollmentNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailEnrollmentNotFound {
+func (o *DetailEnrollmentNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailEnrollmentNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail enrollment not found response
-func (o *DetailEnrollmentNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailEnrollmentNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

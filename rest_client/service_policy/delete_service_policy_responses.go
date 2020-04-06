@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteServicePolicyReader is a Reader for the DeleteServicePolicy structure.
@@ -87,20 +87,20 @@ func NewDeleteServicePolicyOK() *DeleteServicePolicyOK {
 The delete request was successful and the resource has been removed
 */
 type DeleteServicePolicyOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *DeleteServicePolicyOK) Error() string {
 	return fmt.Sprintf("[DELETE /service-policies/{id}][%d] deleteServicePolicyOK  %+v", 200, o.Payload)
 }
 
-func (o *DeleteServicePolicyOK) GetPayload() *models.Empty {
+func (o *DeleteServicePolicyOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *DeleteServicePolicyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewDeleteServicePolicyBadRequest() *DeleteServicePolicyBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type DeleteServicePolicyBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteServicePolicyBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /service-policies/{id}][%d] deleteServicePolicyBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *DeleteServicePolicyBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteServicePolicyBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteServicePolicyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewDeleteServicePolicyUnauthorized() *DeleteServicePolicyUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DeleteServicePolicyUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteServicePolicyUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /service-policies/{id}][%d] deleteServicePolicyUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DeleteServicePolicyUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteServicePolicyUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteServicePolicyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewDeleteServicePolicyConflict() *DeleteServicePolicyConflict {
 The resource requested to be removed/altered cannot be as it is referenced by another object.
 */
 type DeleteServicePolicyConflict struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DeleteServicePolicyConflict) Error() string {
 	return fmt.Sprintf("[DELETE /service-policies/{id}][%d] deleteServicePolicyConflict  %+v", 409, o.Payload)
 }
 
-func (o *DeleteServicePolicyConflict) GetPayload() *models.APIErrorEnvelope {
+func (o *DeleteServicePolicyConflict) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DeleteServicePolicyConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

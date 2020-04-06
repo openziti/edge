@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchConfigTypeOKCode is the HTTP code returned for type PatchConfigTypeOK
@@ -49,7 +49,7 @@ type PatchConfigTypeOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewPatchConfigTypeOK creates PatchConfigTypeOK with default headers values
@@ -59,13 +59,13 @@ func NewPatchConfigTypeOK() *PatchConfigTypeOK {
 }
 
 // WithPayload adds the payload to the patch config type o k response
-func (o *PatchConfigTypeOK) WithPayload(payload *models.Empty) *PatchConfigTypeOK {
+func (o *PatchConfigTypeOK) WithPayload(payload *rest_model.Empty) *PatchConfigTypeOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch config type o k response
-func (o *PatchConfigTypeOK) SetPayload(payload *models.Empty) {
+func (o *PatchConfigTypeOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type PatchConfigTypeBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchConfigTypeBadRequest creates PatchConfigTypeBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewPatchConfigTypeBadRequest() *PatchConfigTypeBadRequest {
 }
 
 // WithPayload adds the payload to the patch config type bad request response
-func (o *PatchConfigTypeBadRequest) WithPayload(payload *models.APIErrorEnvelope) *PatchConfigTypeBadRequest {
+func (o *PatchConfigTypeBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchConfigTypeBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch config type bad request response
-func (o *PatchConfigTypeBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchConfigTypeBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type PatchConfigTypeUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchConfigTypeUnauthorized creates PatchConfigTypeUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewPatchConfigTypeUnauthorized() *PatchConfigTypeUnauthorized {
 }
 
 // WithPayload adds the payload to the patch config type unauthorized response
-func (o *PatchConfigTypeUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *PatchConfigTypeUnauthorized {
+func (o *PatchConfigTypeUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchConfigTypeUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch config type unauthorized response
-func (o *PatchConfigTypeUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchConfigTypeUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type PatchConfigTypeNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewPatchConfigTypeNotFound creates PatchConfigTypeNotFound with default headers values
@@ -191,13 +191,13 @@ func NewPatchConfigTypeNotFound() *PatchConfigTypeNotFound {
 }
 
 // WithPayload adds the payload to the patch config type not found response
-func (o *PatchConfigTypeNotFound) WithPayload(payload *models.APIErrorEnvelope) *PatchConfigTypeNotFound {
+func (o *PatchConfigTypeNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *PatchConfigTypeNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the patch config type not found response
-func (o *PatchConfigTypeNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *PatchConfigTypeNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

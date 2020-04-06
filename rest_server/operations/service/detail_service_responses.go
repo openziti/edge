@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailServiceOKCode is the HTTP code returned for type DetailServiceOK
@@ -49,7 +49,7 @@ type DetailServiceOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailServiceEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailServiceEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailServiceOK creates DetailServiceOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailServiceOK() *DetailServiceOK {
 }
 
 // WithPayload adds the payload to the detail service o k response
-func (o *DetailServiceOK) WithPayload(payload *models.DetailServiceEnvelope) *DetailServiceOK {
+func (o *DetailServiceOK) WithPayload(payload *rest_model.DetailServiceEnvelope) *DetailServiceOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail service o k response
-func (o *DetailServiceOK) SetPayload(payload *models.DetailServiceEnvelope) {
+func (o *DetailServiceOK) SetPayload(payload *rest_model.DetailServiceEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailServiceUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailServiceUnauthorized creates DetailServiceUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailServiceUnauthorized() *DetailServiceUnauthorized {
 }
 
 // WithPayload adds the payload to the detail service unauthorized response
-func (o *DetailServiceUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailServiceUnauthorized {
+func (o *DetailServiceUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailServiceUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail service unauthorized response
-func (o *DetailServiceUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailServiceUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailServiceNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailServiceNotFound creates DetailServiceNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailServiceNotFound() *DetailServiceNotFound {
 }
 
 // WithPayload adds the payload to the detail service not found response
-func (o *DetailServiceNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailServiceNotFound {
+func (o *DetailServiceNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailServiceNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail service not found response
-func (o *DetailServiceNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailServiceNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

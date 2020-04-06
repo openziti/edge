@@ -39,7 +39,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // NewCreateSessionParams creates a new CreateSessionParams object
@@ -90,7 +90,7 @@ type CreateSessionParams struct {
 	  A session to create
 
 	*/
-	Body *models.SessionCreate
+	Body *rest_model.SessionCreate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,13 +131,13 @@ func (o *CreateSessionParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create session params
-func (o *CreateSessionParams) WithBody(body *models.SessionCreate) *CreateSessionParams {
+func (o *CreateSessionParams) WithBody(body *rest_model.SessionCreate) *CreateSessionParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create session params
-func (o *CreateSessionParams) SetBody(body *models.SessionCreate) {
+func (o *CreateSessionParams) SetBody(body *rest_model.SessionCreate) {
 	o.Body = body
 }
 

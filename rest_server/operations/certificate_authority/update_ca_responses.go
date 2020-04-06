@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // UpdateCaOKCode is the HTTP code returned for type UpdateCaOK
@@ -49,7 +49,7 @@ type UpdateCaOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewUpdateCaOK creates UpdateCaOK with default headers values
@@ -59,13 +59,13 @@ func NewUpdateCaOK() *UpdateCaOK {
 }
 
 // WithPayload adds the payload to the update ca o k response
-func (o *UpdateCaOK) WithPayload(payload *models.Empty) *UpdateCaOK {
+func (o *UpdateCaOK) WithPayload(payload *rest_model.Empty) *UpdateCaOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update ca o k response
-func (o *UpdateCaOK) SetPayload(payload *models.Empty) {
+func (o *UpdateCaOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type UpdateCaBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateCaBadRequest creates UpdateCaBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewUpdateCaBadRequest() *UpdateCaBadRequest {
 }
 
 // WithPayload adds the payload to the update ca bad request response
-func (o *UpdateCaBadRequest) WithPayload(payload *models.APIErrorEnvelope) *UpdateCaBadRequest {
+func (o *UpdateCaBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateCaBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update ca bad request response
-func (o *UpdateCaBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateCaBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type UpdateCaUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateCaUnauthorized creates UpdateCaUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewUpdateCaUnauthorized() *UpdateCaUnauthorized {
 }
 
 // WithPayload adds the payload to the update ca unauthorized response
-func (o *UpdateCaUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *UpdateCaUnauthorized {
+func (o *UpdateCaUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateCaUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update ca unauthorized response
-func (o *UpdateCaUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateCaUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -181,7 +181,7 @@ type UpdateCaNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewUpdateCaNotFound creates UpdateCaNotFound with default headers values
@@ -191,13 +191,13 @@ func NewUpdateCaNotFound() *UpdateCaNotFound {
 }
 
 // WithPayload adds the payload to the update ca not found response
-func (o *UpdateCaNotFound) WithPayload(payload *models.APIErrorEnvelope) *UpdateCaNotFound {
+func (o *UpdateCaNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *UpdateCaNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update ca not found response
-func (o *UpdateCaNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *UpdateCaNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

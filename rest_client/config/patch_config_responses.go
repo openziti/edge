@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchConfigReader is a Reader for the PatchConfig structure.
@@ -87,20 +87,20 @@ func NewPatchConfigOK() *PatchConfigOK {
 The patch request was successful and the resource has been altered
 */
 type PatchConfigOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *PatchConfigOK) Error() string {
 	return fmt.Sprintf("[PATCH /configs/{id}][%d] patchConfigOK  %+v", 200, o.Payload)
 }
 
-func (o *PatchConfigOK) GetPayload() *models.Empty {
+func (o *PatchConfigOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *PatchConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewPatchConfigBadRequest() *PatchConfigBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type PatchConfigBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchConfigBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /configs/{id}][%d] patchConfigBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *PatchConfigBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchConfigBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchConfigBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewPatchConfigUnauthorized() *PatchConfigUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type PatchConfigUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /configs/{id}][%d] patchConfigUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *PatchConfigUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchConfigUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchConfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewPatchConfigNotFound() *PatchConfigNotFound {
 The requested resource does not exist
 */
 type PatchConfigNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchConfigNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /configs/{id}][%d] patchConfigNotFound  %+v", 404, o.Payload)
 }
 
-func (o *PatchConfigNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchConfigNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

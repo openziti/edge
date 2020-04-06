@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // PatchEdgeRouterReader is a Reader for the PatchEdgeRouter structure.
@@ -87,20 +87,20 @@ func NewPatchEdgeRouterOK() *PatchEdgeRouterOK {
 The patch request was successful and the resource has been altered
 */
 type PatchEdgeRouterOK struct {
-	Payload *models.Empty
+	Payload *rest_model.Empty
 }
 
 func (o *PatchEdgeRouterOK) Error() string {
 	return fmt.Sprintf("[PATCH /edge-routers/{id}][%d] patchEdgeRouterOK  %+v", 200, o.Payload)
 }
 
-func (o *PatchEdgeRouterOK) GetPayload() *models.Empty {
+func (o *PatchEdgeRouterOK) GetPayload() *rest_model.Empty {
 	return o.Payload
 }
 
 func (o *PatchEdgeRouterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Empty)
+	o.Payload = new(rest_model.Empty)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -120,20 +120,20 @@ func NewPatchEdgeRouterBadRequest() *PatchEdgeRouterBadRequest {
 The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
 type PatchEdgeRouterBadRequest struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchEdgeRouterBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /edge-routers/{id}][%d] patchEdgeRouterBadRequest  %+v", 400, o.Payload)
 }
 
-func (o *PatchEdgeRouterBadRequest) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchEdgeRouterBadRequest) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchEdgeRouterBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -153,20 +153,20 @@ func NewPatchEdgeRouterUnauthorized() *PatchEdgeRouterUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type PatchEdgeRouterUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchEdgeRouterUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /edge-routers/{id}][%d] patchEdgeRouterUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *PatchEdgeRouterUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchEdgeRouterUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchEdgeRouterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -186,20 +186,20 @@ func NewPatchEdgeRouterNotFound() *PatchEdgeRouterNotFound {
 The requested resource does not exist
 */
 type PatchEdgeRouterNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *PatchEdgeRouterNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /edge-routers/{id}][%d] patchEdgeRouterNotFound  %+v", 404, o.Payload)
 }
 
-func (o *PatchEdgeRouterNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *PatchEdgeRouterNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *PatchEdgeRouterNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

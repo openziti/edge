@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailTransitRouterOKCode is the HTTP code returned for type DetailTransitRouterOK
@@ -49,7 +49,7 @@ type DetailTransitRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailTransitRouterEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailTransitRouterEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailTransitRouterOK creates DetailTransitRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailTransitRouterOK() *DetailTransitRouterOK {
 }
 
 // WithPayload adds the payload to the detail transit router o k response
-func (o *DetailTransitRouterOK) WithPayload(payload *models.DetailTransitRouterEnvelope) *DetailTransitRouterOK {
+func (o *DetailTransitRouterOK) WithPayload(payload *rest_model.DetailTransitRouterEnvelope) *DetailTransitRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail transit router o k response
-func (o *DetailTransitRouterOK) SetPayload(payload *models.DetailTransitRouterEnvelope) {
+func (o *DetailTransitRouterOK) SetPayload(payload *rest_model.DetailTransitRouterEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailTransitRouterUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailTransitRouterUnauthorized creates DetailTransitRouterUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailTransitRouterUnauthorized() *DetailTransitRouterUnauthorized {
 }
 
 // WithPayload adds the payload to the detail transit router unauthorized response
-func (o *DetailTransitRouterUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailTransitRouterUnauthorized {
+func (o *DetailTransitRouterUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailTransitRouterUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail transit router unauthorized response
-func (o *DetailTransitRouterUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailTransitRouterUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailTransitRouterNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailTransitRouterNotFound creates DetailTransitRouterNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailTransitRouterNotFound() *DetailTransitRouterNotFound {
 }
 
 // WithPayload adds the payload to the detail transit router not found response
-func (o *DetailTransitRouterNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailTransitRouterNotFound {
+func (o *DetailTransitRouterNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailTransitRouterNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail transit router not found response
-func (o *DetailTransitRouterNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailTransitRouterNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

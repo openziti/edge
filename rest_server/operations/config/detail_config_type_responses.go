@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailConfigTypeOKCode is the HTTP code returned for type DetailConfigTypeOK
@@ -49,7 +49,7 @@ type DetailConfigTypeOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DetailConfigTypeEnvelope `json:"body,omitempty"`
+	Payload *rest_model.DetailConfigTypeEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailConfigTypeOK creates DetailConfigTypeOK with default headers values
@@ -59,13 +59,13 @@ func NewDetailConfigTypeOK() *DetailConfigTypeOK {
 }
 
 // WithPayload adds the payload to the detail config type o k response
-func (o *DetailConfigTypeOK) WithPayload(payload *models.DetailConfigTypeEnvelope) *DetailConfigTypeOK {
+func (o *DetailConfigTypeOK) WithPayload(payload *rest_model.DetailConfigTypeEnvelope) *DetailConfigTypeOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail config type o k response
-func (o *DetailConfigTypeOK) SetPayload(payload *models.DetailConfigTypeEnvelope) {
+func (o *DetailConfigTypeOK) SetPayload(payload *rest_model.DetailConfigTypeEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DetailConfigTypeUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailConfigTypeUnauthorized creates DetailConfigTypeUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewDetailConfigTypeUnauthorized() *DetailConfigTypeUnauthorized {
 }
 
 // WithPayload adds the payload to the detail config type unauthorized response
-func (o *DetailConfigTypeUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DetailConfigTypeUnauthorized {
+func (o *DetailConfigTypeUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailConfigTypeUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail config type unauthorized response
-func (o *DetailConfigTypeUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailConfigTypeUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DetailConfigTypeNotFound struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDetailConfigTypeNotFound creates DetailConfigTypeNotFound with default headers values
@@ -147,13 +147,13 @@ func NewDetailConfigTypeNotFound() *DetailConfigTypeNotFound {
 }
 
 // WithPayload adds the payload to the detail config type not found response
-func (o *DetailConfigTypeNotFound) WithPayload(payload *models.APIErrorEnvelope) *DetailConfigTypeNotFound {
+func (o *DetailConfigTypeNotFound) WithPayload(payload *rest_model.APIErrorEnvelope) *DetailConfigTypeNotFound {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the detail config type not found response
-func (o *DetailConfigTypeNotFound) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DetailConfigTypeNotFound) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

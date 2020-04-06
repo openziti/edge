@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // GetCasIDJwtReader is a Reader for the GetCasIDJwt structure.
@@ -112,20 +112,20 @@ func NewGetCasIDJwtUnauthorized() *GetCasIDJwtUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type GetCasIDJwtUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *GetCasIDJwtUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /cas/{id}/jwt][%d] getCasIdJwtUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *GetCasIDJwtUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *GetCasIDJwtUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *GetCasIDJwtUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -145,20 +145,20 @@ func NewGetCasIDJwtNotFound() *GetCasIDJwtNotFound {
 The requested resource does not exist
 */
 type GetCasIDJwtNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *GetCasIDJwtNotFound) Error() string {
 	return fmt.Sprintf("[GET /cas/{id}/jwt][%d] getCasIdJwtNotFound  %+v", 404, o.Payload)
 }
 
-func (o *GetCasIDJwtNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *GetCasIDJwtNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *GetCasIDJwtNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

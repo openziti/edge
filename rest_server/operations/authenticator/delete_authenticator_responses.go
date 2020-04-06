@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DeleteAuthenticatorOKCode is the HTTP code returned for type DeleteAuthenticatorOK
@@ -49,7 +49,7 @@ type DeleteAuthenticatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Empty `json:"body,omitempty"`
+	Payload *rest_model.Empty `json:"body,omitempty"`
 }
 
 // NewDeleteAuthenticatorOK creates DeleteAuthenticatorOK with default headers values
@@ -59,13 +59,13 @@ func NewDeleteAuthenticatorOK() *DeleteAuthenticatorOK {
 }
 
 // WithPayload adds the payload to the delete authenticator o k response
-func (o *DeleteAuthenticatorOK) WithPayload(payload *models.Empty) *DeleteAuthenticatorOK {
+func (o *DeleteAuthenticatorOK) WithPayload(payload *rest_model.Empty) *DeleteAuthenticatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete authenticator o k response
-func (o *DeleteAuthenticatorOK) SetPayload(payload *models.Empty) {
+func (o *DeleteAuthenticatorOK) SetPayload(payload *rest_model.Empty) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type DeleteAuthenticatorBadRequest struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteAuthenticatorBadRequest creates DeleteAuthenticatorBadRequest with default headers values
@@ -103,13 +103,13 @@ func NewDeleteAuthenticatorBadRequest() *DeleteAuthenticatorBadRequest {
 }
 
 // WithPayload adds the payload to the delete authenticator bad request response
-func (o *DeleteAuthenticatorBadRequest) WithPayload(payload *models.APIErrorEnvelope) *DeleteAuthenticatorBadRequest {
+func (o *DeleteAuthenticatorBadRequest) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteAuthenticatorBadRequest {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete authenticator bad request response
-func (o *DeleteAuthenticatorBadRequest) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteAuthenticatorBadRequest) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
@@ -137,7 +137,7 @@ type DeleteAuthenticatorUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewDeleteAuthenticatorUnauthorized creates DeleteAuthenticatorUnauthorized with default headers values
@@ -147,13 +147,13 @@ func NewDeleteAuthenticatorUnauthorized() *DeleteAuthenticatorUnauthorized {
 }
 
 // WithPayload adds the payload to the delete authenticator unauthorized response
-func (o *DeleteAuthenticatorUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *DeleteAuthenticatorUnauthorized {
+func (o *DeleteAuthenticatorUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *DeleteAuthenticatorUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete authenticator unauthorized response
-func (o *DeleteAuthenticatorUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *DeleteAuthenticatorUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

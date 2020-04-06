@@ -34,7 +34,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // ListEnrollmentsOKCode is the HTTP code returned for type ListEnrollmentsOK
@@ -49,7 +49,7 @@ type ListEnrollmentsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.ListEnrollmentsEnvelope `json:"body,omitempty"`
+	Payload *rest_model.ListEnrollmentsEnvelope `json:"body,omitempty"`
 }
 
 // NewListEnrollmentsOK creates ListEnrollmentsOK with default headers values
@@ -59,13 +59,13 @@ func NewListEnrollmentsOK() *ListEnrollmentsOK {
 }
 
 // WithPayload adds the payload to the list enrollments o k response
-func (o *ListEnrollmentsOK) WithPayload(payload *models.ListEnrollmentsEnvelope) *ListEnrollmentsOK {
+func (o *ListEnrollmentsOK) WithPayload(payload *rest_model.ListEnrollmentsEnvelope) *ListEnrollmentsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list enrollments o k response
-func (o *ListEnrollmentsOK) SetPayload(payload *models.ListEnrollmentsEnvelope) {
+func (o *ListEnrollmentsOK) SetPayload(payload *rest_model.ListEnrollmentsEnvelope) {
 	o.Payload = payload
 }
 
@@ -93,7 +93,7 @@ type ListEnrollmentsUnauthorized struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIErrorEnvelope `json:"body,omitempty"`
+	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
 // NewListEnrollmentsUnauthorized creates ListEnrollmentsUnauthorized with default headers values
@@ -103,13 +103,13 @@ func NewListEnrollmentsUnauthorized() *ListEnrollmentsUnauthorized {
 }
 
 // WithPayload adds the payload to the list enrollments unauthorized response
-func (o *ListEnrollmentsUnauthorized) WithPayload(payload *models.APIErrorEnvelope) *ListEnrollmentsUnauthorized {
+func (o *ListEnrollmentsUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *ListEnrollmentsUnauthorized {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list enrollments unauthorized response
-func (o *ListEnrollmentsUnauthorized) SetPayload(payload *models.APIErrorEnvelope) {
+func (o *ListEnrollmentsUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 

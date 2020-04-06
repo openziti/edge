@@ -36,7 +36,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netfoundry/ziti-edge/models"
+	"github.com/netfoundry/ziti-edge/rest_model"
 )
 
 // DetailTerminatorReader is a Reader for the DetailTerminator structure.
@@ -81,20 +81,20 @@ func NewDetailTerminatorOK() *DetailTerminatorOK {
 A single terminator
 */
 type DetailTerminatorOK struct {
-	Payload *models.DetailTerminatorEnvelope
+	Payload *rest_model.DetailTerminatorEnvelope
 }
 
 func (o *DetailTerminatorOK) Error() string {
 	return fmt.Sprintf("[GET /terminators/{id}][%d] detailTerminatorOK  %+v", 200, o.Payload)
 }
 
-func (o *DetailTerminatorOK) GetPayload() *models.DetailTerminatorEnvelope {
+func (o *DetailTerminatorOK) GetPayload() *rest_model.DetailTerminatorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailTerminatorOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.DetailTerminatorEnvelope)
+	o.Payload = new(rest_model.DetailTerminatorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -114,20 +114,20 @@ func NewDetailTerminatorUnauthorized() *DetailTerminatorUnauthorized {
 The currently supplied session does not have the correct access rights to request this resource
 */
 type DetailTerminatorUnauthorized struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailTerminatorUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /terminators/{id}][%d] detailTerminatorUnauthorized  %+v", 401, o.Payload)
 }
 
-func (o *DetailTerminatorUnauthorized) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailTerminatorUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailTerminatorUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -147,20 +147,20 @@ func NewDetailTerminatorNotFound() *DetailTerminatorNotFound {
 The requested resource does not exist
 */
 type DetailTerminatorNotFound struct {
-	Payload *models.APIErrorEnvelope
+	Payload *rest_model.APIErrorEnvelope
 }
 
 func (o *DetailTerminatorNotFound) Error() string {
 	return fmt.Sprintf("[GET /terminators/{id}][%d] detailTerminatorNotFound  %+v", 404, o.Payload)
 }
 
-func (o *DetailTerminatorNotFound) GetPayload() *models.APIErrorEnvelope {
+func (o *DetailTerminatorNotFound) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
 func (o *DetailTerminatorNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.APIErrorEnvelope)
+	o.Payload = new(rest_model.APIErrorEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
