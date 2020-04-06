@@ -91,7 +91,7 @@ type ListServiceConfigParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 	/*Limit*/
 	Limit *int64
 	/*Offset*/
@@ -147,13 +147,13 @@ func (o *ListServiceConfigParams) SetFilter(filter *string) {
 }
 
 // WithID adds the id to the list service config params
-func (o *ListServiceConfigParams) WithID(id strfmt.UUID) *ListServiceConfigParams {
+func (o *ListServiceConfigParams) WithID(id string) *ListServiceConfigParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the list service config params
-func (o *ListServiceConfigParams) SetID(id strfmt.UUID) {
+func (o *ListServiceConfigParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -204,7 +204,7 @@ func (o *ListServiceConfigParams) WriteToRequest(r runtime.ClientRequest, reg st
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

@@ -52,8 +52,7 @@ type ServiceEdgeRouterPolicyDetail struct {
 	EdgeRouterRoles Roles `json:"edgeRouterRoles,omitempty"`
 
 	// id
-	// Format: uuid
-	ID strfmt.UUID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -85,10 +84,6 @@ func (m *ServiceEdgeRouterPolicyDetail) Validate(formats strfmt.Registry) error 
 	}
 
 	if err := m.validateEdgeRouterRoles(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -149,19 +144,6 @@ func (m *ServiceEdgeRouterPolicyDetail) validateEdgeRouterRoles(formats strfmt.R
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("edgeRouterRoles")
 		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *ServiceEdgeRouterPolicyDetail) validateID(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ID) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("id", "body", "uuid", m.ID.String(), formats); err != nil {
 		return err
 	}
 

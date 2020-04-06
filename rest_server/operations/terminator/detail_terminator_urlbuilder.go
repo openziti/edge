@@ -34,13 +34,11 @@ import (
 	"net/url"
 	golangswaggerpaths "path"
 	"strings"
-
-	"github.com/go-openapi/strfmt"
 )
 
 // DetailTerminatorURL generates an URL for the detail terminator operation
 type DetailTerminatorURL struct {
-	ID strfmt.UUID
+	ID string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -68,7 +66,7 @@ func (o *DetailTerminatorURL) Build() (*url.URL, error) {
 
 	var _path = "/terminators/{id}"
 
-	id := o.ID.String()
+	id := o.ID
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {

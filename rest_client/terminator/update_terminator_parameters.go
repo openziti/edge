@@ -95,7 +95,7 @@ type UpdateTerminatorParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *UpdateTerminatorParams) SetBody(body *models.TerminatorUpdate) {
 }
 
 // WithID adds the id to the update terminator params
-func (o *UpdateTerminatorParams) WithID(id strfmt.UUID) *UpdateTerminatorParams {
+func (o *UpdateTerminatorParams) WithID(id string) *UpdateTerminatorParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the update terminator params
-func (o *UpdateTerminatorParams) SetID(id strfmt.UUID) {
+func (o *UpdateTerminatorParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *UpdateTerminatorParams) WriteToRequest(r runtime.ClientRequest, reg str
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

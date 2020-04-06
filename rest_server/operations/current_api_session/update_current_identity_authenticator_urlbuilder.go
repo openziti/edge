@@ -34,13 +34,11 @@ import (
 	"net/url"
 	golangswaggerpaths "path"
 	"strings"
-
-	"github.com/go-openapi/strfmt"
 )
 
 // UpdateCurrentIdentityAuthenticatorURL generates an URL for the update current identity authenticator operation
 type UpdateCurrentIdentityAuthenticatorURL struct {
-	ID strfmt.UUID
+	ID string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -68,7 +66,7 @@ func (o *UpdateCurrentIdentityAuthenticatorURL) Build() (*url.URL, error) {
 
 	var _path = "/current-identity/authenticators/{id}"
 
-	id := o.ID.String()
+	id := o.ID
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {

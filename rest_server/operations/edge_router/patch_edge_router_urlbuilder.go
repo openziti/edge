@@ -34,13 +34,11 @@ import (
 	"net/url"
 	golangswaggerpaths "path"
 	"strings"
-
-	"github.com/go-openapi/strfmt"
 )
 
 // PatchEdgeRouterURL generates an URL for the patch edge router operation
 type PatchEdgeRouterURL struct {
-	ID strfmt.UUID
+	ID string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -68,7 +66,7 @@ func (o *PatchEdgeRouterURL) Build() (*url.URL, error) {
 
 	var _path = "/edge-routers/{id}"
 
-	id := o.ID.String()
+	id := o.ID
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {

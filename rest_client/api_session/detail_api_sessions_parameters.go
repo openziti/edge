@@ -88,7 +88,7 @@ type DetailAPISessionsParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DetailAPISessionsParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the detail API sessions params
-func (o *DetailAPISessionsParams) WithID(id strfmt.UUID) *DetailAPISessionsParams {
+func (o *DetailAPISessionsParams) WithID(id string) *DetailAPISessionsParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the detail API sessions params
-func (o *DetailAPISessionsParams) SetID(id strfmt.UUID) {
+func (o *DetailAPISessionsParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DetailAPISessionsParams) WriteToRequest(r runtime.ClientRequest, reg st
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

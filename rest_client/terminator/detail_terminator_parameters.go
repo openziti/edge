@@ -88,7 +88,7 @@ type DetailTerminatorParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DetailTerminatorParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the detail terminator params
-func (o *DetailTerminatorParams) WithID(id strfmt.UUID) *DetailTerminatorParams {
+func (o *DetailTerminatorParams) WithID(id string) *DetailTerminatorParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the detail terminator params
-func (o *DetailTerminatorParams) SetID(id strfmt.UUID) {
+func (o *DetailTerminatorParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DetailTerminatorParams) WriteToRequest(r runtime.ClientRequest, reg str
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

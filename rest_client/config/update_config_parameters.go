@@ -95,7 +95,7 @@ type UpdateConfigParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *UpdateConfigParams) SetBody(body *models.ConfigUpdate) {
 }
 
 // WithID adds the id to the update config params
-func (o *UpdateConfigParams) WithID(id strfmt.UUID) *UpdateConfigParams {
+func (o *UpdateConfigParams) WithID(id string) *UpdateConfigParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the update config params
-func (o *UpdateConfigParams) SetID(id strfmt.UUID) {
+func (o *UpdateConfigParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *UpdateConfigParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

@@ -95,7 +95,7 @@ type PatchCurrentIdentityAuthenticatorParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *PatchCurrentIdentityAuthenticatorParams) SetBody(body *models.Authentic
 }
 
 // WithID adds the id to the patch current identity authenticator params
-func (o *PatchCurrentIdentityAuthenticatorParams) WithID(id strfmt.UUID) *PatchCurrentIdentityAuthenticatorParams {
+func (o *PatchCurrentIdentityAuthenticatorParams) WithID(id string) *PatchCurrentIdentityAuthenticatorParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the patch current identity authenticator params
-func (o *PatchCurrentIdentityAuthenticatorParams) SetID(id strfmt.UUID) {
+func (o *PatchCurrentIdentityAuthenticatorParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *PatchCurrentIdentityAuthenticatorParams) WriteToRequest(r runtime.Clien
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

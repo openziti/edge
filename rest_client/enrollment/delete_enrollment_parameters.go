@@ -88,7 +88,7 @@ type DeleteEnrollmentParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DeleteEnrollmentParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the delete enrollment params
-func (o *DeleteEnrollmentParams) WithID(id strfmt.UUID) *DeleteEnrollmentParams {
+func (o *DeleteEnrollmentParams) WithID(id string) *DeleteEnrollmentParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the delete enrollment params
-func (o *DeleteEnrollmentParams) SetID(id strfmt.UUID) {
+func (o *DeleteEnrollmentParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DeleteEnrollmentParams) WriteToRequest(r runtime.ClientRequest, reg str
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

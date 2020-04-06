@@ -30,10 +30,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // AuthenticatorCreate Creates an authenticator for a specific identity which can be used for API authentication
@@ -42,8 +40,7 @@ import (
 type AuthenticatorCreate struct {
 
 	// The id of an existing identity that will be assigned this authenticator
-	// Format: uuid
-	IdentityID strfmt.UUID `json:"identityId,omitempty"`
+	IdentityID string `json:"identityId,omitempty"`
 
 	// The type of authenticator to create; which will dictate which properties on this object are required.
 	Method string `json:"method,omitempty"`
@@ -60,28 +57,6 @@ type AuthenticatorCreate struct {
 
 // Validate validates this authenticator create
 func (m *AuthenticatorCreate) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateIdentityID(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *AuthenticatorCreate) validateIdentityID(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.IdentityID) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("identityId", "body", "uuid", m.IdentityID.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 

@@ -95,7 +95,7 @@ type UpdateServicePolicyParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *UpdateServicePolicyParams) SetBody(body *models.ServicePolicyUpdate) {
 }
 
 // WithID adds the id to the update service policy params
-func (o *UpdateServicePolicyParams) WithID(id strfmt.UUID) *UpdateServicePolicyParams {
+func (o *UpdateServicePolicyParams) WithID(id string) *UpdateServicePolicyParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the update service policy params
-func (o *UpdateServicePolicyParams) SetID(id strfmt.UUID) {
+func (o *UpdateServicePolicyParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *UpdateServicePolicyParams) WriteToRequest(r runtime.ClientRequest, reg 
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

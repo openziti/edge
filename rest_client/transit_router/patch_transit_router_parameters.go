@@ -95,7 +95,7 @@ type PatchTransitRouterParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *PatchTransitRouterParams) SetBody(body *models.TransitRouterPatch) {
 }
 
 // WithID adds the id to the patch transit router params
-func (o *PatchTransitRouterParams) WithID(id strfmt.UUID) *PatchTransitRouterParams {
+func (o *PatchTransitRouterParams) WithID(id string) *PatchTransitRouterParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the patch transit router params
-func (o *PatchTransitRouterParams) SetID(id strfmt.UUID) {
+func (o *PatchTransitRouterParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *PatchTransitRouterParams) WriteToRequest(r runtime.ClientRequest, reg s
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

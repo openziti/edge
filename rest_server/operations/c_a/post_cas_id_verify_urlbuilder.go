@@ -34,13 +34,11 @@ import (
 	"net/url"
 	golangswaggerpaths "path"
 	"strings"
-
-	"github.com/go-openapi/strfmt"
 )
 
 // PostCasIDVerifyURL generates an URL for the post cas ID verify operation
 type PostCasIDVerifyURL struct {
-	ID strfmt.UUID
+	ID string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -68,7 +66,7 @@ func (o *PostCasIDVerifyURL) Build() (*url.URL, error) {
 
 	var _path = "/cas/{id}/verify"
 
-	id := o.ID.String()
+	id := o.ID
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {

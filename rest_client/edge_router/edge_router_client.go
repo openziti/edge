@@ -57,11 +57,15 @@ type ClientService interface {
 
 	DetailEdgeRouter(params *DetailEdgeRouterParams, authInfo runtime.ClientAuthInfoWriter) (*DetailEdgeRouterOK, error)
 
-	LisgEdgeRouters(params *LisgEdgeRoutersParams, authInfo runtime.ClientAuthInfoWriter) (*LisgEdgeRoutersOK, error)
+	ListEdgeRouterEdgeRouterPolicies(params *ListEdgeRouterEdgeRouterPoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRouterEdgeRouterPoliciesOK, error)
 
-	ListEdgeRoutersEdgeRouterPolicies(params *ListEdgeRoutersEdgeRouterPoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRoutersEdgeRouterPoliciesOK, error)
+	ListEdgeRouterIdentities(params *ListEdgeRouterIdentitiesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRouterIdentitiesOK, error)
 
-	ListEdgeRoutersServicePolicies(params *ListEdgeRoutersServicePoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRoutersServicePoliciesOK, error)
+	ListEdgeRouterServicePolicies(params *ListEdgeRouterServicePoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRouterServicePoliciesOK, error)
+
+	ListEdgeRouterServices(params *ListEdgeRouterServicesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRouterServicesOK, error)
+
+	ListEdgeRouters(params *ListEdgeRoutersParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRoutersOK, error)
 
 	PatchEdgeRouter(params *PatchEdgeRouterParams, authInfo runtime.ClientAuthInfoWriter) (*PatchEdgeRouterOK, error)
 
@@ -182,63 +186,25 @@ func (a *Client) DetailEdgeRouter(params *DetailEdgeRouterParams, authInfo runti
 }
 
 /*
-  LisgEdgeRouters lists edge routers
-
-  Retrieves a list of edge router resources; supports filtering, sorting, and pagination. Requires admin access.
-
-*/
-func (a *Client) LisgEdgeRouters(params *LisgEdgeRoutersParams, authInfo runtime.ClientAuthInfoWriter) (*LisgEdgeRoutersOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewLisgEdgeRoutersParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "lisgEdgeRouters",
-		Method:             "GET",
-		PathPattern:        "/edge-routers",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &LisgEdgeRoutersReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*LisgEdgeRoutersOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for lisgEdgeRouters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  ListEdgeRoutersEdgeRouterPolicies lists the edge router policies that affect an edge router
+  ListEdgeRouterEdgeRouterPolicies lists the edge router policies that affect an edge router
 
   Retrieves a list of edge router policies that apply to the specified edge router.
 */
-func (a *Client) ListEdgeRoutersEdgeRouterPolicies(params *ListEdgeRoutersEdgeRouterPoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRoutersEdgeRouterPoliciesOK, error) {
+func (a *Client) ListEdgeRouterEdgeRouterPolicies(params *ListEdgeRouterEdgeRouterPoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRouterEdgeRouterPoliciesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListEdgeRoutersEdgeRouterPoliciesParams()
+		params = NewListEdgeRouterEdgeRouterPoliciesParams()
 	}
 
 	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "listEdgeRoutersEdgeRouterPolicies",
+		ID:                 "listEdgeRouterEdgeRouterPolicies",
 		Method:             "GET",
 		PathPattern:        "/edge-routers/{id}/edge-router-policies",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListEdgeRoutersEdgeRouterPoliciesReader{formats: a.formats},
+		Reader:             &ListEdgeRouterEdgeRouterPoliciesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -246,36 +212,74 @@ func (a *Client) ListEdgeRoutersEdgeRouterPolicies(params *ListEdgeRoutersEdgeRo
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListEdgeRoutersEdgeRouterPoliciesOK)
+	success, ok := result.(*ListEdgeRouterEdgeRouterPoliciesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for listEdgeRoutersEdgeRouterPolicies: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for listEdgeRouterEdgeRouterPolicies: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-  ListEdgeRoutersServicePolicies lists the service policies that affect an edge router
+  ListEdgeRouterIdentities lists associated identities
 
-  Retrieves a list of service policies policies that apply to the specified edge router.
+  Retrieves a list of identities that may access services via the given edge router. Supports filtering, sorting, and pagination. Requires admin access.
+
 */
-func (a *Client) ListEdgeRoutersServicePolicies(params *ListEdgeRoutersServicePoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRoutersServicePoliciesOK, error) {
+func (a *Client) ListEdgeRouterIdentities(params *ListEdgeRouterIdentitiesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRouterIdentitiesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListEdgeRoutersServicePoliciesParams()
+		params = NewListEdgeRouterIdentitiesParams()
 	}
 
 	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "listEdgeRoutersServicePolicies",
+		ID:                 "listEdgeRouterIdentities",
+		Method:             "GET",
+		PathPattern:        "/edge-routers/{id}/identities",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListEdgeRouterIdentitiesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListEdgeRouterIdentitiesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for listEdgeRouterIdentities: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListEdgeRouterServicePolicies lists the service policies that affect an edge router
+
+  Retrieves a list of service policies policies that apply to the specified edge router.
+*/
+func (a *Client) ListEdgeRouterServicePolicies(params *ListEdgeRouterServicePoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRouterServicePoliciesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListEdgeRouterServicePoliciesParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "listEdgeRouterServicePolicies",
 		Method:             "GET",
 		PathPattern:        "/edge-routers/{id}/service-edge-router-policies",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListEdgeRoutersServicePoliciesReader{formats: a.formats},
+		Reader:             &ListEdgeRouterServicePoliciesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -283,13 +287,89 @@ func (a *Client) ListEdgeRoutersServicePolicies(params *ListEdgeRoutersServicePo
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListEdgeRoutersServicePoliciesOK)
+	success, ok := result.(*ListEdgeRouterServicePoliciesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for listEdgeRoutersServicePolicies: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for listEdgeRouterServicePolicies: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListEdgeRouterServices lists associated services
+
+  Retrieves a list of services that may be accessed via the given edge router. Supports filtering, sorting, and pagination. Requires admin access.
+
+*/
+func (a *Client) ListEdgeRouterServices(params *ListEdgeRouterServicesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRouterServicesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListEdgeRouterServicesParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "listEdgeRouterServices",
+		Method:             "GET",
+		PathPattern:        "/edge-routers/{id}/services",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListEdgeRouterServicesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListEdgeRouterServicesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for listEdgeRouterServices: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListEdgeRouters lists edge routers
+
+  Retrieves a list of edge router resources; supports filtering, sorting, and pagination. Requires admin access.
+
+*/
+func (a *Client) ListEdgeRouters(params *ListEdgeRoutersParams, authInfo runtime.ClientAuthInfoWriter) (*ListEdgeRoutersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListEdgeRoutersParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "listEdgeRouters",
+		Method:             "GET",
+		PathPattern:        "/edge-routers",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListEdgeRoutersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListEdgeRoutersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for listEdgeRouters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

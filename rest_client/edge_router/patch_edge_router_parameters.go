@@ -95,7 +95,7 @@ type PatchEdgeRouterParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *PatchEdgeRouterParams) SetBody(body *models.EdgeRouterPatch) {
 }
 
 // WithID adds the id to the patch edge router params
-func (o *PatchEdgeRouterParams) WithID(id strfmt.UUID) *PatchEdgeRouterParams {
+func (o *PatchEdgeRouterParams) WithID(id string) *PatchEdgeRouterParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the patch edge router params
-func (o *PatchEdgeRouterParams) SetID(id strfmt.UUID) {
+func (o *PatchEdgeRouterParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *PatchEdgeRouterParams) WriteToRequest(r runtime.ClientRequest, reg strf
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

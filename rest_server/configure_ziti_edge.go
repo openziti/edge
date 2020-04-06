@@ -49,6 +49,7 @@ import (
 	"github.com/netfoundry/ziti-edge/rest_server/operations/geo_region"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/identity"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/informational"
+	"github.com/netfoundry/ziti-edge/rest_server/operations/role_attributes"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/service"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/service_edge_router_policy"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/service_policy"
@@ -416,9 +417,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation current_api_session.GetCurrentIdentity has not yet been implemented")
 		})
 	}
-	if api.EdgeRouterLisgEdgeRoutersHandler == nil {
-		api.EdgeRouterLisgEdgeRoutersHandler = edge_router.LisgEdgeRoutersHandlerFunc(func(params edge_router.LisgEdgeRoutersParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation edge_router.LisgEdgeRouters has not yet been implemented")
+	if api.IdentityGetIdentityPolicyAdviceHandler == nil {
+		api.IdentityGetIdentityPolicyAdviceHandler = identity.GetIdentityPolicyAdviceHandlerFunc(func(params identity.GetIdentityPolicyAdviceParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation identity.GetIdentityPolicyAdvice has not yet been implemented")
 		})
 	}
 	if api.APISessionListAPISessionsHandler == nil {
@@ -456,19 +457,39 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation current_api_session.ListCurrentIdentityAuthenticators has not yet been implemented")
 		})
 	}
+	if api.EdgeRouterListEdgeRouterEdgeRouterPoliciesHandler == nil {
+		api.EdgeRouterListEdgeRouterEdgeRouterPoliciesHandler = edge_router.ListEdgeRouterEdgeRouterPoliciesHandlerFunc(func(params edge_router.ListEdgeRouterEdgeRouterPoliciesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouterEdgeRouterPolicies has not yet been implemented")
+		})
+	}
+	if api.EdgeRouterListEdgeRouterIdentitiesHandler == nil {
+		api.EdgeRouterListEdgeRouterIdentitiesHandler = edge_router.ListEdgeRouterIdentitiesHandlerFunc(func(params edge_router.ListEdgeRouterIdentitiesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouterIdentities has not yet been implemented")
+		})
+	}
 	if api.EdgeRouterPolicyListEdgeRouterPoliciesHandler == nil {
 		api.EdgeRouterPolicyListEdgeRouterPoliciesHandler = edge_router_policy.ListEdgeRouterPoliciesHandlerFunc(func(params edge_router_policy.ListEdgeRouterPoliciesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation edge_router_policy.ListEdgeRouterPolicies has not yet been implemented")
 		})
 	}
-	if api.EdgeRouterListEdgeRoutersEdgeRouterPoliciesHandler == nil {
-		api.EdgeRouterListEdgeRoutersEdgeRouterPoliciesHandler = edge_router.ListEdgeRoutersEdgeRouterPoliciesHandlerFunc(func(params edge_router.ListEdgeRoutersEdgeRouterPoliciesParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation edge_router.ListEdgeRoutersEdgeRouterPolicies has not yet been implemented")
+	if api.RoleAttributesListEdgeRouterRoleAttributesHandler == nil {
+		api.RoleAttributesListEdgeRouterRoleAttributesHandler = role_attributes.ListEdgeRouterRoleAttributesHandlerFunc(func(params role_attributes.ListEdgeRouterRoleAttributesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation role_attributes.ListEdgeRouterRoleAttributes has not yet been implemented")
 		})
 	}
-	if api.EdgeRouterListEdgeRoutersServicePoliciesHandler == nil {
-		api.EdgeRouterListEdgeRoutersServicePoliciesHandler = edge_router.ListEdgeRoutersServicePoliciesHandlerFunc(func(params edge_router.ListEdgeRoutersServicePoliciesParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation edge_router.ListEdgeRoutersServicePolicies has not yet been implemented")
+	if api.EdgeRouterListEdgeRouterServicePoliciesHandler == nil {
+		api.EdgeRouterListEdgeRouterServicePoliciesHandler = edge_router.ListEdgeRouterServicePoliciesHandlerFunc(func(params edge_router.ListEdgeRouterServicePoliciesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouterServicePolicies has not yet been implemented")
+		})
+	}
+	if api.EdgeRouterListEdgeRouterServicesHandler == nil {
+		api.EdgeRouterListEdgeRouterServicesHandler = edge_router.ListEdgeRouterServicesHandlerFunc(func(params edge_router.ListEdgeRouterServicesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouterServices has not yet been implemented")
+		})
+	}
+	if api.EdgeRouterListEdgeRoutersHandler == nil {
+		api.EdgeRouterListEdgeRoutersHandler = edge_router.ListEdgeRoutersHandlerFunc(func(params edge_router.ListEdgeRoutersParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouters has not yet been implemented")
 		})
 	}
 	if api.EnrollmentListEnrollmentsHandler == nil {
@@ -486,9 +507,24 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation identity.ListIdentities has not yet been implemented")
 		})
 	}
+	if api.IdentityListIdentityEdgeRoutersHandler == nil {
+		api.IdentityListIdentityEdgeRoutersHandler = identity.ListIdentityEdgeRoutersHandlerFunc(func(params identity.ListIdentityEdgeRoutersParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation identity.ListIdentityEdgeRouters has not yet been implemented")
+		})
+	}
+	if api.RoleAttributesListIdentityRoleAttributesHandler == nil {
+		api.RoleAttributesListIdentityRoleAttributesHandler = role_attributes.ListIdentityRoleAttributesHandlerFunc(func(params role_attributes.ListIdentityRoleAttributesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation role_attributes.ListIdentityRoleAttributes has not yet been implemented")
+		})
+	}
 	if api.IdentityListIdentityServicePoliciesHandler == nil {
 		api.IdentityListIdentityServicePoliciesHandler = identity.ListIdentityServicePoliciesHandlerFunc(func(params identity.ListIdentityServicePoliciesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation identity.ListIdentityServicePolicies has not yet been implemented")
+		})
+	}
+	if api.IdentityListIdentityServicesHandler == nil {
+		api.IdentityListIdentityServicesHandler = identity.ListIdentityServicesHandlerFunc(func(params identity.ListIdentityServicesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation identity.ListIdentityServices has not yet been implemented")
 		})
 	}
 	if api.IdentityListIdentityTypeHandler == nil {
@@ -526,6 +562,16 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation service_edge_router_policy.ListServiceEdgeRouterPolicyServices has not yet been implemented")
 		})
 	}
+	if api.ServiceListServiceEdgeRoutersHandler == nil {
+		api.ServiceListServiceEdgeRoutersHandler = service.ListServiceEdgeRoutersHandlerFunc(func(params service.ListServiceEdgeRoutersParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation service.ListServiceEdgeRouters has not yet been implemented")
+		})
+	}
+	if api.ServiceListServiceIdentitiesHandler == nil {
+		api.ServiceListServiceIdentitiesHandler = service.ListServiceIdentitiesHandlerFunc(func(params service.ListServiceIdentitiesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation service.ListServiceIdentities has not yet been implemented")
+		})
+	}
 	if api.ServicePolicyListServicePoliciesHandler == nil {
 		api.ServicePolicyListServicePoliciesHandler = service_policy.ListServicePoliciesHandlerFunc(func(params service_policy.ListServicePoliciesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation service_policy.ListServicePolicies has not yet been implemented")
@@ -539,6 +585,11 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 	if api.ServicePolicyListServicePolicyServicesHandler == nil {
 		api.ServicePolicyListServicePolicyServicesHandler = service_policy.ListServicePolicyServicesHandlerFunc(func(params service_policy.ListServicePolicyServicesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation service_policy.ListServicePolicyServices has not yet been implemented")
+		})
+	}
+	if api.RoleAttributesListServiceRoleAttributesHandler == nil {
+		api.RoleAttributesListServiceRoleAttributesHandler = role_attributes.ListServiceRoleAttributesHandlerFunc(func(params role_attributes.ListServiceRoleAttributesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation role_attributes.ListServiceRoleAttributes has not yet been implemented")
 		})
 	}
 	if api.ServiceListServiceServiceEdgeRouterPoliciesHandler == nil {

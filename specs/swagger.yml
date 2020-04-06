@@ -4336,7 +4336,7 @@ definitions:
       configs:
         type: array
         items:
-          $ref: '#/definitions/entityRef'
+          type: string
   serviceCreate:
     type: object
     required:
@@ -5182,9 +5182,7 @@ definitions:
       commonRouters:
         type: "array"
         items:
-          type: "object"
-          items:
-            $ref: '#/definitions/routerEntityRef'
+          $ref: '#/definitions/routerEntityRef'
 
   routerEntityRef:
     type: object

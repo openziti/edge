@@ -93,7 +93,7 @@ type PostCasIDVerifyParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -145,13 +145,13 @@ func (o *PostCasIDVerifyParams) SetCertificate(certificate string) {
 }
 
 // WithID adds the id to the post cas ID verify params
-func (o *PostCasIDVerifyParams) WithID(id strfmt.UUID) *PostCasIDVerifyParams {
+func (o *PostCasIDVerifyParams) WithID(id string) *PostCasIDVerifyParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the post cas ID verify params
-func (o *PostCasIDVerifyParams) SetID(id strfmt.UUID) {
+func (o *PostCasIDVerifyParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -168,7 +168,7 @@ func (o *PostCasIDVerifyParams) WriteToRequest(r runtime.ClientRequest, reg strf
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

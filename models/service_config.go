@@ -30,10 +30,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // ServiceConfig service config
@@ -42,55 +40,14 @@ import (
 type ServiceConfig struct {
 
 	// config
-	// Format: uuid
-	Config strfmt.UUID `json:"config,omitempty"`
+	Config string `json:"config,omitempty"`
 
 	// service
-	// Format: uuid
-	Service strfmt.UUID `json:"service,omitempty"`
+	Service string `json:"service,omitempty"`
 }
 
 // Validate validates this service config
 func (m *ServiceConfig) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateConfig(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateService(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *ServiceConfig) validateConfig(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Config) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("config", "body", "uuid", m.Config.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *ServiceConfig) validateService(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Service) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("service", "body", "uuid", m.Service.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 

@@ -59,6 +59,10 @@ type ClientService interface {
 
 	ListServiceConfig(params *ListServiceConfigParams, authInfo runtime.ClientAuthInfoWriter) (*ListServiceConfigOK, error)
 
+	ListServiceEdgeRouters(params *ListServiceEdgeRoutersParams, authInfo runtime.ClientAuthInfoWriter) (*ListServiceEdgeRoutersOK, error)
+
+	ListServiceIdentities(params *ListServiceIdentitiesParams, authInfo runtime.ClientAuthInfoWriter) (*ListServiceIdentitiesOK, error)
+
 	ListServiceServiceEdgeRouterPolicies(params *ListServiceServiceEdgeRouterPoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListServiceServiceEdgeRouterPoliciesOK, error)
 
 	ListServiceServicePolicies(params *ListServiceServicePoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListServiceServicePoliciesOK, error)
@@ -220,6 +224,82 @@ func (a *Client) ListServiceConfig(params *ListServiceConfigParams, authInfo run
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for listServiceConfig: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListServiceEdgeRouters lists accessible edge routers
+
+  Retrieves a list of edge-routers that may be used to access the given service. Supports filtering, sorting, and pagination. Requires admin access.
+
+*/
+func (a *Client) ListServiceEdgeRouters(params *ListServiceEdgeRoutersParams, authInfo runtime.ClientAuthInfoWriter) (*ListServiceEdgeRoutersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListServiceEdgeRoutersParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "listServiceEdgeRouters",
+		Method:             "GET",
+		PathPattern:        "/services/{id}/edge-routers",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListServiceEdgeRoutersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListServiceEdgeRoutersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for listServiceEdgeRouters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListServiceIdentities lists identities with access
+
+  Retrieves a list of identities that have access to this service. Supports filtering, sorting, and pagination. Requires admin access.
+
+*/
+func (a *Client) ListServiceIdentities(params *ListServiceIdentitiesParams, authInfo runtime.ClientAuthInfoWriter) (*ListServiceIdentitiesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListServiceIdentitiesParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "listServiceIdentities",
+		Method:             "GET",
+		PathPattern:        "/services/{id}/identities",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListServiceIdentitiesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListServiceIdentitiesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for listServiceIdentities: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

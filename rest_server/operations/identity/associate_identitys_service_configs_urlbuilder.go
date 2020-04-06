@@ -34,13 +34,11 @@ import (
 	"net/url"
 	golangswaggerpaths "path"
 	"strings"
-
-	"github.com/go-openapi/strfmt"
 )
 
 // AssociateIdentitysServiceConfigsURL generates an URL for the associate identitys service configs operation
 type AssociateIdentitysServiceConfigsURL struct {
-	ID strfmt.UUID
+	ID string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -68,7 +66,7 @@ func (o *AssociateIdentitysServiceConfigsURL) Build() (*url.URL, error) {
 
 	var _path = "/identities/{id}/service-configs"
 
-	id := o.ID.String()
+	id := o.ID
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {

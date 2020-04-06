@@ -30,12 +30,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"strconv"
-
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // ServicePatch service patch
@@ -44,7 +40,7 @@ import (
 type ServicePatch struct {
 
 	// configs
-	Configs []strfmt.UUID `json:"configs"`
+	Configs []string `json:"configs"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -61,32 +57,6 @@ type ServicePatch struct {
 
 // Validate validates this service patch
 func (m *ServicePatch) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateConfigs(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *ServicePatch) validateConfigs(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Configs) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Configs); i++ {
-
-		if err := validate.FormatOf("configs"+"."+strconv.Itoa(i), "body", "uuid", m.Configs[i].String(), formats); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 

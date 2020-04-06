@@ -63,9 +63,15 @@ type ClientService interface {
 
 	DisassociateIdentitysServiceConfigs(params *DisassociateIdentitysServiceConfigsParams, authInfo runtime.ClientAuthInfoWriter) (*DisassociateIdentitysServiceConfigsOK, error)
 
+	GetIdentityPolicyAdvice(params *GetIdentityPolicyAdviceParams, authInfo runtime.ClientAuthInfoWriter) (*GetIdentityPolicyAdviceOK, error)
+
 	ListIdentities(params *ListIdentitiesParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentitiesOK, error)
 
+	ListIdentityEdgeRouters(params *ListIdentityEdgeRoutersParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityEdgeRoutersOK, error)
+
 	ListIdentityServicePolicies(params *ListIdentityServicePoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityServicePoliciesOK, error)
+
+	ListIdentityServices(params *ListIdentityServicesParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityServicesOK, error)
 
 	ListIdentityType(params *ListIdentityTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityTypeOK, error)
 
@@ -303,6 +309,47 @@ func (a *Client) DisassociateIdentitysServiceConfigs(params *DisassociateIdentit
 }
 
 /*
+  GetIdentityPolicyAdvice analyzes policies relating the given identity and service
+
+  Analyzes policies to see if the given identity should be able to dial or bind the given service. |
+Will check services policies to see if the identity can access the service. Will check edge router policies |
+to check if the identity and service have access to common edge routers so that a connnection can be made. |
+Will also check if at least one edge router is on-line. Requires admin access.
+
+*/
+func (a *Client) GetIdentityPolicyAdvice(params *GetIdentityPolicyAdviceParams, authInfo runtime.ClientAuthInfoWriter) (*GetIdentityPolicyAdviceOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetIdentityPolicyAdviceParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "getIdentityPolicyAdvice",
+		Method:             "GET",
+		PathPattern:        "/identities/{id}/policy-advice/{serviceId}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetIdentityPolicyAdviceReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetIdentityPolicyAdviceOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for getIdentityPolicyAdvice: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   ListIdentities lists identities
 
   Retrieves a list of identity resources; supports filtering, sorting, and pagination. Requires admin access.
@@ -341,6 +388,44 @@ func (a *Client) ListIdentities(params *ListIdentitiesParams, authInfo runtime.C
 }
 
 /*
+  ListIdentityEdgeRouters lists accessible edge routers
+
+  Retrieves a list of edge-routers that the given identity may use to access services. Supports filtering, sorting, and pagination. Requires admin access.
+
+*/
+func (a *Client) ListIdentityEdgeRouters(params *ListIdentityEdgeRoutersParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityEdgeRoutersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListIdentityEdgeRoutersParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "listIdentityEdgeRouters",
+		Method:             "GET",
+		PathPattern:        "/identities/{id}/edge-routers",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListIdentityEdgeRoutersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListIdentityEdgeRoutersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for listIdentityEdgeRouters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   ListIdentityServicePolicies lists the service policies that affect an identity
 
   Retrieves a list of service policies that apply to the specified identity.
@@ -374,6 +459,44 @@ func (a *Client) ListIdentityServicePolicies(params *ListIdentityServicePolicies
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for listIdentityServicePolicies: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListIdentityServices lists accessible services
+
+  Retrieves a list of services that the given identity has access to. Supports filtering, sorting, and pagination. Requires admin access.
+
+*/
+func (a *Client) ListIdentityServices(params *ListIdentityServicesParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityServicesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListIdentityServicesParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "listIdentityServices",
+		Method:             "GET",
+		PathPattern:        "/identities/{id}/services",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListIdentityServicesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListIdentityServicesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for listIdentityServices: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

@@ -66,8 +66,7 @@ type EdgeRouterDetail struct {
 	Hostname string `json:"hostname,omitempty"`
 
 	// id
-	// Format: uuid
-	ID strfmt.UUID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// is online
 	IsOnline bool `json:"isOnline,omitempty"`
@@ -106,10 +105,6 @@ func (m *EdgeRouterDetail) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEnrollmentExpiresAt(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -172,19 +167,6 @@ func (m *EdgeRouterDetail) validateEnrollmentExpiresAt(formats strfmt.Registry) 
 	}
 
 	if err := validate.FormatOf("enrollmentExpiresAt", "body", "date-time", m.EnrollmentExpiresAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *EdgeRouterDetail) validateID(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ID) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("id", "body", "uuid", m.ID.String(), formats); err != nil {
 		return err
 	}
 

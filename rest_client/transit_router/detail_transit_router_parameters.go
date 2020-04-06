@@ -88,7 +88,7 @@ type DetailTransitRouterParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DetailTransitRouterParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the detail transit router params
-func (o *DetailTransitRouterParams) WithID(id strfmt.UUID) *DetailTransitRouterParams {
+func (o *DetailTransitRouterParams) WithID(id string) *DetailTransitRouterParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the detail transit router params
-func (o *DetailTransitRouterParams) SetID(id strfmt.UUID) {
+func (o *DetailTransitRouterParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DetailTransitRouterParams) WriteToRequest(r runtime.ClientRequest, reg 
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

@@ -55,12 +55,10 @@ type AuthenticatorDetail struct {
 	Fingerprint string `json:"fingerprint,omitempty"`
 
 	// id
-	// Format: uuid
-	ID strfmt.UUID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// identity Id
-	// Format: uuid
-	IdentityID strfmt.UUID `json:"identityId,omitempty"`
+	IdentityID string `json:"identityId,omitempty"`
 
 	// method
 	Method string `json:"method,omitempty"`
@@ -79,14 +77,6 @@ func (m *AuthenticatorDetail) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateID(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIdentityID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -123,32 +113,6 @@ func (m *AuthenticatorDetail) validateCreatedAt(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("createdAt", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *AuthenticatorDetail) validateID(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ID) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("id", "body", "uuid", m.ID.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *AuthenticatorDetail) validateIdentityID(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.IdentityID) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("identityId", "body", "uuid", m.IdentityID.String(), formats); err != nil {
 		return err
 	}
 

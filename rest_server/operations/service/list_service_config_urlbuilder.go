@@ -35,13 +35,12 @@ import (
 	golangswaggerpaths "path"
 	"strings"
 
-	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // ListServiceConfigURL generates an URL for the list service config operation
 type ListServiceConfigURL struct {
-	ID strfmt.UUID
+	ID string
 
 	Filter *string
 	Limit  *int64
@@ -73,7 +72,7 @@ func (o *ListServiceConfigURL) Build() (*url.URL, error) {
 
 	var _path = "/services/{id}/configs"
 
-	id := o.ID.String()
+	id := o.ID
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {

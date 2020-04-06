@@ -55,7 +55,7 @@ func init() {
   "info": {
     "title": "Ziti Edge",
     "contact": {},
-    "version": "0.12.0"
+    "version": "0.13.0"
   },
   "host": "demo.ziti.dev",
   "basePath": "/",
@@ -1548,6 +1548,40 @@ func init() {
         }
       ]
     },
+    "/edge-router-role-attributes": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of role attributes in use by edge routers; supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Role Attributes"
+        ],
+        "summary": "List role attributes in use by edge routers",
+        "operationId": "listEdgeRouterRoleAttributes",
+        "parameters": [
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listRoleAttributes"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
+      }
+    },
     "/edge-routers": {
       "get": {
         "security": [
@@ -1560,7 +1594,7 @@ func init() {
           "Edge Router"
         ],
         "summary": "List edge routers",
-        "operationId": "lisgEdgeRouters",
+        "operationId": "listEdgeRouters",
         "parameters": [
           {
             "$ref": "#/parameters/limit"
@@ -1570,6 +1604,12 @@ func init() {
           },
           {
             "$ref": "#/parameters/filter"
+          },
+          {
+            "$ref": "#/parameters/roleFilter"
+          },
+          {
+            "$ref": "#/parameters/roleSemantic"
           }
         ],
         "responses": {
@@ -1763,10 +1803,41 @@ func init() {
           "Edge Router"
         ],
         "summary": "List the edge router policies that affect an edge router",
-        "operationId": "listEdgeRoutersEdgeRouterPolicies",
+        "operationId": "listEdgeRouterEdgeRouterPolicies",
         "responses": {
           "200": {
             "$ref": "#/responses/listEdgeRouterPolicies"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/id"
+        }
+      ]
+    },
+    "/edge-routers/{id}/identities": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of identities that may access services via the given edge router. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Edge Router"
+        ],
+        "summary": "List associated identities",
+        "operationId": "listEdgeRouterIdentities",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listIdentities"
           },
           "401": {
             "$ref": "#/responses/unauthorizedResponse"
@@ -1794,10 +1865,41 @@ func init() {
           "Edge Router"
         ],
         "summary": "List the service policies that affect an edge router",
-        "operationId": "listEdgeRoutersServicePolicies",
+        "operationId": "listEdgeRouterServicePolicies",
         "responses": {
           "200": {
             "$ref": "#/responses/listServicePolicies"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/id"
+        }
+      ]
+    },
+    "/edge-routers/{id}/services": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of services that may be accessed via the given edge router. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Edge Router"
+        ],
+        "summary": "List associated services",
+        "operationId": "listEdgeRouterServices",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listServices"
           },
           "401": {
             "$ref": "#/responses/unauthorizedResponse"
@@ -2085,6 +2187,12 @@ func init() {
           },
           {
             "$ref": "#/parameters/filter"
+          },
+          {
+            "$ref": "#/parameters/roleFilter"
+          },
+          {
+            "$ref": "#/parameters/roleSemantic"
           }
         ],
         "responses": {
@@ -2297,6 +2405,71 @@ func init() {
         }
       ]
     },
+    "/identities/{id}/edge-routers": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of edge-routers that the given identity may use to access services. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Identity"
+        ],
+        "summary": "List accessible edge-routers",
+        "operationId": "listIdentityEdgeRouters",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listEdgeRouters"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/id"
+        }
+      ]
+    },
+    "/identities/{id}/policy-advice/{serviceId}": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Analyzes policies to see if the given identity should be able to dial or bind the given service. |\nWill check services policies to see if the identity can access the service. Will check edge router policies |\nto check if the identity and service have access to common edge routers so that a connnection can be made. |\nWill also check if at least one edge router is on-line. Requires admin access.\n",
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Analyze policies relating the given identity and service",
+        "operationId": "getIdentityPolicyAdvice",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/getIdentityPolicyAdvice"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/id"
+        },
+        {
+          "$ref": "#/parameters/serviceId"
+        }
+      ]
+    },
     "/identities/{id}/service-configs": {
       "get": {
         "security": [
@@ -2434,6 +2607,71 @@ func init() {
           "$ref": "#/parameters/id"
         }
       ]
+    },
+    "/identities/{id}/services": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of services that the given identity has access to. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Identity"
+        ],
+        "summary": "List accessible services",
+        "operationId": "listIdentityServices",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listEdgeRouters"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/id"
+        }
+      ]
+    },
+    "/identity-role-attributes": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of role attributes in use by identities; supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Role Attributes"
+        ],
+        "summary": "List role attributes in use by identities",
+        "operationId": "listIdentityRoleAttributes",
+        "parameters": [
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listRoleAttributes"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
+      }
     },
     "/identity-types": {
       "get": {
@@ -3052,6 +3290,40 @@ func init() {
         }
       ]
     },
+    "/service-role-attributes": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of role attributes in use by services; supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Role Attributes"
+        ],
+        "summary": "List role attributes in use by services",
+        "operationId": "listServiceRoleAttributes",
+        "parameters": [
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listRoleAttributes"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
+      }
+    },
     "/services": {
       "get": {
         "security": [
@@ -3074,6 +3346,12 @@ func init() {
           },
           {
             "$ref": "#/parameters/filter"
+          },
+          {
+            "$ref": "#/parameters/roleFilter"
+          },
+          {
+            "$ref": "#/parameters/roleSemantic"
           }
         ],
         "responses": {
@@ -3282,6 +3560,84 @@ func init() {
         "responses": {
           "200": {
             "$ref": "#/responses/listConfigs"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/id"
+        }
+      ]
+    },
+    "/services/{id}/edge-routers": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of edge-routers that may be used to access the given service. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Service"
+        ],
+        "summary": "List accessible edge-routers",
+        "operationId": "listServiceEdgeRouters",
+        "parameters": [
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listEdgeRouters"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/id"
+        }
+      ]
+    },
+    "/services/{id}/identities": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of identities that have access to this service. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Service"
+        ],
+        "summary": "List identities with access",
+        "operationId": "listServiceIdentities",
+        "parameters": [
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listIdentities"
           },
           "401": {
             "$ref": "#/responses/unauthorizedResponse"
@@ -4116,8 +4472,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identity": {
           "allOf": [
@@ -4178,8 +4533,7 @@ func init() {
       "properties": {
         "identityId": {
           "description": "The id of an existing identity that will be assigned this authenticator",
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "method": {
           "description": "The type of authenticator to create; which will dictate which properties on this object are required.",
@@ -4216,12 +4570,10 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identityId": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "method": {
           "type": "string"
@@ -4328,8 +4680,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "isAuthEnabled": {
           "type": "boolean",
@@ -4475,8 +4826,7 @@ func init() {
         },
         "type": {
           "description": "The id of a config-type that the data section will match",
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         }
       },
       "example": {
@@ -4504,8 +4854,7 @@ func init() {
           "type": "object"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -4588,7 +4937,6 @@ func init() {
         },
         "id": {
           "type": "string",
-          "format": "uuid",
           "example": "cea49285-6c07-42cf-9f52-09a9b115c783"
         },
         "name": {
@@ -4993,8 +5341,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "isOnline": {
           "type": "boolean"
@@ -5110,8 +5457,7 @@ func init() {
           }
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identityRoles": {
           "type": "array",
@@ -5236,8 +5582,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identity": {
           "$ref": "#/definitions/entityRef"
@@ -5354,8 +5699,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -5373,6 +5717,17 @@ func init() {
       "type": "array",
       "items": {
         "$ref": "#/definitions/geoRegionDetail"
+      }
+    },
+    "getIdentityPolicyAdviceEnvelope": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/policyAdvice"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
       }
     },
     "identityCreate": {
@@ -5441,8 +5796,7 @@ func init() {
           "type": "object"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "isAdmin": {
           "type": "boolean"
@@ -5502,8 +5856,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -5696,6 +6049,17 @@ func init() {
         }
       }
     },
+    "listRoleAttributesEnvelope": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/roleAttributesList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
     "listServiceConfigsEnvelope": {
       "type": "object",
       "properties": {
@@ -5845,11 +6209,69 @@ func init() {
       "maxLength": 100,
       "minLength": 5
     },
+    "policyAdvice": {
+      "type": "object",
+      "properties": {
+        "commonRouters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/routerEntityRef"
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/entityRef"
+        },
+        "identityId": {
+          "type": "string"
+        },
+        "identityRouterCount": {
+          "type": "number"
+        },
+        "isBindAllowed": {
+          "type": "boolean"
+        },
+        "isDialAllowed": {
+          "type": "boolean"
+        },
+        "service": {
+          "$ref": "#/definitions/entityRef"
+        },
+        "serviceId": {
+          "type": "string"
+        },
+        "serviceRouterCount": {
+          "type": "number"
+        }
+      }
+    },
+    "roleAttributesList": {
+      "description": "An array of role attributes",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "roles": {
       "type": "array",
       "items": {
         "type": "string"
       }
+    },
+    "routerEntityRef": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/entityRef"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "isOnline": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
     },
     "sdkInfo": {
       "description": "SDK information an authenticating client may provide",
@@ -5880,12 +6302,10 @@ func init() {
       "type": "object",
       "properties": {
         "config": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "service": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         }
       }
     },
@@ -5943,8 +6363,7 @@ func init() {
         "configs": {
           "type": "array",
           "items": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           }
         },
         "name": {
@@ -5973,7 +6392,7 @@ func init() {
         "configs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/entityRef"
+            "type": "string"
           }
         },
         "createdAt": {
@@ -5981,8 +6400,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -6089,8 +6507,7 @@ func init() {
           "$ref": "#/definitions/roles"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -6128,8 +6545,7 @@ func init() {
         "configs": {
           "type": "array",
           "items": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           }
         },
         "name": {
@@ -6187,8 +6603,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identityRoles": {
           "$ref": "#/definitions/roles"
@@ -6289,8 +6704,7 @@ func init() {
         "configs": {
           "type": "array",
           "items": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           }
         },
         "name": {
@@ -6314,8 +6728,7 @@ func init() {
       "type": "object",
       "properties": {
         "serviceId": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -6339,8 +6752,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "service": {
           "$ref": "#/definitions/entityRef"
@@ -6658,7 +7070,6 @@ func init() {
     },
     "id": {
       "type": "string",
-      "format": "uuid",
       "description": "The id of the requested resource",
       "name": "id",
       "in": "path",
@@ -6673,6 +7084,27 @@ func init() {
       "type": "integer",
       "name": "offset",
       "in": "query"
+    },
+    "roleFilter": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "collectionFormat": "multi",
+      "name": "roleFilter",
+      "in": "query"
+    },
+    "roleSemantic": {
+      "type": "string",
+      "name": "roleSemantic",
+      "in": "query"
+    },
+    "serviceId": {
+      "type": "string",
+      "description": "The id of a service",
+      "name": "serviceId",
+      "in": "path",
+      "required": true
     },
     "token": {
       "type": "string",
@@ -6975,6 +7407,12 @@ func init() {
         "$ref": "#/definitions/erott"
       }
     },
+    "getIdentityPolicyAdvice": {
+      "description": "Returns the document that represents the policy advice",
+      "schema": {
+        "$ref": "#/definitions/getIdentityPolicyAdviceEnvelope"
+      }
+    },
     "invalidAuthResponse": {
       "description": "The authentication request could not be processed as the credentials are invalid",
       "schema": {
@@ -7063,6 +7501,12 @@ func init() {
       "description": "A list of identity types",
       "schema": {
         "$ref": "#/definitions/listIdentityTypesEnvelope"
+      }
+    },
+    "listRoleAttributes": {
+      "description": "A list of role attributes",
+      "schema": {
+        "$ref": "#/definitions/listRoleAttributesEnvelope"
       }
     },
     "listServiceConfigs": {
@@ -7219,7 +7663,7 @@ func init() {
   "info": {
     "title": "Ziti Edge",
     "contact": {},
-    "version": "0.12.0"
+    "version": "0.13.0"
   },
   "host": "demo.ziti.dev",
   "basePath": "/",
@@ -7436,7 +7880,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -8093,7 +8536,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -8629,7 +9071,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -8717,7 +9158,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -8850,7 +9290,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -9410,7 +9849,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -9443,7 +9881,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -10028,7 +10465,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -10587,7 +11023,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -11172,7 +11607,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -11249,7 +11683,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -11326,7 +11759,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -11334,19 +11766,19 @@ func init() {
         }
       ]
     },
-    "/edge-routers": {
+    "/edge-router-role-attributes": {
       "get": {
         "security": [
           {
             "ztSession": []
           }
         ],
-        "description": "Retrieves a list of edge router resources; supports filtering, sorting, and pagination. Requires admin access.\n",
+        "description": "Retrieves a list of role attributes in use by edge routers; supports filtering, sorting, and pagination. Requires admin access.\n",
         "tags": [
-          "Edge Router"
+          "Role Attributes"
         ],
-        "summary": "List edge routers",
-        "operationId": "lisgEdgeRouters",
+        "summary": "List role attributes in use by edge routers",
+        "operationId": "listEdgeRouterRoleAttributes",
         "parameters": [
           {
             "type": "integer",
@@ -11361,6 +11793,84 @@ func init() {
           {
             "type": "string",
             "name": "filter",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of role attributes",
+            "schema": {
+              "$ref": "#/definitions/listRoleAttributesEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/edge-routers": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of edge router resources; supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Edge Router"
+        ],
+        "summary": "List edge routers",
+        "operationId": "listEdgeRouters",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "filter",
+            "in": "query"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "name": "roleFilter",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "roleSemantic",
             "in": "query"
           }
         ],
@@ -11911,7 +12421,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -11931,7 +12440,7 @@ func init() {
           "Edge Router"
         ],
         "summary": "List the edge router policies that affect an edge router",
-        "operationId": "listEdgeRoutersEdgeRouterPolicies",
+        "operationId": "listEdgeRouterEdgeRouterPolicies",
         "responses": {
           "200": {
             "description": "A list of edge router policies",
@@ -11994,7 +12503,88 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/edge-routers/{id}/identities": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of identities that may access services via the given edge router. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Edge Router"
+        ],
+        "summary": "List associated identities",
+        "operationId": "listEdgeRouterIdentities",
+        "responses": {
+          "200": {
+            "description": "A list of identities",
+            "schema": {
+              "$ref": "#/definitions/listIdentitiesEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {
+                      "id": "71a3000f-7dda-491a-9b90-a19f4ee6c406"
+                    }
+                  },
+                  "cause": null,
+                  "causeMessage": "",
+                  "code": "NOT_FOUND",
+                  "message": "The resource requested was not found or is no longer available",
+                  "requestId": "270908d6-f2ef-4577-b973-67bec18ae376"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -12014,7 +12604,7 @@ func init() {
           "Edge Router"
         ],
         "summary": "List the service policies that affect an edge router",
-        "operationId": "listEdgeRoutersServicePolicies",
+        "operationId": "listEdgeRouterServicePolicies",
         "responses": {
           "200": {
             "description": "A list of service policies",
@@ -12077,7 +12667,88 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/edge-routers/{id}/services": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of services that may be accessed via the given edge router. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Edge Router"
+        ],
+        "summary": "List associated services",
+        "operationId": "listEdgeRouterServices",
+        "responses": {
+          "200": {
+            "description": "A list of services",
+            "schema": {
+              "$ref": "#/definitions/listServicesEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {
+                      "id": "71a3000f-7dda-491a-9b90-a19f4ee6c406"
+                    }
+                  },
+                  "cause": null,
+                  "causeMessage": "",
+                  "code": "NOT_FOUND",
+                  "message": "The resource requested was not found or is no longer available",
+                  "requestId": "270908d6-f2ef-4577-b973-67bec18ae376"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -12436,7 +13107,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -12583,7 +13253,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -12618,6 +13287,20 @@ func init() {
           {
             "type": "string",
             "name": "filter",
+            "in": "query"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "name": "roleFilter",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "roleSemantic",
             "in": "query"
           }
         ],
@@ -13168,7 +13851,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -13251,9 +13933,179 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/identities/{id}/edge-routers": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of edge-routers that the given identity may use to access services. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Identity"
+        ],
+        "summary": "List accessible edge-routers",
+        "operationId": "listIdentityEdgeRouters",
+        "responses": {
+          "200": {
+            "description": "A list of edge routers",
+            "schema": {
+              "$ref": "#/definitions/listEdgeRoutersEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {
+                      "id": "71a3000f-7dda-491a-9b90-a19f4ee6c406"
+                    }
+                  },
+                  "cause": null,
+                  "causeMessage": "",
+                  "code": "NOT_FOUND",
+                  "message": "The resource requested was not found or is no longer available",
+                  "requestId": "270908d6-f2ef-4577-b973-67bec18ae376"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/identities/{id}/policy-advice/{serviceId}": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Analyzes policies to see if the given identity should be able to dial or bind the given service. |\nWill check services policies to see if the identity can access the service. Will check edge router policies |\nto check if the identity and service have access to common edge routers so that a connnection can be made. |\nWill also check if at least one edge router is on-line. Requires admin access.\n",
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Analyze policies relating the given identity and service",
+        "operationId": "getIdentityPolicyAdvice",
+        "responses": {
+          "200": {
+            "description": "Returns the document that represents the policy advice",
+            "schema": {
+              "$ref": "#/definitions/getIdentityPolicyAdviceEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {
+                      "id": "71a3000f-7dda-491a-9b90-a19f4ee6c406"
+                    }
+                  },
+                  "cause": null,
+                  "causeMessage": "",
+                  "code": "NOT_FOUND",
+                  "message": "The resource requested was not found or is no longer available",
+                  "requestId": "270908d6-f2ef-4577-b973-67bec18ae376"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The id of a service",
+          "name": "serviceId",
           "in": "path",
           "required": true
         }
@@ -13572,7 +14424,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -13655,13 +14506,158 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
           "required": true
         }
       ]
+    },
+    "/identities/{id}/services": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of services that the given identity has access to. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Identity"
+        ],
+        "summary": "List accessible services",
+        "operationId": "listIdentityServices",
+        "responses": {
+          "200": {
+            "description": "A list of edge routers",
+            "schema": {
+              "$ref": "#/definitions/listEdgeRoutersEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {
+                      "id": "71a3000f-7dda-491a-9b90-a19f4ee6c406"
+                    }
+                  },
+                  "cause": null,
+                  "causeMessage": "",
+                  "code": "NOT_FOUND",
+                  "message": "The resource requested was not found or is no longer available",
+                  "requestId": "270908d6-f2ef-4577-b973-67bec18ae376"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/identity-role-attributes": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of role attributes in use by identities; supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Role Attributes"
+        ],
+        "summary": "List role attributes in use by identities",
+        "operationId": "listIdentityRoleAttributes",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "filter",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of role attributes",
+            "schema": {
+              "$ref": "#/definitions/listRoleAttributesEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/identity-types": {
       "get": {
@@ -13802,7 +14798,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -14387,7 +15382,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -14470,7 +15464,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -14553,7 +15546,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -15138,7 +16130,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -15238,7 +16229,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -15338,13 +16328,76 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
           "required": true
         }
       ]
+    },
+    "/service-role-attributes": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of role attributes in use by services; supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Role Attributes"
+        ],
+        "summary": "List role attributes in use by services",
+        "operationId": "listServiceRoleAttributes",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "filter",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of role attributes",
+            "schema": {
+              "$ref": "#/definitions/listRoleAttributesEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/services": {
       "get": {
@@ -15373,6 +16426,20 @@ func init() {
           {
             "type": "string",
             "name": "filter",
+            "in": "query"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "name": "roleFilter",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "roleSemantic",
             "in": "query"
           }
         ],
@@ -15923,7 +16990,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -15997,7 +17063,152 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/services/{id}/edge-routers": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of edge-routers that may be used to access the given service. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Service"
+        ],
+        "summary": "List accessible edge-routers",
+        "operationId": "listServiceEdgeRouters",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "filter",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of edge routers",
+            "schema": {
+              "$ref": "#/definitions/listEdgeRoutersEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/services/{id}/identities": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of identities that have access to this service. Supports filtering, sorting, and pagination. Requires admin access.\n",
+        "tags": [
+          "Service"
+        ],
+        "summary": "List identities with access",
+        "operationId": "listServiceIdentities",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "filter",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of identities",
+            "schema": {
+              "$ref": "#/definitions/listIdentitiesEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -16071,7 +17282,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -16145,7 +17355,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -16219,7 +17428,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -16566,7 +17774,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -16614,7 +17821,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -16646,7 +17852,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -17278,7 +18483,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -17863,7 +19067,6 @@ func init() {
       "parameters": [
         {
           "type": "string",
-          "format": "uuid",
           "description": "The id of the requested resource",
           "name": "id",
           "in": "path",
@@ -18009,8 +19212,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identity": {
           "allOf": [
@@ -18071,8 +19273,7 @@ func init() {
       "properties": {
         "identityId": {
           "description": "The id of an existing identity that will be assigned this authenticator",
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "method": {
           "description": "The type of authenticator to create; which will dictate which properties on this object are required.",
@@ -18109,12 +19310,10 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identityId": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "method": {
           "type": "string"
@@ -18221,8 +19420,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "isAuthEnabled": {
           "type": "boolean",
@@ -18368,8 +19566,7 @@ func init() {
         },
         "type": {
           "description": "The id of a config-type that the data section will match",
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         }
       },
       "example": {
@@ -18397,8 +19594,7 @@ func init() {
           "type": "object"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -18481,7 +19677,6 @@ func init() {
         },
         "id": {
           "type": "string",
-          "format": "uuid",
           "example": "cea49285-6c07-42cf-9f52-09a9b115c783"
         },
         "name": {
@@ -18886,8 +20081,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "isOnline": {
           "type": "boolean"
@@ -19003,8 +20197,7 @@ func init() {
           }
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identityRoles": {
           "type": "array",
@@ -19129,8 +20322,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identity": {
           "$ref": "#/definitions/entityRef"
@@ -19247,8 +20439,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -19266,6 +20457,17 @@ func init() {
       "type": "array",
       "items": {
         "$ref": "#/definitions/geoRegionDetail"
+      }
+    },
+    "getIdentityPolicyAdviceEnvelope": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/policyAdvice"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
       }
     },
     "identityCreate": {
@@ -19334,8 +20536,7 @@ func init() {
           "type": "object"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "isAdmin": {
           "type": "boolean"
@@ -19395,8 +20596,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -19589,6 +20789,17 @@ func init() {
         }
       }
     },
+    "listRoleAttributesEnvelope": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/roleAttributesList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
     "listServiceConfigsEnvelope": {
       "type": "object",
       "properties": {
@@ -19738,11 +20949,69 @@ func init() {
       "maxLength": 100,
       "minLength": 5
     },
+    "policyAdvice": {
+      "type": "object",
+      "properties": {
+        "commonRouters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/routerEntityRef"
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/entityRef"
+        },
+        "identityId": {
+          "type": "string"
+        },
+        "identityRouterCount": {
+          "type": "number"
+        },
+        "isBindAllowed": {
+          "type": "boolean"
+        },
+        "isDialAllowed": {
+          "type": "boolean"
+        },
+        "service": {
+          "$ref": "#/definitions/entityRef"
+        },
+        "serviceId": {
+          "type": "string"
+        },
+        "serviceRouterCount": {
+          "type": "number"
+        }
+      }
+    },
+    "roleAttributesList": {
+      "description": "An array of role attributes",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "roles": {
       "type": "array",
       "items": {
         "type": "string"
       }
+    },
+    "routerEntityRef": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/entityRef"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "isOnline": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
     },
     "sdkInfo": {
       "description": "SDK information an authenticating client may provide",
@@ -19773,12 +21042,10 @@ func init() {
       "type": "object",
       "properties": {
         "config": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "service": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         }
       }
     },
@@ -19836,8 +21103,7 @@ func init() {
         "configs": {
           "type": "array",
           "items": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           }
         },
         "name": {
@@ -19866,7 +21132,7 @@ func init() {
         "configs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/entityRef"
+            "type": "string"
           }
         },
         "createdAt": {
@@ -19874,8 +21140,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -19982,8 +21247,7 @@ func init() {
           "$ref": "#/definitions/roles"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -20021,8 +21285,7 @@ func init() {
         "configs": {
           "type": "array",
           "items": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           }
         },
         "name": {
@@ -20080,8 +21343,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "identityRoles": {
           "$ref": "#/definitions/roles"
@@ -20182,8 +21444,7 @@ func init() {
         "configs": {
           "type": "array",
           "items": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           }
         },
         "name": {
@@ -20207,8 +21468,7 @@ func init() {
       "type": "object",
       "properties": {
         "serviceId": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -20232,8 +21492,7 @@ func init() {
           "format": "date-time"
         },
         "id": {
-          "type": "string",
-          "format": "uuid"
+          "type": "string"
         },
         "service": {
           "$ref": "#/definitions/entityRef"
@@ -20551,7 +21810,6 @@ func init() {
     },
     "id": {
       "type": "string",
-      "format": "uuid",
       "description": "The id of the requested resource",
       "name": "id",
       "in": "path",
@@ -20566,6 +21824,27 @@ func init() {
       "type": "integer",
       "name": "offset",
       "in": "query"
+    },
+    "roleFilter": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "collectionFormat": "multi",
+      "name": "roleFilter",
+      "in": "query"
+    },
+    "roleSemantic": {
+      "type": "string",
+      "name": "roleSemantic",
+      "in": "query"
+    },
+    "serviceId": {
+      "type": "string",
+      "description": "The id of a service",
+      "name": "serviceId",
+      "in": "path",
+      "required": true
     },
     "token": {
       "type": "string",
@@ -20868,6 +22147,12 @@ func init() {
         "$ref": "#/definitions/erott"
       }
     },
+    "getIdentityPolicyAdvice": {
+      "description": "Returns the document that represents the policy advice",
+      "schema": {
+        "$ref": "#/definitions/getIdentityPolicyAdviceEnvelope"
+      }
+    },
     "invalidAuthResponse": {
       "description": "The authentication request could not be processed as the credentials are invalid",
       "schema": {
@@ -20956,6 +22241,12 @@ func init() {
       "description": "A list of identity types",
       "schema": {
         "$ref": "#/definitions/listIdentityTypesEnvelope"
+      }
+    },
+    "listRoleAttributes": {
+      "description": "A list of role attributes",
+      "schema": {
+        "$ref": "#/definitions/listRoleAttributesEnvelope"
       }
     },
     "listServiceConfigs": {

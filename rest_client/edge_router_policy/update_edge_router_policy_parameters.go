@@ -95,7 +95,7 @@ type UpdateEdgeRouterPolicyParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *UpdateEdgeRouterPolicyParams) SetBody(body *models.EdgeRouterPolicyUpda
 }
 
 // WithID adds the id to the update edge router policy params
-func (o *UpdateEdgeRouterPolicyParams) WithID(id strfmt.UUID) *UpdateEdgeRouterPolicyParams {
+func (o *UpdateEdgeRouterPolicyParams) WithID(id string) *UpdateEdgeRouterPolicyParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the update edge router policy params
-func (o *UpdateEdgeRouterPolicyParams) SetID(id strfmt.UUID) {
+func (o *UpdateEdgeRouterPolicyParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *UpdateEdgeRouterPolicyParams) WriteToRequest(r runtime.ClientRequest, r
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

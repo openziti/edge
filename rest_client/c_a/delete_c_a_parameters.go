@@ -88,7 +88,7 @@ type DeleteCAParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DeleteCAParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the delete c a params
-func (o *DeleteCAParams) WithID(id strfmt.UUID) *DeleteCAParams {
+func (o *DeleteCAParams) WithID(id string) *DeleteCAParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the delete c a params
-func (o *DeleteCAParams) SetID(id strfmt.UUID) {
+func (o *DeleteCAParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DeleteCAParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

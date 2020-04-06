@@ -88,7 +88,7 @@ type DeleteSessionParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DeleteSessionParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the delete session params
-func (o *DeleteSessionParams) WithID(id strfmt.UUID) *DeleteSessionParams {
+func (o *DeleteSessionParams) WithID(id string) *DeleteSessionParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the delete session params
-func (o *DeleteSessionParams) SetID(id strfmt.UUID) {
+func (o *DeleteSessionParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DeleteSessionParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

@@ -30,8 +30,6 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"strconv"
-
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -45,7 +43,7 @@ type ServiceUpdate struct {
 
 	// configs
 	// Required: true
-	Configs []strfmt.UUID `json:"configs"`
+	Configs []string `json:"configs"`
 
 	// name
 	// Required: true
@@ -93,14 +91,6 @@ func (m *ServiceUpdate) validateConfigs(formats strfmt.Registry) error {
 
 	if err := validate.Required("configs", "body", m.Configs); err != nil {
 		return err
-	}
-
-	for i := 0; i < len(m.Configs); i++ {
-
-		if err := validate.FormatOf("configs"+"."+strconv.Itoa(i), "body", "uuid", m.Configs[i].String(), formats); err != nil {
-			return err
-		}
-
 	}
 
 	return nil

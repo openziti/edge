@@ -88,7 +88,7 @@ type DetailConfigTypeParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DetailConfigTypeParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the detail config type params
-func (o *DetailConfigTypeParams) WithID(id strfmt.UUID) *DetailConfigTypeParams {
+func (o *DetailConfigTypeParams) WithID(id string) *DetailConfigTypeParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the detail config type params
-func (o *DetailConfigTypeParams) SetID(id strfmt.UUID) {
+func (o *DetailConfigTypeParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DetailConfigTypeParams) WriteToRequest(r runtime.ClientRequest, reg str
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

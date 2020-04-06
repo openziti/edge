@@ -30,8 +30,6 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"strconv"
-
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -47,15 +45,14 @@ type ServiceDetail struct {
 	Links Links `json:"_links,omitempty"`
 
 	// configs
-	Configs []*EntityRef `json:"configs"`
+	Configs []string `json:"configs"`
 
 	// created at
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"createdAt,omitempty"`
 
 	// id
-	// Format: uuid
-	ID strfmt.UUID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -85,15 +82,7 @@ func (m *ServiceDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateConfigs(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateCreatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -131,31 +120,6 @@ func (m *ServiceDetail) validateLinks(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ServiceDetail) validateConfigs(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Configs) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Configs); i++ {
-		if swag.IsZero(m.Configs[i]) { // not required
-			continue
-		}
-
-		if m.Configs[i] != nil {
-			if err := m.Configs[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("configs" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
 func (m *ServiceDetail) validateCreatedAt(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.CreatedAt) { // not required
@@ -163,19 +127,6 @@ func (m *ServiceDetail) validateCreatedAt(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("createdAt", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *ServiceDetail) validateID(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ID) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("id", "body", "uuid", m.ID.String(), formats); err != nil {
 		return err
 	}
 

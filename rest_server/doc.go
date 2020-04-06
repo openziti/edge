@@ -29,7 +29,7 @@
 //    https
 //  Host: demo.ziti.dev
 //  BasePath: /
-//  Version: 0.12.0
+//  Version: 0.13.0
 //  Contact:
 //
 //  Consumes:

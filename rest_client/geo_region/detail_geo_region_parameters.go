@@ -88,7 +88,7 @@ type DetailGeoRegionParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DetailGeoRegionParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the detail geo region params
-func (o *DetailGeoRegionParams) WithID(id strfmt.UUID) *DetailGeoRegionParams {
+func (o *DetailGeoRegionParams) WithID(id string) *DetailGeoRegionParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the detail geo region params
-func (o *DetailGeoRegionParams) SetID(id strfmt.UUID) {
+func (o *DetailGeoRegionParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DetailGeoRegionParams) WriteToRequest(r runtime.ClientRequest, reg strf
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

@@ -88,7 +88,7 @@ type DeleteEdgeRouterPolicyParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DeleteEdgeRouterPolicyParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the delete edge router policy params
-func (o *DeleteEdgeRouterPolicyParams) WithID(id strfmt.UUID) *DeleteEdgeRouterPolicyParams {
+func (o *DeleteEdgeRouterPolicyParams) WithID(id string) *DeleteEdgeRouterPolicyParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the delete edge router policy params
-func (o *DeleteEdgeRouterPolicyParams) SetID(id strfmt.UUID) {
+func (o *DeleteEdgeRouterPolicyParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DeleteEdgeRouterPolicyParams) WriteToRequest(r runtime.ClientRequest, r
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

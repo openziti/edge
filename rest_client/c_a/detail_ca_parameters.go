@@ -88,7 +88,7 @@ type DetailCaParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DetailCaParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the detail ca params
-func (o *DetailCaParams) WithID(id strfmt.UUID) *DetailCaParams {
+func (o *DetailCaParams) WithID(id string) *DetailCaParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the detail ca params
-func (o *DetailCaParams) SetID(id strfmt.UUID) {
+func (o *DetailCaParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DetailCaParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

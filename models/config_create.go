@@ -54,8 +54,7 @@ type ConfigCreate struct {
 
 	// The id of a config-type that the data section will match
 	// Required: true
-	// Format: uuid
-	Type *strfmt.UUID `json:"type"`
+	Type *string `json:"type"`
 }
 
 // Validate validates this config create
@@ -101,10 +100,6 @@ func (m *ConfigCreate) validateName(formats strfmt.Registry) error {
 func (m *ConfigCreate) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
-		return err
-	}
-
-	if err := validate.FormatOf("type", "body", "uuid", m.Type.String(), formats); err != nil {
 		return err
 	}
 

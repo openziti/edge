@@ -35,7 +35,6 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/validate"
 )
 
 // NewDetailSpecParams creates a new DetailSpecParams object
@@ -58,7 +57,7 @@ type DetailSpecParams struct {
 	  Required: true
 	  In: path
 	*/
-	ID strfmt.UUID
+	ID string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -91,25 +90,7 @@ func (o *DetailSpecParams) bindID(rawData []string, hasKey bool, formats strfmt.
 	// Required: true
 	// Parameter is provided by construction from the route
 
-	// Format: uuid
-	value, err := formats.Parse("uuid", raw)
-	if err != nil {
-		return errors.InvalidType("id", "path", "strfmt.UUID", raw)
-	}
-	o.ID = *(value.(*strfmt.UUID))
+	o.ID = raw
 
-	if err := o.validateID(formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// validateID carries on validations for parameter ID
-func (o *DetailSpecParams) validateID(formats strfmt.Registry) error {
-
-	if err := validate.FormatOf("id", "path", "uuid", o.ID.String(), formats); err != nil {
-		return err
-	}
 	return nil
 }

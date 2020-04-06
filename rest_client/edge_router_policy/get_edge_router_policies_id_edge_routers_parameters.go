@@ -88,7 +88,7 @@ type GetEdgeRouterPoliciesIDEdgeRoutersParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *GetEdgeRouterPoliciesIDEdgeRoutersParams) SetHTTPClient(client *http.Cl
 }
 
 // WithID adds the id to the get edge router policies ID edge routers params
-func (o *GetEdgeRouterPoliciesIDEdgeRoutersParams) WithID(id strfmt.UUID) *GetEdgeRouterPoliciesIDEdgeRoutersParams {
+func (o *GetEdgeRouterPoliciesIDEdgeRoutersParams) WithID(id string) *GetEdgeRouterPoliciesIDEdgeRoutersParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the get edge router policies ID edge routers params
-func (o *GetEdgeRouterPoliciesIDEdgeRoutersParams) SetID(id strfmt.UUID) {
+func (o *GetEdgeRouterPoliciesIDEdgeRoutersParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *GetEdgeRouterPoliciesIDEdgeRoutersParams) WriteToRequest(r runtime.Clie
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

@@ -34,13 +34,11 @@ import (
 	"net/url"
 	golangswaggerpaths "path"
 	"strings"
-
-	"github.com/go-openapi/strfmt"
 )
 
 // ListServiceEdgeRouterPolicyEdgeRoutersURL generates an URL for the list service edge router policy edge routers operation
 type ListServiceEdgeRouterPolicyEdgeRoutersURL struct {
-	ID strfmt.UUID
+	ID string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -68,7 +66,7 @@ func (o *ListServiceEdgeRouterPolicyEdgeRoutersURL) Build() (*url.URL, error) {
 
 	var _path = "/service-edge-router-policies/{id}/edge-routers"
 
-	id := o.ID.String()
+	id := o.ID
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {

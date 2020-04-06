@@ -95,7 +95,7 @@ type PatchTerminatorParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *PatchTerminatorParams) SetBody(body *models.TerminatorPatch) {
 }
 
 // WithID adds the id to the patch terminator params
-func (o *PatchTerminatorParams) WithID(id strfmt.UUID) *PatchTerminatorParams {
+func (o *PatchTerminatorParams) WithID(id string) *PatchTerminatorParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the patch terminator params
-func (o *PatchTerminatorParams) SetID(id strfmt.UUID) {
+func (o *PatchTerminatorParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *PatchTerminatorParams) WriteToRequest(r runtime.ClientRequest, reg strf
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

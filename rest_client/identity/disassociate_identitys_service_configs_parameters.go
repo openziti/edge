@@ -95,7 +95,7 @@ type DisassociateIdentitysServiceConfigsParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *DisassociateIdentitysServiceConfigsParams) SetBody(body models.ServiceC
 }
 
 // WithID adds the id to the disassociate identitys service configs params
-func (o *DisassociateIdentitysServiceConfigsParams) WithID(id strfmt.UUID) *DisassociateIdentitysServiceConfigsParams {
+func (o *DisassociateIdentitysServiceConfigsParams) WithID(id string) *DisassociateIdentitysServiceConfigsParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the disassociate identitys service configs params
-func (o *DisassociateIdentitysServiceConfigsParams) SetID(id strfmt.UUID) {
+func (o *DisassociateIdentitysServiceConfigsParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *DisassociateIdentitysServiceConfigsParams) WriteToRequest(r runtime.Cli
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

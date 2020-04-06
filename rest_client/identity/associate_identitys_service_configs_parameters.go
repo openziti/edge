@@ -95,7 +95,7 @@ type AssociateIdentitysServiceConfigsParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *AssociateIdentitysServiceConfigsParams) SetBody(body models.ServiceConf
 }
 
 // WithID adds the id to the associate identitys service configs params
-func (o *AssociateIdentitysServiceConfigsParams) WithID(id strfmt.UUID) *AssociateIdentitysServiceConfigsParams {
+func (o *AssociateIdentitysServiceConfigsParams) WithID(id string) *AssociateIdentitysServiceConfigsParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the associate identitys service configs params
-func (o *AssociateIdentitysServiceConfigsParams) SetID(id strfmt.UUID) {
+func (o *AssociateIdentitysServiceConfigsParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *AssociateIdentitysServiceConfigsParams) WriteToRequest(r runtime.Client
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

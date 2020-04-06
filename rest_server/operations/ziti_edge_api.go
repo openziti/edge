@@ -57,6 +57,7 @@ import (
 	"github.com/netfoundry/ziti-edge/rest_server/operations/geo_region"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/identity"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/informational"
+	"github.com/netfoundry/ziti-edge/rest_server/operations/role_attributes"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/service"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/service_edge_router_policy"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/service_policy"
@@ -289,8 +290,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		CurrentAPISessionGetCurrentIdentityHandler: current_api_session.GetCurrentIdentityHandlerFunc(func(params current_api_session.GetCurrentIdentityParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation current_api_session.GetCurrentIdentity has not yet been implemented")
 		}),
-		EdgeRouterLisgEdgeRoutersHandler: edge_router.LisgEdgeRoutersHandlerFunc(func(params edge_router.LisgEdgeRoutersParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation edge_router.LisgEdgeRouters has not yet been implemented")
+		IdentityGetIdentityPolicyAdviceHandler: identity.GetIdentityPolicyAdviceHandlerFunc(func(params identity.GetIdentityPolicyAdviceParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation identity.GetIdentityPolicyAdvice has not yet been implemented")
 		}),
 		APISessionListAPISessionsHandler: api_session.ListAPISessionsHandlerFunc(func(params api_session.ListAPISessionsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation api_session.ListAPISessions has not yet been implemented")
@@ -313,14 +314,26 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		CurrentAPISessionListCurrentIdentityAuthenticatorsHandler: current_api_session.ListCurrentIdentityAuthenticatorsHandlerFunc(func(params current_api_session.ListCurrentIdentityAuthenticatorsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation current_api_session.ListCurrentIdentityAuthenticators has not yet been implemented")
 		}),
+		EdgeRouterListEdgeRouterEdgeRouterPoliciesHandler: edge_router.ListEdgeRouterEdgeRouterPoliciesHandlerFunc(func(params edge_router.ListEdgeRouterEdgeRouterPoliciesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouterEdgeRouterPolicies has not yet been implemented")
+		}),
+		EdgeRouterListEdgeRouterIdentitiesHandler: edge_router.ListEdgeRouterIdentitiesHandlerFunc(func(params edge_router.ListEdgeRouterIdentitiesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouterIdentities has not yet been implemented")
+		}),
 		EdgeRouterPolicyListEdgeRouterPoliciesHandler: edge_router_policy.ListEdgeRouterPoliciesHandlerFunc(func(params edge_router_policy.ListEdgeRouterPoliciesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation edge_router_policy.ListEdgeRouterPolicies has not yet been implemented")
 		}),
-		EdgeRouterListEdgeRoutersEdgeRouterPoliciesHandler: edge_router.ListEdgeRoutersEdgeRouterPoliciesHandlerFunc(func(params edge_router.ListEdgeRoutersEdgeRouterPoliciesParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation edge_router.ListEdgeRoutersEdgeRouterPolicies has not yet been implemented")
+		RoleAttributesListEdgeRouterRoleAttributesHandler: role_attributes.ListEdgeRouterRoleAttributesHandlerFunc(func(params role_attributes.ListEdgeRouterRoleAttributesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation role_attributes.ListEdgeRouterRoleAttributes has not yet been implemented")
 		}),
-		EdgeRouterListEdgeRoutersServicePoliciesHandler: edge_router.ListEdgeRoutersServicePoliciesHandlerFunc(func(params edge_router.ListEdgeRoutersServicePoliciesParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation edge_router.ListEdgeRoutersServicePolicies has not yet been implemented")
+		EdgeRouterListEdgeRouterServicePoliciesHandler: edge_router.ListEdgeRouterServicePoliciesHandlerFunc(func(params edge_router.ListEdgeRouterServicePoliciesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouterServicePolicies has not yet been implemented")
+		}),
+		EdgeRouterListEdgeRouterServicesHandler: edge_router.ListEdgeRouterServicesHandlerFunc(func(params edge_router.ListEdgeRouterServicesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouterServices has not yet been implemented")
+		}),
+		EdgeRouterListEdgeRoutersHandler: edge_router.ListEdgeRoutersHandlerFunc(func(params edge_router.ListEdgeRoutersParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation edge_router.ListEdgeRouters has not yet been implemented")
 		}),
 		EnrollmentListEnrollmentsHandler: enrollment.ListEnrollmentsHandlerFunc(func(params enrollment.ListEnrollmentsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation enrollment.ListEnrollments has not yet been implemented")
@@ -331,8 +344,17 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		IdentityListIdentitiesHandler: identity.ListIdentitiesHandlerFunc(func(params identity.ListIdentitiesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation identity.ListIdentities has not yet been implemented")
 		}),
+		IdentityListIdentityEdgeRoutersHandler: identity.ListIdentityEdgeRoutersHandlerFunc(func(params identity.ListIdentityEdgeRoutersParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation identity.ListIdentityEdgeRouters has not yet been implemented")
+		}),
+		RoleAttributesListIdentityRoleAttributesHandler: role_attributes.ListIdentityRoleAttributesHandlerFunc(func(params role_attributes.ListIdentityRoleAttributesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation role_attributes.ListIdentityRoleAttributes has not yet been implemented")
+		}),
 		IdentityListIdentityServicePoliciesHandler: identity.ListIdentityServicePoliciesHandlerFunc(func(params identity.ListIdentityServicePoliciesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation identity.ListIdentityServicePolicies has not yet been implemented")
+		}),
+		IdentityListIdentityServicesHandler: identity.ListIdentityServicesHandlerFunc(func(params identity.ListIdentityServicesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation identity.ListIdentityServices has not yet been implemented")
 		}),
 		IdentityListIdentityTypeHandler: identity.ListIdentityTypeHandlerFunc(func(params identity.ListIdentityTypeParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation identity.ListIdentityType has not yet been implemented")
@@ -355,6 +377,12 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		ServiceEdgeRouterPolicyListServiceEdgeRouterPolicyServicesHandler: service_edge_router_policy.ListServiceEdgeRouterPolicyServicesHandlerFunc(func(params service_edge_router_policy.ListServiceEdgeRouterPolicyServicesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation service_edge_router_policy.ListServiceEdgeRouterPolicyServices has not yet been implemented")
 		}),
+		ServiceListServiceEdgeRoutersHandler: service.ListServiceEdgeRoutersHandlerFunc(func(params service.ListServiceEdgeRoutersParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation service.ListServiceEdgeRouters has not yet been implemented")
+		}),
+		ServiceListServiceIdentitiesHandler: service.ListServiceIdentitiesHandlerFunc(func(params service.ListServiceIdentitiesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation service.ListServiceIdentities has not yet been implemented")
+		}),
 		ServicePolicyListServicePoliciesHandler: service_policy.ListServicePoliciesHandlerFunc(func(params service_policy.ListServicePoliciesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation service_policy.ListServicePolicies has not yet been implemented")
 		}),
@@ -363,6 +391,9 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		}),
 		ServicePolicyListServicePolicyServicesHandler: service_policy.ListServicePolicyServicesHandlerFunc(func(params service_policy.ListServicePolicyServicesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation service_policy.ListServicePolicyServices has not yet been implemented")
+		}),
+		RoleAttributesListServiceRoleAttributesHandler: role_attributes.ListServiceRoleAttributesHandlerFunc(func(params role_attributes.ListServiceRoleAttributesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation role_attributes.ListServiceRoleAttributes has not yet been implemented")
 		}),
 		ServiceListServiceServiceEdgeRouterPoliciesHandler: service.ListServiceServiceEdgeRouterPoliciesHandlerFunc(func(params service.ListServiceServiceEdgeRouterPoliciesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation service.ListServiceServiceEdgeRouterPolicies has not yet been implemented")
@@ -664,8 +695,8 @@ type ZitiEdgeAPI struct {
 	CurrentAPISessionGetCurrentAPISessionHandler current_api_session.GetCurrentAPISessionHandler
 	// CurrentAPISessionGetCurrentIdentityHandler sets the operation handler for the get current identity operation
 	CurrentAPISessionGetCurrentIdentityHandler current_api_session.GetCurrentIdentityHandler
-	// EdgeRouterLisgEdgeRoutersHandler sets the operation handler for the lisg edge routers operation
-	EdgeRouterLisgEdgeRoutersHandler edge_router.LisgEdgeRoutersHandler
+	// IdentityGetIdentityPolicyAdviceHandler sets the operation handler for the get identity policy advice operation
+	IdentityGetIdentityPolicyAdviceHandler identity.GetIdentityPolicyAdviceHandler
 	// APISessionListAPISessionsHandler sets the operation handler for the list API sessions operation
 	APISessionListAPISessionsHandler api_session.ListAPISessionsHandler
 	// AuthenticatorListAuthenticatorsHandler sets the operation handler for the list authenticators operation
@@ -680,20 +711,34 @@ type ZitiEdgeAPI struct {
 	ConfigListConfigsForConfigTypeHandler config.ListConfigsForConfigTypeHandler
 	// CurrentAPISessionListCurrentIdentityAuthenticatorsHandler sets the operation handler for the list current identity authenticators operation
 	CurrentAPISessionListCurrentIdentityAuthenticatorsHandler current_api_session.ListCurrentIdentityAuthenticatorsHandler
+	// EdgeRouterListEdgeRouterEdgeRouterPoliciesHandler sets the operation handler for the list edge router edge router policies operation
+	EdgeRouterListEdgeRouterEdgeRouterPoliciesHandler edge_router.ListEdgeRouterEdgeRouterPoliciesHandler
+	// EdgeRouterListEdgeRouterIdentitiesHandler sets the operation handler for the list edge router identities operation
+	EdgeRouterListEdgeRouterIdentitiesHandler edge_router.ListEdgeRouterIdentitiesHandler
 	// EdgeRouterPolicyListEdgeRouterPoliciesHandler sets the operation handler for the list edge router policies operation
 	EdgeRouterPolicyListEdgeRouterPoliciesHandler edge_router_policy.ListEdgeRouterPoliciesHandler
-	// EdgeRouterListEdgeRoutersEdgeRouterPoliciesHandler sets the operation handler for the list edge routers edge router policies operation
-	EdgeRouterListEdgeRoutersEdgeRouterPoliciesHandler edge_router.ListEdgeRoutersEdgeRouterPoliciesHandler
-	// EdgeRouterListEdgeRoutersServicePoliciesHandler sets the operation handler for the list edge routers service policies operation
-	EdgeRouterListEdgeRoutersServicePoliciesHandler edge_router.ListEdgeRoutersServicePoliciesHandler
+	// RoleAttributesListEdgeRouterRoleAttributesHandler sets the operation handler for the list edge router role attributes operation
+	RoleAttributesListEdgeRouterRoleAttributesHandler role_attributes.ListEdgeRouterRoleAttributesHandler
+	// EdgeRouterListEdgeRouterServicePoliciesHandler sets the operation handler for the list edge router service policies operation
+	EdgeRouterListEdgeRouterServicePoliciesHandler edge_router.ListEdgeRouterServicePoliciesHandler
+	// EdgeRouterListEdgeRouterServicesHandler sets the operation handler for the list edge router services operation
+	EdgeRouterListEdgeRouterServicesHandler edge_router.ListEdgeRouterServicesHandler
+	// EdgeRouterListEdgeRoutersHandler sets the operation handler for the list edge routers operation
+	EdgeRouterListEdgeRoutersHandler edge_router.ListEdgeRoutersHandler
 	// EnrollmentListEnrollmentsHandler sets the operation handler for the list enrollments operation
 	EnrollmentListEnrollmentsHandler enrollment.ListEnrollmentsHandler
 	// GeoRegionListGeoRegionHandler sets the operation handler for the list geo region operation
 	GeoRegionListGeoRegionHandler geo_region.ListGeoRegionHandler
 	// IdentityListIdentitiesHandler sets the operation handler for the list identities operation
 	IdentityListIdentitiesHandler identity.ListIdentitiesHandler
+	// IdentityListIdentityEdgeRoutersHandler sets the operation handler for the list identity edge routers operation
+	IdentityListIdentityEdgeRoutersHandler identity.ListIdentityEdgeRoutersHandler
+	// RoleAttributesListIdentityRoleAttributesHandler sets the operation handler for the list identity role attributes operation
+	RoleAttributesListIdentityRoleAttributesHandler role_attributes.ListIdentityRoleAttributesHandler
 	// IdentityListIdentityServicePoliciesHandler sets the operation handler for the list identity service policies operation
 	IdentityListIdentityServicePoliciesHandler identity.ListIdentityServicePoliciesHandler
+	// IdentityListIdentityServicesHandler sets the operation handler for the list identity services operation
+	IdentityListIdentityServicesHandler identity.ListIdentityServicesHandler
 	// IdentityListIdentityTypeHandler sets the operation handler for the list identity type operation
 	IdentityListIdentityTypeHandler identity.ListIdentityTypeHandler
 	// IdentityListIdentitysEdgeRouterPoliciesHandler sets the operation handler for the list identitys edge router policies operation
@@ -708,12 +753,18 @@ type ZitiEdgeAPI struct {
 	ServiceEdgeRouterPolicyListServiceEdgeRouterPolicyEdgeRoutersHandler service_edge_router_policy.ListServiceEdgeRouterPolicyEdgeRoutersHandler
 	// ServiceEdgeRouterPolicyListServiceEdgeRouterPolicyServicesHandler sets the operation handler for the list service edge router policy services operation
 	ServiceEdgeRouterPolicyListServiceEdgeRouterPolicyServicesHandler service_edge_router_policy.ListServiceEdgeRouterPolicyServicesHandler
+	// ServiceListServiceEdgeRoutersHandler sets the operation handler for the list service edge routers operation
+	ServiceListServiceEdgeRoutersHandler service.ListServiceEdgeRoutersHandler
+	// ServiceListServiceIdentitiesHandler sets the operation handler for the list service identities operation
+	ServiceListServiceIdentitiesHandler service.ListServiceIdentitiesHandler
 	// ServicePolicyListServicePoliciesHandler sets the operation handler for the list service policies operation
 	ServicePolicyListServicePoliciesHandler service_policy.ListServicePoliciesHandler
 	// ServicePolicyListServicePolicyIdentitiesHandler sets the operation handler for the list service policy identities operation
 	ServicePolicyListServicePolicyIdentitiesHandler service_policy.ListServicePolicyIdentitiesHandler
 	// ServicePolicyListServicePolicyServicesHandler sets the operation handler for the list service policy services operation
 	ServicePolicyListServicePolicyServicesHandler service_policy.ListServicePolicyServicesHandler
+	// RoleAttributesListServiceRoleAttributesHandler sets the operation handler for the list service role attributes operation
+	RoleAttributesListServiceRoleAttributesHandler role_attributes.ListServiceRoleAttributesHandler
 	// ServiceListServiceServiceEdgeRouterPoliciesHandler sets the operation handler for the list service service edge router policies operation
 	ServiceListServiceServiceEdgeRouterPoliciesHandler service.ListServiceServiceEdgeRouterPoliciesHandler
 	// ServiceListServiceServicePoliciesHandler sets the operation handler for the list service service policies operation
@@ -1062,8 +1113,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.CurrentAPISessionGetCurrentIdentityHandler == nil {
 		unregistered = append(unregistered, "current_api_session.GetCurrentIdentityHandler")
 	}
-	if o.EdgeRouterLisgEdgeRoutersHandler == nil {
-		unregistered = append(unregistered, "edge_router.LisgEdgeRoutersHandler")
+	if o.IdentityGetIdentityPolicyAdviceHandler == nil {
+		unregistered = append(unregistered, "identity.GetIdentityPolicyAdviceHandler")
 	}
 	if o.APISessionListAPISessionsHandler == nil {
 		unregistered = append(unregistered, "api_session.ListAPISessionsHandler")
@@ -1086,14 +1137,26 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.CurrentAPISessionListCurrentIdentityAuthenticatorsHandler == nil {
 		unregistered = append(unregistered, "current_api_session.ListCurrentIdentityAuthenticatorsHandler")
 	}
+	if o.EdgeRouterListEdgeRouterEdgeRouterPoliciesHandler == nil {
+		unregistered = append(unregistered, "edge_router.ListEdgeRouterEdgeRouterPoliciesHandler")
+	}
+	if o.EdgeRouterListEdgeRouterIdentitiesHandler == nil {
+		unregistered = append(unregistered, "edge_router.ListEdgeRouterIdentitiesHandler")
+	}
 	if o.EdgeRouterPolicyListEdgeRouterPoliciesHandler == nil {
 		unregistered = append(unregistered, "edge_router_policy.ListEdgeRouterPoliciesHandler")
 	}
-	if o.EdgeRouterListEdgeRoutersEdgeRouterPoliciesHandler == nil {
-		unregistered = append(unregistered, "edge_router.ListEdgeRoutersEdgeRouterPoliciesHandler")
+	if o.RoleAttributesListEdgeRouterRoleAttributesHandler == nil {
+		unregistered = append(unregistered, "role_attributes.ListEdgeRouterRoleAttributesHandler")
 	}
-	if o.EdgeRouterListEdgeRoutersServicePoliciesHandler == nil {
-		unregistered = append(unregistered, "edge_router.ListEdgeRoutersServicePoliciesHandler")
+	if o.EdgeRouterListEdgeRouterServicePoliciesHandler == nil {
+		unregistered = append(unregistered, "edge_router.ListEdgeRouterServicePoliciesHandler")
+	}
+	if o.EdgeRouterListEdgeRouterServicesHandler == nil {
+		unregistered = append(unregistered, "edge_router.ListEdgeRouterServicesHandler")
+	}
+	if o.EdgeRouterListEdgeRoutersHandler == nil {
+		unregistered = append(unregistered, "edge_router.ListEdgeRoutersHandler")
 	}
 	if o.EnrollmentListEnrollmentsHandler == nil {
 		unregistered = append(unregistered, "enrollment.ListEnrollmentsHandler")
@@ -1104,8 +1167,17 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.IdentityListIdentitiesHandler == nil {
 		unregistered = append(unregistered, "identity.ListIdentitiesHandler")
 	}
+	if o.IdentityListIdentityEdgeRoutersHandler == nil {
+		unregistered = append(unregistered, "identity.ListIdentityEdgeRoutersHandler")
+	}
+	if o.RoleAttributesListIdentityRoleAttributesHandler == nil {
+		unregistered = append(unregistered, "role_attributes.ListIdentityRoleAttributesHandler")
+	}
 	if o.IdentityListIdentityServicePoliciesHandler == nil {
 		unregistered = append(unregistered, "identity.ListIdentityServicePoliciesHandler")
+	}
+	if o.IdentityListIdentityServicesHandler == nil {
+		unregistered = append(unregistered, "identity.ListIdentityServicesHandler")
 	}
 	if o.IdentityListIdentityTypeHandler == nil {
 		unregistered = append(unregistered, "identity.ListIdentityTypeHandler")
@@ -1128,6 +1200,12 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.ServiceEdgeRouterPolicyListServiceEdgeRouterPolicyServicesHandler == nil {
 		unregistered = append(unregistered, "service_edge_router_policy.ListServiceEdgeRouterPolicyServicesHandler")
 	}
+	if o.ServiceListServiceEdgeRoutersHandler == nil {
+		unregistered = append(unregistered, "service.ListServiceEdgeRoutersHandler")
+	}
+	if o.ServiceListServiceIdentitiesHandler == nil {
+		unregistered = append(unregistered, "service.ListServiceIdentitiesHandler")
+	}
 	if o.ServicePolicyListServicePoliciesHandler == nil {
 		unregistered = append(unregistered, "service_policy.ListServicePoliciesHandler")
 	}
@@ -1136,6 +1214,9 @@ func (o *ZitiEdgeAPI) Validate() error {
 	}
 	if o.ServicePolicyListServicePolicyServicesHandler == nil {
 		unregistered = append(unregistered, "service_policy.ListServicePolicyServicesHandler")
+	}
+	if o.RoleAttributesListServiceRoleAttributesHandler == nil {
+		unregistered = append(unregistered, "role_attributes.ListServiceRoleAttributesHandler")
 	}
 	if o.ServiceListServiceServiceEdgeRouterPoliciesHandler == nil {
 		unregistered = append(unregistered, "service.ListServiceServiceEdgeRouterPoliciesHandler")
@@ -1608,7 +1689,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/edge-routers"] = edge_router.NewLisgEdgeRouters(o.context, o.EdgeRouterLisgEdgeRoutersHandler)
+	o.handlers["GET"]["/identities/{id}/policy-advice/{serviceId}"] = identity.NewGetIdentityPolicyAdvice(o.context, o.IdentityGetIdentityPolicyAdviceHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1640,15 +1721,31 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/edge-routers/{id}/edge-router-policies"] = edge_router.NewListEdgeRouterEdgeRouterPolicies(o.context, o.EdgeRouterListEdgeRouterEdgeRouterPoliciesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/edge-routers/{id}/identities"] = edge_router.NewListEdgeRouterIdentities(o.context, o.EdgeRouterListEdgeRouterIdentitiesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/edge-router-policies"] = edge_router_policy.NewListEdgeRouterPolicies(o.context, o.EdgeRouterPolicyListEdgeRouterPoliciesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/edge-routers/{id}/edge-router-policies"] = edge_router.NewListEdgeRoutersEdgeRouterPolicies(o.context, o.EdgeRouterListEdgeRoutersEdgeRouterPoliciesHandler)
+	o.handlers["GET"]["/edge-router-role-attributes"] = role_attributes.NewListEdgeRouterRoleAttributes(o.context, o.RoleAttributesListEdgeRouterRoleAttributesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/edge-routers/{id}/service-edge-router-policies"] = edge_router.NewListEdgeRoutersServicePolicies(o.context, o.EdgeRouterListEdgeRoutersServicePoliciesHandler)
+	o.handlers["GET"]["/edge-routers/{id}/service-edge-router-policies"] = edge_router.NewListEdgeRouterServicePolicies(o.context, o.EdgeRouterListEdgeRouterServicePoliciesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/edge-routers/{id}/services"] = edge_router.NewListEdgeRouterServices(o.context, o.EdgeRouterListEdgeRouterServicesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/edge-routers"] = edge_router.NewListEdgeRouters(o.context, o.EdgeRouterListEdgeRoutersHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1664,7 +1761,19 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/identities/{id}/edge-routers"] = identity.NewListIdentityEdgeRouters(o.context, o.IdentityListIdentityEdgeRoutersHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/identity-role-attributes"] = role_attributes.NewListIdentityRoleAttributes(o.context, o.RoleAttributesListIdentityRoleAttributesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/identities/{id}/service-policies"] = identity.NewListIdentityServicePolicies(o.context, o.IdentityListIdentityServicePoliciesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/identities/{id}/services"] = identity.NewListIdentityServices(o.context, o.IdentityListIdentityServicesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1696,6 +1805,14 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/services/{id}/edge-routers"] = service.NewListServiceEdgeRouters(o.context, o.ServiceListServiceEdgeRoutersHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/services/{id}/identities"] = service.NewListServiceIdentities(o.context, o.ServiceListServiceIdentitiesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/service-policies"] = service_policy.NewListServicePolicies(o.context, o.ServicePolicyListServicePoliciesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -1705,6 +1822,10 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/service-policies/{id}/services"] = service_policy.NewListServicePolicyServices(o.context, o.ServicePolicyListServicePolicyServicesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/service-role-attributes"] = role_attributes.NewListServiceRoleAttributes(o.context, o.RoleAttributesListServiceRoleAttributesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

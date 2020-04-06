@@ -95,7 +95,7 @@ type UpdateCaParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -147,13 +147,13 @@ func (o *UpdateCaParams) SetBody(body *models.CaUpdate) {
 }
 
 // WithID adds the id to the update ca params
-func (o *UpdateCaParams) WithID(id strfmt.UUID) *UpdateCaParams {
+func (o *UpdateCaParams) WithID(id string) *UpdateCaParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the update ca params
-func (o *UpdateCaParams) SetID(id strfmt.UUID) {
+func (o *UpdateCaParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -172,7 +172,7 @@ func (o *UpdateCaParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

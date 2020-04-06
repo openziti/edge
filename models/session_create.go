@@ -33,7 +33,6 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // SessionCreate session create
@@ -42,8 +41,7 @@ import (
 type SessionCreate struct {
 
 	// service Id
-	// Format: uuid
-	ServiceID strfmt.UUID `json:"serviceId,omitempty"`
+	ServiceID string `json:"serviceId,omitempty"`
 
 	// tags
 	Tags Tags `json:"tags,omitempty"`
@@ -56,10 +54,6 @@ type SessionCreate struct {
 func (m *SessionCreate) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateServiceID(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateType(formats); err != nil {
 		res = append(res, err)
 	}
@@ -67,19 +61,6 @@ func (m *SessionCreate) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *SessionCreate) validateServiceID(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ServiceID) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("serviceId", "body", "uuid", m.ServiceID.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 

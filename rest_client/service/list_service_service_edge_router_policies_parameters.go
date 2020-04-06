@@ -91,7 +91,7 @@ type ListServiceServiceEdgeRouterPoliciesParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 	/*Limit*/
 	Limit *int64
 	/*Offset*/
@@ -147,13 +147,13 @@ func (o *ListServiceServiceEdgeRouterPoliciesParams) SetFilter(filter *string) {
 }
 
 // WithID adds the id to the list service service edge router policies params
-func (o *ListServiceServiceEdgeRouterPoliciesParams) WithID(id strfmt.UUID) *ListServiceServiceEdgeRouterPoliciesParams {
+func (o *ListServiceServiceEdgeRouterPoliciesParams) WithID(id string) *ListServiceServiceEdgeRouterPoliciesParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the list service service edge router policies params
-func (o *ListServiceServiceEdgeRouterPoliciesParams) SetID(id strfmt.UUID) {
+func (o *ListServiceServiceEdgeRouterPoliciesParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -204,7 +204,7 @@ func (o *ListServiceServiceEdgeRouterPoliciesParams) WriteToRequest(r runtime.Cl
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

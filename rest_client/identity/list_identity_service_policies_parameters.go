@@ -88,7 +88,7 @@ type ListIdentityServicePoliciesParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *ListIdentityServicePoliciesParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the list identity service policies params
-func (o *ListIdentityServicePoliciesParams) WithID(id strfmt.UUID) *ListIdentityServicePoliciesParams {
+func (o *ListIdentityServicePoliciesParams) WithID(id string) *ListIdentityServicePoliciesParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the list identity service policies params
-func (o *ListIdentityServicePoliciesParams) SetID(id strfmt.UUID) {
+func (o *ListIdentityServicePoliciesParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *ListIdentityServicePoliciesParams) WriteToRequest(r runtime.ClientReque
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

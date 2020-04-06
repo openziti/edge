@@ -91,7 +91,7 @@ type ListServiceTerminatorsParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 	/*Limit*/
 	Limit *int64
 	/*Offset*/
@@ -147,13 +147,13 @@ func (o *ListServiceTerminatorsParams) SetFilter(filter *string) {
 }
 
 // WithID adds the id to the list service terminators params
-func (o *ListServiceTerminatorsParams) WithID(id strfmt.UUID) *ListServiceTerminatorsParams {
+func (o *ListServiceTerminatorsParams) WithID(id string) *ListServiceTerminatorsParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the list service terminators params
-func (o *ListServiceTerminatorsParams) SetID(id strfmt.UUID) {
+func (o *ListServiceTerminatorsParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -204,7 +204,7 @@ func (o *ListServiceTerminatorsParams) WriteToRequest(r runtime.ClientRequest, r
 	}
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

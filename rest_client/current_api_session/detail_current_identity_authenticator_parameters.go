@@ -88,7 +88,7 @@ type DetailCurrentIdentityAuthenticatorParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DetailCurrentIdentityAuthenticatorParams) SetHTTPClient(client *http.Cl
 }
 
 // WithID adds the id to the detail current identity authenticator params
-func (o *DetailCurrentIdentityAuthenticatorParams) WithID(id strfmt.UUID) *DetailCurrentIdentityAuthenticatorParams {
+func (o *DetailCurrentIdentityAuthenticatorParams) WithID(id string) *DetailCurrentIdentityAuthenticatorParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the detail current identity authenticator params
-func (o *DetailCurrentIdentityAuthenticatorParams) SetID(id strfmt.UUID) {
+func (o *DetailCurrentIdentityAuthenticatorParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DetailCurrentIdentityAuthenticatorParams) WriteToRequest(r runtime.Clie
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

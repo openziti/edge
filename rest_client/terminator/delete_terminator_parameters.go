@@ -88,7 +88,7 @@ type DeleteTerminatorParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DeleteTerminatorParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the delete terminator params
-func (o *DeleteTerminatorParams) WithID(id strfmt.UUID) *DeleteTerminatorParams {
+func (o *DeleteTerminatorParams) WithID(id string) *DeleteTerminatorParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the delete terminator params
-func (o *DeleteTerminatorParams) SetID(id strfmt.UUID) {
+func (o *DeleteTerminatorParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DeleteTerminatorParams) WriteToRequest(r runtime.ClientRequest, reg str
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

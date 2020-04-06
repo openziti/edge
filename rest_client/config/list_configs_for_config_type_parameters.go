@@ -88,7 +88,7 @@ type ListConfigsForConfigTypeParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *ListConfigsForConfigTypeParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the list configs for config type params
-func (o *ListConfigsForConfigTypeParams) WithID(id strfmt.UUID) *ListConfigsForConfigTypeParams {
+func (o *ListConfigsForConfigTypeParams) WithID(id string) *ListConfigsForConfigTypeParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the list configs for config type params
-func (o *ListConfigsForConfigTypeParams) SetID(id strfmt.UUID) {
+func (o *ListConfigsForConfigTypeParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *ListConfigsForConfigTypeParams) WriteToRequest(r runtime.ClientRequest,
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

@@ -88,7 +88,7 @@ type DetailSpecBodyParams struct {
 	  The id of the requested resource
 
 	*/
-	ID strfmt.UUID
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -129,13 +129,13 @@ func (o *DetailSpecBodyParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithID adds the id to the detail spec body params
-func (o *DetailSpecBodyParams) WithID(id strfmt.UUID) *DetailSpecBodyParams {
+func (o *DetailSpecBodyParams) WithID(id string) *DetailSpecBodyParams {
 	o.SetID(id)
 	return o
 }
 
 // SetID adds the id to the detail spec body params
-func (o *DetailSpecBodyParams) SetID(id strfmt.UUID) {
+func (o *DetailSpecBodyParams) SetID(id string) {
 	o.ID = id
 }
 
@@ -148,7 +148,7 @@ func (o *DetailSpecBodyParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 	var res []error
 
 	// path param id
-	if err := r.SetPathParam("id", o.ID.String()); err != nil {
+	if err := r.SetPathParam("id", o.ID); err != nil {
 		return err
 	}
 

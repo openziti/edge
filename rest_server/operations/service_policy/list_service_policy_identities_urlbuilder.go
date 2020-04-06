@@ -35,13 +35,12 @@ import (
 	golangswaggerpaths "path"
 	"strings"
 
-	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // ListServicePolicyIdentitiesURL generates an URL for the list service policy identities operation
 type ListServicePolicyIdentitiesURL struct {
-	ID strfmt.UUID
+	ID string
 
 	Filter *string
 	Limit  *int64
@@ -73,7 +72,7 @@ func (o *ListServicePolicyIdentitiesURL) Build() (*url.URL, error) {
 
 	var _path = "/service-policies/{id}/identities"
 
-	id := o.ID.String()
+	id := o.ID
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {
