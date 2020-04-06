@@ -398,7 +398,7 @@ paths:
       security:
         - ztSession: []
       tags:
-        - CA
+        - Certificate Authority
       operationId: listCas
       parameters:
         - $ref: '#/parameters/limit'
@@ -413,7 +413,7 @@ paths:
       security:
         - ztSession: []
       tags:
-        - CA
+        - Certificate Authority
       operationId: createCa
 
       parameters:
@@ -439,7 +439,7 @@ paths:
       security:
         - ztSession: []
       tags:
-        - CA
+        - Certificate Authority
       operationId: detailCa
       responses:
         '200':
@@ -454,7 +454,7 @@ paths:
       security:
         - ztSession: []
       tags:
-        - CA
+        - Certificate Authority
       operationId: updateCa
       parameters:
         - name: Body
@@ -478,7 +478,7 @@ paths:
       security:
         - ztSession: []
       tags:
-        - CA
+        - Certificate Authority
       operationId: patchCa
       parameters:
         - name: Body
@@ -504,8 +504,8 @@ paths:
       security:
         - ztSession: []
       tags:
-        - CA
-      operationId: deleteCA
+        - Certificate Authority
+      operationId: deleteCa
       responses:
         '200':
           $ref: '#/responses/deleteResponse'
@@ -524,7 +524,7 @@ paths:
       security:
         - ztSession: []
       tags:
-        - CA
+        - Certificate Authority
       produces:
         - 'application/jwt'
       responses:
@@ -554,7 +554,7 @@ paths:
       security:
         - ztSession: []
       tags:
-        - CA
+        - Certificate Authority
       consumes:
         - 'text/plain'
       parameters:

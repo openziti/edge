@@ -39,7 +39,7 @@ import (
 	"github.com/netfoundry/ziti-edge/rest_server/operations/api_session"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/authentication"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/authenticator"
-	"github.com/netfoundry/ziti-edge/rest_server/operations/c_a"
+	"github.com/netfoundry/ziti-edge/rest_server/operations/certificate_authority"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/config"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/current_api_session"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/edge_router"
@@ -107,9 +107,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 	//
 	// Example:
 	// api.APIAuthorizer = security.Authorized()
-	if api.CaGetCasIDJwtHandler == nil {
-		api.CaGetCasIDJwtHandler = c_a.GetCasIDJwtHandlerFunc(func(params c_a.GetCasIDJwtParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.GetCasIDJwt has not yet been implemented")
+	if api.CertificateAuthorityGetCasIDJwtHandler == nil {
+		api.CertificateAuthorityGetCasIDJwtHandler = certificate_authority.GetCasIDJwtHandlerFunc(func(params certificate_authority.GetCasIDJwtParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.GetCasIDJwt has not yet been implemented")
 		})
 	}
 	if api.EdgeRouterPolicyGetEdgeRouterPoliciesIDEdgeRoutersHandler == nil {
@@ -122,9 +122,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation edge_router_policy.GetEdgeRouterPoliciesIDIdentities has not yet been implemented")
 		})
 	}
-	if api.CaPostCasIDVerifyHandler == nil {
-		api.CaPostCasIDVerifyHandler = c_a.PostCasIDVerifyHandlerFunc(func(params c_a.PostCasIDVerifyParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.PostCasIDVerify has not yet been implemented")
+	if api.CertificateAuthorityPostCasIDVerifyHandler == nil {
+		api.CertificateAuthorityPostCasIDVerifyHandler = certificate_authority.PostCasIDVerifyHandlerFunc(func(params certificate_authority.PostCasIDVerifyParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.PostCasIDVerify has not yet been implemented")
 		})
 	}
 	if api.EnrollPostEnrollCaHandler == nil {
@@ -167,9 +167,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation authenticator.CreateAuthenticators has not yet been implemented")
 		})
 	}
-	if api.CaCreateCaHandler == nil {
-		api.CaCreateCaHandler = c_a.CreateCaHandlerFunc(func(params c_a.CreateCaParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.CreateCa has not yet been implemented")
+	if api.CertificateAuthorityCreateCaHandler == nil {
+		api.CertificateAuthorityCreateCaHandler = certificate_authority.CreateCaHandlerFunc(func(params certificate_authority.CreateCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.CreateCa has not yet been implemented")
 		})
 	}
 	if api.ConfigCreateConfigHandler == nil {
@@ -237,9 +237,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation authenticator.DeleteAuthenticator has not yet been implemented")
 		})
 	}
-	if api.CaDeleteCAHandler == nil {
-		api.CaDeleteCAHandler = c_a.DeleteCAHandlerFunc(func(params c_a.DeleteCAParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.DeleteCA has not yet been implemented")
+	if api.CertificateAuthorityDeleteCaHandler == nil {
+		api.CertificateAuthorityDeleteCaHandler = certificate_authority.DeleteCaHandlerFunc(func(params certificate_authority.DeleteCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.DeleteCa has not yet been implemented")
 		})
 	}
 	if api.ConfigDeleteConfigHandler == nil {
@@ -312,9 +312,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation authenticator.DetailAuthenticator has not yet been implemented")
 		})
 	}
-	if api.CaDetailCaHandler == nil {
-		api.CaDetailCaHandler = c_a.DetailCaHandlerFunc(func(params c_a.DetailCaParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.DetailCa has not yet been implemented")
+	if api.CertificateAuthorityDetailCaHandler == nil {
+		api.CertificateAuthorityDetailCaHandler = certificate_authority.DetailCaHandlerFunc(func(params certificate_authority.DetailCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.DetailCa has not yet been implemented")
 		})
 	}
 	if api.ConfigDetailConfigHandler == nil {
@@ -432,9 +432,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation authenticator.ListAuthenticators has not yet been implemented")
 		})
 	}
-	if api.CaListCasHandler == nil {
-		api.CaListCasHandler = c_a.ListCasHandlerFunc(func(params c_a.ListCasParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.ListCas has not yet been implemented")
+	if api.CertificateAuthorityListCasHandler == nil {
+		api.CertificateAuthorityListCasHandler = certificate_authority.ListCasHandlerFunc(func(params certificate_authority.ListCasParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.ListCas has not yet been implemented")
 		})
 	}
 	if api.ConfigListConfigHandler == nil {
@@ -652,9 +652,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation authenticator.PatchAuthenticator has not yet been implemented")
 		})
 	}
-	if api.CaPatchCaHandler == nil {
-		api.CaPatchCaHandler = c_a.PatchCaHandlerFunc(func(params c_a.PatchCaParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.PatchCa has not yet been implemented")
+	if api.CertificateAuthorityPatchCaHandler == nil {
+		api.CertificateAuthorityPatchCaHandler = certificate_authority.PatchCaHandlerFunc(func(params certificate_authority.PatchCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.PatchCa has not yet been implemented")
 		})
 	}
 	if api.ConfigPatchConfigHandler == nil {
@@ -717,9 +717,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation authenticator.UpdateAuthenticator has not yet been implemented")
 		})
 	}
-	if api.CaUpdateCaHandler == nil {
-		api.CaUpdateCaHandler = c_a.UpdateCaHandlerFunc(func(params c_a.UpdateCaParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.UpdateCa has not yet been implemented")
+	if api.CertificateAuthorityUpdateCaHandler == nil {
+		api.CertificateAuthorityUpdateCaHandler = certificate_authority.UpdateCaHandlerFunc(func(params certificate_authority.UpdateCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.UpdateCa has not yet been implemented")
 		})
 	}
 	if api.ConfigUpdateConfigHandler == nil {

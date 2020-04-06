@@ -407,7 +407,7 @@ func init() {
         ],
         "description": "Retrieves a list of CA resources; supports filtering, sorting, and pagination. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "List CAs",
         "operationId": "listCas",
@@ -436,7 +436,7 @@ func init() {
         ],
         "description": "Creates a CA in an unverified state. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Creates a CA",
         "operationId": "createCa",
@@ -473,7 +473,7 @@ func init() {
         ],
         "description": "Retrieves a single CA by id. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Retrieves a single CA",
         "operationId": "detailCa",
@@ -497,7 +497,7 @@ func init() {
         ],
         "description": "Update all fields on a CA by id. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Update all fields on a CA",
         "operationId": "updateCa",
@@ -535,10 +535,10 @@ func init() {
         ],
         "description": "Delete a CA by id. Deleting a CA will delete its associated certificate authenticators. This can make it\nimpossible for identities to authenticate if they no longer have any valid authenticators. Requires admin access.\n",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Delete a CA",
-        "operationId": "deleteCA",
+        "operationId": "deleteCa",
         "responses": {
           "200": {
             "$ref": "#/responses/deleteResponse"
@@ -559,7 +559,7 @@ func init() {
         ],
         "description": "Update only the supplied fields on a CA by id. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Update the supplied fields on a CA",
         "operationId": "patchCa",
@@ -607,7 +607,7 @@ func init() {
           "application/jwt"
         ],
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Retrieve the enrollment JWT for a CA",
         "responses": {
@@ -646,7 +646,7 @@ func init() {
           "text/plain"
         ],
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Verify a CA",
         "parameters": [
@@ -8552,7 +8552,7 @@ func init() {
         ],
         "description": "Retrieves a list of CA resources; supports filtering, sorting, and pagination. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "List CAs",
         "operationId": "listCas",
@@ -8590,7 +8590,7 @@ func init() {
         ],
         "description": "Creates a CA in an unverified state. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Creates a CA",
         "operationId": "createCa",
@@ -8685,7 +8685,7 @@ func init() {
         ],
         "description": "Retrieves a single CA by id. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Retrieves a single CA",
         "operationId": "detailCa",
@@ -8756,7 +8756,7 @@ func init() {
         ],
         "description": "Update all fields on a CA by id. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Update all fields on a CA",
         "operationId": "updateCa",
@@ -8875,10 +8875,10 @@ func init() {
         ],
         "description": "Delete a CA by id. Deleting a CA will delete its associated certificate authenticators. This can make it\nimpossible for identities to authenticate if they no longer have any valid authenticators. Requires admin access.\n",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Delete a CA",
-        "operationId": "deleteCA",
+        "operationId": "deleteCa",
         "responses": {
           "200": {
             "description": "The delete request was successful and the resource has been removed",
@@ -8957,7 +8957,7 @@ func init() {
         ],
         "description": "Update only the supplied fields on a CA by id. Requires admin access.",
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Update the supplied fields on a CA",
         "operationId": "patchCa",
@@ -9090,7 +9090,7 @@ func init() {
           "application/jwt"
         ],
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Retrieve the enrollment JWT for a CA",
         "responses": {
@@ -9177,7 +9177,7 @@ func init() {
           "text/plain"
         ],
         "tags": [
-          "CA"
+          "Certificate Authority"
         ],
         "summary": "Verify a CA",
         "parameters": [

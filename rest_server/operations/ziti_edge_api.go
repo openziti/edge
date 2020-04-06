@@ -47,7 +47,7 @@ import (
 	"github.com/netfoundry/ziti-edge/rest_server/operations/api_session"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/authentication"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/authenticator"
-	"github.com/netfoundry/ziti-edge/rest_server/operations/c_a"
+	"github.com/netfoundry/ziti-edge/rest_server/operations/certificate_authority"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/config"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/current_api_session"
 	"github.com/netfoundry/ziti-edge/rest_server/operations/edge_router"
@@ -104,8 +104,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 			return errors.NotImplemented("textYaml producer has not yet been implemented")
 		}),
 
-		CaGetCasIDJwtHandler: c_a.GetCasIDJwtHandlerFunc(func(params c_a.GetCasIDJwtParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.GetCasIDJwt has not yet been implemented")
+		CertificateAuthorityGetCasIDJwtHandler: certificate_authority.GetCasIDJwtHandlerFunc(func(params certificate_authority.GetCasIDJwtParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.GetCasIDJwt has not yet been implemented")
 		}),
 		EdgeRouterPolicyGetEdgeRouterPoliciesIDEdgeRoutersHandler: edge_router_policy.GetEdgeRouterPoliciesIDEdgeRoutersHandlerFunc(func(params edge_router_policy.GetEdgeRouterPoliciesIDEdgeRoutersParams) middleware.Responder {
 			return middleware.NotImplemented("operation edge_router_policy.GetEdgeRouterPoliciesIDEdgeRouters has not yet been implemented")
@@ -113,8 +113,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		EdgeRouterPolicyGetEdgeRouterPoliciesIDIdentitiesHandler: edge_router_policy.GetEdgeRouterPoliciesIDIdentitiesHandlerFunc(func(params edge_router_policy.GetEdgeRouterPoliciesIDIdentitiesParams) middleware.Responder {
 			return middleware.NotImplemented("operation edge_router_policy.GetEdgeRouterPoliciesIDIdentities has not yet been implemented")
 		}),
-		CaPostCasIDVerifyHandler: c_a.PostCasIDVerifyHandlerFunc(func(params c_a.PostCasIDVerifyParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.PostCasIDVerify has not yet been implemented")
+		CertificateAuthorityPostCasIDVerifyHandler: certificate_authority.PostCasIDVerifyHandlerFunc(func(params certificate_authority.PostCasIDVerifyParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.PostCasIDVerify has not yet been implemented")
 		}),
 		EnrollPostEnrollCaHandler: enroll.PostEnrollCaHandlerFunc(func(params enroll.PostEnrollCaParams) middleware.Responder {
 			return middleware.NotImplemented("operation enroll.PostEnrollCa has not yet been implemented")
@@ -140,8 +140,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		AuthenticatorCreateAuthenticatorsHandler: authenticator.CreateAuthenticatorsHandlerFunc(func(params authenticator.CreateAuthenticatorsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation authenticator.CreateAuthenticators has not yet been implemented")
 		}),
-		CaCreateCaHandler: c_a.CreateCaHandlerFunc(func(params c_a.CreateCaParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.CreateCa has not yet been implemented")
+		CertificateAuthorityCreateCaHandler: certificate_authority.CreateCaHandlerFunc(func(params certificate_authority.CreateCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.CreateCa has not yet been implemented")
 		}),
 		ConfigCreateConfigHandler: config.CreateConfigHandlerFunc(func(params config.CreateConfigParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation config.CreateConfig has not yet been implemented")
@@ -182,8 +182,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		AuthenticatorDeleteAuthenticatorHandler: authenticator.DeleteAuthenticatorHandlerFunc(func(params authenticator.DeleteAuthenticatorParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation authenticator.DeleteAuthenticator has not yet been implemented")
 		}),
-		CaDeleteCAHandler: c_a.DeleteCAHandlerFunc(func(params c_a.DeleteCAParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.DeleteCA has not yet been implemented")
+		CertificateAuthorityDeleteCaHandler: certificate_authority.DeleteCaHandlerFunc(func(params certificate_authority.DeleteCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.DeleteCa has not yet been implemented")
 		}),
 		ConfigDeleteConfigHandler: config.DeleteConfigHandlerFunc(func(params config.DeleteConfigParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation config.DeleteConfig has not yet been implemented")
@@ -227,8 +227,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		AuthenticatorDetailAuthenticatorHandler: authenticator.DetailAuthenticatorHandlerFunc(func(params authenticator.DetailAuthenticatorParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation authenticator.DetailAuthenticator has not yet been implemented")
 		}),
-		CaDetailCaHandler: c_a.DetailCaHandlerFunc(func(params c_a.DetailCaParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.DetailCa has not yet been implemented")
+		CertificateAuthorityDetailCaHandler: certificate_authority.DetailCaHandlerFunc(func(params certificate_authority.DetailCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.DetailCa has not yet been implemented")
 		}),
 		ConfigDetailConfigHandler: config.DetailConfigHandlerFunc(func(params config.DetailConfigParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation config.DetailConfig has not yet been implemented")
@@ -299,8 +299,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		AuthenticatorListAuthenticatorsHandler: authenticator.ListAuthenticatorsHandlerFunc(func(params authenticator.ListAuthenticatorsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation authenticator.ListAuthenticators has not yet been implemented")
 		}),
-		CaListCasHandler: c_a.ListCasHandlerFunc(func(params c_a.ListCasParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.ListCas has not yet been implemented")
+		CertificateAuthorityListCasHandler: certificate_authority.ListCasHandlerFunc(func(params certificate_authority.ListCasParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.ListCas has not yet been implemented")
 		}),
 		ConfigListConfigHandler: config.ListConfigHandlerFunc(func(params config.ListConfigParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation config.ListConfig has not yet been implemented")
@@ -431,8 +431,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		AuthenticatorPatchAuthenticatorHandler: authenticator.PatchAuthenticatorHandlerFunc(func(params authenticator.PatchAuthenticatorParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation authenticator.PatchAuthenticator has not yet been implemented")
 		}),
-		CaPatchCaHandler: c_a.PatchCaHandlerFunc(func(params c_a.PatchCaParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.PatchCa has not yet been implemented")
+		CertificateAuthorityPatchCaHandler: certificate_authority.PatchCaHandlerFunc(func(params certificate_authority.PatchCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.PatchCa has not yet been implemented")
 		}),
 		ConfigPatchConfigHandler: config.PatchConfigHandlerFunc(func(params config.PatchConfigParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation config.PatchConfig has not yet been implemented")
@@ -470,8 +470,8 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		AuthenticatorUpdateAuthenticatorHandler: authenticator.UpdateAuthenticatorHandlerFunc(func(params authenticator.UpdateAuthenticatorParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation authenticator.UpdateAuthenticator has not yet been implemented")
 		}),
-		CaUpdateCaHandler: c_a.UpdateCaHandlerFunc(func(params c_a.UpdateCaParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation c_a.UpdateCa has not yet been implemented")
+		CertificateAuthorityUpdateCaHandler: certificate_authority.UpdateCaHandlerFunc(func(params certificate_authority.UpdateCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.UpdateCa has not yet been implemented")
 		}),
 		ConfigUpdateConfigHandler: config.UpdateConfigHandlerFunc(func(params config.UpdateConfigParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation config.UpdateConfig has not yet been implemented")
@@ -571,14 +571,14 @@ type ZitiEdgeAPI struct {
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
 
-	// CaGetCasIDJwtHandler sets the operation handler for the get cas ID jwt operation
-	CaGetCasIDJwtHandler c_a.GetCasIDJwtHandler
+	// CertificateAuthorityGetCasIDJwtHandler sets the operation handler for the get cas ID jwt operation
+	CertificateAuthorityGetCasIDJwtHandler certificate_authority.GetCasIDJwtHandler
 	// EdgeRouterPolicyGetEdgeRouterPoliciesIDEdgeRoutersHandler sets the operation handler for the get edge router policies ID edge routers operation
 	EdgeRouterPolicyGetEdgeRouterPoliciesIDEdgeRoutersHandler edge_router_policy.GetEdgeRouterPoliciesIDEdgeRoutersHandler
 	// EdgeRouterPolicyGetEdgeRouterPoliciesIDIdentitiesHandler sets the operation handler for the get edge router policies ID identities operation
 	EdgeRouterPolicyGetEdgeRouterPoliciesIDIdentitiesHandler edge_router_policy.GetEdgeRouterPoliciesIDIdentitiesHandler
-	// CaPostCasIDVerifyHandler sets the operation handler for the post cas ID verify operation
-	CaPostCasIDVerifyHandler c_a.PostCasIDVerifyHandler
+	// CertificateAuthorityPostCasIDVerifyHandler sets the operation handler for the post cas ID verify operation
+	CertificateAuthorityPostCasIDVerifyHandler certificate_authority.PostCasIDVerifyHandler
 	// EnrollPostEnrollCaHandler sets the operation handler for the post enroll ca operation
 	EnrollPostEnrollCaHandler enroll.PostEnrollCaHandler
 	// EnrollPostEnrollErottHandler sets the operation handler for the post enroll erott operation
@@ -595,8 +595,8 @@ type ZitiEdgeAPI struct {
 	AuthenticationAuthenticateHandler authentication.AuthenticateHandler
 	// AuthenticatorCreateAuthenticatorsHandler sets the operation handler for the create authenticators operation
 	AuthenticatorCreateAuthenticatorsHandler authenticator.CreateAuthenticatorsHandler
-	// CaCreateCaHandler sets the operation handler for the create ca operation
-	CaCreateCaHandler c_a.CreateCaHandler
+	// CertificateAuthorityCreateCaHandler sets the operation handler for the create ca operation
+	CertificateAuthorityCreateCaHandler certificate_authority.CreateCaHandler
 	// ConfigCreateConfigHandler sets the operation handler for the create config operation
 	ConfigCreateConfigHandler config.CreateConfigHandler
 	// ConfigCreateConfigTypeHandler sets the operation handler for the create config type operation
@@ -623,8 +623,8 @@ type ZitiEdgeAPI struct {
 	APISessionDeleteAPISessionsHandler api_session.DeleteAPISessionsHandler
 	// AuthenticatorDeleteAuthenticatorHandler sets the operation handler for the delete authenticator operation
 	AuthenticatorDeleteAuthenticatorHandler authenticator.DeleteAuthenticatorHandler
-	// CaDeleteCAHandler sets the operation handler for the delete c a operation
-	CaDeleteCAHandler c_a.DeleteCAHandler
+	// CertificateAuthorityDeleteCaHandler sets the operation handler for the delete ca operation
+	CertificateAuthorityDeleteCaHandler certificate_authority.DeleteCaHandler
 	// ConfigDeleteConfigHandler sets the operation handler for the delete config operation
 	ConfigDeleteConfigHandler config.DeleteConfigHandler
 	// ConfigDeleteConfigTypeHandler sets the operation handler for the delete config type operation
@@ -653,8 +653,8 @@ type ZitiEdgeAPI struct {
 	APISessionDetailAPISessionsHandler api_session.DetailAPISessionsHandler
 	// AuthenticatorDetailAuthenticatorHandler sets the operation handler for the detail authenticator operation
 	AuthenticatorDetailAuthenticatorHandler authenticator.DetailAuthenticatorHandler
-	// CaDetailCaHandler sets the operation handler for the detail ca operation
-	CaDetailCaHandler c_a.DetailCaHandler
+	// CertificateAuthorityDetailCaHandler sets the operation handler for the detail ca operation
+	CertificateAuthorityDetailCaHandler certificate_authority.DetailCaHandler
 	// ConfigDetailConfigHandler sets the operation handler for the detail config operation
 	ConfigDetailConfigHandler config.DetailConfigHandler
 	// ConfigDetailConfigTypeHandler sets the operation handler for the detail config type operation
@@ -701,8 +701,8 @@ type ZitiEdgeAPI struct {
 	APISessionListAPISessionsHandler api_session.ListAPISessionsHandler
 	// AuthenticatorListAuthenticatorsHandler sets the operation handler for the list authenticators operation
 	AuthenticatorListAuthenticatorsHandler authenticator.ListAuthenticatorsHandler
-	// CaListCasHandler sets the operation handler for the list cas operation
-	CaListCasHandler c_a.ListCasHandler
+	// CertificateAuthorityListCasHandler sets the operation handler for the list cas operation
+	CertificateAuthorityListCasHandler certificate_authority.ListCasHandler
 	// ConfigListConfigHandler sets the operation handler for the list config operation
 	ConfigListConfigHandler config.ListConfigHandler
 	// ConfigListConfigTypeHandler sets the operation handler for the list config type operation
@@ -789,8 +789,8 @@ type ZitiEdgeAPI struct {
 	WellKnownListWellKnownCasHandler well_known.ListWellKnownCasHandler
 	// AuthenticatorPatchAuthenticatorHandler sets the operation handler for the patch authenticator operation
 	AuthenticatorPatchAuthenticatorHandler authenticator.PatchAuthenticatorHandler
-	// CaPatchCaHandler sets the operation handler for the patch ca operation
-	CaPatchCaHandler c_a.PatchCaHandler
+	// CertificateAuthorityPatchCaHandler sets the operation handler for the patch ca operation
+	CertificateAuthorityPatchCaHandler certificate_authority.PatchCaHandler
 	// ConfigPatchConfigHandler sets the operation handler for the patch config operation
 	ConfigPatchConfigHandler config.PatchConfigHandler
 	// ConfigPatchConfigTypeHandler sets the operation handler for the patch config type operation
@@ -815,8 +815,8 @@ type ZitiEdgeAPI struct {
 	TransitRouterPatchTransitRouterHandler transit_router.PatchTransitRouterHandler
 	// AuthenticatorUpdateAuthenticatorHandler sets the operation handler for the update authenticator operation
 	AuthenticatorUpdateAuthenticatorHandler authenticator.UpdateAuthenticatorHandler
-	// CaUpdateCaHandler sets the operation handler for the update ca operation
-	CaUpdateCaHandler c_a.UpdateCaHandler
+	// CertificateAuthorityUpdateCaHandler sets the operation handler for the update ca operation
+	CertificateAuthorityUpdateCaHandler certificate_authority.UpdateCaHandler
 	// ConfigUpdateConfigHandler sets the operation handler for the update config operation
 	ConfigUpdateConfigHandler config.UpdateConfigHandler
 	// ConfigUpdateConfigTypeHandler sets the operation handler for the update config type operation
@@ -927,8 +927,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 		unregistered = append(unregistered, "ZtSessionAuth")
 	}
 
-	if o.CaGetCasIDJwtHandler == nil {
-		unregistered = append(unregistered, "c_a.GetCasIDJwtHandler")
+	if o.CertificateAuthorityGetCasIDJwtHandler == nil {
+		unregistered = append(unregistered, "certificate_authority.GetCasIDJwtHandler")
 	}
 	if o.EdgeRouterPolicyGetEdgeRouterPoliciesIDEdgeRoutersHandler == nil {
 		unregistered = append(unregistered, "edge_router_policy.GetEdgeRouterPoliciesIDEdgeRoutersHandler")
@@ -936,8 +936,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.EdgeRouterPolicyGetEdgeRouterPoliciesIDIdentitiesHandler == nil {
 		unregistered = append(unregistered, "edge_router_policy.GetEdgeRouterPoliciesIDIdentitiesHandler")
 	}
-	if o.CaPostCasIDVerifyHandler == nil {
-		unregistered = append(unregistered, "c_a.PostCasIDVerifyHandler")
+	if o.CertificateAuthorityPostCasIDVerifyHandler == nil {
+		unregistered = append(unregistered, "certificate_authority.PostCasIDVerifyHandler")
 	}
 	if o.EnrollPostEnrollCaHandler == nil {
 		unregistered = append(unregistered, "enroll.PostEnrollCaHandler")
@@ -963,8 +963,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.AuthenticatorCreateAuthenticatorsHandler == nil {
 		unregistered = append(unregistered, "authenticator.CreateAuthenticatorsHandler")
 	}
-	if o.CaCreateCaHandler == nil {
-		unregistered = append(unregistered, "c_a.CreateCaHandler")
+	if o.CertificateAuthorityCreateCaHandler == nil {
+		unregistered = append(unregistered, "certificate_authority.CreateCaHandler")
 	}
 	if o.ConfigCreateConfigHandler == nil {
 		unregistered = append(unregistered, "config.CreateConfigHandler")
@@ -1005,8 +1005,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.AuthenticatorDeleteAuthenticatorHandler == nil {
 		unregistered = append(unregistered, "authenticator.DeleteAuthenticatorHandler")
 	}
-	if o.CaDeleteCAHandler == nil {
-		unregistered = append(unregistered, "c_a.DeleteCAHandler")
+	if o.CertificateAuthorityDeleteCaHandler == nil {
+		unregistered = append(unregistered, "certificate_authority.DeleteCaHandler")
 	}
 	if o.ConfigDeleteConfigHandler == nil {
 		unregistered = append(unregistered, "config.DeleteConfigHandler")
@@ -1050,8 +1050,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.AuthenticatorDetailAuthenticatorHandler == nil {
 		unregistered = append(unregistered, "authenticator.DetailAuthenticatorHandler")
 	}
-	if o.CaDetailCaHandler == nil {
-		unregistered = append(unregistered, "c_a.DetailCaHandler")
+	if o.CertificateAuthorityDetailCaHandler == nil {
+		unregistered = append(unregistered, "certificate_authority.DetailCaHandler")
 	}
 	if o.ConfigDetailConfigHandler == nil {
 		unregistered = append(unregistered, "config.DetailConfigHandler")
@@ -1122,8 +1122,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.AuthenticatorListAuthenticatorsHandler == nil {
 		unregistered = append(unregistered, "authenticator.ListAuthenticatorsHandler")
 	}
-	if o.CaListCasHandler == nil {
-		unregistered = append(unregistered, "c_a.ListCasHandler")
+	if o.CertificateAuthorityListCasHandler == nil {
+		unregistered = append(unregistered, "certificate_authority.ListCasHandler")
 	}
 	if o.ConfigListConfigHandler == nil {
 		unregistered = append(unregistered, "config.ListConfigHandler")
@@ -1254,8 +1254,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.AuthenticatorPatchAuthenticatorHandler == nil {
 		unregistered = append(unregistered, "authenticator.PatchAuthenticatorHandler")
 	}
-	if o.CaPatchCaHandler == nil {
-		unregistered = append(unregistered, "c_a.PatchCaHandler")
+	if o.CertificateAuthorityPatchCaHandler == nil {
+		unregistered = append(unregistered, "certificate_authority.PatchCaHandler")
 	}
 	if o.ConfigPatchConfigHandler == nil {
 		unregistered = append(unregistered, "config.PatchConfigHandler")
@@ -1293,8 +1293,8 @@ func (o *ZitiEdgeAPI) Validate() error {
 	if o.AuthenticatorUpdateAuthenticatorHandler == nil {
 		unregistered = append(unregistered, "authenticator.UpdateAuthenticatorHandler")
 	}
-	if o.CaUpdateCaHandler == nil {
-		unregistered = append(unregistered, "c_a.UpdateCaHandler")
+	if o.CertificateAuthorityUpdateCaHandler == nil {
+		unregistered = append(unregistered, "certificate_authority.UpdateCaHandler")
 	}
 	if o.ConfigUpdateConfigHandler == nil {
 		unregistered = append(unregistered, "config.UpdateConfigHandler")
@@ -1441,7 +1441,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/cas/{id}/jwt"] = c_a.NewGetCasIDJwt(o.context, o.CaGetCasIDJwtHandler)
+	o.handlers["GET"]["/cas/{id}/jwt"] = certificate_authority.NewGetCasIDJwt(o.context, o.CertificateAuthorityGetCasIDJwtHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1453,7 +1453,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/cas/{id}/verify"] = c_a.NewPostCasIDVerify(o.context, o.CaPostCasIDVerifyHandler)
+	o.handlers["POST"]["/cas/{id}/verify"] = certificate_authority.NewPostCasIDVerify(o.context, o.CertificateAuthorityPostCasIDVerifyHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
@@ -1489,7 +1489,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/cas"] = c_a.NewCreateCa(o.context, o.CaCreateCaHandler)
+	o.handlers["POST"]["/cas"] = certificate_authority.NewCreateCa(o.context, o.CertificateAuthorityCreateCaHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
@@ -1545,7 +1545,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
-	o.handlers["DELETE"]["/cas/{id}"] = c_a.NewDeleteCA(o.context, o.CaDeleteCAHandler)
+	o.handlers["DELETE"]["/cas/{id}"] = certificate_authority.NewDeleteCa(o.context, o.CertificateAuthorityDeleteCaHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
@@ -1605,7 +1605,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/cas/{id}"] = c_a.NewDetailCa(o.context, o.CaDetailCaHandler)
+	o.handlers["GET"]["/cas/{id}"] = certificate_authority.NewDetailCa(o.context, o.CertificateAuthorityDetailCaHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1701,7 +1701,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/cas"] = c_a.NewListCas(o.context, o.CaListCasHandler)
+	o.handlers["GET"]["/cas"] = certificate_authority.NewListCas(o.context, o.CertificateAuthorityListCasHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1877,7 +1877,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["PATCH"] == nil {
 		o.handlers["PATCH"] = make(map[string]http.Handler)
 	}
-	o.handlers["PATCH"]["/cas/{id}"] = c_a.NewPatchCa(o.context, o.CaPatchCaHandler)
+	o.handlers["PATCH"]["/cas/{id}"] = certificate_authority.NewPatchCa(o.context, o.CertificateAuthorityPatchCaHandler)
 	if o.handlers["PATCH"] == nil {
 		o.handlers["PATCH"] = make(map[string]http.Handler)
 	}
@@ -1929,7 +1929,7 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/cas/{id}"] = c_a.NewUpdateCa(o.context, o.CaUpdateCaHandler)
+	o.handlers["PUT"]["/cas/{id}"] = certificate_authority.NewUpdateCa(o.context, o.CertificateAuthorityUpdateCaHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
