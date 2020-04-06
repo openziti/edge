@@ -3356,6 +3356,22 @@ definitions:
   ###################################################################
   # Shared Definitions
   ##################################################################
+  baseEntity:
+    description: Fields shared by all Edge API entities
+    type: object
+    properties:
+      id:
+        type: string
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+      _links:
+        $ref: '#/definitions/links'
+      tags:
+        $ref: '#/definitions/tags'
   link:
     description: A link to another resource
     type: object
@@ -3445,24 +3461,14 @@ definitions:
   apiSessionDetail:
     description: An API Session object
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      token:
-        type: string
-      identity:
-        allOf:
-          - $ref: '#/definitions/entityRef'
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          token:
+            type: string
+          identity:
+            $ref: '#/definitions/entityRef'
   ###################################################################
   # Identities
   ##################################################################
@@ -3533,38 +3539,29 @@ definitions:
   identityDetail:
     description: Detail of a specific identity
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-      type:
-        $ref: '#/definitions/entityRef'
-      isDefaultAdmin:
-        type: boolean
-      isAdmin:
-        type: boolean
-      authenticators:
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
         properties:
-          updb:
+          name:
+            type: string
+          type:
+            $ref: '#/definitions/entityRef'
+          isDefaultAdmin:
+            type: boolean
+          isAdmin:
+            type: boolean
+          authenticators:
             properties:
-              username:
-                type: string
+              updb:
+                properties:
+                  username:
+                    type: string
+                type: object
             type: object
-        type: object
-      enrollment:
-        properties: {}
-        type: object
+          enrollment:
+            properties: {}
+            type: object
   ###################################################################
   # Authenticator
   ##################################################################
@@ -3594,25 +3591,18 @@ definitions:
   authenticatorDetail:
     description: A singular authenticator resource
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      method:
-        type: string
-      identityId:
-        type: string
-      certPem:
-        type: string
-      fingerprint:
-        type: string
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          method:
+            type: string
+          identityId:
+            type: string
+          certPem:
+            type: string
+          fingerprint:
+            type: string
   authenticatorUpdate:
     description: All of the fields on an authenticator that will be updated
     type: object
@@ -3643,40 +3633,31 @@ definitions:
   caDetail:
     description: A Certificate Authority (CA) resource
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-      fingerprint:
-        type: string
-      certPem:
-        type: string
-      isVerified:
-        type: boolean
-        example: false
-      verificationToken:
-        type: string
-        format: uuid
-      isAutoCaEnrollmentEnabled:
-        type: boolean
-        example: true
-      isOttCaEnrollmentEnabled:
-        type: boolean
-        example: true
-      isAuthEnabled:
-        type: boolean
-        example: true
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
+          fingerprint:
+            type: string
+          certPem:
+            type: string
+          isVerified:
+            type: boolean
+            example: false
+          verificationToken:
+            type: string
+            format: uuid
+          isAutoCaEnrollmentEnabled:
+            type: boolean
+            example: true
+          isOttCaEnrollmentEnabled:
+            type: boolean
+            example: true
+          isAuthEnabled:
+            type: boolean
+            example: true
     example:
       id: c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c
       createdAt: '2020-03-10T15:20:40.4301069Z'
@@ -3812,28 +3793,16 @@ definitions:
   configTypeDetail:
     description: A config-type resource
     type: object
-    properties:
-      id:
-        type: string
-        example: cea49285-6c07-42cf-9f52-09a9b115c783
-      createdAt:
-        type: string
-        format: date-time
-        example: 2020-02-06T18:50:32.7812998Z
-      updatedAt:
-        type: string
-        format: date-time
-        example: 2020-02-06T18:50:32.7812998Z
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-        example: ziti-tunneler-server.v1
-      schema:
-        description: A JSON schema to enforce configuration against
-        type: object
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
+            example: ziti-tunneler-server.v1
+          schema:
+            description: A JSON schema to enforce configuration against
+            type: object
   configTypeCreate:
     type: object
     description: A config-type create object
@@ -3887,26 +3856,17 @@ definitions:
   configDetail:
     description: A config resource
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-      type:
-        $ref: '#/definitions/entityRef'
-      data:
-        type: object
-        description: The data section of a config is based on the schema of its type
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
+          type:
+            $ref: '#/definitions/entityRef'
+          data:
+            type: object
+            description: The data section of a config is based on the schema of its type
   configCreate:
     type: object
     description: A config create object
@@ -3978,31 +3938,24 @@ definitions:
       An enrollment object. Enrolments are tied to identities and portentially a CA. Depending on the
       method, different fields are utilized. For example ottca enrollments use the `ca` field and updb enrollments
       use the username field, but not vice versa.
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      token:
-        type: string
-      method:
-        type: string
-      expiresAt:
-        type: string
-      identity:
-        $ref: '#/definitions/entityRef'
-      username:
-        type: string
-      details:
-        type: object
-        additionalProperties:
-          type: string
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          token:
+            type: string
+          method:
+            type: string
+          expiresAt:
+            type: string
+          identity:
+            $ref: '#/definitions/entityRef'
+          username:
+            type: string
+          details:
+            type: object
+            additionalProperties:
+              type: string
     example:
       id: 624fa53f-7629-4a7a-9e38-c1f4ce322c1d
       createdAt: '0001-01-01T00:00:00Z'
@@ -4074,41 +4027,32 @@ definitions:
   edgeRouterDetail:
     description: A detail edge router resource
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-      isVerified:
-        type: boolean
-      isOnline:
-        type: boolean
-      enrollmentToken:
-        type: string
-      enrollmentJwt:
-        type: string
-      enrollmentCreatedAt:
-        type: string
-        format: date-time
-      enrollmentExpiresAt:
-        type: string
-        format: date-time
-      hostname:
-        type: string
-      supportedProtocols:
-        additionalProperties:
-          type: string
-        type: object
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
+          isVerified:
+            type: boolean
+          isOnline:
+            type: boolean
+          enrollmentToken:
+            type: string
+          enrollmentJwt:
+            type: string
+          enrollmentCreatedAt:
+            type: string
+            format: date-time
+          enrollmentExpiresAt:
+            type: string
+            format: date-time
+          hostname:
+            type: string
+          supportedProtocols:
+            additionalProperties:
+              type: string
+            type: object
     example:
       id: b0766b8d-bd1a-4d28-8415-639b29d3c83d
       createdAt: '2020-03-16T17:13:31.5807454Z'
@@ -4189,31 +4133,22 @@ definitions:
       $ref: '#/definitions/edgeRouterPolicyDetail'
   edgeRouterPolicyDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-      semantic:
-        $ref: '#/definitions/semantic'
-      edgeRouterRoles:
-        type: array
-        items:
-          type: string
-      identityRoles:
-        type: array
-        items:
-          type: string
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
+          semantic:
+            $ref: '#/definitions/semantic'
+          edgeRouterRoles:
+            type: array
+            items:
+              type: string
+          identityRoles:
+            type: array
+            items:
+              type: string
   ###################################################################
   # Service Policies
   ##################################################################
@@ -4312,31 +4247,22 @@ definitions:
       $ref: '#/definitions/serviceDetail'
   serviceDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-      terminatorStrategy:
-        type: string
-      roleAttributes:
-        $ref: '#/definitions/attributes'
-      permissions:
-        $ref: '#/definitions/dialBind'
-      configs:
-        type: array
-        items:
-          type: string
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
+          terminatorStrategy:
+            type: string
+          roleAttributes:
+            $ref: '#/definitions/attributes'
+          permissions:
+            $ref: '#/definitions/dialBind'
+          configs:
+            type: array
+            items:
+              type: string
   serviceCreate:
     type: object
     required:
@@ -4404,21 +4330,12 @@ definitions:
       $ref: '#/definitions/geoRegionDetail'
   geoRegionDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
   ###################################################################
   # Identity-Types
   ##################################################################
@@ -4428,21 +4345,12 @@ definitions:
       $ref: '#/definitions/identityDetail'
   identityTypeDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
   ###################################################################
   # Service Configs
   ##################################################################
@@ -4492,27 +4400,18 @@ definitions:
       $ref: '#/definitions/serviceEdgeRouterPolicyDetail'
   serviceEdgeRouterPolicyDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-      semantic:
-        $ref: '#/definitions/semantic'
-      edgeRouterRoles:
-        $ref: '#/definitions/roles'
-      serviceRoles:
-        $ref: '#/definitions/roles'
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
+          semantic:
+            $ref: '#/definitions/semantic'
+          edgeRouterRoles:
+            $ref: '#/definitions/roles'
+          serviceRoles:
+            $ref: '#/definitions/roles'
   serviceEdgeRouterPolicyCreate:
     type: object
     required:
@@ -4578,29 +4477,20 @@ definitions:
       $ref: '#/definitions/sessionDetail'
   sessionDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      type:
-        $ref: '#/definitions/dialBind'
-      apiSession:
-        $ref: '#/definitions/entityRef'
-      service:
-        $ref: '#/definitions/entityRef'
-      sessionEdgeRouters:
-        type: array
-        items:
-          $ref: '#/definitions/sessionEdgeRouter'
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          type:
+            $ref: '#/definitions/dialBind'
+          apiSession:
+            $ref: '#/definitions/entityRef'
+          service:
+            $ref: '#/definitions/entityRef'
+          sessionEdgeRouters:
+            type: array
+            items:
+              $ref: '#/definitions/sessionEdgeRouter'
   sessionEdgeRouter:
     type: object
     properties:
@@ -5016,31 +4906,22 @@ definitions:
       $ref: '#/definitions/terminatorDetail'
   terminatorDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      serviceId:
-        type: string
-      service:
-        $ref: '#/definitions/entityRef'
-      routerId:
-        type: string
-      router:
-        $ref: '#/definitions/entityRef'
-      binding:
-        type: string
-      address:
-        type: string
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          serviceId:
+            type: string
+          service:
+            $ref: '#/definitions/entityRef'
+          routerId:
+            type: string
+          router:
+            $ref: '#/definitions/entityRef'
+          binding:
+            type: string
+          address:
+            type: string
   terminatorCreate:
     type: object
     required:
@@ -5120,21 +5001,12 @@ definitions:
       $ref: '#/definitions/specDetail'
   specDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
   specBodyDetail:
     type: string
 
@@ -5216,27 +5088,18 @@ definitions:
       $ref: '#/definitions/transitRouterDetail'
   transitRouterDetail:
     type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
-      _links:
-        $ref: '#/definitions/links'
-      tags:
-        $ref: '#/definitions/tags'
-      name:
-        type: string
-      fingerprint:
-        type: string
-      isVerified:
-        type: boolean
-      isOnline:
-        type: boolean
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        properties:
+          name:
+            type: string
+          fingerprint:
+            type: string
+          isVerified:
+            type: boolean
+          isOnline:
+            type: boolean
   transitRouterCreate:
     type: object
     required:

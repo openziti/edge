@@ -4463,35 +4463,22 @@ func init() {
     "apiSessionDetail": {
       "description": "An API Session object",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "identity": {
-          "allOf": [
-            {
+        {
+          "type": "object",
+          "properties": {
+            "identity": {
               "$ref": "#/definitions/entityRef"
+            },
+            "token": {
+              "type": "string"
             }
-          ]
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "token": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+          }
         }
-      }
+      ]
     },
     "apiSessionList": {
       "type": "array",
@@ -4555,34 +4542,28 @@ func init() {
     "authenticatorDetail": {
       "description": "A singular authenticator resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "certPem": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "fingerprint": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "identityId": {
-          "type": "string"
-        },
-        "method": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "certPem": {
+              "type": "string"
+            },
+            "fingerprint": {
+              "type": "string"
+            },
+            "identityId": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "authenticatorList": {
       "description": "An array of authenticator resources",
@@ -4616,6 +4597,29 @@ func init() {
         },
         "username": {
           "$ref": "#/definitions/username"
+        }
+      }
+    },
+    "baseEntity": {
+      "description": "Fields shared by all Edge API entities",
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/links"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "tags": {
+          "$ref": "#/definitions/tags"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -4665,54 +4669,45 @@ func init() {
     "caDetail": {
       "description": "A Certificate Authority (CA) resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "certPem": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "fingerprint": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "isAuthEnabled": {
-          "type": "boolean",
-          "example": true
-        },
-        "isAutoCaEnrollmentEnabled": {
-          "type": "boolean",
-          "example": true
-        },
-        "isOttCaEnrollmentEnabled": {
-          "type": "boolean",
-          "example": true
-        },
-        "isVerified": {
-          "type": "boolean",
-          "example": false
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "verificationToken": {
-          "type": "string",
-          "format": "uuid"
+        {
+          "type": "object",
+          "properties": {
+            "certPem": {
+              "type": "string"
+            },
+            "fingerprint": {
+              "type": "string"
+            },
+            "isAuthEnabled": {
+              "type": "boolean",
+              "example": true
+            },
+            "isAutoCaEnrollmentEnabled": {
+              "type": "boolean",
+              "example": true
+            },
+            "isOttCaEnrollmentEnabled": {
+              "type": "boolean",
+              "example": true
+            },
+            "isVerified": {
+              "type": "boolean",
+              "example": false
+            },
+            "name": {
+              "type": "string"
+            },
+            "verificationToken": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
         }
-      },
+      ],
       "example": {
         "_links": {
           "jwt": {
@@ -4841,35 +4836,26 @@ func init() {
     "configDetail": {
       "description": "A config resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "data": {
-          "description": "The data section of a config is based on the schema of its type",
-          "type": "object"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "type": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "description": "The data section of a config is based on the schema of its type",
+              "type": "object"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "$ref": "#/definitions/entityRef"
+            }
+          }
         }
-      }
+      ]
     },
     "configList": {
       "description": "An array of config resources",
@@ -4926,36 +4912,24 @@ func init() {
     "configTypeDetail": {
       "description": "A config-type resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time",
-          "example": "2020-02-06T18:50:32.7812998Z"
-        },
-        "id": {
-          "type": "string",
-          "example": "cea49285-6c07-42cf-9f52-09a9b115c783"
-        },
-        "name": {
-          "type": "string",
-          "example": "ziti-tunneler-server.v1"
-        },
-        "schema": {
-          "description": "A JSON schema to enforce configuration against",
-          "type": "object"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time",
-          "example": "2020-02-06T18:50:32.7812998Z"
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "ziti-tunneler-server.v1"
+            },
+            "schema": {
+              "description": "A JSON schema to enforce configuration against",
+              "type": "object"
+            }
+          }
         }
-      }
+      ]
     },
     "configTypeList": {
       "description": "An array of config-type resources",
@@ -5315,57 +5289,48 @@ func init() {
     "edgeRouterDetail": {
       "description": "A detail edge router resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enrollmentCreatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enrollmentExpiresAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enrollmentJwt": {
-          "type": "string"
-        },
-        "enrollmentToken": {
-          "type": "string"
-        },
-        "hostname": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "isOnline": {
-          "type": "boolean"
-        },
-        "isVerified": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "supportedProtocols": {
+        {
           "type": "object",
-          "additionalProperties": {
-            "type": "string"
+          "properties": {
+            "enrollmentCreatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "enrollmentExpiresAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "enrollmentJwt": {
+              "type": "string"
+            },
+            "enrollmentToken": {
+              "type": "string"
+            },
+            "hostname": {
+              "type": "string"
+            },
+            "isOnline": {
+              "type": "boolean"
+            },
+            "isVerified": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "supportedProtocols": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
           }
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      },
+      ],
       "example": {
         "_links": {
           "edge-router-policies": {
@@ -5442,43 +5407,34 @@ func init() {
     },
     "edgeRouterPolicyDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "edgeRouterRoles": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        {
+          "type": "object",
+          "properties": {
+            "edgeRouterRoles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "identityRoles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "name": {
+              "type": "string"
+            },
+            "semantic": {
+              "$ref": "#/definitions/semantic"
+            }
           }
-        },
-        "id": {
-          "type": "string"
-        },
-        "identityRoles": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "name": {
-          "type": "string"
-        },
-        "semantic": {
-          "$ref": "#/definitions/semantic"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      }
+      ]
     },
     "edgeRouterPolicyList": {
       "type": "array",
@@ -5564,43 +5520,37 @@ func init() {
     "enrollmentDetail": {
       "description": "An enrollment object. Enrolments are tied to identities and portentially a CA. Depending on the\nmethod, different fields are utilized. For example ottca enrollments use the ` + "`" + `ca` + "`" + ` field and updb enrollments\nuse the username field, but not vice versa.\n",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "details": {
+        {
           "type": "object",
-          "additionalProperties": {
-            "type": "string"
+          "properties": {
+            "details": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "expiresAt": {
+              "type": "string"
+            },
+            "identity": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "method": {
+              "type": "string"
+            },
+            "token": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
           }
-        },
-        "expiresAt": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "identity": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "method": {
-          "type": "string"
-        },
-        "token": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "username": {
-          "type": "string"
         }
-      },
+      ],
       "example": {
         "_links": {
           "self": {
@@ -5690,28 +5640,19 @@ func init() {
     },
     "geoRegionDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "geoRegionList": {
       "type": "array",
@@ -5771,53 +5712,44 @@ func init() {
     "identityDetail": {
       "description": "Detail of a specific identity",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "authenticators": {
+        {
           "type": "object",
           "properties": {
-            "updb": {
+            "authenticators": {
               "type": "object",
               "properties": {
-                "username": {
-                  "type": "string"
+                "updb": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
+            },
+            "enrollment": {
+              "type": "object"
+            },
+            "isAdmin": {
+              "type": "boolean"
+            },
+            "isDefaultAdmin": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "$ref": "#/definitions/entityRef"
             }
           }
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enrollment": {
-          "type": "object"
-        },
-        "id": {
-          "type": "string"
-        },
-        "isAdmin": {
-          "type": "boolean"
-        },
-        "isDefaultAdmin": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "type": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      }
+      ]
     },
     "identityList": {
       "description": "A list of identities",
@@ -5847,28 +5779,19 @@ func init() {
     },
     "identityTypeDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "identityTypeList": {
       "type": "array",
@@ -6385,43 +6308,34 @@ func init() {
     },
     "serviceDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "configs": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        {
+          "type": "object",
+          "properties": {
+            "configs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "name": {
+              "type": "string"
+            },
+            "permissions": {
+              "$ref": "#/definitions/dialBind"
+            },
+            "roleAttributes": {
+              "$ref": "#/definitions/attributes"
+            },
+            "terminatorStrategy": {
+              "type": "string"
+            }
           }
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "permissions": {
-          "$ref": "#/definitions/dialBind"
-        },
-        "roleAttributes": {
-          "$ref": "#/definitions/attributes"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "terminatorStrategy": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      }
+      ]
     },
     "serviceEdgePolicyPatch": {
       "type": "object",
@@ -6495,37 +6409,28 @@ func init() {
     },
     "serviceEdgeRouterPolicyDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "edgeRouterRoles": {
-          "$ref": "#/definitions/roles"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "semantic": {
-          "$ref": "#/definitions/semantic"
-        },
-        "serviceRoles": {
-          "$ref": "#/definitions/roles"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "edgeRouterRoles": {
+              "$ref": "#/definitions/roles"
+            },
+            "name": {
+              "type": "string"
+            },
+            "semantic": {
+              "$ref": "#/definitions/semantic"
+            },
+            "serviceRoles": {
+              "$ref": "#/definitions/roles"
+            }
+          }
         }
-      }
+      ]
     },
     "serviceEdgeRouterPolicyList": {
       "type": "array",
@@ -6740,40 +6645,31 @@ func init() {
     },
     "sessionDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "apiSession": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "service": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "sessionEdgeRouters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/sessionEdgeRouter"
+        {
+          "type": "object",
+          "properties": {
+            "apiSession": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "service": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "sessionEdgeRouters": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/sessionEdgeRouter"
+              }
+            },
+            "type": {
+              "$ref": "#/definitions/dialBind"
+            }
           }
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "type": {
-          "$ref": "#/definitions/dialBind"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      }
+      ]
     },
     "sessionEdgeRouter": {
       "type": "object",
@@ -6803,28 +6699,19 @@ func init() {
     },
     "specDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "specList": {
       "type": "array",
@@ -6864,43 +6751,34 @@ func init() {
     },
     "terminatorDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "address": {
-          "type": "string"
-        },
-        "binding": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "router": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "routerId": {
-          "type": "string"
-        },
-        "service": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "serviceId": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "binding": {
+              "type": "string"
+            },
+            "router": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "routerId": {
+              "type": "string"
+            },
+            "service": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "serviceId": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "terminatorList": {
       "type": "array",
@@ -6968,37 +6846,28 @@ func init() {
     },
     "transitRouterDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "fingerprint": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "isOnline": {
-          "type": "boolean"
-        },
-        "isVerified": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "fingerprint": {
+              "type": "string"
+            },
+            "isOnline": {
+              "type": "boolean"
+            },
+            "isVerified": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "transitRouterList": {
       "type": "array",
@@ -19120,7 +18989,7 @@ func init() {
         }
       }
     },
-    "IdentityDetailAuthenticators": {
+    "IdentityDetailAO1Authenticators": {
       "type": "object",
       "properties": {
         "updb": {
@@ -19133,7 +19002,7 @@ func init() {
         }
       }
     },
-    "IdentityDetailAuthenticatorsUpdb": {
+    "IdentityDetailAO1AuthenticatorsUpdb": {
       "type": "object",
       "properties": {
         "username": {
@@ -19203,35 +19072,22 @@ func init() {
     "apiSessionDetail": {
       "description": "An API Session object",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "identity": {
-          "allOf": [
-            {
+        {
+          "type": "object",
+          "properties": {
+            "identity": {
               "$ref": "#/definitions/entityRef"
+            },
+            "token": {
+              "type": "string"
             }
-          ]
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "token": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+          }
         }
-      }
+      ]
     },
     "apiSessionList": {
       "type": "array",
@@ -19295,34 +19151,28 @@ func init() {
     "authenticatorDetail": {
       "description": "A singular authenticator resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "certPem": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "fingerprint": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "identityId": {
-          "type": "string"
-        },
-        "method": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "certPem": {
+              "type": "string"
+            },
+            "fingerprint": {
+              "type": "string"
+            },
+            "identityId": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "authenticatorList": {
       "description": "An array of authenticator resources",
@@ -19356,6 +19206,29 @@ func init() {
         },
         "username": {
           "$ref": "#/definitions/username"
+        }
+      }
+    },
+    "baseEntity": {
+      "description": "Fields shared by all Edge API entities",
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/links"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "tags": {
+          "$ref": "#/definitions/tags"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -19405,54 +19278,45 @@ func init() {
     "caDetail": {
       "description": "A Certificate Authority (CA) resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "certPem": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "fingerprint": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "isAuthEnabled": {
-          "type": "boolean",
-          "example": true
-        },
-        "isAutoCaEnrollmentEnabled": {
-          "type": "boolean",
-          "example": true
-        },
-        "isOttCaEnrollmentEnabled": {
-          "type": "boolean",
-          "example": true
-        },
-        "isVerified": {
-          "type": "boolean",
-          "example": false
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "verificationToken": {
-          "type": "string",
-          "format": "uuid"
+        {
+          "type": "object",
+          "properties": {
+            "certPem": {
+              "type": "string"
+            },
+            "fingerprint": {
+              "type": "string"
+            },
+            "isAuthEnabled": {
+              "type": "boolean",
+              "example": true
+            },
+            "isAutoCaEnrollmentEnabled": {
+              "type": "boolean",
+              "example": true
+            },
+            "isOttCaEnrollmentEnabled": {
+              "type": "boolean",
+              "example": true
+            },
+            "isVerified": {
+              "type": "boolean",
+              "example": false
+            },
+            "name": {
+              "type": "string"
+            },
+            "verificationToken": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
         }
-      },
+      ],
       "example": {
         "_links": {
           "jwt": {
@@ -19581,35 +19445,26 @@ func init() {
     "configDetail": {
       "description": "A config resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "data": {
-          "description": "The data section of a config is based on the schema of its type",
-          "type": "object"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "type": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "description": "The data section of a config is based on the schema of its type",
+              "type": "object"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "$ref": "#/definitions/entityRef"
+            }
+          }
         }
-      }
+      ]
     },
     "configList": {
       "description": "An array of config resources",
@@ -19666,36 +19521,24 @@ func init() {
     "configTypeDetail": {
       "description": "A config-type resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time",
-          "example": "2020-02-06T18:50:32.7812998Z"
-        },
-        "id": {
-          "type": "string",
-          "example": "cea49285-6c07-42cf-9f52-09a9b115c783"
-        },
-        "name": {
-          "type": "string",
-          "example": "ziti-tunneler-server.v1"
-        },
-        "schema": {
-          "description": "A JSON schema to enforce configuration against",
-          "type": "object"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time",
-          "example": "2020-02-06T18:50:32.7812998Z"
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "ziti-tunneler-server.v1"
+            },
+            "schema": {
+              "description": "A JSON schema to enforce configuration against",
+              "type": "object"
+            }
+          }
         }
-      }
+      ]
     },
     "configTypeList": {
       "description": "An array of config-type resources",
@@ -20055,57 +19898,48 @@ func init() {
     "edgeRouterDetail": {
       "description": "A detail edge router resource",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enrollmentCreatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enrollmentExpiresAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enrollmentJwt": {
-          "type": "string"
-        },
-        "enrollmentToken": {
-          "type": "string"
-        },
-        "hostname": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "isOnline": {
-          "type": "boolean"
-        },
-        "isVerified": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "supportedProtocols": {
+        {
           "type": "object",
-          "additionalProperties": {
-            "type": "string"
+          "properties": {
+            "enrollmentCreatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "enrollmentExpiresAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "enrollmentJwt": {
+              "type": "string"
+            },
+            "enrollmentToken": {
+              "type": "string"
+            },
+            "hostname": {
+              "type": "string"
+            },
+            "isOnline": {
+              "type": "boolean"
+            },
+            "isVerified": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "supportedProtocols": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
           }
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      },
+      ],
       "example": {
         "_links": {
           "edge-router-policies": {
@@ -20182,43 +20016,34 @@ func init() {
     },
     "edgeRouterPolicyDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "edgeRouterRoles": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        {
+          "type": "object",
+          "properties": {
+            "edgeRouterRoles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "identityRoles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "name": {
+              "type": "string"
+            },
+            "semantic": {
+              "$ref": "#/definitions/semantic"
+            }
           }
-        },
-        "id": {
-          "type": "string"
-        },
-        "identityRoles": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "name": {
-          "type": "string"
-        },
-        "semantic": {
-          "$ref": "#/definitions/semantic"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      }
+      ]
     },
     "edgeRouterPolicyList": {
       "type": "array",
@@ -20304,43 +20129,37 @@ func init() {
     "enrollmentDetail": {
       "description": "An enrollment object. Enrolments are tied to identities and portentially a CA. Depending on the\nmethod, different fields are utilized. For example ottca enrollments use the ` + "`" + `ca` + "`" + ` field and updb enrollments\nuse the username field, but not vice versa.\n",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "details": {
+        {
           "type": "object",
-          "additionalProperties": {
-            "type": "string"
+          "properties": {
+            "details": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "expiresAt": {
+              "type": "string"
+            },
+            "identity": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "method": {
+              "type": "string"
+            },
+            "token": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
           }
-        },
-        "expiresAt": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "identity": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "method": {
-          "type": "string"
-        },
-        "token": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "username": {
-          "type": "string"
         }
-      },
+      ],
       "example": {
         "_links": {
           "self": {
@@ -20430,28 +20249,19 @@ func init() {
     },
     "geoRegionDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "geoRegionList": {
       "type": "array",
@@ -20511,53 +20321,44 @@ func init() {
     "identityDetail": {
       "description": "Detail of a specific identity",
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "authenticators": {
+        {
           "type": "object",
           "properties": {
-            "updb": {
+            "authenticators": {
               "type": "object",
               "properties": {
-                "username": {
-                  "type": "string"
+                "updb": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
+            },
+            "enrollment": {
+              "type": "object"
+            },
+            "isAdmin": {
+              "type": "boolean"
+            },
+            "isDefaultAdmin": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "$ref": "#/definitions/entityRef"
             }
           }
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enrollment": {
-          "type": "object"
-        },
-        "id": {
-          "type": "string"
-        },
-        "isAdmin": {
-          "type": "boolean"
-        },
-        "isDefaultAdmin": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "type": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      }
+      ]
     },
     "identityList": {
       "description": "A list of identities",
@@ -20587,28 +20388,19 @@ func init() {
     },
     "identityTypeDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "identityTypeList": {
       "type": "array",
@@ -21125,43 +20917,34 @@ func init() {
     },
     "serviceDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "configs": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        {
+          "type": "object",
+          "properties": {
+            "configs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "name": {
+              "type": "string"
+            },
+            "permissions": {
+              "$ref": "#/definitions/dialBind"
+            },
+            "roleAttributes": {
+              "$ref": "#/definitions/attributes"
+            },
+            "terminatorStrategy": {
+              "type": "string"
+            }
           }
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "permissions": {
-          "$ref": "#/definitions/dialBind"
-        },
-        "roleAttributes": {
-          "$ref": "#/definitions/attributes"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "terminatorStrategy": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      }
+      ]
     },
     "serviceEdgePolicyPatch": {
       "type": "object",
@@ -21235,37 +21018,28 @@ func init() {
     },
     "serviceEdgeRouterPolicyDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "edgeRouterRoles": {
-          "$ref": "#/definitions/roles"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "semantic": {
-          "$ref": "#/definitions/semantic"
-        },
-        "serviceRoles": {
-          "$ref": "#/definitions/roles"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "edgeRouterRoles": {
+              "$ref": "#/definitions/roles"
+            },
+            "name": {
+              "type": "string"
+            },
+            "semantic": {
+              "$ref": "#/definitions/semantic"
+            },
+            "serviceRoles": {
+              "$ref": "#/definitions/roles"
+            }
+          }
         }
-      }
+      ]
     },
     "serviceEdgeRouterPolicyList": {
       "type": "array",
@@ -21480,40 +21254,31 @@ func init() {
     },
     "sessionDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "apiSession": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "service": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "sessionEdgeRouters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/sessionEdgeRouter"
+        {
+          "type": "object",
+          "properties": {
+            "apiSession": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "service": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "sessionEdgeRouters": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/sessionEdgeRouter"
+              }
+            },
+            "type": {
+              "$ref": "#/definitions/dialBind"
+            }
           }
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "type": {
-          "$ref": "#/definitions/dialBind"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
-      }
+      ]
     },
     "sessionEdgeRouter": {
       "type": "object",
@@ -21543,28 +21308,19 @@ func init() {
     },
     "specDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "specList": {
       "type": "array",
@@ -21604,43 +21360,34 @@ func init() {
     },
     "terminatorDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "address": {
-          "type": "string"
-        },
-        "binding": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
-          "type": "string"
-        },
-        "router": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "routerId": {
-          "type": "string"
-        },
-        "service": {
-          "$ref": "#/definitions/entityRef"
-        },
-        "serviceId": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "binding": {
+              "type": "string"
+            },
+            "router": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "routerId": {
+              "type": "string"
+            },
+            "service": {
+              "$ref": "#/definitions/entityRef"
+            },
+            "serviceId": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "terminatorList": {
       "type": "array",
@@ -21708,37 +21455,28 @@ func init() {
     },
     "transitRouterDetail": {
       "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
         },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "fingerprint": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "isOnline": {
-          "type": "boolean"
-        },
-        "isVerified": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "$ref": "#/definitions/tags"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+        {
+          "type": "object",
+          "properties": {
+            "fingerprint": {
+              "type": "string"
+            },
+            "isOnline": {
+              "type": "boolean"
+            },
+            "isVerified": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
         }
-      }
+      ]
     },
     "transitRouterList": {
       "type": "array",

@@ -33,57 +33,84 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // APISessionDetail An API Session object
 //
 // swagger:model apiSessionDetail
 type APISessionDetail struct {
-
-	// links
-	Links Links `json:"_links,omitempty"`
-
-	// created at
-	// Format: date-time
-	CreatedAt strfmt.DateTime `json:"createdAt,omitempty"`
-
-	// id
-	ID string `json:"id,omitempty"`
+	BaseEntity
 
 	// identity
-	Identity struct {
-		EntityRef
-	} `json:"identity,omitempty"`
-
-	// tags
-	Tags Tags `json:"tags,omitempty"`
+	Identity *EntityRef `json:"identity,omitempty"`
 
 	// token
 	Token string `json:"token,omitempty"`
+}
 
-	// updated at
-	// Format: date-time
-	UpdatedAt strfmt.DateTime `json:"updatedAt,omitempty"`
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (m *APISessionDetail) UnmarshalJSON(raw []byte) error {
+	// AO0
+	var aO0 BaseEntity
+	if err := swag.ReadJSON(raw, &aO0); err != nil {
+		return err
+	}
+	m.BaseEntity = aO0
+
+	// AO1
+	var dataAO1 struct {
+		Identity *EntityRef `json:"identity,omitempty"`
+
+		Token string `json:"token,omitempty"`
+	}
+	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
+		return err
+	}
+
+	m.Identity = dataAO1.Identity
+
+	m.Token = dataAO1.Token
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (m APISessionDetail) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	aO0, err := swag.WriteJSON(m.BaseEntity)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, aO0)
+	var dataAO1 struct {
+		Identity *EntityRef `json:"identity,omitempty"`
+
+		Token string `json:"token,omitempty"`
+	}
+
+	dataAO1.Identity = m.Identity
+
+	dataAO1.Token = m.Token
+
+	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
+	if errAO1 != nil {
+		return nil, errAO1
+	}
+	_parts = append(_parts, jsonDataAO1)
+	return swag.ConcatJSON(_parts...), nil
 }
 
 // Validate validates this api session detail
 func (m *APISessionDetail) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLinks(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateCreatedAt(formats); err != nil {
+	// validation for a type composition with BaseEntity
+	if err := m.BaseEntity.Validate(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateIdentity(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUpdatedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -93,52 +120,19 @@ func (m *APISessionDetail) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *APISessionDetail) validateLinks(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Links) { // not required
-		return nil
-	}
-
-	if err := m.Links.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("_links")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *APISessionDetail) validateCreatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.CreatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("createdAt", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (m *APISessionDetail) validateIdentity(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Identity) { // not required
 		return nil
 	}
 
-	return nil
-}
-
-func (m *APISessionDetail) validateUpdatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UpdatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("updatedAt", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
-		return err
+	if m.Identity != nil {
+		if err := m.Identity.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("identity")
+			}
+			return err
+		}
 	}
 
 	return nil

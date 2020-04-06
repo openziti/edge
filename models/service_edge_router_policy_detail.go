@@ -33,26 +33,16 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // ServiceEdgeRouterPolicyDetail service edge router policy detail
 //
 // swagger:model serviceEdgeRouterPolicyDetail
 type ServiceEdgeRouterPolicyDetail struct {
-
-	// links
-	Links Links `json:"_links,omitempty"`
-
-	// created at
-	// Format: date-time
-	CreatedAt strfmt.DateTime `json:"createdAt,omitempty"`
+	BaseEntity
 
 	// edge router roles
 	EdgeRouterRoles Roles `json:"edgeRouterRoles,omitempty"`
-
-	// id
-	ID string `json:"id,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -62,24 +52,83 @@ type ServiceEdgeRouterPolicyDetail struct {
 
 	// service roles
 	ServiceRoles Roles `json:"serviceRoles,omitempty"`
+}
 
-	// tags
-	Tags Tags `json:"tags,omitempty"`
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (m *ServiceEdgeRouterPolicyDetail) UnmarshalJSON(raw []byte) error {
+	// AO0
+	var aO0 BaseEntity
+	if err := swag.ReadJSON(raw, &aO0); err != nil {
+		return err
+	}
+	m.BaseEntity = aO0
 
-	// updated at
-	// Format: date-time
-	UpdatedAt strfmt.DateTime `json:"updatedAt,omitempty"`
+	// AO1
+	var dataAO1 struct {
+		EdgeRouterRoles Roles `json:"edgeRouterRoles,omitempty"`
+
+		Name string `json:"name,omitempty"`
+
+		Semantic Semantic `json:"semantic,omitempty"`
+
+		ServiceRoles Roles `json:"serviceRoles,omitempty"`
+	}
+	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
+		return err
+	}
+
+	m.EdgeRouterRoles = dataAO1.EdgeRouterRoles
+
+	m.Name = dataAO1.Name
+
+	m.Semantic = dataAO1.Semantic
+
+	m.ServiceRoles = dataAO1.ServiceRoles
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (m ServiceEdgeRouterPolicyDetail) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	aO0, err := swag.WriteJSON(m.BaseEntity)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, aO0)
+	var dataAO1 struct {
+		EdgeRouterRoles Roles `json:"edgeRouterRoles,omitempty"`
+
+		Name string `json:"name,omitempty"`
+
+		Semantic Semantic `json:"semantic,omitempty"`
+
+		ServiceRoles Roles `json:"serviceRoles,omitempty"`
+	}
+
+	dataAO1.EdgeRouterRoles = m.EdgeRouterRoles
+
+	dataAO1.Name = m.Name
+
+	dataAO1.Semantic = m.Semantic
+
+	dataAO1.ServiceRoles = m.ServiceRoles
+
+	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
+	if errAO1 != nil {
+		return nil, errAO1
+	}
+	_parts = append(_parts, jsonDataAO1)
+	return swag.ConcatJSON(_parts...), nil
 }
 
 // Validate validates this service edge router policy detail
 func (m *ServiceEdgeRouterPolicyDetail) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLinks(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateCreatedAt(formats); err != nil {
+	// validation for a type composition with BaseEntity
+	if err := m.BaseEntity.Validate(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -95,42 +144,9 @@ func (m *ServiceEdgeRouterPolicyDetail) Validate(formats strfmt.Registry) error 
 		res = append(res, err)
 	}
 
-	if err := m.validateUpdatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *ServiceEdgeRouterPolicyDetail) validateLinks(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Links) { // not required
-		return nil
-	}
-
-	if err := m.Links.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("_links")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *ServiceEdgeRouterPolicyDetail) validateCreatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.CreatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("createdAt", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -176,19 +192,6 @@ func (m *ServiceEdgeRouterPolicyDetail) validateServiceRoles(formats strfmt.Regi
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("serviceRoles")
 		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *ServiceEdgeRouterPolicyDetail) validateUpdatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UpdatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("updatedAt", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
 		return err
 	}
 

@@ -33,29 +33,19 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // TerminatorDetail terminator detail
 //
 // swagger:model terminatorDetail
 type TerminatorDetail struct {
-
-	// links
-	Links Links `json:"_links,omitempty"`
+	BaseEntity
 
 	// address
 	Address string `json:"address,omitempty"`
 
 	// binding
 	Binding string `json:"binding,omitempty"`
-
-	// created at
-	// Format: date-time
-	CreatedAt strfmt.DateTime `json:"createdAt,omitempty"`
-
-	// id
-	ID string `json:"id,omitempty"`
 
 	// router
 	Router *EntityRef `json:"router,omitempty"`
@@ -68,24 +58,99 @@ type TerminatorDetail struct {
 
 	// service Id
 	ServiceID string `json:"serviceId,omitempty"`
+}
 
-	// tags
-	Tags Tags `json:"tags,omitempty"`
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (m *TerminatorDetail) UnmarshalJSON(raw []byte) error {
+	// AO0
+	var aO0 BaseEntity
+	if err := swag.ReadJSON(raw, &aO0); err != nil {
+		return err
+	}
+	m.BaseEntity = aO0
 
-	// updated at
-	// Format: date-time
-	UpdatedAt strfmt.DateTime `json:"updatedAt,omitempty"`
+	// AO1
+	var dataAO1 struct {
+		Address string `json:"address,omitempty"`
+
+		Binding string `json:"binding,omitempty"`
+
+		Router *EntityRef `json:"router,omitempty"`
+
+		RouterID string `json:"routerId,omitempty"`
+
+		Service *EntityRef `json:"service,omitempty"`
+
+		ServiceID string `json:"serviceId,omitempty"`
+	}
+	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
+		return err
+	}
+
+	m.Address = dataAO1.Address
+
+	m.Binding = dataAO1.Binding
+
+	m.Router = dataAO1.Router
+
+	m.RouterID = dataAO1.RouterID
+
+	m.Service = dataAO1.Service
+
+	m.ServiceID = dataAO1.ServiceID
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (m TerminatorDetail) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	aO0, err := swag.WriteJSON(m.BaseEntity)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, aO0)
+	var dataAO1 struct {
+		Address string `json:"address,omitempty"`
+
+		Binding string `json:"binding,omitempty"`
+
+		Router *EntityRef `json:"router,omitempty"`
+
+		RouterID string `json:"routerId,omitempty"`
+
+		Service *EntityRef `json:"service,omitempty"`
+
+		ServiceID string `json:"serviceId,omitempty"`
+	}
+
+	dataAO1.Address = m.Address
+
+	dataAO1.Binding = m.Binding
+
+	dataAO1.Router = m.Router
+
+	dataAO1.RouterID = m.RouterID
+
+	dataAO1.Service = m.Service
+
+	dataAO1.ServiceID = m.ServiceID
+
+	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
+	if errAO1 != nil {
+		return nil, errAO1
+	}
+	_parts = append(_parts, jsonDataAO1)
+	return swag.ConcatJSON(_parts...), nil
 }
 
 // Validate validates this terminator detail
 func (m *TerminatorDetail) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLinks(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateCreatedAt(formats); err != nil {
+	// validation for a type composition with BaseEntity
+	if err := m.BaseEntity.Validate(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -97,42 +162,9 @@ func (m *TerminatorDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateUpdatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *TerminatorDetail) validateLinks(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Links) { // not required
-		return nil
-	}
-
-	if err := m.Links.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("_links")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *TerminatorDetail) validateCreatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.CreatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("createdAt", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -167,19 +199,6 @@ func (m *TerminatorDetail) validateService(formats strfmt.Registry) error {
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *TerminatorDetail) validateUpdatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UpdatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("updatedAt", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
-		return err
 	}
 
 	return nil

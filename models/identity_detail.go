@@ -33,29 +33,19 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // IdentityDetail Detail of a specific identity
 //
 // swagger:model identityDetail
 type IdentityDetail struct {
-
-	// links
-	Links Links `json:"_links,omitempty"`
+	BaseEntity
 
 	// authenticators
-	Authenticators *IdentityDetailAuthenticators `json:"authenticators,omitempty"`
-
-	// created at
-	// Format: date-time
-	CreatedAt strfmt.DateTime `json:"createdAt,omitempty"`
+	Authenticators *IdentityDetailAO1Authenticators `json:"authenticators,omitempty"`
 
 	// enrollment
 	Enrollment interface{} `json:"enrollment,omitempty"`
-
-	// id
-	ID string `json:"id,omitempty"`
 
 	// is admin
 	IsAdmin bool `json:"isAdmin,omitempty"`
@@ -66,22 +56,101 @@ type IdentityDetail struct {
 	// name
 	Name string `json:"name,omitempty"`
 
-	// tags
-	Tags Tags `json:"tags,omitempty"`
-
 	// type
 	Type *EntityRef `json:"type,omitempty"`
+}
 
-	// updated at
-	// Format: date-time
-	UpdatedAt strfmt.DateTime `json:"updatedAt,omitempty"`
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (m *IdentityDetail) UnmarshalJSON(raw []byte) error {
+	// AO0
+	var aO0 BaseEntity
+	if err := swag.ReadJSON(raw, &aO0); err != nil {
+		return err
+	}
+	m.BaseEntity = aO0
+
+	// AO1
+	var dataAO1 struct {
+		Authenticators *IdentityDetailAO1Authenticators `json:"authenticators,omitempty"`
+
+		Enrollment interface{} `json:"enrollment,omitempty"`
+
+		IsAdmin bool `json:"isAdmin,omitempty"`
+
+		IsDefaultAdmin bool `json:"isDefaultAdmin,omitempty"`
+
+		Name string `json:"name,omitempty"`
+
+		Type *EntityRef `json:"type,omitempty"`
+	}
+	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
+		return err
+	}
+
+	m.Authenticators = dataAO1.Authenticators
+
+	m.Enrollment = dataAO1.Enrollment
+
+	m.IsAdmin = dataAO1.IsAdmin
+
+	m.IsDefaultAdmin = dataAO1.IsDefaultAdmin
+
+	m.Name = dataAO1.Name
+
+	m.Type = dataAO1.Type
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (m IdentityDetail) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	aO0, err := swag.WriteJSON(m.BaseEntity)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, aO0)
+	var dataAO1 struct {
+		Authenticators *IdentityDetailAO1Authenticators `json:"authenticators,omitempty"`
+
+		Enrollment interface{} `json:"enrollment,omitempty"`
+
+		IsAdmin bool `json:"isAdmin,omitempty"`
+
+		IsDefaultAdmin bool `json:"isDefaultAdmin,omitempty"`
+
+		Name string `json:"name,omitempty"`
+
+		Type *EntityRef `json:"type,omitempty"`
+	}
+
+	dataAO1.Authenticators = m.Authenticators
+
+	dataAO1.Enrollment = m.Enrollment
+
+	dataAO1.IsAdmin = m.IsAdmin
+
+	dataAO1.IsDefaultAdmin = m.IsDefaultAdmin
+
+	dataAO1.Name = m.Name
+
+	dataAO1.Type = m.Type
+
+	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
+	if errAO1 != nil {
+		return nil, errAO1
+	}
+	_parts = append(_parts, jsonDataAO1)
+	return swag.ConcatJSON(_parts...), nil
 }
 
 // Validate validates this identity detail
 func (m *IdentityDetail) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLinks(formats); err != nil {
+	// validation for a type composition with BaseEntity
+	if err := m.BaseEntity.Validate(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -89,37 +158,13 @@ func (m *IdentityDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateCreatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateType(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUpdatedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *IdentityDetail) validateLinks(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Links) { // not required
-		return nil
-	}
-
-	if err := m.Links.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("_links")
-		}
-		return err
-	}
-
 	return nil
 }
 
@@ -136,19 +181,6 @@ func (m *IdentityDetail) validateAuthenticators(formats strfmt.Registry) error {
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *IdentityDetail) validateCreatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.CreatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("createdAt", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
 	}
 
 	return nil
@@ -172,19 +204,6 @@ func (m *IdentityDetail) validateType(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *IdentityDetail) validateUpdatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UpdatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("updatedAt", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // MarshalBinary interface implementation
 func (m *IdentityDetail) MarshalBinary() ([]byte, error) {
 	if m == nil {
@@ -203,17 +222,17 @@ func (m *IdentityDetail) UnmarshalBinary(b []byte) error {
 	return nil
 }
 
-// IdentityDetailAuthenticators identity detail authenticators
+// IdentityDetailAO1Authenticators identity detail a o1 authenticators
 //
-// swagger:model IdentityDetailAuthenticators
-type IdentityDetailAuthenticators struct {
+// swagger:model IdentityDetailAO1Authenticators
+type IdentityDetailAO1Authenticators struct {
 
 	// updb
-	Updb *IdentityDetailAuthenticatorsUpdb `json:"updb,omitempty"`
+	Updb *IdentityDetailAO1AuthenticatorsUpdb `json:"updb,omitempty"`
 }
 
-// Validate validates this identity detail authenticators
-func (m *IdentityDetailAuthenticators) Validate(formats strfmt.Registry) error {
+// Validate validates this identity detail a o1 authenticators
+func (m *IdentityDetailAO1Authenticators) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateUpdb(formats); err != nil {
@@ -226,7 +245,7 @@ func (m *IdentityDetailAuthenticators) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *IdentityDetailAuthenticators) validateUpdb(formats strfmt.Registry) error {
+func (m *IdentityDetailAO1Authenticators) validateUpdb(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Updb) { // not required
 		return nil
@@ -245,7 +264,7 @@ func (m *IdentityDetailAuthenticators) validateUpdb(formats strfmt.Registry) err
 }
 
 // MarshalBinary interface implementation
-func (m *IdentityDetailAuthenticators) MarshalBinary() ([]byte, error) {
+func (m *IdentityDetailAO1Authenticators) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -253,8 +272,8 @@ func (m *IdentityDetailAuthenticators) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *IdentityDetailAuthenticators) UnmarshalBinary(b []byte) error {
-	var res IdentityDetailAuthenticators
+func (m *IdentityDetailAO1Authenticators) UnmarshalBinary(b []byte) error {
+	var res IdentityDetailAO1Authenticators
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
@@ -262,22 +281,22 @@ func (m *IdentityDetailAuthenticators) UnmarshalBinary(b []byte) error {
 	return nil
 }
 
-// IdentityDetailAuthenticatorsUpdb identity detail authenticators updb
+// IdentityDetailAO1AuthenticatorsUpdb identity detail a o1 authenticators updb
 //
-// swagger:model IdentityDetailAuthenticatorsUpdb
-type IdentityDetailAuthenticatorsUpdb struct {
+// swagger:model IdentityDetailAO1AuthenticatorsUpdb
+type IdentityDetailAO1AuthenticatorsUpdb struct {
 
 	// username
 	Username string `json:"username,omitempty"`
 }
 
-// Validate validates this identity detail authenticators updb
-func (m *IdentityDetailAuthenticatorsUpdb) Validate(formats strfmt.Registry) error {
+// Validate validates this identity detail a o1 authenticators updb
+func (m *IdentityDetailAO1AuthenticatorsUpdb) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *IdentityDetailAuthenticatorsUpdb) MarshalBinary() ([]byte, error) {
+func (m *IdentityDetailAO1AuthenticatorsUpdb) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -285,8 +304,8 @@ func (m *IdentityDetailAuthenticatorsUpdb) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *IdentityDetailAuthenticatorsUpdb) UnmarshalBinary(b []byte) error {
-	var res IdentityDetailAuthenticatorsUpdb
+func (m *IdentityDetailAO1AuthenticatorsUpdb) UnmarshalBinary(b []byte) error {
+	var res IdentityDetailAO1AuthenticatorsUpdb
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

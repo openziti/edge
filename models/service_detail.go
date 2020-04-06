@@ -33,26 +33,16 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // ServiceDetail service detail
 //
 // swagger:model serviceDetail
 type ServiceDetail struct {
-
-	// links
-	Links Links `json:"_links,omitempty"`
+	BaseEntity
 
 	// configs
 	Configs []string `json:"configs"`
-
-	// created at
-	// Format: date-time
-	CreatedAt strfmt.DateTime `json:"createdAt,omitempty"`
-
-	// id
-	ID string `json:"id,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -63,26 +53,93 @@ type ServiceDetail struct {
 	// role attributes
 	RoleAttributes Attributes `json:"roleAttributes,omitempty"`
 
-	// tags
-	Tags Tags `json:"tags,omitempty"`
-
 	// terminator strategy
 	TerminatorStrategy string `json:"terminatorStrategy,omitempty"`
+}
 
-	// updated at
-	// Format: date-time
-	UpdatedAt strfmt.DateTime `json:"updatedAt,omitempty"`
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (m *ServiceDetail) UnmarshalJSON(raw []byte) error {
+	// AO0
+	var aO0 BaseEntity
+	if err := swag.ReadJSON(raw, &aO0); err != nil {
+		return err
+	}
+	m.BaseEntity = aO0
+
+	// AO1
+	var dataAO1 struct {
+		Configs []string `json:"configs"`
+
+		Name string `json:"name,omitempty"`
+
+		Permissions DialBind `json:"permissions,omitempty"`
+
+		RoleAttributes Attributes `json:"roleAttributes,omitempty"`
+
+		TerminatorStrategy string `json:"terminatorStrategy,omitempty"`
+	}
+	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
+		return err
+	}
+
+	m.Configs = dataAO1.Configs
+
+	m.Name = dataAO1.Name
+
+	m.Permissions = dataAO1.Permissions
+
+	m.RoleAttributes = dataAO1.RoleAttributes
+
+	m.TerminatorStrategy = dataAO1.TerminatorStrategy
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (m ServiceDetail) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	aO0, err := swag.WriteJSON(m.BaseEntity)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, aO0)
+	var dataAO1 struct {
+		Configs []string `json:"configs"`
+
+		Name string `json:"name,omitempty"`
+
+		Permissions DialBind `json:"permissions,omitempty"`
+
+		RoleAttributes Attributes `json:"roleAttributes,omitempty"`
+
+		TerminatorStrategy string `json:"terminatorStrategy,omitempty"`
+	}
+
+	dataAO1.Configs = m.Configs
+
+	dataAO1.Name = m.Name
+
+	dataAO1.Permissions = m.Permissions
+
+	dataAO1.RoleAttributes = m.RoleAttributes
+
+	dataAO1.TerminatorStrategy = m.TerminatorStrategy
+
+	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
+	if errAO1 != nil {
+		return nil, errAO1
+	}
+	_parts = append(_parts, jsonDataAO1)
+	return swag.ConcatJSON(_parts...), nil
 }
 
 // Validate validates this service detail
 func (m *ServiceDetail) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLinks(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateCreatedAt(formats); err != nil {
+	// validation for a type composition with BaseEntity
+	if err := m.BaseEntity.Validate(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -94,42 +151,9 @@ func (m *ServiceDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateUpdatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *ServiceDetail) validateLinks(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Links) { // not required
-		return nil
-	}
-
-	if err := m.Links.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("_links")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *ServiceDetail) validateCreatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.CreatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("createdAt", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -159,19 +183,6 @@ func (m *ServiceDetail) validateRoleAttributes(formats strfmt.Registry) error {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("roleAttributes")
 		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *ServiceDetail) validateUpdatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UpdatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("updatedAt", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
 		return err
 	}
 

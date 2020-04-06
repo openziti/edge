@@ -40,13 +40,7 @@ import (
 //
 // swagger:model edgeRouterDetail
 type EdgeRouterDetail struct {
-
-	// links
-	Links Links `json:"_links,omitempty"`
-
-	// created at
-	// Format: date-time
-	CreatedAt strfmt.DateTime `json:"createdAt,omitempty"`
+	BaseEntity
 
 	// enrollment created at
 	// Format: date-time
@@ -65,9 +59,6 @@ type EdgeRouterDetail struct {
 	// hostname
 	Hostname string `json:"hostname,omitempty"`
 
-	// id
-	ID string `json:"id,omitempty"`
-
 	// is online
 	IsOnline bool `json:"isOnline,omitempty"`
 
@@ -79,24 +70,123 @@ type EdgeRouterDetail struct {
 
 	// supported protocols
 	SupportedProtocols map[string]string `json:"supportedProtocols,omitempty"`
+}
 
-	// tags
-	Tags Tags `json:"tags,omitempty"`
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (m *EdgeRouterDetail) UnmarshalJSON(raw []byte) error {
+	// AO0
+	var aO0 BaseEntity
+	if err := swag.ReadJSON(raw, &aO0); err != nil {
+		return err
+	}
+	m.BaseEntity = aO0
 
-	// updated at
-	// Format: date-time
-	UpdatedAt strfmt.DateTime `json:"updatedAt,omitempty"`
+	// AO1
+	var dataAO1 struct {
+		EnrollmentCreatedAt strfmt.DateTime `json:"enrollmentCreatedAt,omitempty"`
+
+		EnrollmentExpiresAt strfmt.DateTime `json:"enrollmentExpiresAt,omitempty"`
+
+		EnrollmentJwt string `json:"enrollmentJwt,omitempty"`
+
+		EnrollmentToken string `json:"enrollmentToken,omitempty"`
+
+		Hostname string `json:"hostname,omitempty"`
+
+		IsOnline bool `json:"isOnline,omitempty"`
+
+		IsVerified bool `json:"isVerified,omitempty"`
+
+		Name string `json:"name,omitempty"`
+
+		SupportedProtocols map[string]string `json:"supportedProtocols,omitempty"`
+	}
+	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
+		return err
+	}
+
+	m.EnrollmentCreatedAt = dataAO1.EnrollmentCreatedAt
+
+	m.EnrollmentExpiresAt = dataAO1.EnrollmentExpiresAt
+
+	m.EnrollmentJwt = dataAO1.EnrollmentJwt
+
+	m.EnrollmentToken = dataAO1.EnrollmentToken
+
+	m.Hostname = dataAO1.Hostname
+
+	m.IsOnline = dataAO1.IsOnline
+
+	m.IsVerified = dataAO1.IsVerified
+
+	m.Name = dataAO1.Name
+
+	m.SupportedProtocols = dataAO1.SupportedProtocols
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (m EdgeRouterDetail) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	aO0, err := swag.WriteJSON(m.BaseEntity)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, aO0)
+	var dataAO1 struct {
+		EnrollmentCreatedAt strfmt.DateTime `json:"enrollmentCreatedAt,omitempty"`
+
+		EnrollmentExpiresAt strfmt.DateTime `json:"enrollmentExpiresAt,omitempty"`
+
+		EnrollmentJwt string `json:"enrollmentJwt,omitempty"`
+
+		EnrollmentToken string `json:"enrollmentToken,omitempty"`
+
+		Hostname string `json:"hostname,omitempty"`
+
+		IsOnline bool `json:"isOnline,omitempty"`
+
+		IsVerified bool `json:"isVerified,omitempty"`
+
+		Name string `json:"name,omitempty"`
+
+		SupportedProtocols map[string]string `json:"supportedProtocols,omitempty"`
+	}
+
+	dataAO1.EnrollmentCreatedAt = m.EnrollmentCreatedAt
+
+	dataAO1.EnrollmentExpiresAt = m.EnrollmentExpiresAt
+
+	dataAO1.EnrollmentJwt = m.EnrollmentJwt
+
+	dataAO1.EnrollmentToken = m.EnrollmentToken
+
+	dataAO1.Hostname = m.Hostname
+
+	dataAO1.IsOnline = m.IsOnline
+
+	dataAO1.IsVerified = m.IsVerified
+
+	dataAO1.Name = m.Name
+
+	dataAO1.SupportedProtocols = m.SupportedProtocols
+
+	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
+	if errAO1 != nil {
+		return nil, errAO1
+	}
+	_parts = append(_parts, jsonDataAO1)
+	return swag.ConcatJSON(_parts...), nil
 }
 
 // Validate validates this edge router detail
 func (m *EdgeRouterDetail) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLinks(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateCreatedAt(formats); err != nil {
+	// validation for a type composition with BaseEntity
+	if err := m.BaseEntity.Validate(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -108,42 +198,9 @@ func (m *EdgeRouterDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateUpdatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *EdgeRouterDetail) validateLinks(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Links) { // not required
-		return nil
-	}
-
-	if err := m.Links.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("_links")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *EdgeRouterDetail) validateCreatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.CreatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("createdAt", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -167,19 +224,6 @@ func (m *EdgeRouterDetail) validateEnrollmentExpiresAt(formats strfmt.Registry) 
 	}
 
 	if err := validate.FormatOf("enrollmentExpiresAt", "body", "date-time", m.EnrollmentExpiresAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *EdgeRouterDetail) validateUpdatedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UpdatedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("updatedAt", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
 		return err
 	}
 
