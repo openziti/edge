@@ -21,8 +21,8 @@ import (
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-edge/controller/env"
 	"github.com/netfoundry/ziti-edge/controller/response"
+	"github.com/netfoundry/ziti-fabric/controller/model"
 	"github.com/netfoundry/ziti-fabric/controller/models"
-	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/util/stringz"
 )
 
@@ -33,15 +33,20 @@ type TerminatorApi struct {
 	Router  *string `json:"router"`
 	Binding *string `json:"binding"`
 	Address *string `json:"address"`
+	Cost    *int    `json:"cost"`
 }
 
-func (i *TerminatorApi) ToModel(id string) *network.Terminator {
-	result := &network.Terminator{}
+func (i *TerminatorApi) ToModel(id string) *model.Terminator {
+	result := &model.Terminator{}
 	result.Id = id
 	result.Service = stringz.OrEmpty(i.Service)
 	result.Router = stringz.OrEmpty(i.Router)
 	result.Binding = stringz.OrEmpty(i.Binding)
 	result.Address = stringz.OrEmpty(i.Address)
+	if i.Cost != nil {
+		result.Cost = uint16(*i.Cost)
+	}
+
 	return result
 }
 
@@ -53,6 +58,7 @@ type TerminatorApiList struct {
 	Router    *EntityApiRef `json:"router"`
 	Binding   string        `json:"binding"`
 	Address   string        `json:"address"`
+	Cost      uint16        `json:"cost"`
 }
 
 func (c *TerminatorApiList) GetSelfLink() *response.Link {
@@ -83,7 +89,7 @@ func (c *TerminatorApiList) ToEntityApiRef() *EntityApiRef {
 }
 
 func MapTerminatorToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e models.Entity) (BaseApiEntity, error) {
-	i, ok := e.(*network.Terminator)
+	i, ok := e.(*model.Terminator)
 
 	if !ok {
 		err := fmt.Errorf("entity is not a terminator \"%s\"", e.GetId())
@@ -103,7 +109,7 @@ func MapTerminatorToApiEntity(ae *env.AppEnv, _ *response.RequestContext, e mode
 	return al, nil
 }
 
-func MapTerminatorToApiList(ae *env.AppEnv, i *network.Terminator) (*TerminatorApiList, error) {
+func MapTerminatorToApiList(ae *env.AppEnv, i *model.Terminator) (*TerminatorApiList, error) {
 	service, err := ae.Handlers.EdgeService.Read(i.Service)
 	if err != nil {
 		return nil, err
@@ -122,6 +128,7 @@ func MapTerminatorToApiList(ae *env.AppEnv, i *network.Terminator) (*TerminatorA
 		Router:    NewTransitRouterEntityRef(router),
 		Binding:   i.Binding,
 		Address:   i.Address,
+		Cost:      i.Cost,
 	}
 
 	ret.PopulateLinks()

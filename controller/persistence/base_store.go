@@ -19,6 +19,7 @@ package persistence
 import (
 	"fmt"
 	"github.com/netfoundry/ziti-fabric/controller/db"
+	"github.com/netfoundry/ziti-fabric/controller/model"
 	"github.com/netfoundry/ziti-fabric/controller/network"
 	"github.com/netfoundry/ziti-foundation/storage/ast"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
@@ -34,7 +35,7 @@ type DbProvider interface {
 	GetDb() boltz.Db
 	GetServiceCache() network.Cache
 	GetStores() *db.Stores
-	GetControllers() *network.Controllers
+	GetControllers() *model.Controllers
 }
 
 type Store interface {

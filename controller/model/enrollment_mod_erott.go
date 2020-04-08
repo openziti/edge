@@ -22,7 +22,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/apierror"
 	"github.com/netfoundry/ziti-edge/controller/schema"
 	"github.com/netfoundry/ziti-edge/internal/cert"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/model"
 	"github.com/xeipuuv/gojsonschema"
 	"strings"
 	"time"
@@ -201,6 +201,6 @@ func (module *EnrollModuleEr) Process(context EnrollmentContext) (*EnrollmentRes
 
 func (module *EnrollModuleEr) createRouter(commonName string, fingerprint string) error {
 	fgp := strings.Replace(strings.ToLower(fingerprint), ":", "", -1)
-	r := network.NewRouter(commonName, fgp)
+	r := model.NewRouter(commonName, fgp)
 	return module.env.GetHostController().GetNetwork().CreateRouter(r)
 }

@@ -609,6 +609,7 @@ func (entity *transitRouter) validate(ctx *TestContext, c *gabs.Container) {
 	ctx.pathEquals(c, entity.name, path("name"))
 	ctx.pathEquals(c, entity.tags, path("tags"))
 }
+
 type ca struct {
 	id                        string
 	name                      string                 `json:"name"`

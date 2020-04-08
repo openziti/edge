@@ -17,14 +17,14 @@
 package model
 
 import (
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/model"
 )
 
 type Handlers struct {
 	// fabric
-	Router     *network.RouterController
-	Service    *network.ServiceController
-	Terminator *network.TerminatorController
+	Router     *model.RouterController
+	Service    *model.ServiceController
+	Terminator *model.TerminatorController
 
 	// edge
 	ApiSession              *ApiSessionHandler

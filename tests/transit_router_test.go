@@ -19,8 +19,8 @@
 package tests
 
 import (
+	"github.com/netfoundry/ziti-fabric/controller/model"
 	"github.com/netfoundry/ziti-fabric/controller/models"
-	"github.com/netfoundry/ziti-fabric/controller/network"
 	"testing"
 	"time"
 )
@@ -101,7 +101,7 @@ func Test_TransitRouters(t *testing.T) {
 	t.Run("can list transit routers created in fabric", func(t *testing.T) {
 		ctx.testContextChanged(t)
 
-		fabTxRouter := &network.Router{
+		fabTxRouter := &model.Router{
 			BaseEntity: models.BaseEntity{
 				Id:        "uMvqq",
 				CreatedAt: time.Now(),

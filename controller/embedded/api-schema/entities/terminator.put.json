@@ -20,6 +20,12 @@
     "address": {
       "type": "string"
     },
+    "cost": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
     "tags": {
       "default": {},
       "$ref": "definitions.all.json#/definitions/tags-null"

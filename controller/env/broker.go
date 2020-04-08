@@ -26,7 +26,7 @@ import (
 	"github.com/netfoundry/ziti-edge/controller/model"
 	"github.com/netfoundry/ziti-edge/controller/persistence"
 	"github.com/netfoundry/ziti-edge/pb/edge_ctrl_pb"
-	"github.com/netfoundry/ziti-fabric/controller/network"
+	fabricModel "github.com/netfoundry/ziti-fabric/controller/model"
 	"github.com/netfoundry/ziti-foundation/channel2"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"strings"
@@ -581,7 +581,7 @@ func (b *Broker) GetOnlineEdgeRouter(id string) *model.EdgeRouter {
 	return entry.EdgeRouter
 }
 
-func (b *Broker) RouterConnected(r *network.Router) {
+func (b *Broker) RouterConnected(r *fabricModel.Router) {
 	go func() {
 		fp := formatFingerprint(r.Fingerprint)
 		edgeRouter, _ := b.ae.Handlers.EdgeRouter.ReadOneByFingerprint(fp)
@@ -595,7 +595,7 @@ func (b *Broker) RouterConnected(r *network.Router) {
 	}()
 }
 
-func (b *Broker) sendHello(r *network.Router, edgeRouter *model.EdgeRouter, fingerprint string) {
+func (b *Broker) sendHello(r *fabricModel.Router, edgeRouter *model.EdgeRouter, fingerprint string) {
 	serverVersion := build.GetBuildInfo().GetVersion()
 	serverHello := &edge_ctrl_pb.ServerHello{
 		Version: serverVersion,
@@ -658,7 +658,7 @@ func (b *Broker) sendHello(r *network.Router, edgeRouter *model.EdgeRouter, fing
 	}
 }
 
-func (b *Broker) RouterDisconnected(r *network.Router) {
+func (b *Broker) RouterDisconnected(r *fabricModel.Router) {
 	go func() {
 		fp := formatFingerprint(r.Fingerprint)
 		edgeRouter, _ := b.ae.Handlers.EdgeRouter.ReadOneByFingerprint(fp)

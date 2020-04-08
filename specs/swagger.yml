@@ -5041,6 +5041,9 @@ definitions:
         type: string
       address:
         type: string
+      cost:
+        type: integer
+
   terminatorCreate:
     type: object
     required:
@@ -5056,6 +5059,8 @@ definitions:
         type: string
       address:
         type: string
+      cost:
+        type: integer
       tags:
         $ref: '#/definitions/tags'
   terminatorUpdate:
@@ -5075,6 +5080,8 @@ definitions:
         type: string
       address:
         type: string
+      cost:
+        type: integer
       tags:
         $ref: '#/definitions/tags'
   terminatorPatch:
@@ -5088,6 +5095,8 @@ definitions:
         type: string
       address:
         type: string
+      cost:
+        type: integer
       tags:
         $ref: '#/definitions/tags'
   ###################################################################

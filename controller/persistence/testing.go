@@ -20,7 +20,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/netfoundry/ziti-fabric/controller/db"
+	"github.com/netfoundry/ziti-fabric/controller/model"
 	"github.com/netfoundry/ziti-fabric/controller/network"
+	"github.com/netfoundry/ziti-fabric/controller/xt"
+	"github.com/netfoundry/ziti-fabric/controller/xt_default"
 	"github.com/netfoundry/ziti-foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
@@ -47,7 +50,7 @@ func (p *testDbProvider) GetServiceCache() network.Cache {
 func (p *testDbProvider) RemoveFromCache(_ string) {
 }
 
-func (p *testDbProvider) GetControllers() *network.Controllers {
+func (p *testDbProvider) GetControllers() *model.Controllers {
 	return p.ctx.controllers
 }
 
@@ -56,10 +59,12 @@ type TestContext struct {
 	db           *db.Db
 	fabricStores *db.Stores
 	stores       *Stores
-	controllers  *network.Controllers
+	controllers  *model.Controllers
 }
 
 func NewTestContext(t *testing.T) *TestContext {
+	xt.GlobalRegistry().RegisterFactory(xt_default.NewFactory())
+
 	result := &TestContext{
 		BaseTestContext: *boltz.NewTestContext(t),
 	}
@@ -98,7 +103,7 @@ func (ctx *TestContext) Init() {
 
 	dbProvider := ctx.GetDbProvider()
 
-	ctx.controllers = network.NewControllers(ctx.db, ctx.fabricStores)
+	ctx.controllers = model.NewControllers(ctx.db, ctx.fabricStores)
 	ctx.stores, err = NewBoltStores(dbProvider)
 	ctx.NoError(err)
 
