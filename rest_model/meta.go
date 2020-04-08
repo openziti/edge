@@ -40,6 +40,12 @@ import (
 // swagger:model meta
 type Meta struct {
 
+	// api enrolment version
+	APIEnrolmentVersion string `json:"apiEnrolmentVersion,omitempty"`
+
+	// api version
+	APIVersion string `json:"apiVersion,omitempty"`
+
 	// filterable fields
 	FilterableFields []string `json:"filterableFields"`
 

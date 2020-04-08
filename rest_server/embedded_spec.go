@@ -6102,6 +6102,12 @@ func init() {
     "meta": {
       "type": "object",
       "properties": {
+        "apiEnrolmentVersion": {
+          "type": "string"
+        },
+        "apiVersion": {
+          "type": "string"
+        },
         "filterableFields": {
           "type": "array",
           "items": {
@@ -20711,6 +20717,12 @@ func init() {
     "meta": {
       "type": "object",
       "properties": {
+        "apiEnrolmentVersion": {
+          "type": "string"
+        },
+        "apiVersion": {
+          "type": "string"
+        },
         "filterableFields": {
           "type": "array",
           "items": {

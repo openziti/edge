@@ -4550,6 +4550,7 @@ definitions:
         type: object
         example: {}
   meta:
+    type: object
     properties:
       filterableFields:
         type: array
@@ -4557,7 +4558,10 @@ definitions:
           type: string
       pagination:
         $ref: '#/definitions/pagination'
-    type: object
+      apiEnrolmentVersion:
+        type: string
+      apiVersion:
+        type: string
   create:
     type: object
     properties:
