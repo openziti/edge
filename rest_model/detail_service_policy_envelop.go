@@ -33,6 +33,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DetailServicePolicyEnvelop detail service policy envelop
@@ -41,10 +42,12 @@ import (
 type DetailServicePolicyEnvelop struct {
 
 	// data
-	Data *ServicePolicyDetail `json:"data,omitempty"`
+	// Required: true
+	Data *ServicePolicyDetail `json:"data"`
 
 	// meta
-	Meta *Meta `json:"meta,omitempty"`
+	// Required: true
+	Meta *Meta `json:"meta"`
 }
 
 // Validate validates this detail service policy envelop
@@ -67,8 +70,8 @@ func (m *DetailServicePolicyEnvelop) Validate(formats strfmt.Registry) error {
 
 func (m *DetailServicePolicyEnvelop) validateData(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Data) { // not required
-		return nil
+	if err := validate.Required("data", "body", m.Data); err != nil {
+		return err
 	}
 
 	if m.Data != nil {
@@ -85,8 +88,8 @@ func (m *DetailServicePolicyEnvelop) validateData(formats strfmt.Registry) error
 
 func (m *DetailServicePolicyEnvelop) validateMeta(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Meta) { // not required
-		return nil
+	if err := validate.Required("meta", "body", m.Meta); err != nil {
+		return err
 	}
 
 	if m.Meta != nil {

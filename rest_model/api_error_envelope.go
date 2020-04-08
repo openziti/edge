@@ -33,6 +33,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // APIErrorEnvelope api error envelope
@@ -41,10 +42,12 @@ import (
 type APIErrorEnvelope struct {
 
 	// error
-	Error *APIError `json:"error,omitempty"`
+	// Required: true
+	Error *APIError `json:"error"`
 
 	// meta
-	Meta *Meta `json:"meta,omitempty"`
+	// Required: true
+	Meta *Meta `json:"meta"`
 }
 
 // Validate validates this api error envelope
@@ -67,8 +70,8 @@ func (m *APIErrorEnvelope) Validate(formats strfmt.Registry) error {
 
 func (m *APIErrorEnvelope) validateError(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Error) { // not required
-		return nil
+	if err := validate.Required("error", "body", m.Error); err != nil {
+		return err
 	}
 
 	if m.Error != nil {
@@ -85,8 +88,8 @@ func (m *APIErrorEnvelope) validateError(formats strfmt.Registry) error {
 
 func (m *APIErrorEnvelope) validateMeta(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Meta) { // not required
-		return nil
+	if err := validate.Required("meta", "body", m.Meta); err != nil {
+		return err
 	}
 
 	if m.Meta != nil {

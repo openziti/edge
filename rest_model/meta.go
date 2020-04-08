@@ -47,7 +47,7 @@ type Meta struct {
 	APIVersion string `json:"apiVersion,omitempty"`
 
 	// filterable fields
-	FilterableFields []string `json:"filterableFields"`
+	FilterableFields []string `json:"filterableFields,omitempty"`
 
 	// pagination
 	Pagination *Pagination `json:"pagination,omitempty"`

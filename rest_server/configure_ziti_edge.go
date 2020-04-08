@@ -107,6 +107,11 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 	//
 	// Example:
 	// api.APIAuthorizer = security.Authorized()
+	if api.CurrentAPISessionDeleteCurrentAPISessionHandler == nil {
+		api.CurrentAPISessionDeleteCurrentAPISessionHandler = current_api_session.DeleteCurrentAPISessionHandlerFunc(func(params current_api_session.DeleteCurrentAPISessionParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation current_api_session.DeleteCurrentAPISession has not yet been implemented")
+		})
+	}
 	if api.CertificateAuthorityGetCasIDJwtHandler == nil {
 		api.CertificateAuthorityGetCasIDJwtHandler = certificate_authority.GetCasIDJwtHandlerFunc(func(params certificate_authority.GetCasIDJwtParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation certificate_authority.GetCasIDJwt has not yet been implemented")

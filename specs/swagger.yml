@@ -856,7 +856,18 @@ paths:
           $ref: '#/responses/detailCurrentAPISession'
         401:
           $ref: '#/responses/unauthorizedResponse'
-
+    delete:
+      summary: Logout
+      description: Terminates the current API session
+      security:
+        - ztSession: []
+      tags:
+        - CurrentAPI Session
+      responses:
+        200:
+          $ref: '#/responses/emptyResponse'
+        401:
+          $ref: '#/responses/unauthorizedResponse'
   '/current-identity':
     get:
       summary: Return the current identity
@@ -3469,6 +3480,20 @@ definitions:
             type: string
           identity:
             $ref: '#/definitions/entityRef'
+  currentApiSessionDetail:
+    description: An API Session object for the current API session
+    type: object
+    allOf:
+      - $ref: '#/definitions/apiSessionDetail'
+      - type: object
+        properties:
+          expiresAt:
+            type: string
+            format: date-time
+          configTypes:
+            type: array
+            items:
+              type: string
   ###################################################################
   # Identities
   ##################################################################
@@ -4504,6 +4529,9 @@ definitions:
           type: string
   apiErrorEnvelope:
     type: object
+    required:
+      - meta
+      - error
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4543,6 +4571,9 @@ definitions:
         type: object
   empty:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4556,6 +4587,7 @@ definitions:
         type: array
         items:
           type: string
+        x-omitempty: true
       pagination:
         $ref: '#/definitions/pagination'
       apiEnrolmentVersion:
@@ -4608,25 +4640,37 @@ definitions:
         description: A PEM encoded set of CA certificates to trust
   currentAPISessionDetailEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
       data:
-        $ref: '#/definitions/apiSessionDetail'
+        $ref: '#/definitions/currentApiSessionDetail'
   currentIdentityDetailEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
       data:
         $ref: '#/definitions/identityDetail'
   listAPISessionsEnvelope:
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
       data:
         $ref: '#/definitions/apiSessionList'
   detailAPISessionEnvelope:
+    required:
+      - meta
+      - data
     type: object
     properties:
       meta:
@@ -4642,6 +4686,9 @@ definitions:
         $ref: '#/definitions/authenticatorList'
   detailAuthenticatorEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4649,6 +4696,9 @@ definitions:
         $ref: '#/definitions/authenticatorDetail'
   listCasEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4656,6 +4706,9 @@ definitions:
         $ref: '#/definitions/caList'
   detailCaEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4663,6 +4716,9 @@ definitions:
         $ref: '#/definitions/caDetail'
   listConfigTypesEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4670,12 +4726,19 @@ definitions:
         $ref: '#/definitions/configTypeList'
   detailConfigTypeEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
       data:
         $ref: '#/definitions/configTypeDetail'
   listConfigsEnvelope:
+    type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4683,6 +4746,9 @@ definitions:
         $ref: '#/definitions/configList'
   detailConfigEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4690,6 +4756,9 @@ definitions:
         $ref: '#/definitions/configDetail'
   listVersionEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4697,6 +4766,9 @@ definitions:
         $ref: '#/definitions/version'
   listSummaryCountsEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4704,6 +4776,9 @@ definitions:
         $ref: '#/definitions/listSummaryCounts'
   listEnrollmentsEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4711,6 +4786,9 @@ definitions:
         $ref: '#/definitions/enrollmentList'
   detailEnrollmentEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4718,6 +4796,9 @@ definitions:
         $ref: '#/definitions/enrollmentDetail'
   listEdgeRoutersEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4725,6 +4806,9 @@ definitions:
         $ref: '#/definitions/edgeRouterList'
   detailedEdgeRouterEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4732,6 +4816,9 @@ definitions:
         $ref: '#/definitions/edgeRouterDetail'
   listEdgeRouterPoliciesEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4739,6 +4826,9 @@ definitions:
         $ref: '#/definitions/edgeRouterPolicyList'
   detailEdgeRouterPolicyEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4746,6 +4836,9 @@ definitions:
         $ref: '#/definitions/edgeRouterPolicyDetail'
   listServicePoliciesEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4753,6 +4846,9 @@ definitions:
         $ref: '#/definitions/servicePolicyList'
   detailServicePolicyEnvelop:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4760,6 +4856,9 @@ definitions:
         $ref: '#/definitions/servicePolicyDetail'
   listServicesEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4767,6 +4866,9 @@ definitions:
         $ref: '#/definitions/serviceList'
   detailServiceEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4774,6 +4876,9 @@ definitions:
         $ref: '#/definitions/serviceDetail'
   listIdentitiesEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4781,6 +4886,9 @@ definitions:
         $ref: '#/definitions/identityList'
   detailIdentityEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4788,6 +4896,9 @@ definitions:
         $ref: '#/definitions/identityDetail'
   listGeoRegionsEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4795,6 +4906,9 @@ definitions:
         $ref: '#/definitions/geoRegionList'
   detailGeoRegionEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4802,6 +4916,9 @@ definitions:
         $ref: '#/definitions/geoRegionDetail'
   listIdentityTypesEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4809,6 +4926,9 @@ definitions:
         $ref: '#/definitions/identityTypeList'
   detailIdentityTypeEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4816,6 +4936,9 @@ definitions:
         $ref: '#/definitions/identityTypeDetail'
   listServiceConfigsEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4823,6 +4946,9 @@ definitions:
         $ref: '#/definitions/serviceConfigList'
   listServiceEdgeRouterPoliciesEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4830,6 +4956,9 @@ definitions:
         $ref: '#/definitions/serviceEdgeRouterPolicyList'
   detailServiceEdgePolicyEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4837,6 +4966,9 @@ definitions:
         $ref: '#/definitions/serviceEdgeRouterPolicyDetail'
   listSessionsEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4844,6 +4976,9 @@ definitions:
         $ref: '#/definitions/sessionList'
   detailSessionEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4892,6 +5027,9 @@ definitions:
   ##################################################################
   listTerminatorsEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4899,6 +5037,9 @@ definitions:
         $ref: '#/definitions/terminatorList'
   detailTerminatorEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4980,6 +5121,9 @@ definitions:
   ##################################################################
   listSpecsEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4987,6 +5131,9 @@ definitions:
         $ref: '#/definitions/specList'
   detailSpecEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -4994,6 +5141,9 @@ definitions:
         $ref: '#/definitions/specDetail'
   detailSpecBodyEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -5016,6 +5166,9 @@ definitions:
 
   listRoleAttributesEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -5030,6 +5183,9 @@ definitions:
 
   getIdentityPolicyAdviceEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -5074,6 +5230,9 @@ definitions:
   ##################################################################
   listTransitRoutersEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'
@@ -5081,6 +5240,9 @@ definitions:
         $ref: '#/definitions/transitRouterList'
   detailTransitRouterEnvelope:
     type: object
+    required:
+      - meta
+      - data
     properties:
       meta:
         $ref: '#/definitions/meta'

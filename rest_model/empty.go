@@ -33,6 +33,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Empty empty
@@ -41,15 +42,21 @@ import (
 type Empty struct {
 
 	// data
-	Data interface{} `json:"data,omitempty"`
+	// Required: true
+	Data interface{} `json:"data"`
 
 	// meta
-	Meta *Meta `json:"meta,omitempty"`
+	// Required: true
+	Meta *Meta `json:"meta"`
 }
 
 // Validate validates this empty
 func (m *Empty) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateData(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateMeta(formats); err != nil {
 		res = append(res, err)
@@ -61,10 +68,19 @@ func (m *Empty) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Empty) validateData(formats strfmt.Registry) error {
+
+	if err := validate.Required("data", "body", m.Data); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *Empty) validateMeta(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Meta) { // not required
-		return nil
+	if err := validate.Required("meta", "body", m.Meta); err != nil {
+		return err
 	}
 
 	if m.Meta != nil {

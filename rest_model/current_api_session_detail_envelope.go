@@ -33,6 +33,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // CurrentAPISessionDetailEnvelope current API session detail envelope
@@ -41,10 +42,12 @@ import (
 type CurrentAPISessionDetailEnvelope struct {
 
 	// data
-	Data *APISessionDetail `json:"data,omitempty"`
+	// Required: true
+	Data *CurrentAPISessionDetail `json:"data"`
 
 	// meta
-	Meta *Meta `json:"meta,omitempty"`
+	// Required: true
+	Meta *Meta `json:"meta"`
 }
 
 // Validate validates this current API session detail envelope
@@ -67,8 +70,8 @@ func (m *CurrentAPISessionDetailEnvelope) Validate(formats strfmt.Registry) erro
 
 func (m *CurrentAPISessionDetailEnvelope) validateData(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Data) { // not required
-		return nil
+	if err := validate.Required("data", "body", m.Data); err != nil {
+		return err
 	}
 
 	if m.Data != nil {
@@ -85,8 +88,8 @@ func (m *CurrentAPISessionDetailEnvelope) validateData(formats strfmt.Registry) 
 
 func (m *CurrentAPISessionDetailEnvelope) validateMeta(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Meta) { // not required
-		return nil
+	if err := validate.Required("meta", "body", m.Meta); err != nil {
+		return err
 	}
 
 	if m.Meta != nil {

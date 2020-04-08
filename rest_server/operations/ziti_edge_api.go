@@ -104,6 +104,9 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 			return errors.NotImplemented("textYaml producer has not yet been implemented")
 		}),
 
+		CurrentAPISessionDeleteCurrentAPISessionHandler: current_api_session.DeleteCurrentAPISessionHandlerFunc(func(params current_api_session.DeleteCurrentAPISessionParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation current_api_session.DeleteCurrentAPISession has not yet been implemented")
+		}),
 		CertificateAuthorityGetCasIDJwtHandler: certificate_authority.GetCasIDJwtHandlerFunc(func(params certificate_authority.GetCasIDJwtParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation certificate_authority.GetCasIDJwt has not yet been implemented")
 		}),
@@ -571,6 +574,8 @@ type ZitiEdgeAPI struct {
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
 
+	// CurrentAPISessionDeleteCurrentAPISessionHandler sets the operation handler for the delete current API session operation
+	CurrentAPISessionDeleteCurrentAPISessionHandler current_api_session.DeleteCurrentAPISessionHandler
 	// CertificateAuthorityGetCasIDJwtHandler sets the operation handler for the get cas ID jwt operation
 	CertificateAuthorityGetCasIDJwtHandler certificate_authority.GetCasIDJwtHandler
 	// EdgeRouterPolicyGetEdgeRouterPoliciesIDEdgeRoutersHandler sets the operation handler for the get edge router policies ID edge routers operation
@@ -927,6 +932,9 @@ func (o *ZitiEdgeAPI) Validate() error {
 		unregistered = append(unregistered, "ZtSessionAuth")
 	}
 
+	if o.CurrentAPISessionDeleteCurrentAPISessionHandler == nil {
+		unregistered = append(unregistered, "current_api_session.DeleteCurrentAPISessionHandler")
+	}
 	if o.CertificateAuthorityGetCasIDJwtHandler == nil {
 		unregistered = append(unregistered, "certificate_authority.GetCasIDJwtHandler")
 	}
@@ -1438,6 +1446,10 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/current-api-session"] = current_api_session.NewDeleteCurrentAPISession(o.context, o.CurrentAPISessionDeleteCurrentAPISessionHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

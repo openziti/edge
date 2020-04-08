@@ -33,6 +33,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DetailConfigEnvelope detail config envelope
@@ -41,10 +42,12 @@ import (
 type DetailConfigEnvelope struct {
 
 	// data
-	Data *ConfigDetail `json:"data,omitempty"`
+	// Required: true
+	Data *ConfigDetail `json:"data"`
 
 	// meta
-	Meta *Meta `json:"meta,omitempty"`
+	// Required: true
+	Meta *Meta `json:"meta"`
 }
 
 // Validate validates this detail config envelope
@@ -67,8 +70,8 @@ func (m *DetailConfigEnvelope) Validate(formats strfmt.Registry) error {
 
 func (m *DetailConfigEnvelope) validateData(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Data) { // not required
-		return nil
+	if err := validate.Required("data", "body", m.Data); err != nil {
+		return err
 	}
 
 	if m.Data != nil {
@@ -85,8 +88,8 @@ func (m *DetailConfigEnvelope) validateData(formats strfmt.Registry) error {
 
 func (m *DetailConfigEnvelope) validateMeta(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Meta) { // not required
-		return nil
+	if err := validate.Required("meta", "body", m.Meta); err != nil {
+		return err
 	}
 
 	if m.Meta != nil {

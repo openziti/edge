@@ -33,6 +33,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ListCasEnvelope list cas envelope
@@ -41,10 +42,12 @@ import (
 type ListCasEnvelope struct {
 
 	// data
-	Data CaList `json:"data,omitempty"`
+	// Required: true
+	Data CaList `json:"data"`
 
 	// meta
-	Meta *Meta `json:"meta,omitempty"`
+	// Required: true
+	Meta *Meta `json:"meta"`
 }
 
 // Validate validates this list cas envelope
@@ -67,8 +70,8 @@ func (m *ListCasEnvelope) Validate(formats strfmt.Registry) error {
 
 func (m *ListCasEnvelope) validateData(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Data) { // not required
-		return nil
+	if err := validate.Required("data", "body", m.Data); err != nil {
+		return err
 	}
 
 	if err := m.Data.Validate(formats); err != nil {
@@ -83,8 +86,8 @@ func (m *ListCasEnvelope) validateData(formats strfmt.Registry) error {
 
 func (m *ListCasEnvelope) validateMeta(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Meta) { // not required
-		return nil
+	if err := validate.Required("meta", "body", m.Meta); err != nil {
+		return err
 	}
 
 	if m.Meta != nil {

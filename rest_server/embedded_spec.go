@@ -1129,6 +1129,26 @@ func init() {
             "$ref": "#/responses/unauthorizedResponse"
           }
         }
+      },
+      "delete": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Terminates the current API session",
+        "tags": [
+          "CurrentAPI Session"
+        ],
+        "summary": "Logout",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/emptyResponse"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
       }
     },
     "/current-identity": {
@@ -4451,6 +4471,10 @@ func init() {
     },
     "apiErrorEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "error"
+      ],
       "properties": {
         "error": {
           "$ref": "#/definitions/apiError"
@@ -5032,17 +5056,49 @@ func init() {
     },
     "currentAPISessionDetailEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
-          "$ref": "#/definitions/apiSessionDetail"
+          "$ref": "#/definitions/currentApiSessionDetail"
         },
         "meta": {
           "$ref": "#/definitions/meta"
         }
       }
     },
+    "currentApiSessionDetail": {
+      "description": "An API Session object for the current API session",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/apiSessionDetail"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "configTypes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
     "currentIdentityDetailEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityDetail"
@@ -5054,6 +5110,10 @@ func init() {
     },
     "detailAPISessionEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/apiSessionDetail"
@@ -5065,6 +5125,10 @@ func init() {
     },
     "detailAuthenticatorEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/authenticatorDetail"
@@ -5076,6 +5140,10 @@ func init() {
     },
     "detailCaEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/caDetail"
@@ -5087,6 +5155,10 @@ func init() {
     },
     "detailConfigEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/configDetail"
@@ -5098,6 +5170,10 @@ func init() {
     },
     "detailConfigTypeEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/configTypeDetail"
@@ -5109,6 +5185,10 @@ func init() {
     },
     "detailEdgeRouterPolicyEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/edgeRouterPolicyDetail"
@@ -5120,6 +5200,10 @@ func init() {
     },
     "detailEnrollmentEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/enrollmentDetail"
@@ -5131,6 +5215,10 @@ func init() {
     },
     "detailGeoRegionEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/geoRegionDetail"
@@ -5142,6 +5230,10 @@ func init() {
     },
     "detailIdentityEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityDetail"
@@ -5153,6 +5245,10 @@ func init() {
     },
     "detailIdentityTypeEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityTypeDetail"
@@ -5164,6 +5260,10 @@ func init() {
     },
     "detailServiceEdgePolicyEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceEdgeRouterPolicyDetail"
@@ -5175,6 +5275,10 @@ func init() {
     },
     "detailServiceEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceDetail"
@@ -5186,6 +5290,10 @@ func init() {
     },
     "detailServicePolicyEnvelop": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/servicePolicyDetail"
@@ -5197,6 +5305,10 @@ func init() {
     },
     "detailSessionEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/sessionDetail"
@@ -5208,6 +5320,10 @@ func init() {
     },
     "detailSpecBodyEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/specBodyDetail"
@@ -5219,6 +5335,10 @@ func init() {
     },
     "detailSpecEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/specDetail"
@@ -5230,6 +5350,10 @@ func init() {
     },
     "detailTerminatorEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/terminatorDetail"
@@ -5241,6 +5365,10 @@ func init() {
     },
     "detailTransitRouterEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/transitRouterDetail"
@@ -5252,6 +5380,10 @@ func init() {
     },
     "detailedEdgeRouterEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/edgeRouterDetail"
@@ -5507,6 +5639,10 @@ func init() {
     },
     "empty": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "type": "object",
@@ -5662,6 +5798,10 @@ func init() {
     },
     "getIdentityPolicyAdviceEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/policyAdvice"
@@ -5854,6 +5994,10 @@ func init() {
       }
     },
     "listAPISessionsEnvelope": {
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/apiSessionList"
@@ -5876,6 +6020,10 @@ func init() {
     },
     "listCasEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/caList"
@@ -5887,6 +6035,10 @@ func init() {
     },
     "listConfigTypesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/configTypeList"
@@ -5897,6 +6049,11 @@ func init() {
       }
     },
     "listConfigsEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/configList"
@@ -5908,6 +6065,10 @@ func init() {
     },
     "listEdgeRouterPoliciesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/edgeRouterPolicyList"
@@ -5919,6 +6080,10 @@ func init() {
     },
     "listEdgeRoutersEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/edgeRouterList"
@@ -5930,6 +6095,10 @@ func init() {
     },
     "listEnrollmentsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/enrollmentList"
@@ -5941,6 +6110,10 @@ func init() {
     },
     "listGeoRegionsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/geoRegionList"
@@ -5952,6 +6125,10 @@ func init() {
     },
     "listIdentitiesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityList"
@@ -5963,6 +6140,10 @@ func init() {
     },
     "listIdentityTypesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityTypeList"
@@ -5974,6 +6155,10 @@ func init() {
     },
     "listRoleAttributesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/roleAttributesList"
@@ -5985,6 +6170,10 @@ func init() {
     },
     "listServiceConfigsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceConfigList"
@@ -5996,6 +6185,10 @@ func init() {
     },
     "listServiceEdgeRouterPoliciesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceEdgeRouterPolicyList"
@@ -6007,6 +6200,10 @@ func init() {
     },
     "listServicePoliciesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/servicePolicyList"
@@ -6018,6 +6215,10 @@ func init() {
     },
     "listServicesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceList"
@@ -6029,6 +6230,10 @@ func init() {
     },
     "listSessionsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/sessionList"
@@ -6040,6 +6245,10 @@ func init() {
     },
     "listSpecsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/specList"
@@ -6057,6 +6266,10 @@ func init() {
     },
     "listSummaryCountsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/listSummaryCounts"
@@ -6068,6 +6281,10 @@ func init() {
     },
     "listTerminatorsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/terminatorList"
@@ -6079,6 +6296,10 @@ func init() {
     },
     "listTransitRoutersEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/transitRouterList"
@@ -6090,6 +6311,10 @@ func init() {
     },
     "listVersionEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/version"
@@ -6112,7 +6337,8 @@ func init() {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "x-omitempty": true
         },
         "pagination": {
           "$ref": "#/definitions/pagination"
@@ -10401,6 +10627,50 @@ func init() {
                 },
                 "meta": {}
               }
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Terminates the current API session",
+        "tags": [
+          "CurrentAPI Session"
+        ],
+        "summary": "Logout",
+        "responses": {
+          "200": {
+            "description": "Base empty response",
+            "schema": {
+              "$ref": "#/definitions/empty"
             }
           },
           "401": {
@@ -19066,6 +19336,10 @@ func init() {
     },
     "apiErrorEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "error"
+      ],
       "properties": {
         "error": {
           "$ref": "#/definitions/apiError"
@@ -19647,17 +19921,49 @@ func init() {
     },
     "currentAPISessionDetailEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
-          "$ref": "#/definitions/apiSessionDetail"
+          "$ref": "#/definitions/currentApiSessionDetail"
         },
         "meta": {
           "$ref": "#/definitions/meta"
         }
       }
     },
+    "currentApiSessionDetail": {
+      "description": "An API Session object for the current API session",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/apiSessionDetail"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "configTypes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
     "currentIdentityDetailEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityDetail"
@@ -19669,6 +19975,10 @@ func init() {
     },
     "detailAPISessionEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/apiSessionDetail"
@@ -19680,6 +19990,10 @@ func init() {
     },
     "detailAuthenticatorEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/authenticatorDetail"
@@ -19691,6 +20005,10 @@ func init() {
     },
     "detailCaEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/caDetail"
@@ -19702,6 +20020,10 @@ func init() {
     },
     "detailConfigEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/configDetail"
@@ -19713,6 +20035,10 @@ func init() {
     },
     "detailConfigTypeEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/configTypeDetail"
@@ -19724,6 +20050,10 @@ func init() {
     },
     "detailEdgeRouterPolicyEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/edgeRouterPolicyDetail"
@@ -19735,6 +20065,10 @@ func init() {
     },
     "detailEnrollmentEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/enrollmentDetail"
@@ -19746,6 +20080,10 @@ func init() {
     },
     "detailGeoRegionEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/geoRegionDetail"
@@ -19757,6 +20095,10 @@ func init() {
     },
     "detailIdentityEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityDetail"
@@ -19768,6 +20110,10 @@ func init() {
     },
     "detailIdentityTypeEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityTypeDetail"
@@ -19779,6 +20125,10 @@ func init() {
     },
     "detailServiceEdgePolicyEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceEdgeRouterPolicyDetail"
@@ -19790,6 +20140,10 @@ func init() {
     },
     "detailServiceEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceDetail"
@@ -19801,6 +20155,10 @@ func init() {
     },
     "detailServicePolicyEnvelop": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/servicePolicyDetail"
@@ -19812,6 +20170,10 @@ func init() {
     },
     "detailSessionEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/sessionDetail"
@@ -19823,6 +20185,10 @@ func init() {
     },
     "detailSpecBodyEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/specBodyDetail"
@@ -19834,6 +20200,10 @@ func init() {
     },
     "detailSpecEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/specDetail"
@@ -19845,6 +20215,10 @@ func init() {
     },
     "detailTerminatorEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/terminatorDetail"
@@ -19856,6 +20230,10 @@ func init() {
     },
     "detailTransitRouterEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/transitRouterDetail"
@@ -19867,6 +20245,10 @@ func init() {
     },
     "detailedEdgeRouterEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/edgeRouterDetail"
@@ -20122,6 +20504,10 @@ func init() {
     },
     "empty": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "type": "object",
@@ -20277,6 +20663,10 @@ func init() {
     },
     "getIdentityPolicyAdviceEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/policyAdvice"
@@ -20469,6 +20859,10 @@ func init() {
       }
     },
     "listAPISessionsEnvelope": {
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/apiSessionList"
@@ -20491,6 +20885,10 @@ func init() {
     },
     "listCasEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/caList"
@@ -20502,6 +20900,10 @@ func init() {
     },
     "listConfigTypesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/configTypeList"
@@ -20512,6 +20914,11 @@ func init() {
       }
     },
     "listConfigsEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/configList"
@@ -20523,6 +20930,10 @@ func init() {
     },
     "listEdgeRouterPoliciesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/edgeRouterPolicyList"
@@ -20534,6 +20945,10 @@ func init() {
     },
     "listEdgeRoutersEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/edgeRouterList"
@@ -20545,6 +20960,10 @@ func init() {
     },
     "listEnrollmentsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/enrollmentList"
@@ -20556,6 +20975,10 @@ func init() {
     },
     "listGeoRegionsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/geoRegionList"
@@ -20567,6 +20990,10 @@ func init() {
     },
     "listIdentitiesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityList"
@@ -20578,6 +21005,10 @@ func init() {
     },
     "listIdentityTypesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/identityTypeList"
@@ -20589,6 +21020,10 @@ func init() {
     },
     "listRoleAttributesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/roleAttributesList"
@@ -20600,6 +21035,10 @@ func init() {
     },
     "listServiceConfigsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceConfigList"
@@ -20611,6 +21050,10 @@ func init() {
     },
     "listServiceEdgeRouterPoliciesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceEdgeRouterPolicyList"
@@ -20622,6 +21065,10 @@ func init() {
     },
     "listServicePoliciesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/servicePolicyList"
@@ -20633,6 +21080,10 @@ func init() {
     },
     "listServicesEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/serviceList"
@@ -20644,6 +21095,10 @@ func init() {
     },
     "listSessionsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/sessionList"
@@ -20655,6 +21110,10 @@ func init() {
     },
     "listSpecsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/specList"
@@ -20672,6 +21131,10 @@ func init() {
     },
     "listSummaryCountsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/listSummaryCounts"
@@ -20683,6 +21146,10 @@ func init() {
     },
     "listTerminatorsEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/terminatorList"
@@ -20694,6 +21161,10 @@ func init() {
     },
     "listTransitRoutersEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/transitRouterList"
@@ -20705,6 +21176,10 @@ func init() {
     },
     "listVersionEnvelope": {
       "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
       "properties": {
         "data": {
           "$ref": "#/definitions/version"
@@ -20727,7 +21202,8 @@ func init() {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "x-omitempty": true
         },
         "pagination": {
           "$ref": "#/definitions/pagination"

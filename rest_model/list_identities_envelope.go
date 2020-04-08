@@ -33,6 +33,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ListIdentitiesEnvelope list identities envelope
@@ -41,10 +42,12 @@ import (
 type ListIdentitiesEnvelope struct {
 
 	// data
-	Data IdentityList `json:"data,omitempty"`
+	// Required: true
+	Data IdentityList `json:"data"`
 
 	// meta
-	Meta *Meta `json:"meta,omitempty"`
+	// Required: true
+	Meta *Meta `json:"meta"`
 }
 
 // Validate validates this list identities envelope
@@ -67,8 +70,8 @@ func (m *ListIdentitiesEnvelope) Validate(formats strfmt.Registry) error {
 
 func (m *ListIdentitiesEnvelope) validateData(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Data) { // not required
-		return nil
+	if err := validate.Required("data", "body", m.Data); err != nil {
+		return err
 	}
 
 	if err := m.Data.Validate(formats); err != nil {
@@ -83,8 +86,8 @@ func (m *ListIdentitiesEnvelope) validateData(formats strfmt.Registry) error {
 
 func (m *ListIdentitiesEnvelope) validateMeta(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Meta) { // not required
-		return nil
+	if err := validate.Required("meta", "body", m.Meta); err != nil {
+		return err
 	}
 
 	if m.Meta != nil {

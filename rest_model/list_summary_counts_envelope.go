@@ -33,6 +33,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ListSummaryCountsEnvelope list summary counts envelope
@@ -41,10 +42,12 @@ import (
 type ListSummaryCountsEnvelope struct {
 
 	// data
-	Data ListSummaryCounts `json:"data,omitempty"`
+	// Required: true
+	Data ListSummaryCounts `json:"data"`
 
 	// meta
-	Meta *Meta `json:"meta,omitempty"`
+	// Required: true
+	Meta *Meta `json:"meta"`
 }
 
 // Validate validates this list summary counts envelope
@@ -67,10 +70,6 @@ func (m *ListSummaryCountsEnvelope) Validate(formats strfmt.Registry) error {
 
 func (m *ListSummaryCountsEnvelope) validateData(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Data) { // not required
-		return nil
-	}
-
 	if err := m.Data.Validate(formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("data")
@@ -83,8 +82,8 @@ func (m *ListSummaryCountsEnvelope) validateData(formats strfmt.Registry) error 
 
 func (m *ListSummaryCountsEnvelope) validateMeta(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Meta) { // not required
-		return nil
+	if err := validate.Required("meta", "body", m.Meta); err != nil {
+		return err
 	}
 
 	if m.Meta != nil {
