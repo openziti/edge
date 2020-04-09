@@ -5018,10 +5018,13 @@ definitions:
     properties:
       limit:
         type: number
+        format: int64
       offset:
         type: number
+        format: int64
       totalCount:
         type: number
+        format: int64
   ###################################################################
   # Terminators
   ##################################################################

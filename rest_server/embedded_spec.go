@@ -6349,13 +6349,16 @@ func init() {
       "type": "object",
       "properties": {
         "limit": {
-          "type": "number"
+          "type": "number",
+          "format": "int64"
         },
         "offset": {
-          "type": "number"
+          "type": "number",
+          "format": "int64"
         },
         "totalCount": {
-          "type": "number"
+          "type": "number",
+          "format": "int64"
         }
       }
     },
@@ -21214,13 +21217,16 @@ func init() {
       "type": "object",
       "properties": {
         "limit": {
-          "type": "number"
+          "type": "number",
+          "format": "int64"
         },
         "offset": {
-          "type": "number"
+          "type": "number",
+          "format": "int64"
         },
         "totalCount": {
-          "type": "number"
+          "type": "number",
+          "format": "int64"
         }
       }
     },

@@ -40,13 +40,13 @@ import (
 type Pagination struct {
 
 	// limit
-	Limit float64 `json:"limit,omitempty"`
+	Limit int64 `json:"limit,omitempty"`
 
 	// offset
-	Offset float64 `json:"offset,omitempty"`
+	Offset int64 `json:"offset,omitempty"`
 
 	// total count
-	TotalCount float64 `json:"totalCount,omitempty"`
+	TotalCount int64 `json:"totalCount,omitempty"`
 }
 
 // Validate validates this pagination
