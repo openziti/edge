@@ -42,9 +42,9 @@ require (
 	github.com/michaelquigley/pfxlog v0.0.0-20190813191113-2be43bd0dccc
 	github.com/miekg/dns v1.1.22
 	github.com/mitchellh/mapstructure v1.1.2
-	github.com/netfoundry/ziti-fabric v0.11.14
-	github.com/netfoundry/ziti-foundation v0.9.11
-	github.com/netfoundry/ziti-sdk-golang v0.11.22
+	github.com/netfoundry/ziti-fabric v0.11.18
+	github.com/netfoundry/ziti-foundation v0.9.13
+	github.com/netfoundry/ziti-sdk-golang v0.11.24
 	github.com/oleiade/reflections v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
 	github.com/pkg/errors v0.9.1
