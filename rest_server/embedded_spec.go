@@ -6959,6 +6959,10 @@ func init() {
       "type": "object",
       "additionalProperties": true
     },
+    "terminatorCost": {
+      "type": "integer",
+      "maximum": 65535
+    },
     "terminatorCreate": {
       "type": "object",
       "required": [
@@ -6972,6 +6976,12 @@ func init() {
         },
         "binding": {
           "type": "string"
+        },
+        "cost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "precedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
         },
         "router": {
           "type": "string"
@@ -6998,6 +7008,12 @@ func init() {
             },
             "binding": {
               "type": "string"
+            },
+            "cost": {
+              "$ref": "#/definitions/terminatorCost"
+            },
+            "precedence": {
+              "$ref": "#/definitions/terminatorPrecedence"
             },
             "router": {
               "$ref": "#/definitions/entityRef"
@@ -7030,6 +7046,12 @@ func init() {
         "binding": {
           "type": "string"
         },
+        "cost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "precedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "router": {
           "type": "string"
         },
@@ -7040,6 +7062,14 @@ func init() {
           "$ref": "#/definitions/tags"
         }
       }
+    },
+    "terminatorPrecedence": {
+      "type": "string",
+      "enum": [
+        "default",
+        "required",
+        "failed"
+      ]
     },
     "terminatorUpdate": {
       "type": "object",
@@ -7056,6 +7086,12 @@ func init() {
         },
         "binding": {
           "type": "string"
+        },
+        "cost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "precedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
         },
         "router": {
           "type": "string"
@@ -21827,6 +21863,11 @@ func init() {
       "type": "object",
       "additionalProperties": true
     },
+    "terminatorCost": {
+      "type": "integer",
+      "maximum": 65535,
+      "minimum": 0
+    },
     "terminatorCreate": {
       "type": "object",
       "required": [
@@ -21840,6 +21881,12 @@ func init() {
         },
         "binding": {
           "type": "string"
+        },
+        "cost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "precedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
         },
         "router": {
           "type": "string"
@@ -21866,6 +21913,12 @@ func init() {
             },
             "binding": {
               "type": "string"
+            },
+            "cost": {
+              "$ref": "#/definitions/terminatorCost"
+            },
+            "precedence": {
+              "$ref": "#/definitions/terminatorPrecedence"
             },
             "router": {
               "$ref": "#/definitions/entityRef"
@@ -21898,6 +21951,12 @@ func init() {
         "binding": {
           "type": "string"
         },
+        "cost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "precedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "router": {
           "type": "string"
         },
@@ -21908,6 +21967,14 @@ func init() {
           "$ref": "#/definitions/tags"
         }
       }
+    },
+    "terminatorPrecedence": {
+      "type": "string",
+      "enum": [
+        "default",
+        "required",
+        "failed"
+      ]
     },
     "terminatorUpdate": {
       "type": "object",
@@ -21924,6 +21991,12 @@ func init() {
         },
         "binding": {
           "type": "string"
+        },
+        "cost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "precedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
         },
         "router": {
           "type": "string"

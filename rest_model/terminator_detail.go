@@ -47,6 +47,12 @@ type TerminatorDetail struct {
 	// binding
 	Binding string `json:"binding,omitempty"`
 
+	// cost
+	Cost TerminatorCost `json:"cost,omitempty"`
+
+	// precedence
+	Precedence TerminatorPrecedence `json:"precedence,omitempty"`
+
 	// router
 	Router *EntityRef `json:"router,omitempty"`
 
@@ -75,6 +81,10 @@ func (m *TerminatorDetail) UnmarshalJSON(raw []byte) error {
 
 		Binding string `json:"binding,omitempty"`
 
+		Cost TerminatorCost `json:"cost,omitempty"`
+
+		Precedence TerminatorPrecedence `json:"precedence,omitempty"`
+
 		Router *EntityRef `json:"router,omitempty"`
 
 		RouterID string `json:"routerId,omitempty"`
@@ -90,6 +100,10 @@ func (m *TerminatorDetail) UnmarshalJSON(raw []byte) error {
 	m.Address = dataAO1.Address
 
 	m.Binding = dataAO1.Binding
+
+	m.Cost = dataAO1.Cost
+
+	m.Precedence = dataAO1.Precedence
 
 	m.Router = dataAO1.Router
 
@@ -116,6 +130,10 @@ func (m TerminatorDetail) MarshalJSON() ([]byte, error) {
 
 		Binding string `json:"binding,omitempty"`
 
+		Cost TerminatorCost `json:"cost,omitempty"`
+
+		Precedence TerminatorPrecedence `json:"precedence,omitempty"`
+
 		Router *EntityRef `json:"router,omitempty"`
 
 		RouterID string `json:"routerId,omitempty"`
@@ -128,6 +146,10 @@ func (m TerminatorDetail) MarshalJSON() ([]byte, error) {
 	dataAO1.Address = m.Address
 
 	dataAO1.Binding = m.Binding
+
+	dataAO1.Cost = m.Cost
+
+	dataAO1.Precedence = m.Precedence
 
 	dataAO1.Router = m.Router
 
@@ -154,6 +176,14 @@ func (m *TerminatorDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCost(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePrecedence(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateRouter(formats); err != nil {
 		res = append(res, err)
 	}
@@ -165,6 +195,38 @@ func (m *TerminatorDetail) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *TerminatorDetail) validateCost(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Cost) { // not required
+		return nil
+	}
+
+	if err := m.Cost.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("cost")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *TerminatorDetail) validatePrecedence(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Precedence) { // not required
+		return nil
+	}
+
+	if err := m.Precedence.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("precedence")
+		}
+		return err
+	}
+
 	return nil
 }
 

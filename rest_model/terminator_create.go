@@ -48,6 +48,12 @@ type TerminatorCreate struct {
 	// binding
 	Binding string `json:"binding,omitempty"`
 
+	// cost
+	Cost TerminatorCost `json:"cost,omitempty"`
+
+	// precedence
+	Precedence TerminatorPrecedence `json:"precedence,omitempty"`
+
 	// router
 	// Required: true
 	Router *string `json:"router"`
@@ -68,6 +74,14 @@ func (m *TerminatorCreate) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCost(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePrecedence(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateRouter(formats); err != nil {
 		res = append(res, err)
 	}
@@ -85,6 +99,38 @@ func (m *TerminatorCreate) Validate(formats strfmt.Registry) error {
 func (m *TerminatorCreate) validateAddress(formats strfmt.Registry) error {
 
 	if err := validate.Required("address", "body", m.Address); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *TerminatorCreate) validateCost(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Cost) { // not required
+		return nil
+	}
+
+	if err := m.Cost.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("cost")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *TerminatorCreate) validatePrecedence(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Precedence) { // not required
+		return nil
+	}
+
+	if err := m.Precedence.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("precedence")
+		}
 		return err
 	}
 

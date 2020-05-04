@@ -30,6 +30,7 @@ package rest_model
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -45,6 +46,12 @@ type TerminatorPatch struct {
 	// binding
 	Binding string `json:"binding,omitempty"`
 
+	// cost
+	Cost TerminatorCost `json:"cost,omitempty"`
+
+	// precedence
+	Precedence TerminatorPrecedence `json:"precedence,omitempty"`
+
 	// router
 	Router string `json:"router,omitempty"`
 
@@ -57,6 +64,51 @@ type TerminatorPatch struct {
 
 // Validate validates this terminator patch
 func (m *TerminatorPatch) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateCost(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePrecedence(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *TerminatorPatch) validateCost(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Cost) { // not required
+		return nil
+	}
+
+	if err := m.Cost.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("cost")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *TerminatorPatch) validatePrecedence(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Precedence) { // not required
+		return nil
+	}
+
+	if err := m.Precedence.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("precedence")
+		}
+		return err
+	}
+
 	return nil
 }
 

@@ -5054,6 +5054,7 @@ definitions:
       $ref: '#/definitions/terminatorDetail'
   terminatorDetail:
     type: object
+<<<<<<< HEAD
     allOf:
       - $ref: '#/definitions/baseEntity'
       - type: object
@@ -5070,11 +5071,38 @@ definitions:
             type: string
           address:
             type: string
-          cost:
-            $ref: '#/definitions/terminatorCost'
-          precedence:
-            $ref: '#/definitions/terminatorPrecedence'
+=======
+    properties:
+      id:
+        type: string
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+      _links:
+        $ref: '#/definitions/links'
+      tags:
+        $ref: '#/definitions/tags'
+      serviceId:
+        type: string
+      service:
+        $ref: '#/definitions/entityRef'
+      routerId:
+        type: string
+      router:
+        $ref: '#/definitions/entityRef'
+      binding:
+        type: string
+      address:
+        type: string
+      cost:
+        $ref: '#/definitions/terminatorCost'
+      precedence:
+        $ref: '#/definitions/terminatorPrecedence'
 
+>>>>>>> master
   terminatorCreate:
     type: object
     required:
