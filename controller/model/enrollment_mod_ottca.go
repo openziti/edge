@@ -144,8 +144,7 @@ func (module *EnrollModuleOttCa) Process(ctx EnrollmentContext) (*EnrollmentResu
 	return &EnrollmentResult{
 		Identity:      identity,
 		Authenticator: newAuthenticator,
-		Content:       []byte{},
-		ContentType:   "text/plain",
+		Content:       map[string]interface{}{},
 		Status:        200,
 	}, nil
 }

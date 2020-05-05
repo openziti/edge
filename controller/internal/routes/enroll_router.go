@@ -18,17 +18,19 @@ package routes
 
 import (
 	"encoding/base64"
-	"encoding/json"
 	"encoding/pem"
 	"github.com/fullsailor/pkcs7"
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/env"
 	"github.com/openziti/edge/controller/internal/permissions"
 	"github.com/openziti/edge/controller/model"
 	"github.com/openziti/edge/controller/response"
+	"github.com/openziti/edge/rest_model"
+	"github.com/openziti/edge/rest_server/operations/enroll"
+	"github.com/openziti/edge/rest_server/operations/well_known"
 	"net/http"
-	"strings"
 )
 
 func init() {
@@ -44,16 +46,34 @@ func NewEnrollRouter() *EnrollRouter {
 }
 
 func (ro *EnrollRouter) Register(ae *env.AppEnv) {
-	enrollHandler := ae.WrapHandler(ro.enrollHandler, permissions.Always())
-	ae.RootRouter.HandleFunc("/enroll", enrollHandler).Methods("POST")
-	ae.RootRouter.HandleFunc("/enroll/", enrollHandler).Methods("POST")
 
-	caCertsHandler := ae.WrapHandler(ro.getCaCerts, permissions.Always())
-	ae.RootRouter.HandleFunc("/.well-known/est/cacerts", caCertsHandler).Methods("GET")
+	ae.Api.EnrollEnrollHandler = enroll.EnrollHandlerFunc(func(params enroll.EnrollParams) middleware.Responder {
+		return ae.IsAllowed(ro.enrollHandler, params.HTTPRequest, "", "", permissions.Always())
+	})
+
+	ae.Api.EnrollEnrollCaHandler = enroll.EnrollCaHandlerFunc(func(params enroll.EnrollCaParams) middleware.Responder {
+		return ae.IsAllowed(ro.enrollHandler, params.HTTPRequest, "", "", permissions.Always())
+	})
+
+	ae.Api.EnrollEnrollOttCaHandler = enroll.EnrollOttCaHandlerFunc(func(params enroll.EnrollOttCaParams) middleware.Responder {
+		return ae.IsAllowed(ro.enrollHandler, params.HTTPRequest, "", "", permissions.Always())
+	})
+
+	ae.Api.EnrollEnrollOttHandler = enroll.EnrollOttHandlerFunc(func(params enroll.EnrollOttParams) middleware.Responder {
+		return ae.IsAllowed(ro.enrollHandler, params.HTTPRequest, "", "", permissions.Always())
+	})
+
+	ae.Api.EnrollEnrollErOttHandler = enroll.EnrollErOttHandlerFunc(func(params enroll.EnrollErOttParams) middleware.Responder {
+		return ae.IsAllowed(ro.enrollHandler, params.HTTPRequest, "", "", permissions.Always())
+	})
+
+	ae.Api.WellKnownListWellKnownCasHandler = well_known.ListWellKnownCasHandlerFunc(func(params well_known.ListWellKnownCasParams) middleware.Responder {
+		return ae.IsAllowed(ro.getCaCerts, params.HTTPRequest, "", "", permissions.Always())
+	})
 }
 
 func (ro *EnrollRouter) getCaCerts(ae *env.AppEnv, rc *response.RequestContext) {
-	rc.ResponseWriter.Header().Set("Content-Type", "application/pkcs7-mime")
+	rc.ResponseWriter.Header().Set("content-type", "application/pkcs7-mime")
 	rc.ResponseWriter.Header().Set("Content-Transfer-Encoding", "base64")
 	response.AddVersionHeader(rc.ResponseWriter)
 	rc.ResponseWriter.WriteHeader(http.StatusOK)
@@ -75,7 +95,7 @@ func (ro *EnrollRouter) getCaCerts(ae *env.AppEnv, rc *response.RequestContext) 
 	data, err = pkcs7.DegenerateCertificate(data)
 	if err != nil {
 		pfxlog.Logger().Errorf("unexpected issue creating pkcs7 degenerate: %s", err)
-		rc.RequestResponder.RespondWithError(&apierror.ApiError{
+		rc.RespondWithError(&apierror.ApiError{
 			Code:    apierror.UnhandledCode,
 			Message: apierror.UnhandledMessage,
 			Status:  http.StatusInternalServerError,
@@ -105,51 +125,21 @@ func (ro *EnrollRouter) enrollHandler(ae *env.AppEnv, rc *response.RequestContex
 	err := enrollContext.FillFromHttpRequest(rc.Request)
 
 	if err != nil {
-		rc.RequestResponder.RespondWithError(err)
+		rc.RespondWithError(err)
 		return
 	}
 
 	result, err := ae.Handlers.Enrollment.Enroll(enrollContext)
 
 	if err != nil {
-		rc.RequestResponder.RespondWithError(err)
+		rc.RespondWithError(err)
 		return
 	}
 
 	if result == nil {
-		rc.RequestResponder.RespondWithUnauthorizedError(rc)
+		rc.RespondWithApiError(apierror.NewUnauthorized())
 		return
 	}
 
-	err = ro.Respond(rc, result)
-
-	if err != nil {
-		pfxlog.Logger().WithError(err).Error("error attempting to respond with enrollment response")
-	}
-}
-
-func (ro *EnrollRouter) Respond(rc *response.RequestContext, enrollmentResult *model.EnrollmentResult) error {
-	rc.ResponseWriter.Header().Add("content-type", enrollmentResult.ContentType)
-
-	contentType := strings.Split(enrollmentResult.ContentType, ";")
-
-	if contentType[0] == "application/json" {
-		data := map[string]interface{}{}
-		err := json.Unmarshal(enrollmentResult.Content, &data)
-		if err != nil {
-			return err
-		}
-
-		apiResponse := response.NewApiResponseBody(data, nil)
-		enrollmentResult.Content, err = json.Marshal(apiResponse)
-
-		if err != nil {
-			return err
-		}
-	}
-
-	rc.ResponseWriter.WriteHeader(enrollmentResult.Status)
-	_, err := rc.ResponseWriter.Write(enrollmentResult.Content)
-
-	return err
+	rc.RespondWithOk(result.Content, &rest_model.Meta{})
 }
