@@ -41,10 +41,13 @@ import (
 type AuthenticatorPatch struct {
 
 	// password
-	Password Password `json:"password,omitempty"`
+	Password *PasswordNullable `json:"password,omitempty"`
+
+	// tags
+	Tags Tags `json:"tags,omitempty"`
 
 	// username
-	Username Username `json:"username,omitempty"`
+	Username *UsernameNullable `json:"username,omitempty"`
 }
 
 // Validate validates this authenticator patch
@@ -52,6 +55,10 @@ func (m *AuthenticatorPatch) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePassword(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -71,9 +78,27 @@ func (m *AuthenticatorPatch) validatePassword(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := m.Password.Validate(formats); err != nil {
+	if m.Password != nil {
+		if err := m.Password.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("password")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AuthenticatorPatch) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("password")
+			return ve.ValidateName("tags")
 		}
 		return err
 	}
@@ -87,11 +112,13 @@ func (m *AuthenticatorPatch) validateUsername(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := m.Username.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("username")
+	if m.Username != nil {
+		if err := m.Username.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("username")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil

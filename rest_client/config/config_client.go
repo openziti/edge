@@ -63,9 +63,9 @@ type ClientService interface {
 
 	DetailConfigType(params *DetailConfigTypeParams, authInfo runtime.ClientAuthInfoWriter) (*DetailConfigTypeOK, error)
 
-	ListConfig(params *ListConfigParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigOK, error)
+	ListConfigTypes(params *ListConfigTypesParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigTypesOK, error)
 
-	ListConfigType(params *ListConfigTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigTypeOK, error)
+	ListConfigs(params *ListConfigsParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigsOK, error)
 
 	ListConfigsForConfigType(params *ListConfigsForConfigTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigsForConfigTypeOK, error)
 
@@ -301,64 +301,26 @@ func (a *Client) DetailConfigType(params *DetailConfigTypeParams, authInfo runti
 }
 
 /*
-  ListConfig lists configs
-
-  Retrieves a list of config resources; supports filtering, sorting, and pagination. Requires admin access.
-
-*/
-func (a *Client) ListConfig(params *ListConfigParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListConfigParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "listConfig",
-		Method:             "GET",
-		PathPattern:        "/configs",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListConfigReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListConfigOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for listConfig: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  ListConfigType lists config types
+  ListConfigTypes lists config types
 
   Retrieves a list of config-type resources; supports filtering, sorting, and pagination. Requires admin access.
 
 */
-func (a *Client) ListConfigType(params *ListConfigTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigTypeOK, error) {
+func (a *Client) ListConfigTypes(params *ListConfigTypesParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigTypesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListConfigTypeParams()
+		params = NewListConfigTypesParams()
 	}
 
 	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "listConfigType",
+		ID:                 "listConfigTypes",
 		Method:             "GET",
 		PathPattern:        "/config-types",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListConfigTypeReader{formats: a.formats},
+		Reader:             &ListConfigTypesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -366,13 +328,51 @@ func (a *Client) ListConfigType(params *ListConfigTypeParams, authInfo runtime.C
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListConfigTypeOK)
+	success, ok := result.(*ListConfigTypesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for listConfigType: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for listConfigTypes: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListConfigs lists configs
+
+  Retrieves a list of config resources; supports filtering, sorting, and pagination. Requires admin access.
+
+*/
+func (a *Client) ListConfigs(params *ListConfigsParams, authInfo runtime.ClientAuthInfoWriter) (*ListConfigsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListConfigsParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "listConfigs",
+		Method:             "GET",
+		PathPattern:        "/configs",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListConfigsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListConfigsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for listConfigs: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

@@ -81,20 +81,20 @@ func NewCreateTerminatorOK() *CreateTerminatorOK {
 The create request was successful and the resource has been added at the following location
 */
 type CreateTerminatorOK struct {
-	Payload *rest_model.Create
+	Payload *rest_model.CreateEnvelope
 }
 
 func (o *CreateTerminatorOK) Error() string {
 	return fmt.Sprintf("[POST /terminators][%d] createTerminatorOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateTerminatorOK) GetPayload() *rest_model.Create {
+func (o *CreateTerminatorOK) GetPayload() *rest_model.CreateEnvelope {
 	return o.Payload
 }
 
 func (o *CreateTerminatorOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(rest_model.Create)
+	o.Payload = new(rest_model.CreateEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

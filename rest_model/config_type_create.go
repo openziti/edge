@@ -47,7 +47,7 @@ type ConfigTypeCreate struct {
 
 	// A JSON schema to enforce configuration against
 	// Required: true
-	Schema interface{} `json:"schema"`
+	Schema map[string]interface{} `json:"schema"`
 
 	// tags
 	Tags Tags `json:"tags,omitempty"`
@@ -62,6 +62,10 @@ func (m *ConfigTypeCreate) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSchema(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -82,7 +86,31 @@ func (m *ConfigTypeCreate) validateName(formats strfmt.Registry) error {
 
 func (m *ConfigTypeCreate) validateSchema(formats strfmt.Registry) error {
 
-	if err := validate.Required("schema", "body", m.Schema); err != nil {
+	for k := range m.Schema {
+
+		if err := validate.Required("schema"+"."+k, "body", m.Schema[k]); err != nil {
+			return err
+		}
+
+		if err := validate.Required("schema"+"."+k, "body", m.Schema[k]); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ConfigTypeCreate) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
 		return err
 	}
 

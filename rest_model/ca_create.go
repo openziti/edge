@@ -45,14 +45,21 @@ type CaCreate struct {
 	// Required: true
 	CertPem *string `json:"certPem"`
 
+	// identity roles
+	// Required: true
+	IdentityRoles Roles `json:"identityRoles"`
+
 	// is auth enabled
-	IsAuthEnabled bool `json:"isAuthEnabled,omitempty"`
+	// Required: true
+	IsAuthEnabled *bool `json:"isAuthEnabled"`
 
 	// is auto ca enrollment enabled
-	IsAutoCaEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
+	// Required: true
+	IsAutoCaEnrollmentEnabled *bool `json:"isAutoCaEnrollmentEnabled"`
 
 	// is ott ca enrollment enabled
-	IsOttCaEnrollmentEnabled bool `json:"isOttCaEnrollmentEnabled,omitempty"`
+	// Required: true
+	IsOttCaEnrollmentEnabled *bool `json:"isOttCaEnrollmentEnabled"`
 
 	// name
 	// Required: true
@@ -70,7 +77,27 @@ func (m *CaCreate) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateIdentityRoles(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateIsAuthEnabled(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateIsAutoCaEnrollmentEnabled(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateIsOttCaEnrollmentEnabled(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -89,9 +116,68 @@ func (m *CaCreate) validateCertPem(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *CaCreate) validateIdentityRoles(formats strfmt.Registry) error {
+
+	if err := validate.Required("identityRoles", "body", m.IdentityRoles); err != nil {
+		return err
+	}
+
+	if err := m.IdentityRoles.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("identityRoles")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *CaCreate) validateIsAuthEnabled(formats strfmt.Registry) error {
+
+	if err := validate.Required("isAuthEnabled", "body", m.IsAuthEnabled); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CaCreate) validateIsAutoCaEnrollmentEnabled(formats strfmt.Registry) error {
+
+	if err := validate.Required("isAutoCaEnrollmentEnabled", "body", m.IsAutoCaEnrollmentEnabled); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CaCreate) validateIsOttCaEnrollmentEnabled(formats strfmt.Registry) error {
+
+	if err := validate.Required("isOttCaEnrollmentEnabled", "body", m.IsOttCaEnrollmentEnabled); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *CaCreate) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CaCreate) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
 		return err
 	}
 

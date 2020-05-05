@@ -287,7 +287,7 @@ paths:
         - ztSession: []
       tags:
         - Authenticator
-      operationId: createAuthenticators
+      operationId: createAuthenticator
       parameters:
         - name: Body
           in: body
@@ -525,6 +525,7 @@ paths:
         - ztSession: []
       tags:
         - Certificate Authority
+      operationId: getCaJwt
       produces:
         - 'application/jwt'
       responses:
@@ -555,6 +556,7 @@ paths:
         - ztSession: []
       tags:
         - Certificate Authority
+      operationId: verifyCa
       consumes:
         - 'text/plain'
       parameters:
@@ -585,7 +587,7 @@ paths:
         - ztSession: []
       tags:
         - Config
-      operationId: listConfigType
+      operationId: listConfigTypes
       parameters:
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/offset'
@@ -723,7 +725,7 @@ paths:
         - ztSession: []
       tags:
         - Config
-      operationId: listConfig
+      operationId: listConfigs
       parameters:
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/offset'
@@ -1818,7 +1820,7 @@ paths:
         - ztSession: []
       tags:
         - Identity
-      operationId: listIdentityType
+      operationId: listIdentityTypes
       parameters:
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/offset'
@@ -2484,7 +2486,7 @@ paths:
             $ref: '#/definitions/sessionCreate'
       responses:
         '200':
-          $ref: '#/responses/createResponse'
+          $ref: '#/responses/sessionCreateResponse'
         '400':
           $ref: '#/responses/badRequestResponse'
         '401':
@@ -3025,7 +3027,11 @@ responses:
   createResponse:
     description: The create request was successful and the resource has been added at the following location
     schema:
-      $ref: '#/definitions/create'
+      $ref: '#/definitions/createEnvelope'
+  sessionCreateResponse:
+    description: The create request was successful and the resource has been added at the ollowing location.
+    schema:
+      $ref: '#/definitions/sessionCreateEnvelope'
   ###################################################################
   # Current Session
   ##################################################################
@@ -3416,8 +3422,9 @@ definitions:
   tags:
     description: 'A map of user defined fields and values. The values are limited to the following types/values: null, string, boolean'
     type: object
-    additionalProperties: true
-    properties: {}
+    additionalProperties: {
+      type: object
+    }
   attributes:
     description: A set of strings used to loosly couple this resource to policies
     type: array
@@ -3444,10 +3451,20 @@ definitions:
     type: string
     minLength: 5
     maxLength: 100
+  password-nullable:
+    type: string
+    minLength: 5
+    maxLength: 100
+    x-nullable: true
   username:
     type: string
     minLength: 4
     maxLength: 100
+  username-nullable:
+    type: string
+    minLength: 4
+    maxLength: 100
+    x-nullable: true
   authenticate:
     type: object
     description: A generic authenticate object meant for use with the /authenticate path. Required fields depend on authentication method.
@@ -3480,6 +3497,12 @@ definitions:
             type: string
           identity:
             $ref: '#/definitions/entityRef'
+          identityId:
+            type: string
+          configTypes:
+            type: array
+            items:
+              type: string
   currentApiSessionDetail:
     description: An API Session object for the current API session
     type: object
@@ -3490,10 +3513,6 @@ definitions:
           expiresAt:
             type: string
             format: date-time
-          configTypes:
-            type: array
-            items:
-              type: string
   ###################################################################
   # Identities
   ##################################################################
@@ -3556,6 +3575,8 @@ definitions:
           - Service
       isAdmin:
         type: boolean
+      tags:
+        $ref: '#/definitions/tags'
   identityList:
     description: A list of identities
     type: array
@@ -3612,7 +3633,7 @@ definitions:
     description: An array of authenticator resources
     type: array
     items:
-      $ref: '#/definitions/apiSessionDetail'
+      $ref: '#/definitions/authenticatorDetail'
   authenticatorDetail:
     description: A singular authenticator resource
     type: object
@@ -3628,6 +3649,8 @@ definitions:
             type: string
           fingerprint:
             type: string
+          username:
+            type: string
   authenticatorUpdate:
     description: All of the fields on an authenticator that will be updated
     type: object
@@ -3639,14 +3662,18 @@ definitions:
         $ref: '#/definitions/username'
       password:
         $ref: '#/definitions/password'
+      tags:
+        $ref: '#/definitions/tags'
   authenticatorPatch:
     description: All of the fields on an authenticator that may be updated
     type: object
     properties:
       username:
-        $ref: '#/definitions/username'
+        $ref: '#/definitions/username-nullable'
       password:
-        $ref: '#/definitions/password'
+        $ref: '#/definitions/password-nullable'
+      tags:
+        $ref: '#/definitions/tags'
   ###################################################################
   # Certificate Authorities
   ##################################################################
@@ -3683,50 +3710,18 @@ definitions:
           isAuthEnabled:
             type: boolean
             example: true
-    example:
-      id: c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c
-      createdAt: '2020-03-10T15:20:40.4301069Z'
-      updatedAt: '2020-03-10T15:20:40.4301069Z'
-      _links:
-        jwt:
-          href: './cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c/jwt'
-          method: GET
-        self:
-          href: './cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c'
-        verify:
-          href: './cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c/verify'
-          method: POST
-      tags:
-        externalId: '1234567489'
-      name: Test 3rd Party External CA-505d3728-6c4b-473b-8050-4862f8cf997c
-      fingerprint: 95:F1:95:C3:6D:B0:1E:4A:70:63:A7:E3:AB:8E:B2:B1:B4:10:BD:DB
-      certPem: |-
-        -----BEGIN CERTIFICATE-----
-        MIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT
-        AlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk
-        TmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy
-        NTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D
-        MRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg
-        RXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z
-        Iaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/
-        3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh
-        MB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG
-        uc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB
-        hjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms
-        kllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE
-        1ZG1zveyMvsYsH04C9FndE6w2MLvlA==
-        -----END CERTIFICATE-----
-      isVerified: false
-      verificationToken: 53065a7d-a535-4072-86a2-dd55b71f779c
-      isAutoCaEnrollmentEnabled: true
-      isOttCaEnrollmentEnabled: true
-      isAuthEnabled: true
+          identityRoles:
+            $ref: '#/definitions/roles'
   caCreate:
     description: A create Certificate Authority (CA) object
     type: object
     required:
       - name
       - certPem
+      - isAutoCaEnrollmentEnabled
+      - isOttCaEnrollmentEnabled
+      - isAuthEnabled
+      - identityRoles
     properties:
       name:
         type: string
@@ -3745,29 +3740,8 @@ definitions:
         example: '-----BEGIN CERTIFICATE-----\nMIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT\nAlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk\nTmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy\nNTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D\nMRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg\nRXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z\nIaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/\n3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh\nMB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG\nuc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB\nhjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms\nkllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE\n1ZG1zveyMvsYsH04C9FndE6w2MLvlA==\n-----END CERTIFICATE-----'
       tags:
         $ref: '#/definitions/tags'
-    example:
-      name: Test 3rd Party External CA
-      isAutoCaEnrollmentEnabled: true
-      isAuthEnabled: true
-      isOttCaEnrollmentEnabled: true
-      certPem: |-
-        -----BEGIN CERTIFICATE-----
-        MIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT
-        AlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk
-        TmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy
-        NTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D
-        MRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg
-        RXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z
-        Iaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/
-        3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh
-        MB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG
-        uc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB
-        hjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms
-        kllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE
-        1ZG1zveyMvsYsH04C9FndE6w2MLvlA==
-        -----END CERTIFICATE-----
-      tags:
-        externalId: '1234567489'
+      identityRoles:
+        $ref: '#/definitions/roles'
   caUpdate:
     type: object
     required:
@@ -3775,6 +3749,7 @@ definitions:
       - isAutoCaEnrollmentEnabled
       - isOttCaEnrollmentEnabled
       - isAuthEnabled
+      - identityRoles
     properties:
       name:
         type: string
@@ -3790,6 +3765,8 @@ definitions:
         example: true
       tags:
         $ref: '#/definitions/tags'
+      identityRoles:
+        $ref: '#/definitions/roles'
   caPatch:
     type: object
     properties:
@@ -3807,6 +3784,8 @@ definitions:
         example: true
       tags:
         $ref: '#/definitions/tags'
+      identityRoles:
+        $ref: '#/definitions/roles'
   ###################################################################
   # Config-Types
   ##################################################################
@@ -3828,6 +3807,8 @@ definitions:
           schema:
             description: A JSON schema to enforce configuration against
             type: object
+            additionalProperties:
+              type: object
   configTypeCreate:
     type: object
     description: A config-type create object
@@ -3843,6 +3824,8 @@ definitions:
       schema:
         description: A JSON schema to enforce configuration against
         type: object
+        additionalProperties:
+          type: object
   configTypeUpdate:
     description: A config-type update object
     type: object
@@ -3858,6 +3841,8 @@ definitions:
       schema:
         description: A JSON schema to enforce configuration against
         type: object
+        additionalProperties:
+          type: object
   configTypePatch:
     description: A config-type patch object
     type: object
@@ -3870,6 +3855,8 @@ definitions:
       schema:
         description: A JSON schema to enforce configuration against
         type: object
+        additionalProperties:
+          type: object
   ###################################################################
   # Configs
   ##################################################################
@@ -3910,6 +3897,8 @@ definitions:
         description: The id of a config-type that the data section will match
       data:
         type: object
+        additionalProperties:
+          type: object
         description: Data payload is defined by the schema of the config-type defined in the type parameter
     example:
       name: test-config
@@ -3931,6 +3920,8 @@ definitions:
         example: default.ziti-tunneler-server.v1
       data:
         type: object
+        additionalProperties:
+          type: object
         description: Data payload is defined by the schema of the config-type defined in the type parameter
     example:
       name: example-config-name
@@ -3948,6 +3939,8 @@ definitions:
         example: default.ziti-tunneler-server.v1
       data:
         type: object
+        additionalProperties:
+          type: object
         description: Data payload is defined by the schema of the config-type defined in the type parameter
     example:
       name: example-config-name
@@ -4288,10 +4281,6 @@ definitions:
             type: array
             items:
               type: string
-      config:
-        type: object
-        additionalProperties:
-          type: object
         description: map of config data for this service keyed by the config type name. Only configs of the types requested will be returned.
   serviceCreate:
     type: object
@@ -4599,19 +4588,36 @@ definitions:
         type: string
       apiVersion:
         type: string
-  create:
+  createEnvelope:
     type: object
     properties:
       meta:
-        properties: {}
-        type: object
+        $ref: '#/definitions/meta'
       data:
-        properties:
-          _links:
-            $ref: '#/definitions/links'
-          id:
-            type: string
+        $ref: '#/definitions/createLocation'
+  createLocation:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/links'
+      id:
+        type: string
+  sessionCreateEnvelope:
+    type: object
+    properties:
+      meta:
+        $ref: '#/definitions/meta'
+      data:
+        $ref: '#/definitions/sessionCreateLocation'
         type: object
+  sessionCreateLocation:
+    type: object
+    allOf:
+      - $ref: '#/definitions/createLocation'
+      - type: object
+        properties:
+          token:
+            type: string
   version:
     type: object
     properties:
@@ -5079,8 +5085,8 @@ definitions:
             $ref: '#/definitions/terminatorCost'
           precedence:
             $ref: '#/definitions/terminatorPrecedence'
-      dynamicCost:
-        $ref: '#/definitions/terminatorCost'
+          dynamicCost:
+            $ref: '#/definitions/terminatorCost'
 
   terminatorCreate:
     type: object

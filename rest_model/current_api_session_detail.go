@@ -42,9 +42,6 @@ import (
 type CurrentAPISessionDetail struct {
 	APISessionDetail
 
-	// config types
-	ConfigTypes []string `json:"configTypes"`
-
 	// expires at
 	// Format: date-time
 	ExpiresAt strfmt.DateTime `json:"expiresAt,omitempty"`
@@ -61,15 +58,11 @@ func (m *CurrentAPISessionDetail) UnmarshalJSON(raw []byte) error {
 
 	// AO1
 	var dataAO1 struct {
-		ConfigTypes []string `json:"configTypes"`
-
 		ExpiresAt strfmt.DateTime `json:"expiresAt,omitempty"`
 	}
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
 	}
-
-	m.ConfigTypes = dataAO1.ConfigTypes
 
 	m.ExpiresAt = dataAO1.ExpiresAt
 
@@ -86,12 +79,8 @@ func (m CurrentAPISessionDetail) MarshalJSON() ([]byte, error) {
 	}
 	_parts = append(_parts, aO0)
 	var dataAO1 struct {
-		ConfigTypes []string `json:"configTypes"`
-
 		ExpiresAt strfmt.DateTime `json:"expiresAt,omitempty"`
 	}
-
-	dataAO1.ConfigTypes = m.ConfigTypes
 
 	dataAO1.ExpiresAt = m.ExpiresAt
 

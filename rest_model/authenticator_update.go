@@ -44,6 +44,9 @@ type AuthenticatorUpdate struct {
 	// Required: true
 	Password Password `json:"password"`
 
+	// tags
+	Tags Tags `json:"tags,omitempty"`
+
 	// username
 	// Required: true
 	Username Username `json:"username"`
@@ -54,6 +57,10 @@ func (m *AuthenticatorUpdate) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePassword(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -72,6 +79,22 @@ func (m *AuthenticatorUpdate) validatePassword(formats strfmt.Registry) error {
 	if err := m.Password.Validate(formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("password")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *AuthenticatorUpdate) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
 		}
 		return err
 	}

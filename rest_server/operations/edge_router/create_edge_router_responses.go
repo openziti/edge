@@ -49,7 +49,7 @@ type CreateEdgeRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *rest_model.Create `json:"body,omitempty"`
+	Payload *rest_model.CreateEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateEdgeRouterOK creates CreateEdgeRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateEdgeRouterOK() *CreateEdgeRouterOK {
 }
 
 // WithPayload adds the payload to the create edge router o k response
-func (o *CreateEdgeRouterOK) WithPayload(payload *rest_model.Create) *CreateEdgeRouterOK {
+func (o *CreateEdgeRouterOK) WithPayload(payload *rest_model.CreateEnvelope) *CreateEdgeRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create edge router o k response
-func (o *CreateEdgeRouterOK) SetPayload(payload *rest_model.Create) {
+func (o *CreateEdgeRouterOK) SetPayload(payload *rest_model.CreateEnvelope) {
 	o.Payload = payload
 }
 

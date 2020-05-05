@@ -41,8 +41,14 @@ import (
 type APISessionDetail struct {
 	BaseEntity
 
+	// config types
+	ConfigTypes []string `json:"configTypes"`
+
 	// identity
 	Identity *EntityRef `json:"identity,omitempty"`
+
+	// identity Id
+	IdentityID string `json:"identityId,omitempty"`
 
 	// token
 	Token string `json:"token,omitempty"`
@@ -59,7 +65,11 @@ func (m *APISessionDetail) UnmarshalJSON(raw []byte) error {
 
 	// AO1
 	var dataAO1 struct {
+		ConfigTypes []string `json:"configTypes"`
+
 		Identity *EntityRef `json:"identity,omitempty"`
+
+		IdentityID string `json:"identityId,omitempty"`
 
 		Token string `json:"token,omitempty"`
 	}
@@ -67,7 +77,11 @@ func (m *APISessionDetail) UnmarshalJSON(raw []byte) error {
 		return err
 	}
 
+	m.ConfigTypes = dataAO1.ConfigTypes
+
 	m.Identity = dataAO1.Identity
+
+	m.IdentityID = dataAO1.IdentityID
 
 	m.Token = dataAO1.Token
 
@@ -84,12 +98,20 @@ func (m APISessionDetail) MarshalJSON() ([]byte, error) {
 	}
 	_parts = append(_parts, aO0)
 	var dataAO1 struct {
+		ConfigTypes []string `json:"configTypes"`
+
 		Identity *EntityRef `json:"identity,omitempty"`
+
+		IdentityID string `json:"identityId,omitempty"`
 
 		Token string `json:"token,omitempty"`
 	}
 
+	dataAO1.ConfigTypes = m.ConfigTypes
+
 	dataAO1.Identity = m.Identity
+
+	dataAO1.IdentityID = m.IdentityID
 
 	dataAO1.Token = m.Token
 

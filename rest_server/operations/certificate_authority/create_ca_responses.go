@@ -49,7 +49,7 @@ type CreateCaOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *rest_model.Create `json:"body,omitempty"`
+	Payload *rest_model.CreateEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateCaOK creates CreateCaOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateCaOK() *CreateCaOK {
 }
 
 // WithPayload adds the payload to the create ca o k response
-func (o *CreateCaOK) WithPayload(payload *rest_model.Create) *CreateCaOK {
+func (o *CreateCaOK) WithPayload(payload *rest_model.CreateEnvelope) *CreateCaOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create ca o k response
-func (o *CreateCaOK) SetPayload(payload *rest_model.Create) {
+func (o *CreateCaOK) SetPayload(payload *rest_model.CreateEnvelope) {
 	o.Payload = payload
 }
 

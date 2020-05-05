@@ -30,6 +30,7 @@ package rest_model
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -43,7 +44,7 @@ type ConfigTypePatch struct {
 	Name string `json:"name,omitempty"`
 
 	// A JSON schema to enforce configuration against
-	Schema interface{} `json:"schema,omitempty"`
+	Schema map[string]interface{} `json:"schema,omitempty"`
 
 	// tags
 	Tags Tags `json:"tags,omitempty"`
@@ -51,6 +52,31 @@ type ConfigTypePatch struct {
 
 // Validate validates this config type patch
 func (m *ConfigTypePatch) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateTags(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConfigTypePatch) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
+		return err
+	}
+
 	return nil
 }
 

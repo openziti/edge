@@ -78,23 +78,23 @@ func NewCreateSessionOK() *CreateSessionOK {
 
 /*CreateSessionOK handles this case with default header values.
 
-The create request was successful and the resource has been added at the following location
+The create request was successful and the resource has been added at the ollowing location.
 */
 type CreateSessionOK struct {
-	Payload *rest_model.Create
+	Payload *rest_model.SessionCreateEnvelope
 }
 
 func (o *CreateSessionOK) Error() string {
 	return fmt.Sprintf("[POST /sessions][%d] createSessionOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateSessionOK) GetPayload() *rest_model.Create {
+func (o *CreateSessionOK) GetPayload() *rest_model.SessionCreateEnvelope {
 	return o.Payload
 }
 
 func (o *CreateSessionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(rest_model.Create)
+	o.Payload = new(rest_model.SessionCreateEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

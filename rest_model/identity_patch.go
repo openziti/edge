@@ -49,6 +49,9 @@ type IdentityPatch struct {
 	// name
 	Name string `json:"name,omitempty"`
 
+	// tags
+	Tags Tags `json:"tags,omitempty"`
+
 	// type
 	// Enum: [User Device Service]
 	Type string `json:"type,omitempty"`
@@ -58,6 +61,10 @@ type IdentityPatch struct {
 func (m *IdentityPatch) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateTags(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateType(formats); err != nil {
 		res = append(res, err)
 	}
@@ -65,6 +72,22 @@ func (m *IdentityPatch) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *IdentityPatch) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
+		return err
+	}
+
 	return nil
 }
 

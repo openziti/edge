@@ -41,6 +41,10 @@ import (
 // swagger:model caUpdate
 type CaUpdate struct {
 
+	// identity roles
+	// Required: true
+	IdentityRoles Roles `json:"identityRoles"`
+
 	// is auth enabled
 	// Required: true
 	IsAuthEnabled *bool `json:"isAuthEnabled"`
@@ -65,6 +69,10 @@ type CaUpdate struct {
 func (m *CaUpdate) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateIdentityRoles(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateIsAuthEnabled(formats); err != nil {
 		res = append(res, err)
 	}
@@ -81,9 +89,29 @@ func (m *CaUpdate) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateTags(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CaUpdate) validateIdentityRoles(formats strfmt.Registry) error {
+
+	if err := validate.Required("identityRoles", "body", m.IdentityRoles); err != nil {
+		return err
+	}
+
+	if err := m.IdentityRoles.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("identityRoles")
+		}
+		return err
+	}
+
 	return nil
 }
 
@@ -117,6 +145,22 @@ func (m *CaUpdate) validateIsOttCaEnrollmentEnabled(formats strfmt.Registry) err
 func (m *CaUpdate) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CaUpdate) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
 		return err
 	}
 

@@ -55,7 +55,7 @@ func init() {
   "info": {
     "title": "Ziti Edge",
     "contact": {},
-    "version": "0.13.0"
+    "version": "0.14.0"
   },
   "host": "demo.ziti.dev",
   "basePath": "/",
@@ -239,7 +239,7 @@ func init() {
           "Authenticator"
         ],
         "summary": "Creates an authenticator",
-        "operationId": "createAuthenticators",
+        "operationId": "createAuthenticator",
         "parameters": [
           {
             "description": "A Authenticators create object",
@@ -610,6 +610,7 @@ func init() {
           "Certificate Authority"
         ],
         "summary": "Retrieve the enrollment JWT for a CA",
+        "operationId": "getCaJwt",
         "responses": {
           "200": {
             "description": "The result is the JWT text to validate the CA",
@@ -649,6 +650,7 @@ func init() {
           "Certificate Authority"
         ],
         "summary": "Verify a CA",
+        "operationId": "verifyCa",
         "parameters": [
           {
             "description": "A PEM formatted certificate signed by the target CA with the common name matching the CA's validationToken",
@@ -693,7 +695,7 @@ func init() {
           "Config"
         ],
         "summary": "List config-types",
-        "operationId": "listConfigType",
+        "operationId": "listConfigTypes",
         "parameters": [
           {
             "$ref": "#/parameters/limit"
@@ -917,7 +919,7 @@ func init() {
           "Config"
         ],
         "summary": "List configs",
-        "operationId": "listConfig",
+        "operationId": "listConfigs",
         "parameters": [
           {
             "$ref": "#/parameters/limit"
@@ -2705,7 +2707,7 @@ func init() {
           "Identity"
         ],
         "summary": "List available identity types",
-        "operationId": "listIdentityType",
+        "operationId": "listIdentityTypes",
         "parameters": [
           {
             "$ref": "#/parameters/limit"
@@ -3845,7 +3847,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/createResponse"
+            "$ref": "#/responses/sessionCreateResponse"
           },
           "400": {
             "$ref": "#/responses/badRequestResponse"
@@ -4494,8 +4496,17 @@ func init() {
         {
           "type": "object",
           "properties": {
+            "configTypes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "identity": {
               "$ref": "#/definitions/entityRef"
+            },
+            "identityId": {
+              "type": "string"
             },
             "token": {
               "type": "string"
@@ -4584,6 +4595,9 @@ func init() {
             },
             "method": {
               "type": "string"
+            },
+            "username": {
+              "type": "string"
             }
           }
         }
@@ -4593,7 +4607,7 @@ func init() {
       "description": "An array of authenticator resources",
       "type": "array",
       "items": {
-        "$ref": "#/definitions/apiSessionDetail"
+        "$ref": "#/definitions/authenticatorDetail"
       }
     },
     "authenticatorPatch": {
@@ -4601,10 +4615,13 @@ func init() {
       "type": "object",
       "properties": {
         "password": {
-          "$ref": "#/definitions/password"
+          "$ref": "#/definitions/password-nullable"
+        },
+        "tags": {
+          "$ref": "#/definitions/tags"
         },
         "username": {
-          "$ref": "#/definitions/username"
+          "$ref": "#/definitions/username-nullable"
         }
       }
     },
@@ -4618,6 +4635,9 @@ func init() {
       "properties": {
         "password": {
           "$ref": "#/definitions/password"
+        },
+        "tags": {
+          "$ref": "#/definitions/tags"
         },
         "username": {
           "$ref": "#/definitions/username"
@@ -4652,12 +4672,19 @@ func init() {
       "type": "object",
       "required": [
         "name",
-        "certPem"
+        "certPem",
+        "isAutoCaEnrollmentEnabled",
+        "isOttCaEnrollmentEnabled",
+        "isAuthEnabled",
+        "identityRoles"
       ],
       "properties": {
         "certPem": {
           "type": "string",
           "example": "-----BEGIN CERTIFICATE-----\\nMIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT\\nAlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk\\nTmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy\\nNTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D\\nMRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg\\nRXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z\\nIaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/\\n3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh\\nMB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG\\nuc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB\\nhjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms\\nkllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE\\n1ZG1zveyMvsYsH04C9FndE6w2MLvlA==\\n-----END CERTIFICATE-----"
+        },
+        "identityRoles": {
+          "$ref": "#/definitions/roles"
         },
         "isAuthEnabled": {
           "type": "boolean",
@@ -4678,16 +4705,6 @@ func init() {
         "tags": {
           "$ref": "#/definitions/tags"
         }
-      },
-      "example": {
-        "certPem": "-----BEGIN CERTIFICATE-----\nMIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT\nAlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk\nTmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy\nNTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D\nMRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg\nRXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z\nIaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/\n3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh\nMB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG\nuc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB\nhjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms\nkllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE\n1ZG1zveyMvsYsH04C9FndE6w2MLvlA==\n-----END CERTIFICATE-----",
-        "isAuthEnabled": true,
-        "isAutoCaEnrollmentEnabled": true,
-        "isOttCaEnrollmentEnabled": true,
-        "name": "Test 3rd Party External CA",
-        "tags": {
-          "externalId": "1234567489"
-        }
       }
     },
     "caDetail": {
@@ -4705,6 +4722,9 @@ func init() {
             },
             "fingerprint": {
               "type": "string"
+            },
+            "identityRoles": {
+              "$ref": "#/definitions/roles"
             },
             "isAuthEnabled": {
               "type": "boolean",
@@ -4731,36 +4751,7 @@ func init() {
             }
           }
         }
-      ],
-      "example": {
-        "_links": {
-          "jwt": {
-            "href": "./cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c/jwt",
-            "method": "GET"
-          },
-          "self": {
-            "href": "./cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c"
-          },
-          "verify": {
-            "href": "./cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c/verify",
-            "method": "POST"
-          }
-        },
-        "certPem": "-----BEGIN CERTIFICATE-----\nMIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT\nAlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk\nTmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy\nNTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D\nMRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg\nRXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z\nIaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/\n3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh\nMB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG\nuc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB\nhjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms\nkllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE\n1ZG1zveyMvsYsH04C9FndE6w2MLvlA==\n-----END CERTIFICATE-----",
-        "createdAt": "2020-03-10T15:20:40.4301069Z",
-        "fingerprint": "95:F1:95:C3:6D:B0:1E:4A:70:63:A7:E3:AB:8E:B2:B1:B4:10:BD:DB",
-        "id": "c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c",
-        "isAuthEnabled": true,
-        "isAutoCaEnrollmentEnabled": true,
-        "isOttCaEnrollmentEnabled": true,
-        "isVerified": false,
-        "name": "Test 3rd Party External CA-505d3728-6c4b-473b-8050-4862f8cf997c",
-        "tags": {
-          "externalId": "1234567489"
-        },
-        "updatedAt": "2020-03-10T15:20:40.4301069Z",
-        "verificationToken": "53065a7d-a535-4072-86a2-dd55b71f779c"
-      }
+      ]
     },
     "caList": {
       "description": "An array of Certificate Authority (CA) resources",
@@ -4772,6 +4763,9 @@ func init() {
     "caPatch": {
       "type": "object",
       "properties": {
+        "identityRoles": {
+          "$ref": "#/definitions/roles"
+        },
         "isAuthEnabled": {
           "type": "boolean",
           "example": true
@@ -4799,9 +4793,13 @@ func init() {
         "name",
         "isAutoCaEnrollmentEnabled",
         "isOttCaEnrollmentEnabled",
-        "isAuthEnabled"
+        "isAuthEnabled",
+        "identityRoles"
       ],
       "properties": {
+        "identityRoles": {
+          "$ref": "#/definitions/roles"
+        },
         "isAuthEnabled": {
           "type": "boolean",
           "example": true
@@ -4834,7 +4832,10 @@ func init() {
       "properties": {
         "data": {
           "description": "Data payload is defined by the schema of the config-type defined in the type parameter",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "name": {
           "type": "string",
@@ -4894,7 +4895,10 @@ func init() {
       "properties": {
         "data": {
           "description": "Data payload is defined by the schema of the config-type defined in the type parameter",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "name": {
           "type": "string",
@@ -4926,7 +4930,10 @@ func init() {
         },
         "schema": {
           "description": "A JSON schema to enforce configuration against",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -4949,7 +4956,10 @@ func init() {
             },
             "schema": {
               "description": "A JSON schema to enforce configuration against",
-              "type": "object"
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
             }
           }
         }
@@ -4972,7 +4982,10 @@ func init() {
         },
         "schema": {
           "description": "A JSON schema to enforce configuration against",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -4993,7 +5006,10 @@ func init() {
         },
         "schema": {
           "description": "A JSON schema to enforce configuration against",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -5017,7 +5033,10 @@ func init() {
       "properties": {
         "data": {
           "description": "Data payload is defined by the schema of the config-type defined in the type parameter",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "name": {
           "type": "string",
@@ -5035,22 +5054,25 @@ func init() {
         "name": "example-config-name"
       }
     },
-    "create": {
+    "createEnvelope": {
       "type": "object",
       "properties": {
         "data": {
-          "type": "object",
-          "properties": {
-            "_links": {
-              "$ref": "#/definitions/links"
-            },
-            "id": {
-              "type": "string"
-            }
-          }
+          "$ref": "#/definitions/createLocation"
         },
         "meta": {
-          "type": "object"
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
+    "createLocation": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/links"
+        },
+        "id": {
+          "type": "string"
         }
       }
     },
@@ -5079,12 +5101,6 @@ func init() {
         {
           "type": "object",
           "properties": {
-            "configTypes": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
             "expiresAt": {
               "type": "string",
               "format": "date-time"
@@ -5907,6 +5923,9 @@ func init() {
         "name": {
           "type": "string"
         },
+        "tags": {
+          "$ref": "#/definitions/tags"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -6367,6 +6386,12 @@ func init() {
       "maxLength": 100,
       "minLength": 5
     },
+    "password-nullable": {
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 5,
+      "x-nullable": true
+    },
     "policyAdvice": {
       "type": "object",
       "properties": {
@@ -6548,6 +6573,7 @@ func init() {
           "$ref": "#/definitions/baseEntity"
         },
         {
+          "description": "map of config data for this service keyed by the config type name. Only configs of the types requested will be returned.",
           "type": "object",
           "properties": {
             "configs": {
@@ -6878,6 +6904,34 @@ func init() {
         }
       }
     },
+    "sessionCreateEnvelope": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "$ref": "#/definitions/sessionCreateLocation"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
+    "sessionCreateLocation": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/createLocation"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "sessionDetail": {
       "type": "object",
       "allOf": [
@@ -6957,7 +7011,9 @@ func init() {
     "tags": {
       "description": "A map of user defined fields and values. The values are limited to the following types/values: null, string, boolean",
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": {
+        "type": "object"
+      }
     },
     "terminatorCost": {
       "type": "integer",
@@ -7010,6 +7066,9 @@ func init() {
               "type": "string"
             },
             "cost": {
+              "$ref": "#/definitions/terminatorCost"
+            },
+            "dynamicCost": {
               "$ref": "#/definitions/terminatorCost"
             },
             "precedence": {
@@ -7170,6 +7229,12 @@ func init() {
       "maxLength": 100,
       "minLength": 4
     },
+    "username-nullable": {
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 4,
+      "x-nullable": true
+    },
     "version": {
       "type": "object",
       "properties": {
@@ -7320,7 +7385,7 @@ func init() {
     "createResponse": {
       "description": "The create request was successful and the resource has been added at the following location",
       "schema": {
-        "$ref": "#/definitions/create"
+        "$ref": "#/definitions/createEnvelope"
       }
     },
     "deleteResponse": {
@@ -7741,6 +7806,12 @@ func init() {
         "$ref": "#/definitions/empty"
       }
     },
+    "sessionCreateResponse": {
+      "description": "The create request was successful and the resource has been added at the ollowing location.",
+      "schema": {
+        "$ref": "#/definitions/sessionCreateEnvelope"
+      }
+    },
     "unauthorizedResponse": {
       "description": "The currently supplied session does not have the correct access rights to request this resource",
       "schema": {
@@ -7803,7 +7874,7 @@ func init() {
   "info": {
     "title": "Ziti Edge",
     "contact": {},
-    "version": "0.13.0"
+    "version": "0.14.0"
   },
   "host": "demo.ziti.dev",
   "basePath": "/",
@@ -8198,7 +8269,7 @@ func init() {
           "Authenticator"
         ],
         "summary": "Creates an authenticator",
-        "operationId": "createAuthenticators",
+        "operationId": "createAuthenticator",
         "parameters": [
           {
             "description": "A Authenticators create object",
@@ -8749,7 +8820,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -9233,6 +9304,7 @@ func init() {
           "Certificate Authority"
         ],
         "summary": "Retrieve the enrollment JWT for a CA",
+        "operationId": "getCaJwt",
         "responses": {
           "200": {
             "description": "The result is the JWT text to validate the CA",
@@ -9320,6 +9392,7 @@ func init() {
           "Certificate Authority"
         ],
         "summary": "Verify a CA",
+        "operationId": "verifyCa",
         "parameters": [
           {
             "description": "A PEM formatted certificate signed by the target CA with the common name matching the CA's validationToken",
@@ -9449,7 +9522,7 @@ func init() {
           "Config"
         ],
         "summary": "List config-types",
-        "operationId": "listConfigType",
+        "operationId": "listConfigTypes",
         "parameters": [
           {
             "type": "integer",
@@ -9502,7 +9575,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -10040,7 +10113,7 @@ func init() {
           "Config"
         ],
         "summary": "List configs",
-        "operationId": "listConfig",
+        "operationId": "listConfigs",
         "parameters": [
           {
             "type": "integer",
@@ -10118,7 +10191,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -11304,7 +11377,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -12118,7 +12191,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -13548,7 +13621,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -14855,7 +14928,7 @@ func init() {
           "Identity"
         ],
         "summary": "List available identity types",
-        "operationId": "listIdentityType",
+        "operationId": "listIdentityTypes",
         "parameters": [
           {
             "type": "integer",
@@ -15079,7 +15152,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -15827,7 +15900,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -16687,7 +16760,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -17707,9 +17780,9 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "The create request was successful and the resource has been added at the following location",
+            "description": "The create request was successful and the resource has been added at the ollowing location.",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/sessionCreateEnvelope"
             }
           },
           "400": {
@@ -18180,7 +18253,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -18764,7 +18837,7 @@ func init() {
           "200": {
             "description": "The create request was successful and the resource has been added at the following location",
             "schema": {
-              "$ref": "#/definitions/create"
+              "$ref": "#/definitions/createEnvelope"
             }
           },
           "400": {
@@ -19278,17 +19351,6 @@ func init() {
     }
   },
   "definitions": {
-    "CreateData": {
-      "type": "object",
-      "properties": {
-        "_links": {
-          "$ref": "#/definitions/links"
-        },
-        "id": {
-          "type": "string"
-        }
-      }
-    },
     "IdentityCreateEnrollment": {
       "type": "object",
       "properties": {
@@ -19398,8 +19460,17 @@ func init() {
         {
           "type": "object",
           "properties": {
+            "configTypes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "identity": {
               "$ref": "#/definitions/entityRef"
+            },
+            "identityId": {
+              "type": "string"
             },
             "token": {
               "type": "string"
@@ -19488,6 +19559,9 @@ func init() {
             },
             "method": {
               "type": "string"
+            },
+            "username": {
+              "type": "string"
             }
           }
         }
@@ -19497,7 +19571,7 @@ func init() {
       "description": "An array of authenticator resources",
       "type": "array",
       "items": {
-        "$ref": "#/definitions/apiSessionDetail"
+        "$ref": "#/definitions/authenticatorDetail"
       }
     },
     "authenticatorPatch": {
@@ -19505,10 +19579,13 @@ func init() {
       "type": "object",
       "properties": {
         "password": {
-          "$ref": "#/definitions/password"
+          "$ref": "#/definitions/password-nullable"
+        },
+        "tags": {
+          "$ref": "#/definitions/tags"
         },
         "username": {
-          "$ref": "#/definitions/username"
+          "$ref": "#/definitions/username-nullable"
         }
       }
     },
@@ -19522,6 +19599,9 @@ func init() {
       "properties": {
         "password": {
           "$ref": "#/definitions/password"
+        },
+        "tags": {
+          "$ref": "#/definitions/tags"
         },
         "username": {
           "$ref": "#/definitions/username"
@@ -19556,12 +19636,19 @@ func init() {
       "type": "object",
       "required": [
         "name",
-        "certPem"
+        "certPem",
+        "isAutoCaEnrollmentEnabled",
+        "isOttCaEnrollmentEnabled",
+        "isAuthEnabled",
+        "identityRoles"
       ],
       "properties": {
         "certPem": {
           "type": "string",
           "example": "-----BEGIN CERTIFICATE-----\\nMIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT\\nAlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk\\nTmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy\\nNTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D\\nMRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg\\nRXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z\\nIaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/\\n3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh\\nMB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG\\nuc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB\\nhjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms\\nkllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE\\n1ZG1zveyMvsYsH04C9FndE6w2MLvlA==\\n-----END CERTIFICATE-----"
+        },
+        "identityRoles": {
+          "$ref": "#/definitions/roles"
         },
         "isAuthEnabled": {
           "type": "boolean",
@@ -19582,16 +19669,6 @@ func init() {
         "tags": {
           "$ref": "#/definitions/tags"
         }
-      },
-      "example": {
-        "certPem": "-----BEGIN CERTIFICATE-----\nMIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT\nAlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk\nTmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy\nNTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D\nMRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg\nRXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z\nIaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/\n3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh\nMB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG\nuc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB\nhjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms\nkllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE\n1ZG1zveyMvsYsH04C9FndE6w2MLvlA==\n-----END CERTIFICATE-----",
-        "isAuthEnabled": true,
-        "isAutoCaEnrollmentEnabled": true,
-        "isOttCaEnrollmentEnabled": true,
-        "name": "Test 3rd Party External CA",
-        "tags": {
-          "externalId": "1234567489"
-        }
       }
     },
     "caDetail": {
@@ -19609,6 +19686,9 @@ func init() {
             },
             "fingerprint": {
               "type": "string"
+            },
+            "identityRoles": {
+              "$ref": "#/definitions/roles"
             },
             "isAuthEnabled": {
               "type": "boolean",
@@ -19635,36 +19715,7 @@ func init() {
             }
           }
         }
-      ],
-      "example": {
-        "_links": {
-          "jwt": {
-            "href": "./cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c/jwt",
-            "method": "GET"
-          },
-          "self": {
-            "href": "./cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c"
-          },
-          "verify": {
-            "href": "./cas/c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c/verify",
-            "method": "POST"
-          }
-        },
-        "certPem": "-----BEGIN CERTIFICATE-----\nMIICUjCCAdmgAwIBAgIJANooo7NB+dZZMAoGCCqGSM49BAMCMF4xCzAJBgNVBAYT\nAlVTMQswCQYDVQQIDAJOQzETMBEGA1UECgwKTmV0Rm91bmRyeTEtMCsGA1UEAwwk\nTmV0Rm91bmRyeSBaaXRpIEV4dGVybmFsIEFQSSBSb290IENBMB4XDTE4MTExNTEy\nNTcwOVoXDTM4MTExMDEyNTcwOVowXjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5D\nMRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0wKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkg\nRXh0ZXJuYWwgQVBJIFJvb3QgQ0EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAARwq61Z\nIaqbaw0PDt3frJZaHjkxfZhwYrykI1GlbRNd/jix03lVG9qvpN5Og9fQfFFcFmD/\n3vCE9S6O0npm0mADQxcBcxbMRAH5dtBuCuiJW6qAAbPgiM32vqSxBiFt0KejYzBh\nMB0GA1UdDgQWBBRx1OVGuc/jdltDc8YBtkw8Tbr4fjAfBgNVHSMEGDAWgBRx1OVG\nuc/jdltDc8YBtkw8Tbr4fjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB\nhjAKBggqhkjOPQQDAgNnADBkAjBDRxNZUaIVpkQKnAgJukl3ysd3/i7Z6hDyIEms\nkllz/+ZvmdBp9iedV5o5BvJUggACMCv+UBFlJH7pmsOCo/F45Kk178YsCC7gaMxE\n1ZG1zveyMvsYsH04C9FndE6w2MLvlA==\n-----END CERTIFICATE-----",
-        "createdAt": "2020-03-10T15:20:40.4301069Z",
-        "fingerprint": "95:F1:95:C3:6D:B0:1E:4A:70:63:A7:E3:AB:8E:B2:B1:B4:10:BD:DB",
-        "id": "c0db0ec1-f0ac-461e-8dbf-0597ad33dd8c",
-        "isAuthEnabled": true,
-        "isAutoCaEnrollmentEnabled": true,
-        "isOttCaEnrollmentEnabled": true,
-        "isVerified": false,
-        "name": "Test 3rd Party External CA-505d3728-6c4b-473b-8050-4862f8cf997c",
-        "tags": {
-          "externalId": "1234567489"
-        },
-        "updatedAt": "2020-03-10T15:20:40.4301069Z",
-        "verificationToken": "53065a7d-a535-4072-86a2-dd55b71f779c"
-      }
+      ]
     },
     "caList": {
       "description": "An array of Certificate Authority (CA) resources",
@@ -19676,6 +19727,9 @@ func init() {
     "caPatch": {
       "type": "object",
       "properties": {
+        "identityRoles": {
+          "$ref": "#/definitions/roles"
+        },
         "isAuthEnabled": {
           "type": "boolean",
           "example": true
@@ -19703,9 +19757,13 @@ func init() {
         "name",
         "isAutoCaEnrollmentEnabled",
         "isOttCaEnrollmentEnabled",
-        "isAuthEnabled"
+        "isAuthEnabled",
+        "identityRoles"
       ],
       "properties": {
+        "identityRoles": {
+          "$ref": "#/definitions/roles"
+        },
         "isAuthEnabled": {
           "type": "boolean",
           "example": true
@@ -19738,7 +19796,10 @@ func init() {
       "properties": {
         "data": {
           "description": "Data payload is defined by the schema of the config-type defined in the type parameter",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "name": {
           "type": "string",
@@ -19798,7 +19859,10 @@ func init() {
       "properties": {
         "data": {
           "description": "Data payload is defined by the schema of the config-type defined in the type parameter",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "name": {
           "type": "string",
@@ -19830,7 +19894,10 @@ func init() {
         },
         "schema": {
           "description": "A JSON schema to enforce configuration against",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -19853,7 +19920,10 @@ func init() {
             },
             "schema": {
               "description": "A JSON schema to enforce configuration against",
-              "type": "object"
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
             }
           }
         }
@@ -19876,7 +19946,10 @@ func init() {
         },
         "schema": {
           "description": "A JSON schema to enforce configuration against",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -19897,7 +19970,10 @@ func init() {
         },
         "schema": {
           "description": "A JSON schema to enforce configuration against",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -19921,7 +19997,10 @@ func init() {
       "properties": {
         "data": {
           "description": "Data payload is defined by the schema of the config-type defined in the type parameter",
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "name": {
           "type": "string",
@@ -19939,22 +20018,25 @@ func init() {
         "name": "example-config-name"
       }
     },
-    "create": {
+    "createEnvelope": {
       "type": "object",
       "properties": {
         "data": {
-          "type": "object",
-          "properties": {
-            "_links": {
-              "$ref": "#/definitions/links"
-            },
-            "id": {
-              "type": "string"
-            }
-          }
+          "$ref": "#/definitions/createLocation"
         },
         "meta": {
-          "type": "object"
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
+    "createLocation": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/links"
+        },
+        "id": {
+          "type": "string"
         }
       }
     },
@@ -19983,12 +20065,6 @@ func init() {
         {
           "type": "object",
           "properties": {
-            "configTypes": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
             "expiresAt": {
               "type": "string",
               "format": "date-time"
@@ -20811,6 +20887,9 @@ func init() {
         "name": {
           "type": "string"
         },
+        "tags": {
+          "$ref": "#/definitions/tags"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -21271,6 +21350,12 @@ func init() {
       "maxLength": 100,
       "minLength": 5
     },
+    "password-nullable": {
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 5,
+      "x-nullable": true
+    },
     "policyAdvice": {
       "type": "object",
       "properties": {
@@ -21452,6 +21537,7 @@ func init() {
           "$ref": "#/definitions/baseEntity"
         },
         {
+          "description": "map of config data for this service keyed by the config type name. Only configs of the types requested will be returned.",
           "type": "object",
           "properties": {
             "configs": {
@@ -21782,6 +21868,34 @@ func init() {
         }
       }
     },
+    "sessionCreateEnvelope": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "$ref": "#/definitions/sessionCreateLocation"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
+    "sessionCreateLocation": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/createLocation"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "sessionDetail": {
       "type": "object",
       "allOf": [
@@ -21861,7 +21975,9 @@ func init() {
     "tags": {
       "description": "A map of user defined fields and values. The values are limited to the following types/values: null, string, boolean",
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": {
+        "type": "object"
+      }
     },
     "terminatorCost": {
       "type": "integer",
@@ -21915,6 +22031,9 @@ func init() {
               "type": "string"
             },
             "cost": {
+              "$ref": "#/definitions/terminatorCost"
+            },
+            "dynamicCost": {
               "$ref": "#/definitions/terminatorCost"
             },
             "precedence": {
@@ -22075,6 +22194,12 @@ func init() {
       "maxLength": 100,
       "minLength": 4
     },
+    "username-nullable": {
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 4,
+      "x-nullable": true
+    },
     "version": {
       "type": "object",
       "properties": {
@@ -22225,7 +22350,7 @@ func init() {
     "createResponse": {
       "description": "The create request was successful and the resource has been added at the following location",
       "schema": {
-        "$ref": "#/definitions/create"
+        "$ref": "#/definitions/createEnvelope"
       }
     },
     "deleteResponse": {
@@ -22644,6 +22769,12 @@ func init() {
       "description": "The patch request was successful and the resource has been altered",
       "schema": {
         "$ref": "#/definitions/empty"
+      }
+    },
+    "sessionCreateResponse": {
+      "description": "The create request was successful and the resource has been added at the ollowing location.",
+      "schema": {
+        "$ref": "#/definitions/sessionCreateEnvelope"
       }
     },
     "unauthorizedResponse": {

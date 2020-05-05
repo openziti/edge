@@ -51,15 +51,13 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	GetCasIDJwt(params *GetCasIDJwtParams, authInfo runtime.ClientAuthInfoWriter) (*GetCasIDJwtOK, error)
-
-	PostCasIDVerify(params *PostCasIDVerifyParams, authInfo runtime.ClientAuthInfoWriter) (*PostCasIDVerifyOK, error)
-
 	CreateCa(params *CreateCaParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCaOK, error)
 
 	DeleteCa(params *DeleteCaParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCaOK, error)
 
 	DetailCa(params *DetailCaParams, authInfo runtime.ClientAuthInfoWriter) (*DetailCaOK, error)
+
+	GetCaJwt(params *GetCaJwtParams, authInfo runtime.ClientAuthInfoWriter) (*GetCaJwtOK, error)
 
 	ListCas(params *ListCasParams, authInfo runtime.ClientAuthInfoWriter) (*ListCasOK, error)
 
@@ -67,86 +65,9 @@ type ClientService interface {
 
 	UpdateCa(params *UpdateCaParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateCaOK, error)
 
+	VerifyCa(params *VerifyCaParams, authInfo runtime.ClientAuthInfoWriter) (*VerifyCaOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-  GetCasIDJwt retrieves the enrollment j w t for a c a
-
-  For CA auto enrollment, the enrollment JWT is static and provided on each CA resource. This endpoint provides
-the jwt as a text response.
-
-*/
-func (a *Client) GetCasIDJwt(params *GetCasIDJwtParams, authInfo runtime.ClientAuthInfoWriter) (*GetCasIDJwtOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewGetCasIDJwtParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetCasIDJwt",
-		Method:             "GET",
-		PathPattern:        "/cas/{id}/jwt",
-		ProducesMediaTypes: []string{"application/jwt"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &GetCasIDJwtReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*GetCasIDJwtOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetCasIDJwt: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  PostCasIDVerify verifies a c a
-
-  Allows a CA to become verified by submitting a certificate in PEM format that has been signed by the target CA.
-The common name on the certificate must match the verificationToken property of the CA. Unverfieid CAs can not
-be used for enrollment/authentication. Requires admin access.
-
-*/
-func (a *Client) PostCasIDVerify(params *PostCasIDVerifyParams, authInfo runtime.ClientAuthInfoWriter) (*PostCasIDVerifyOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPostCasIDVerifyParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "PostCasIDVerify",
-		Method:             "POST",
-		PathPattern:        "/cas/{id}/verify",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"text/plain"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PostCasIDVerifyReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PostCasIDVerifyOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for PostCasIDVerify: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
 }
 
 /*
@@ -263,6 +184,45 @@ func (a *Client) DetailCa(params *DetailCaParams, authInfo runtime.ClientAuthInf
 }
 
 /*
+  GetCaJwt retrieves the enrollment j w t for a c a
+
+  For CA auto enrollment, the enrollment JWT is static and provided on each CA resource. This endpoint provides
+the jwt as a text response.
+
+*/
+func (a *Client) GetCaJwt(params *GetCaJwtParams, authInfo runtime.ClientAuthInfoWriter) (*GetCaJwtOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetCaJwtParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "getCaJwt",
+		Method:             "GET",
+		PathPattern:        "/cas/{id}/jwt",
+		ProducesMediaTypes: []string{"application/jwt"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetCaJwtReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetCaJwtOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for getCaJwt: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   ListCas lists c as
 
   Retrieves a list of CA resources; supports filtering, sorting, and pagination. Requires admin access.
@@ -370,6 +330,46 @@ func (a *Client) UpdateCa(params *UpdateCaParams, authInfo runtime.ClientAuthInf
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for updateCa: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  VerifyCa verifies a c a
+
+  Allows a CA to become verified by submitting a certificate in PEM format that has been signed by the target CA.
+The common name on the certificate must match the verificationToken property of the CA. Unverfieid CAs can not
+be used for enrollment/authentication. Requires admin access.
+
+*/
+func (a *Client) VerifyCa(params *VerifyCaParams, authInfo runtime.ClientAuthInfoWriter) (*VerifyCaOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewVerifyCaParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "verifyCa",
+		Method:             "POST",
+		PathPattern:        "/cas/{id}/verify",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"text/plain"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &VerifyCaReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*VerifyCaOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for verifyCa: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

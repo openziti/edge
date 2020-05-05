@@ -49,7 +49,7 @@ type CreateConfigOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *rest_model.Create `json:"body,omitempty"`
+	Payload *rest_model.CreateEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateConfigOK creates CreateConfigOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateConfigOK() *CreateConfigOK {
 }
 
 // WithPayload adds the payload to the create config o k response
-func (o *CreateConfigOK) WithPayload(payload *rest_model.Create) *CreateConfigOK {
+func (o *CreateConfigOK) WithPayload(payload *rest_model.CreateEnvelope) *CreateConfigOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create config o k response
-func (o *CreateConfigOK) SetPayload(payload *rest_model.Create) {
+func (o *CreateConfigOK) SetPayload(payload *rest_model.CreateEnvelope) {
 	o.Payload = payload
 }
 

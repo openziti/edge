@@ -102,7 +102,10 @@ func (m *EdgeRouterUpdate) validateRoleAttributes(formats strfmt.Registry) error
 
 func (m *EdgeRouterUpdate) validateTags(formats strfmt.Registry) error {
 
-	if err := validate.Required("tags", "body", m.Tags); err != nil {
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
 		return err
 	}
 

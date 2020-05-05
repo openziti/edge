@@ -43,7 +43,7 @@ type ConfigUpdate struct {
 
 	// Data payload is defined by the schema of the config-type defined in the type parameter
 	// Required: true
-	Data interface{} `json:"data"`
+	Data map[string]interface{} `json:"data"`
 
 	// name
 	// Required: true
@@ -65,6 +65,10 @@ func (m *ConfigUpdate) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateTags(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -73,8 +77,16 @@ func (m *ConfigUpdate) Validate(formats strfmt.Registry) error {
 
 func (m *ConfigUpdate) validateData(formats strfmt.Registry) error {
 
-	if err := validate.Required("data", "body", m.Data); err != nil {
-		return err
+	for k := range m.Data {
+
+		if err := validate.Required("data"+"."+k, "body", m.Data[k]); err != nil {
+			return err
+		}
+
+		if err := validate.Required("data"+"."+k, "body", m.Data[k]); err != nil {
+			return err
+		}
+
 	}
 
 	return nil
@@ -83,6 +95,22 @@ func (m *ConfigUpdate) validateData(formats strfmt.Registry) error {
 func (m *ConfigUpdate) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ConfigUpdate) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
 		return err
 	}
 

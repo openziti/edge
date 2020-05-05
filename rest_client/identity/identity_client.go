@@ -73,7 +73,7 @@ type ClientService interface {
 
 	ListIdentityServices(params *ListIdentityServicesParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityServicesOK, error)
 
-	ListIdentityType(params *ListIdentityTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityTypeOK, error)
+	ListIdentityTypes(params *ListIdentityTypesParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityTypesOK, error)
 
 	ListIdentitysEdgeRouterPolicies(params *ListIdentitysEdgeRouterPoliciesParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentitysEdgeRouterPoliciesOK, error)
 
@@ -501,26 +501,26 @@ func (a *Client) ListIdentityServices(params *ListIdentityServicesParams, authIn
 }
 
 /*
-  ListIdentityType lists available identity types
+  ListIdentityTypes lists available identity types
 
   Retrieves a list of identity types; supports filtering, sorting, and pagination. Requires admin access.
 
 */
-func (a *Client) ListIdentityType(params *ListIdentityTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityTypeOK, error) {
+func (a *Client) ListIdentityTypes(params *ListIdentityTypesParams, authInfo runtime.ClientAuthInfoWriter) (*ListIdentityTypesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListIdentityTypeParams()
+		params = NewListIdentityTypesParams()
 	}
 
 	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "listIdentityType",
+		ID:                 "listIdentityTypes",
 		Method:             "GET",
 		PathPattern:        "/identity-types",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListIdentityTypeReader{formats: a.formats},
+		Reader:             &ListIdentityTypesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -528,13 +528,13 @@ func (a *Client) ListIdentityType(params *ListIdentityTypeParams, authInfo runti
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListIdentityTypeOK)
+	success, ok := result.(*ListIdentityTypesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for listIdentityType: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for listIdentityTypes: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

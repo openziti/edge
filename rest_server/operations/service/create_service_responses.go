@@ -49,7 +49,7 @@ type CreateServiceOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *rest_model.Create `json:"body,omitempty"`
+	Payload *rest_model.CreateEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateServiceOK creates CreateServiceOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateServiceOK() *CreateServiceOK {
 }
 
 // WithPayload adds the payload to the create service o k response
-func (o *CreateServiceOK) WithPayload(payload *rest_model.Create) *CreateServiceOK {
+func (o *CreateServiceOK) WithPayload(payload *rest_model.CreateEnvelope) *CreateServiceOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create service o k response
-func (o *CreateServiceOK) SetPayload(payload *rest_model.Create) {
+func (o *CreateServiceOK) SetPayload(payload *rest_model.CreateEnvelope) {
 	o.Payload = payload
 }
 

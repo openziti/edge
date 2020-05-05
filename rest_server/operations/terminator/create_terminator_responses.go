@@ -49,7 +49,7 @@ type CreateTerminatorOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *rest_model.Create `json:"body,omitempty"`
+	Payload *rest_model.CreateEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateTerminatorOK creates CreateTerminatorOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateTerminatorOK() *CreateTerminatorOK {
 }
 
 // WithPayload adds the payload to the create terminator o k response
-func (o *CreateTerminatorOK) WithPayload(payload *rest_model.Create) *CreateTerminatorOK {
+func (o *CreateTerminatorOK) WithPayload(payload *rest_model.CreateEnvelope) *CreateTerminatorOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create terminator o k response
-func (o *CreateTerminatorOK) SetPayload(payload *rest_model.Create) {
+func (o *CreateTerminatorOK) SetPayload(payload *rest_model.CreateEnvelope) {
 	o.Payload = payload
 }
 

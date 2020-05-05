@@ -51,7 +51,7 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateAuthenticators(params *CreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter) (*CreateAuthenticatorsOK, error)
+	CreateAuthenticator(params *CreateAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter) (*CreateAuthenticatorOK, error)
 
 	DeleteAuthenticator(params *DeleteAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteAuthenticatorOK, error)
 
@@ -67,26 +67,26 @@ type ClientService interface {
 }
 
 /*
-  CreateAuthenticators creates an authenticator
+  CreateAuthenticator creates an authenticator
 
   Creates an authenticator for a specific identity. Requires admin access.
 
 */
-func (a *Client) CreateAuthenticators(params *CreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter) (*CreateAuthenticatorsOK, error) {
+func (a *Client) CreateAuthenticator(params *CreateAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter) (*CreateAuthenticatorOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateAuthenticatorsParams()
+		params = NewCreateAuthenticatorParams()
 	}
 
 	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "createAuthenticators",
+		ID:                 "createAuthenticator",
 		Method:             "POST",
 		PathPattern:        "/authenticators",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateAuthenticatorsReader{formats: a.formats},
+		Reader:             &CreateAuthenticatorReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -94,13 +94,13 @@ func (a *Client) CreateAuthenticators(params *CreateAuthenticatorsParams, authIn
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateAuthenticatorsOK)
+	success, ok := result.(*CreateAuthenticatorOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for createAuthenticators: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for createAuthenticator: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

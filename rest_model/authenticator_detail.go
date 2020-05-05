@@ -52,6 +52,9 @@ type AuthenticatorDetail struct {
 
 	// method
 	Method string `json:"method,omitempty"`
+
+	// username
+	Username string `json:"username,omitempty"`
 }
 
 // UnmarshalJSON unmarshals this object from a JSON structure
@@ -72,6 +75,8 @@ func (m *AuthenticatorDetail) UnmarshalJSON(raw []byte) error {
 		IdentityID string `json:"identityId,omitempty"`
 
 		Method string `json:"method,omitempty"`
+
+		Username string `json:"username,omitempty"`
 	}
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
@@ -84,6 +89,8 @@ func (m *AuthenticatorDetail) UnmarshalJSON(raw []byte) error {
 	m.IdentityID = dataAO1.IdentityID
 
 	m.Method = dataAO1.Method
+
+	m.Username = dataAO1.Username
 
 	return nil
 }
@@ -105,6 +112,8 @@ func (m AuthenticatorDetail) MarshalJSON() ([]byte, error) {
 		IdentityID string `json:"identityId,omitempty"`
 
 		Method string `json:"method,omitempty"`
+
+		Username string `json:"username,omitempty"`
 	}
 
 	dataAO1.CertPem = m.CertPem
@@ -114,6 +123,8 @@ func (m AuthenticatorDetail) MarshalJSON() ([]byte, error) {
 	dataAO1.IdentityID = m.IdentityID
 
 	dataAO1.Method = m.Method
+
+	dataAO1.Username = m.Username
 
 	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
 	if errAO1 != nil {

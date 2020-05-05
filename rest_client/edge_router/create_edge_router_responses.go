@@ -81,20 +81,20 @@ func NewCreateEdgeRouterOK() *CreateEdgeRouterOK {
 The create request was successful and the resource has been added at the following location
 */
 type CreateEdgeRouterOK struct {
-	Payload *rest_model.Create
+	Payload *rest_model.CreateEnvelope
 }
 
 func (o *CreateEdgeRouterOK) Error() string {
 	return fmt.Sprintf("[POST /edge-routers][%d] createEdgeRouterOK  %+v", 200, o.Payload)
 }
 
-func (o *CreateEdgeRouterOK) GetPayload() *rest_model.Create {
+func (o *CreateEdgeRouterOK) GetPayload() *rest_model.CreateEnvelope {
 	return o.Payload
 }
 
 func (o *CreateEdgeRouterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(rest_model.Create)
+	o.Payload = new(rest_model.CreateEnvelope)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -40,7 +40,7 @@ import (
 // AuthenticatorList An array of authenticator resources
 //
 // swagger:model authenticatorList
-type AuthenticatorList []*APISessionDetail
+type AuthenticatorList []*AuthenticatorDetail
 
 // Validate validates this authenticator list
 func (m AuthenticatorList) Validate(formats strfmt.Registry) error {

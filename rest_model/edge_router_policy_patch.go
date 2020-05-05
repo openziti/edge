@@ -78,6 +78,10 @@ func (m *EdgeRouterPolicyPatch) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateTags(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -134,6 +138,22 @@ func (m *EdgeRouterPolicyPatch) validateSemantic(formats strfmt.Registry) error 
 	if err := m.Semantic.Validate(formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("semantic")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *EdgeRouterPolicyPatch) validateTags(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
 		}
 		return err
 	}

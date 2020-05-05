@@ -107,7 +107,10 @@ func (m *IdentityUpdate) validateName(formats strfmt.Registry) error {
 
 func (m *IdentityUpdate) validateTags(formats strfmt.Registry) error {
 
-	if err := validate.Required("tags", "body", m.Tags); err != nil {
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
 		return err
 	}
 

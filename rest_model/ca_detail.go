@@ -48,6 +48,9 @@ type CaDetail struct {
 	// fingerprint
 	Fingerprint string `json:"fingerprint,omitempty"`
 
+	// identity roles
+	IdentityRoles Roles `json:"identityRoles,omitempty"`
+
 	// is auth enabled
 	IsAuthEnabled bool `json:"isAuthEnabled,omitempty"`
 
@@ -83,6 +86,8 @@ func (m *CaDetail) UnmarshalJSON(raw []byte) error {
 
 		Fingerprint string `json:"fingerprint,omitempty"`
 
+		IdentityRoles Roles `json:"identityRoles,omitempty"`
+
 		IsAuthEnabled bool `json:"isAuthEnabled,omitempty"`
 
 		IsAutoCaEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
@@ -102,6 +107,8 @@ func (m *CaDetail) UnmarshalJSON(raw []byte) error {
 	m.CertPem = dataAO1.CertPem
 
 	m.Fingerprint = dataAO1.Fingerprint
+
+	m.IdentityRoles = dataAO1.IdentityRoles
 
 	m.IsAuthEnabled = dataAO1.IsAuthEnabled
 
@@ -132,6 +139,8 @@ func (m CaDetail) MarshalJSON() ([]byte, error) {
 
 		Fingerprint string `json:"fingerprint,omitempty"`
 
+		IdentityRoles Roles `json:"identityRoles,omitempty"`
+
 		IsAuthEnabled bool `json:"isAuthEnabled,omitempty"`
 
 		IsAutoCaEnrollmentEnabled bool `json:"isAutoCaEnrollmentEnabled,omitempty"`
@@ -148,6 +157,8 @@ func (m CaDetail) MarshalJSON() ([]byte, error) {
 	dataAO1.CertPem = m.CertPem
 
 	dataAO1.Fingerprint = m.Fingerprint
+
+	dataAO1.IdentityRoles = m.IdentityRoles
 
 	dataAO1.IsAuthEnabled = m.IsAuthEnabled
 
@@ -178,6 +189,10 @@ func (m *CaDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateIdentityRoles(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateVerificationToken(formats); err != nil {
 		res = append(res, err)
 	}
@@ -185,6 +200,22 @@ func (m *CaDetail) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CaDetail) validateIdentityRoles(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.IdentityRoles) { // not required
+		return nil
+	}
+
+	if err := m.IdentityRoles.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("identityRoles")
+		}
+		return err
+	}
+
 	return nil
 }
 

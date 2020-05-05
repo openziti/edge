@@ -112,11 +112,6 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation current_api_session.DeleteCurrentAPISession has not yet been implemented")
 		})
 	}
-	if api.CertificateAuthorityGetCasIDJwtHandler == nil {
-		api.CertificateAuthorityGetCasIDJwtHandler = certificate_authority.GetCasIDJwtHandlerFunc(func(params certificate_authority.GetCasIDJwtParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation certificate_authority.GetCasIDJwt has not yet been implemented")
-		})
-	}
 	if api.EdgeRouterPolicyGetEdgeRouterPoliciesIDEdgeRoutersHandler == nil {
 		api.EdgeRouterPolicyGetEdgeRouterPoliciesIDEdgeRoutersHandler = edge_router_policy.GetEdgeRouterPoliciesIDEdgeRoutersHandlerFunc(func(params edge_router_policy.GetEdgeRouterPoliciesIDEdgeRoutersParams) middleware.Responder {
 			return middleware.NotImplemented("operation edge_router_policy.GetEdgeRouterPoliciesIDEdgeRouters has not yet been implemented")
@@ -125,11 +120,6 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 	if api.EdgeRouterPolicyGetEdgeRouterPoliciesIDIdentitiesHandler == nil {
 		api.EdgeRouterPolicyGetEdgeRouterPoliciesIDIdentitiesHandler = edge_router_policy.GetEdgeRouterPoliciesIDIdentitiesHandlerFunc(func(params edge_router_policy.GetEdgeRouterPoliciesIDIdentitiesParams) middleware.Responder {
 			return middleware.NotImplemented("operation edge_router_policy.GetEdgeRouterPoliciesIDIdentities has not yet been implemented")
-		})
-	}
-	if api.CertificateAuthorityPostCasIDVerifyHandler == nil {
-		api.CertificateAuthorityPostCasIDVerifyHandler = certificate_authority.PostCasIDVerifyHandlerFunc(func(params certificate_authority.PostCasIDVerifyParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation certificate_authority.PostCasIDVerify has not yet been implemented")
 		})
 	}
 	if api.EnrollPostEnrollCaHandler == nil {
@@ -167,9 +157,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation authentication.Authenticate has not yet been implemented")
 		})
 	}
-	if api.AuthenticatorCreateAuthenticatorsHandler == nil {
-		api.AuthenticatorCreateAuthenticatorsHandler = authenticator.CreateAuthenticatorsHandlerFunc(func(params authenticator.CreateAuthenticatorsParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation authenticator.CreateAuthenticators has not yet been implemented")
+	if api.AuthenticatorCreateAuthenticatorHandler == nil {
+		api.AuthenticatorCreateAuthenticatorHandler = authenticator.CreateAuthenticatorHandlerFunc(func(params authenticator.CreateAuthenticatorParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation authenticator.CreateAuthenticator has not yet been implemented")
 		})
 	}
 	if api.CertificateAuthorityCreateCaHandler == nil {
@@ -412,6 +402,11 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation identity.DisassociateIdentitysServiceConfigs has not yet been implemented")
 		})
 	}
+	if api.CertificateAuthorityGetCaJwtHandler == nil {
+		api.CertificateAuthorityGetCaJwtHandler = certificate_authority.GetCaJwtHandlerFunc(func(params certificate_authority.GetCaJwtParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.GetCaJwt has not yet been implemented")
+		})
+	}
 	if api.CurrentAPISessionGetCurrentAPISessionHandler == nil {
 		api.CurrentAPISessionGetCurrentAPISessionHandler = current_api_session.GetCurrentAPISessionHandlerFunc(func(params current_api_session.GetCurrentAPISessionParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation current_api_session.GetCurrentAPISession has not yet been implemented")
@@ -442,14 +437,14 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation certificate_authority.ListCas has not yet been implemented")
 		})
 	}
-	if api.ConfigListConfigHandler == nil {
-		api.ConfigListConfigHandler = config.ListConfigHandlerFunc(func(params config.ListConfigParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation config.ListConfig has not yet been implemented")
+	if api.ConfigListConfigTypesHandler == nil {
+		api.ConfigListConfigTypesHandler = config.ListConfigTypesHandlerFunc(func(params config.ListConfigTypesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation config.ListConfigTypes has not yet been implemented")
 		})
 	}
-	if api.ConfigListConfigTypeHandler == nil {
-		api.ConfigListConfigTypeHandler = config.ListConfigTypeHandlerFunc(func(params config.ListConfigTypeParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation config.ListConfigType has not yet been implemented")
+	if api.ConfigListConfigsHandler == nil {
+		api.ConfigListConfigsHandler = config.ListConfigsHandlerFunc(func(params config.ListConfigsParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation config.ListConfigs has not yet been implemented")
 		})
 	}
 	if api.ConfigListConfigsForConfigTypeHandler == nil {
@@ -532,9 +527,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 			return middleware.NotImplemented("operation identity.ListIdentityServices has not yet been implemented")
 		})
 	}
-	if api.IdentityListIdentityTypeHandler == nil {
-		api.IdentityListIdentityTypeHandler = identity.ListIdentityTypeHandlerFunc(func(params identity.ListIdentityTypeParams, principal interface{}) middleware.Responder {
-			return middleware.NotImplemented("operation identity.ListIdentityType has not yet been implemented")
+	if api.IdentityListIdentityTypesHandler == nil {
+		api.IdentityListIdentityTypesHandler = identity.ListIdentityTypesHandlerFunc(func(params identity.ListIdentityTypesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation identity.ListIdentityTypes has not yet been implemented")
 		})
 	}
 	if api.IdentityListIdentitysEdgeRouterPoliciesHandler == nil {
@@ -780,6 +775,11 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 	if api.TransitRouterUpdateTransitRouterHandler == nil {
 		api.TransitRouterUpdateTransitRouterHandler = transit_router.UpdateTransitRouterHandlerFunc(func(params transit_router.UpdateTransitRouterParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation transit_router.UpdateTransitRouter has not yet been implemented")
+		})
+	}
+	if api.CertificateAuthorityVerifyCaHandler == nil {
+		api.CertificateAuthorityVerifyCaHandler = certificate_authority.VerifyCaHandlerFunc(func(params certificate_authority.VerifyCaParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation certificate_authority.VerifyCa has not yet been implemented")
 		})
 	}
 

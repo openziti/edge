@@ -50,6 +50,9 @@ type TerminatorDetail struct {
 	// cost
 	Cost TerminatorCost `json:"cost,omitempty"`
 
+	// dynamic cost
+	DynamicCost TerminatorCost `json:"dynamicCost,omitempty"`
+
 	// precedence
 	Precedence TerminatorPrecedence `json:"precedence,omitempty"`
 
@@ -83,6 +86,8 @@ func (m *TerminatorDetail) UnmarshalJSON(raw []byte) error {
 
 		Cost TerminatorCost `json:"cost,omitempty"`
 
+		DynamicCost TerminatorCost `json:"dynamicCost,omitempty"`
+
 		Precedence TerminatorPrecedence `json:"precedence,omitempty"`
 
 		Router *EntityRef `json:"router,omitempty"`
@@ -102,6 +107,8 @@ func (m *TerminatorDetail) UnmarshalJSON(raw []byte) error {
 	m.Binding = dataAO1.Binding
 
 	m.Cost = dataAO1.Cost
+
+	m.DynamicCost = dataAO1.DynamicCost
 
 	m.Precedence = dataAO1.Precedence
 
@@ -132,6 +139,8 @@ func (m TerminatorDetail) MarshalJSON() ([]byte, error) {
 
 		Cost TerminatorCost `json:"cost,omitempty"`
 
+		DynamicCost TerminatorCost `json:"dynamicCost,omitempty"`
+
 		Precedence TerminatorPrecedence `json:"precedence,omitempty"`
 
 		Router *EntityRef `json:"router,omitempty"`
@@ -148,6 +157,8 @@ func (m TerminatorDetail) MarshalJSON() ([]byte, error) {
 	dataAO1.Binding = m.Binding
 
 	dataAO1.Cost = m.Cost
+
+	dataAO1.DynamicCost = m.DynamicCost
 
 	dataAO1.Precedence = m.Precedence
 
@@ -180,6 +191,10 @@ func (m *TerminatorDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDynamicCost(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePrecedence(formats); err != nil {
 		res = append(res, err)
 	}
@@ -207,6 +222,22 @@ func (m *TerminatorDetail) validateCost(formats strfmt.Registry) error {
 	if err := m.Cost.Validate(formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("cost")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *TerminatorDetail) validateDynamicCost(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.DynamicCost) { // not required
+		return nil
+	}
+
+	if err := m.DynamicCost.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("dynamicCost")
 		}
 		return err
 	}

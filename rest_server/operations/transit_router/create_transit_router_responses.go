@@ -49,7 +49,7 @@ type CreateTransitRouterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *rest_model.Create `json:"body,omitempty"`
+	Payload *rest_model.CreateEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateTransitRouterOK creates CreateTransitRouterOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateTransitRouterOK() *CreateTransitRouterOK {
 }
 
 // WithPayload adds the payload to the create transit router o k response
-func (o *CreateTransitRouterOK) WithPayload(payload *rest_model.Create) *CreateTransitRouterOK {
+func (o *CreateTransitRouterOK) WithPayload(payload *rest_model.CreateEnvelope) *CreateTransitRouterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create transit router o k response
-func (o *CreateTransitRouterOK) SetPayload(payload *rest_model.Create) {
+func (o *CreateTransitRouterOK) SetPayload(payload *rest_model.CreateEnvelope) {
 	o.Payload = payload
 }
 

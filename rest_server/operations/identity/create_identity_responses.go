@@ -49,7 +49,7 @@ type CreateIdentityOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *rest_model.Create `json:"body,omitempty"`
+	Payload *rest_model.CreateEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateIdentityOK creates CreateIdentityOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateIdentityOK() *CreateIdentityOK {
 }
 
 // WithPayload adds the payload to the create identity o k response
-func (o *CreateIdentityOK) WithPayload(payload *rest_model.Create) *CreateIdentityOK {
+func (o *CreateIdentityOK) WithPayload(payload *rest_model.CreateEnvelope) *CreateIdentityOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create identity o k response
-func (o *CreateIdentityOK) SetPayload(payload *rest_model.Create) {
+func (o *CreateIdentityOK) SetPayload(payload *rest_model.CreateEnvelope) {
 	o.Payload = payload
 }
 

@@ -40,7 +40,7 @@ import (
 // CreateSessionOKCode is the HTTP code returned for type CreateSessionOK
 const CreateSessionOKCode int = 200
 
-/*CreateSessionOK The create request was successful and the resource has been added at the following location
+/*CreateSessionOK The create request was successful and the resource has been added at the ollowing location.
 
 swagger:response createSessionOK
 */
@@ -49,7 +49,7 @@ type CreateSessionOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *rest_model.Create `json:"body,omitempty"`
+	Payload *rest_model.SessionCreateEnvelope `json:"body,omitempty"`
 }
 
 // NewCreateSessionOK creates CreateSessionOK with default headers values
@@ -59,13 +59,13 @@ func NewCreateSessionOK() *CreateSessionOK {
 }
 
 // WithPayload adds the payload to the create session o k response
-func (o *CreateSessionOK) WithPayload(payload *rest_model.Create) *CreateSessionOK {
+func (o *CreateSessionOK) WithPayload(payload *rest_model.SessionCreateEnvelope) *CreateSessionOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create session o k response
-func (o *CreateSessionOK) SetPayload(payload *rest_model.Create) {
+func (o *CreateSessionOK) SetPayload(payload *rest_model.SessionCreateEnvelope) {
 	o.Payload = payload
 }
 

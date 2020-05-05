@@ -147,7 +147,10 @@ func (m *ServiceEdgePolicyUpdate) validateServiceRoles(formats strfmt.Registry) 
 
 func (m *ServiceEdgePolicyUpdate) validateTags(formats strfmt.Registry) error {
 
-	if err := validate.Required("tags", "body", m.Tags); err != nil {
+	if err := m.Tags.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		}
 		return err
 	}
 
