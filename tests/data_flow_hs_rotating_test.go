@@ -32,6 +32,7 @@ import (
 )
 
 func Test_HSRotatingDataflow(t *testing.T) {
+	t.SkipNow()
 	ctx := NewTestContext(t)
 	defer ctx.teardown()
 	ctx.startServer()
