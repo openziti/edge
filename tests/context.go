@@ -737,7 +737,6 @@ func (server *testServer) acceptLoop() {
 
 func (server *testServer) dispatch(conn *testServerConn) {
 	defer func() {
-		// fmt.Printf("marking waiter done to conn %v-%v\n", conn.server.idx, conn.id)
 		server.waiter.Done()
 	}()
 
@@ -754,7 +753,6 @@ func (server *testServer) dispatch(conn *testServerConn) {
 	}()
 
 	defer func() {
-		// fmt.Printf("closing conn %v-%v\n", conn.server.idx, conn.id)
 		conn.RequireClose()
 	}()
 

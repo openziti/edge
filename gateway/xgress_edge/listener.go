@@ -300,6 +300,13 @@ func (proxy *ingressProxy) processUpdateBind(req *channel2.Message, ch channel2.
 	token := string(req.Body)
 	log := pfxlog.ContextLogger(ch.Label()).WithField("sessionId", token).WithFields(edge.GetLoggerFields(req))
 
+	localListener, ok := proxy.listener.factory.hostedServices.Get(token)
+
+	if !ok {
+		log.Error("failed to update bind, no listener found")
+		return
+	}
+
 	sm := fabric.GetStateManager()
 	ns := sm.GetNetworkSession(token)
 
@@ -336,15 +343,9 @@ func (proxy *ingressProxy) processUpdateBind(req *channel2.Message, ch channel2.
 		precedence = &updatedPrecedence
 	}
 
-	localListener, ok := proxy.listener.factory.hostedServices.Get(token)
-
-	if ok {
-		log.Debugf("updating terminator %v to precedence %v and cost %v", localListener.terminatorId, precedence, cost)
-		if err := xgress.UpdateTerminator(proxy.listener.factory, localListener.terminatorId, cost, precedence); err != nil {
-			log.WithError(err).Error("failed to update bind")
-		}
-	} else {
-		log.Error("failed to update bind, no listener found")
+	log.Debugf("updating terminator %v to precedence %v and cost %v", localListener.terminatorId, precedence, cost)
+	if err := xgress.UpdateTerminator(proxy.listener.factory, localListener.terminatorId, cost, precedence); err != nil {
+		log.WithError(err).Error("failed to update bind")
 	}
 }
 
