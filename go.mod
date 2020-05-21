@@ -51,5 +51,5 @@ require (
 	gopkg.in/Masterminds/squirrel.v1 v1.0.0-20170825200431-a6b93000bd21
 	gopkg.in/oleiade/reflections.v1 v1.0.0
 	gopkg.in/resty.v1 v1.12.0
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.3.0
 )
