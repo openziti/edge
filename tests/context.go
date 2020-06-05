@@ -479,6 +479,7 @@ func (ctx *TestContext) completeOttEnrollment(identityId string) *certAuthentica
 	resp, err := ctx.newRequest().
 		SetBody(csrPem).
 		SetHeader("content-type", "application/x-pem-file").
+		SetHeader("accept", "application/json").
 		Post("enroll?token=" + token)
 	ctx.req.NoError(err)
 	ctx.logJson(resp.Body())

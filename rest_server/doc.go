@@ -41,6 +41,7 @@
 //  Produces:
 //    - application/jwt
 //    - application/pkcs7-mime
+//    - application/x-pem-file
 //    - application/x-x509-user-cert
 //    - application/json
 //    - text/yaml

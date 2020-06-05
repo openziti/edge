@@ -30,6 +30,7 @@ type EnrollmentResult struct {
 	Identity      *Identity
 	Authenticator *Authenticator
 	Content       interface{}
+	TextContent   []byte
 	Producer      runtime.Producer
 	Status        int
 }

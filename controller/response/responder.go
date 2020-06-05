@@ -36,6 +36,7 @@ type Responder interface {
 	RespondWithError(err error)
 	RespondWithApiError(apiError *apierror.ApiError)
 	SetProducer(producer runtime.Producer)
+	GetProducer() runtime.Producer
 	RespondWithCouldNotReadBody(err error)
 	RespondWithCouldNotParseBody(err error)
 	RespondWithValidationErrors(errors *schema.ValidationErrors)

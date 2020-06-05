@@ -1367,7 +1367,10 @@ paths:
         - application/pkcs10
         - application/json
         - application/x-pem-file
+        - text/plain
       produces:
+        #default to PEM for older clients that do not properly set/inspect accept/content-type headers
+        - application/x-pem-file
         - application/json
       responses:
         '200':

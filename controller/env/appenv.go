@@ -257,6 +257,35 @@ func (ae *AppEnv) FillRequestContext(rc *response.RequestContext) error {
 	return nil
 }
 
+type TextProducer struct{}
+
+func (p TextProducer) Produce(writer io.Writer, i interface{}) error {
+	if buffer, ok := i.([]byte); ok {
+		_, err := writer.Write(buffer)
+		return err
+	} else if reader, ok := i.(io.Reader); ok {
+		buffer, err := ioutil.ReadAll(reader)
+		if err != nil {
+			return err
+		}
+		_, err = writer.Write(buffer)
+		return err
+	} else if buffer, ok := i.(string); ok {
+		_, err := writer.Write([]byte(buffer))
+		return err
+	} else if apiError, ok := i.(*apierror.ApiError); ok {
+		output := fmt.Sprintf("CODE: %s\nMESSAGE: %s\nNote: cannot render additional information for this content-type", apiError.Code, apiError.Message)
+		_, err := writer.Write([]byte(output))
+		return err
+	} else if _, ok := i.(error); ok {
+		//don't attempt to render random error information, may leak sensitive information
+		_, err := writer.Write([]byte("an error has occurred, more detail cannot be displayed in this content type"))
+		return err
+	} else {
+		return fmt.Errorf("unsupported type for text producer: %T", i)
+	}
+}
+
 func NewAppEnv(c *edgeConfig.Config) *AppEnv {
 	swaggerSpec, err := loads.Embedded(rest_server.SwaggerJSON, rest_server.FlatSwaggerJSON)
 	if err != nil {
@@ -287,10 +316,15 @@ func NewAppEnv(c *edgeConfig.Config) *AppEnv {
 
 	api.APIAuthorizer = authorizer{}
 
-	api.ApplicationXPemFileConsumer = runtime.ConsumerFunc(func(reader io.Reader, data interface{}) error {
-		return nil // leave content on body
+	noOpConsumer := runtime.ConsumerFunc(func(reader io.Reader, data interface{}) error {
+		return nil //do nothing
 	})
 
+	//enrollment consumer, leave content unread, allow modules to read
+	api.ApplicationXPemFileConsumer = noOpConsumer
+	api.ApplicationPkcs10Consumer = noOpConsumer
+
+	api.ApplicationXPemFileProducer = &TextProducer{}
 	api.ZtSessionAuth = func(token string) (principle interface{}, err error) {
 		principle, err = ae.GetHandlers().ApiSession.ReadByToken(token)
 

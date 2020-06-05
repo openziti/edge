@@ -182,6 +182,7 @@ func (module *EnrollModuleCa) Process(context EnrollmentContext) (*EnrollmentRes
 		Identity:      identity,
 		Authenticator: newAuthenticator,
 		Content:       map[string]interface{}{},
+		TextContent:   []byte(""),
 		Status:        200,
 	}, nil
 }

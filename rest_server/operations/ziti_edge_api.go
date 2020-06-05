@@ -99,6 +99,9 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		ApplicationPkcs7MimeProducer: runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
 			return errors.NotImplemented("applicationPkcs7Mime producer has not yet been implemented")
 		}),
+		ApplicationXPemFileProducer: runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
+			return errors.NotImplemented("applicationXPemFile producer has not yet been implemented")
+		}),
 		ApplicationXX509UserCertProducer: runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
 			return errors.NotImplemented("applicationXX509UserCert producer has not yet been implemented")
 		}),
@@ -569,6 +572,9 @@ type ZitiEdgeAPI struct {
 	// ApplicationPkcs7MimeProducer registers a producer for the following mime types:
 	//   - application/pkcs7-mime
 	ApplicationPkcs7MimeProducer runtime.Producer
+	// ApplicationXPemFileProducer registers a producer for the following mime types:
+	//   - application/x-pem-file
+	ApplicationXPemFileProducer runtime.Producer
 	// ApplicationXX509UserCertProducer registers a producer for the following mime types:
 	//   - application/x-x509-user-cert
 	ApplicationXX509UserCertProducer runtime.Producer
@@ -936,6 +942,9 @@ func (o *ZitiEdgeAPI) Validate() error {
 	}
 	if o.ApplicationPkcs7MimeProducer == nil {
 		unregistered = append(unregistered, "ApplicationPkcs7MimeProducer")
+	}
+	if o.ApplicationXPemFileProducer == nil {
+		unregistered = append(unregistered, "ApplicationXPemFileProducer")
 	}
 	if o.ApplicationXX509UserCertProducer == nil {
 		unregistered = append(unregistered, "ApplicationXX509UserCertProducer")
@@ -1427,6 +1436,8 @@ func (o *ZitiEdgeAPI) ProducersFor(mediaTypes []string) map[string]runtime.Produ
 			result["application/jwt"] = o.ApplicationJwtProducer
 		case "application/pkcs7-mime":
 			result["application/pkcs7-mime"] = o.ApplicationPkcs7MimeProducer
+		case "application/x-pem-file":
+			result["application/x-pem-file"] = o.ApplicationXPemFileProducer
 		case "application/x-x509-user-cert":
 			result["application/x-x509-user-cert"] = o.ApplicationXX509UserCertProducer
 		case "application/json":

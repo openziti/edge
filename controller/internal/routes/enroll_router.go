@@ -20,17 +20,20 @@ import (
 	"encoding/base64"
 	"encoding/pem"
 	"github.com/fullsailor/pkcs7"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/env"
 	"github.com/openziti/edge/controller/internal/permissions"
 	"github.com/openziti/edge/controller/model"
+	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/edge/controller/response"
 	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/edge/rest_server/operations/enroll"
 	"github.com/openziti/edge/rest_server/operations/well_known"
 	"net/http"
+	"strings"
 )
 
 func init() {
@@ -138,6 +141,29 @@ func (ro *EnrollRouter) enrollHandler(ae *env.AppEnv, rc *response.RequestContex
 
 	if result == nil {
 		rc.RespondWithApiError(apierror.NewUnauthorized())
+		return
+	}
+
+	//prefer json producer for non ott methods (backwards compat for ott)
+	explicitJsonAccept := false
+	if accept := rc.Request.Header.Values("accept"); len(accept) == 0 {
+		explicitJsonAccept = false //no headers specified
+	} else {
+		for _, val := range accept {
+			if strings.Split(val, ";")[0] == "application/json" {
+				explicitJsonAccept = true
+			}
+		}
+	}
+
+	// for non ott enrollment, always return JSON
+	//prefer JSON if explicitly acceptable
+	if enrollContext.Method != persistence.MethodEnrollOtt || explicitJsonAccept {
+		rc.SetProducer(runtime.JSONProducer())
+	}
+
+	if producer, ok := rc.GetProducer().(*env.TextProducer); ok {
+		response.Respond(rc.ResponseWriter, rc.Id, producer, result.TextContent, http.StatusOK)
 		return
 	}
 

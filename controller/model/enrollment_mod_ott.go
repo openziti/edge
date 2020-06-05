@@ -108,6 +108,7 @@ func (module *EnrollModuleOtt) Process(ctx EnrollmentContext) (*EnrollmentResult
 		Identity:      identity,
 		Authenticator: newAuthenticator,
 		Content:       content,
+		TextContent:   certPem,
 		Status:        200,
 	}, nil
 

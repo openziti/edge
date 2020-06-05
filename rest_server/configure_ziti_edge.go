@@ -90,6 +90,9 @@ func configureAPI(api *operations.ZitiEdgeAPI) http.Handler {
 	api.ApplicationPkcs7MimeProducer = runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
 		return errors.NotImplemented("applicationPkcs7Mime producer has not yet been implemented")
 	})
+	api.ApplicationXPemFileProducer = runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
+		return errors.NotImplemented("applicationXPemFile producer has not yet been implemented")
+	})
 	api.ApplicationXX509UserCertProducer = runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
 		return errors.NotImplemented("applicationXX509UserCert producer has not yet been implemented")
 	})

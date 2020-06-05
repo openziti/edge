@@ -1969,9 +1969,11 @@ func init() {
         "consumes": [
           "application/pkcs10",
           "application/json",
-          "application/x-pem-file"
+          "application/x-pem-file",
+          "text/plain"
         ],
         "produces": [
+          "application/x-pem-file",
           "application/json"
         ],
         "tags": [
@@ -13471,10 +13473,12 @@ func init() {
         "consumes": [
           "application/json",
           "application/pkcs10",
-          "application/x-pem-file"
+          "application/x-pem-file",
+          "text/plain"
         ],
         "produces": [
-          "application/json"
+          "application/json",
+          "application/x-pem-file"
         ],
         "tags": [
           "Enroll"
