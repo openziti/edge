@@ -229,7 +229,7 @@ func (ae *AppEnv) FillRequestContext(rc *response.RequestContext) error {
 			//re-read session to get new updatedAt
 			rc.ApiSession, _ = ae.GetHandlers().ApiSession.Read(rc.ApiSession.Id)
 		} else {
-			logger.WithError(err).Error("could not update API session to extend timeout for token %s", rc.SessionToken)
+			logger.WithError(err).Errorf("could not update API session to extend timeout for token %s", rc.SessionToken)
 		}
 	}
 
