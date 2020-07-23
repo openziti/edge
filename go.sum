@@ -288,6 +288,8 @@ github.com/openziti/foundation v0.11.11 h1:GPASO0aTtzuzwQbfvu1OMOPdAKzi/DTkxKJ0y
 github.com/openziti/foundation v0.11.11/go.mod h1:Qdd7eCuTrpRwEeDbvYy89sFbEY4+J7OuX8UygxNBsvY=
 github.com/openziti/foundation v0.11.13 h1:lY0nBzo2JmvEPKGI27OivWA2qUgEvir4v8KF7vC+prg=
 github.com/openziti/foundation v0.11.13/go.mod h1:Qdd7eCuTrpRwEeDbvYy89sFbEY4+J7OuX8UygxNBsvY=
+github.com/openziti/foundation v0.11.14 h1:1gOM32AH1sieXd3UOPKHCZH/0ZfbnAxK2gPaPSuuEIM=
+github.com/openziti/foundation v0.11.14/go.mod h1:4Jgs3HGDiP1aVk5nNzXJqwJwWhrjOYy1F+4Xtxcgxvo=
 github.com/openziti/sdk-golang v0.13.22 h1:7AyqZ/4nbjcHK/LLW6yu5wKKkE2Lm//5vRBmEwFOL20=
 github.com/openziti/sdk-golang v0.13.22/go.mod h1:+VndTfu7qpHeiVIk5al8ySypCpMStlX2rHlOH1qjlOY=
 github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6 h1:lNCW6THrCKBiJBpz8kbVGjC7MgdCGKwuvBgc7LoD6sw=

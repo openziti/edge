@@ -32,7 +32,7 @@ require (
 	github.com/miekg/dns v1.1.30
 	github.com/mitchellh/mapstructure v1.3.2
 	github.com/openziti/fabric v0.11.53
-	github.com/openziti/foundation v0.11.13
+	github.com/openziti/foundation v0.11.14
 	github.com/openziti/sdk-golang v0.13.22
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.6.0
