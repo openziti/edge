@@ -97,7 +97,7 @@ func open(name string, mtu uint) (*tunInterface, error) {
 
 	iFace, err := net.InterfaceByName(ifName)
 	tun := &tunInterface{
-		dev:   os.NewFile(uintptr(f), string(tunFlags.name[:])),
+		dev:   os.NewFile(uintptr(f), ifName),
 		iFace: iFace,
 	}
 
