@@ -162,6 +162,7 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 	}
 
 	var edgeBinding map[interface{}]interface{}
+	var edgeWssBinding map[interface{}]interface{}
 
 	for i, value := range listeners {
 		submap := value.(map[interface{}]interface{})
@@ -179,34 +180,68 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 				}
 				edgeBinding = submap
 			}
+
+			if binding == "edge_wss" {
+				if edgeWssBinding != nil {
+					return errors.New("multiple edgeWssBinding listeners found in [listeners], only one is allowed")
+				}
+				edgeWssBinding = submap
+			}
 		}
 	}
 
-	if edgeBinding == nil {
-		return errors.New("required binding [edge] not found in [listeners]")
+	if (edgeBinding == nil) && (edgeWssBinding == nil) {
+		return errors.New("required binding [edge] or [edge_wss] not found in [listeners]")
 	}
 
-	if value, found := edgeBinding["options"]; found {
-		submap := value.(map[interface{}]interface{})
+	if edgeBinding != nil {
+		if value, found := edgeBinding["options"]; found {
+			submap := value.(map[interface{}]interface{})
 
-		if submap == nil {
-			return errors.New("required section [listeners.edge.options] is not a map")
-		}
-
-		if value, found := submap["advertise"]; found {
-			advertise := value.(string)
-
-			if advertise == "" {
-				return errors.New("required value [listeners.edge.options.advertise] was not a string or was not found")
+			if submap == nil {
+				return errors.New("required section [listeners.edge.options] is not a map")
 			}
 
-			config.Advertise = advertise
-		} else {
-			return errors.New("required value [listeners.edge.options.advertise] was not found")
-		}
+			if value, found := submap["advertise"]; found {
+				advertise := value.(string)
 
-	} else {
-		return errors.New("required value [listeners.edge.options] not found")
+				if advertise == "" {
+					return errors.New("required value [listeners.edge.options.advertise] was not a string or was not found")
+				}
+
+				config.Advertise = advertise
+			} else {
+				return errors.New("required value [listeners.edge.options.advertise] was not found")
+			}
+
+		} else {
+			return errors.New("required value [listeners.edge.options] not found")
+		}
+	}
+
+	if edgeWssBinding != nil {
+		if value, found := edgeWssBinding["options"]; found {
+			submap := value.(map[interface{}]interface{})
+
+			if submap == nil {
+				return errors.New("required section [listeners.edge.options] is not a map")
+			}
+
+			if value, found := submap["advertise"]; found {
+				advertise := value.(string)
+
+				if advertise == "" {
+					return errors.New("required value [listeners.edge.options.advertise] was not a string or was not found")
+				}
+
+				config.Advertise = advertise
+			} else {
+				return errors.New("required value [listeners.edge.options.advertise] was not found")
+			}
+
+		} else {
+			return errors.New("required value [listeners.edge.options] not found")
+		}
 	}
 
 	return nil
