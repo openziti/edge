@@ -21,9 +21,11 @@ import (
 	"fmt"
 	"github.com/mitchellh/mapstructure"
 	"github.com/openziti/foundation/identity/identity"
+	"github.com/openziti/foundation/transport"
 	"net"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type Config struct {
@@ -32,6 +34,7 @@ type Config struct {
 	Advertise      string
 	Csr            Csr
 	IdentityConfig identity.IdentityConfig
+	Tcfg           transport.Configuration
 }
 
 type Csr struct {
@@ -106,6 +109,10 @@ func (config *Config) LoadConfigFromMap(configMap map[interface{}]interface{}) e
 		return err
 	}
 
+	if err = config.loadTransportConfig(configMap); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -175,23 +182,38 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 			binding := value.(string)
 
 			if binding == "edge" {
-				if edgeBinding != nil {
-					return errors.New("multiple edge listeners found in [listeners], only one is allowed")
-				}
-				edgeBinding = submap
-			}
 
-			if binding == "edge_wss" {
-				if edgeWssBinding != nil {
-					return errors.New("multiple edgeWssBinding listeners found in [listeners], only one is allowed")
+				if value, found := submap["address"]; found {
+					address := value.(string)
+					if address == "" {
+						return errors.New("required value [listeners.edge.address] was not a string or was not found")
+					}
+					_, err := transport.ParseAddress(address)
+					if err != nil {
+						return errors.New("required value [listeners.edge.address] was not a valid address")
+					}
+					tokens := strings.Split(address, ":")
+					if tokens[0] == "wss" {
+						if edgeWssBinding != nil {
+							return errors.New("multiple edge listeners found in [listeners], only one 'wss' address is allowed")
+						}
+						edgeWssBinding = submap
+
+					} else {
+						if edgeBinding != nil {
+							return errors.New("multiple edge listeners found in [listeners], only one non-'wss' is allowed")
+						}
+						edgeBinding = submap
+					}
+				} else {
+					return errors.New("required value [listeners.edge.address] was not found")
 				}
-				edgeWssBinding = submap
 			}
 		}
 	}
 
 	if (edgeBinding == nil) && (edgeWssBinding == nil) {
-		return errors.New("required binding [edge] or [edge_wss] not found in [listeners]")
+		return errors.New("required binding [edge] not found in [listeners]")
 	}
 
 	if edgeBinding != nil {
@@ -308,4 +330,16 @@ func (config *Config) loadIdentity(rootConfigMap map[interface{}]interface{}) {
 			config.IdentityConfig.CA = value.(string)
 		}
 	}
+}
+
+func (config *Config) loadTransportConfig(rootConfigMap map[interface{}]interface{}) error {
+	if val, ok := rootConfigMap["transport"]; ok && val != nil {
+		var tcfg map[interface{}]interface{}
+		if tcfg, ok = val.(map[interface{}]interface{}); !ok {
+			return fmt.Errorf("expected map as transport configuration")
+		}
+		config.Tcfg = tcfg
+	}
+
+	return nil
 }
