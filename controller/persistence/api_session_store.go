@@ -27,12 +27,14 @@ const (
 	FieldApiSessionIdentity    = "identity"
 	FieldApiSessionToken       = "token"
 	FieldApiSessionConfigTypes = "configTypes"
+	FieldApiSessionIPAddress   = "ipAddress"
 )
 
 type ApiSession struct {
 	boltz.BaseExtEntity
 	IdentityId  string
 	Token       string
+	IPAddress   string
 	ConfigTypes []string
 }
 
@@ -49,6 +51,7 @@ func (entity *ApiSession) LoadValues(_ boltz.CrudStore, bucket *boltz.TypedBucke
 	entity.IdentityId = bucket.GetStringOrError(FieldApiSessionIdentity)
 	entity.Token = bucket.GetStringOrError(FieldApiSessionToken)
 	entity.ConfigTypes = bucket.GetStringList(FieldApiSessionConfigTypes)
+	entity.IPAddress = bucket.GetStringWithDefault(FieldApiSessionIPAddress, "")
 }
 
 func (entity *ApiSession) SetValues(ctx *boltz.PersistContext) {
@@ -56,6 +59,7 @@ func (entity *ApiSession) SetValues(ctx *boltz.PersistContext) {
 	ctx.SetString(FieldApiSessionIdentity, entity.IdentityId)
 	ctx.SetString(FieldApiSessionToken, entity.Token)
 	ctx.SetStringList(FieldApiSessionConfigTypes, entity.ConfigTypes)
+	ctx.SetString(FieldApiSessionIPAddress, entity.IPAddress)
 }
 
 func (entity *ApiSession) GetEntityType() string {
@@ -84,7 +88,6 @@ type apiSessionStoreImpl struct {
 
 	indexToken     boltz.ReadIndex
 	symbolIdentity boltz.EntitySymbol
-	symbolSessions boltz.EntitySetSymbol
 }
 
 func (store *apiSessionStoreImpl) NewStoreEntity() boltz.Entity {
@@ -100,11 +103,11 @@ func (store *apiSessionStoreImpl) initializeLocal() {
 	symbolToken := store.AddSymbol(FieldApiSessionToken, ast.NodeTypeString)
 	store.indexToken = store.AddUniqueIndex(symbolToken)
 	store.symbolIdentity = store.AddFkSymbol(FieldApiSessionIdentity, store.stores.identity)
-	store.symbolSessions = store.AddFkSetSymbol(EntityTypeSessions, store.stores.session)
+
+	store.AddFkConstraint(store.symbolIdentity, false, boltz.CascadeDelete)
 }
 
 func (store *apiSessionStoreImpl) initializeLinked() {
-	store.AddFkIndex(store.symbolIdentity, store.stores.identity.symbolApiSessions)
 }
 
 func (store *apiSessionStoreImpl) LoadOneById(tx *bbolt.Tx, id string) (*ApiSession, error) {
@@ -129,15 +132,6 @@ func (store *apiSessionStoreImpl) LoadOneByQuery(tx *bbolt.Tx, query string) (*A
 		return nil, err
 	}
 	return entity, nil
-}
-
-func (store *apiSessionStoreImpl) DeleteById(ctx boltz.MutateContext, id string) error {
-	for _, sessionId := range store.GetRelatedEntitiesIdList(ctx.Tx(), id, EntityTypeSessions) {
-		if err := store.stores.session.DeleteById(ctx, sessionId); err != nil {
-			return err
-		}
-	}
-	return store.baseStore.DeleteById(ctx, id)
 }
 
 func (store *apiSessionStoreImpl) MarkActivity(tx *bbolt.Tx, tokens []string) error {

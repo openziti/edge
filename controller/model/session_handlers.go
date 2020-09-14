@@ -21,7 +21,6 @@ import (
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/storage/ast"
 	"github.com/openziti/foundation/storage/boltz"
-
 	"go.etcd.io/bbolt"
 )
 
@@ -149,6 +148,19 @@ func (handler *SessionHandler) querySessions(query ast.Query) (*SessionListResul
 		return nil, err
 	}
 	return result, nil
+}
+
+func (handler *SessionHandler) StreamAll(collect func(*Session, error) error) error {
+	return handler.env.GetDbProvider().GetDb().View(func(tx *bbolt.Tx) error {
+		for cursor := handler.Store.IterateIds(tx, ast.BoolNodeTrue); cursor.IsValid(); cursor.Next() {
+			current := cursor.Current()
+			apiSession, err := handler.readInTx(tx, string(current))
+			if err := collect(apiSession, err); err != nil {
+				return err
+			}
+		}
+		return collect(nil, nil)
+	})
 }
 
 func (handler *SessionHandler) ListSessionsForEdgeRouter(edgeRouterId string) (*SessionListResult, error) {

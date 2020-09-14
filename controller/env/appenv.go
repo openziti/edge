@@ -46,6 +46,7 @@ import (
 	"github.com/openziti/fabric/controller/xctrl"
 	"github.com/openziti/fabric/controller/xmgmt"
 	"github.com/openziti/foundation/common/constants"
+	"github.com/openziti/foundation/metrics"
 	"github.com/openziti/foundation/storage/boltz"
 	"github.com/openziti/sdk-golang/ziti/config"
 	"github.com/xeipuuv/gojsonschema"
@@ -119,6 +120,10 @@ func (ae *AppEnv) IsEdgeRouterOnline(id string) bool {
 
 func (ae *AppEnv) GetApiClientCsrSigner() cert.Signer {
 	return ae.ApiClientCsrSigner
+}
+
+func (ae *AppEnv) GetMetricsRegistry() metrics.Registry {
+	return ae.HostController.GetNetwork().GetMetricsRegistry()
 }
 
 type HostController interface {
@@ -202,16 +207,20 @@ func (a authorizer) Authorize(request *http.Request, principal interface{}) erro
 func (ae *AppEnv) FillRequestContext(rc *response.RequestContext) error {
 	rc.SessionToken = ae.GetSessionTokenFromRequest(rc.Request)
 	logger := pfxlog.Logger()
-	_, err := uuid.Parse(rc.SessionToken)
 
-	if err != nil {
-		logger.WithError(err).Debug("failed to parse session id")
-		rc.SessionToken = ""
-	} else {
-		logger.Tracef("authorizing request using session id '%v'", rc.SessionToken)
+	if rc.SessionToken != "" {
+		_, err := uuid.Parse(rc.SessionToken)
+		if err != nil {
+			logger.WithError(err).Debug("failed to parse session id")
+			rc.SessionToken = ""
+		} else {
+			logger.Tracef("authorizing request using session id '%v'", rc.SessionToken)
+		}
+
 	}
 
 	if rc.SessionToken != "" {
+		var err error
 		rc.ApiSession, err = ae.GetHandlers().ApiSession.ReadByToken(rc.SessionToken)
 		if err != nil {
 			logger.WithError(err).Debugf("looking up API session for %s resulted in an error, request will continue unauthenticated", rc.SessionToken)
@@ -232,6 +241,7 @@ func (ae *AppEnv) FillRequestContext(rc *response.RequestContext) error {
 	}
 
 	if rc.ApiSession != nil {
+		var err error
 		rc.Identity, err = ae.GetHandlers().Identity.Read(rc.ApiSession.IdentityId)
 		if err != nil {
 			if boltz.IsErrNotFoundErr(err) {
@@ -325,14 +335,15 @@ func (ae *AppEnv) InitPersistence() error {
 	var err error
 
 	ae.BoltStores, err = persistence.NewBoltStores(ae.HostController.GetNetwork())
-	if err == nil {
-		err = persistence.RunMigrations(ae.GetDbProvider().GetDb(), ae.BoltStores)
+	if err != nil {
+		return err
 	}
 
-	if err == nil {
-		ae.Handlers = model.InitHandlers(ae)
+	if err = persistence.RunMigrations(ae.GetDbProvider().GetDb(), ae.BoltStores); err != nil {
+		return err
 	}
 
+	ae.Handlers = model.InitHandlers(ae)
 	events.Init(ae.BoltStores.Session)
 
 	return err
