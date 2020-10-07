@@ -2,9 +2,9 @@ module github.com/openziti/edge
 
 go 1.14
 
-//replace github.com/openziti/foundation => ../foundation
+replace github.com/openziti/foundation => ../foundation
 
-//replace github.com/openziti/fabric => ../fabric
+replace github.com/openziti/fabric => ../fabric
 
 //replace github.com/openziti/sdk-golang => ../sdk-golang
 

@@ -1,11 +1,17 @@
 package events
 
 import (
+	"fmt"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/foundation/storage/boltz"
 	"github.com/openziti/foundation/util/cowslice"
+	"github.com/pkg/errors"
+	"reflect"
 )
+
+const	SessionEventTypeCreated = "created"
+const	SessionEventTypeDeleted = "deleted"
 
 type SessionCreatedEvent struct {
 	Id           string
@@ -80,3 +86,75 @@ func sessionDeleted(args ...interface{}) {
 		go handler.HandleSessionDeleted(event)
 	}
 }
+
+
+
+func registerSessionEventHandler(val interface{}, config map[interface{}]interface{}) error {
+
+	handler, ok := val.(SessionEventHandler)
+
+	if !ok {
+		return errors.Errorf("type %v doesn't implement github.com/openziti/edge/events/SessionEventHandler interface.", reflect.TypeOf(val))
+	}
+
+	var includeList []string
+	if includeVar, ok := config["include"]; ok {
+		if includeStr, ok := includeVar.(string); ok {
+			includeList = append(includeList, includeStr)
+		} else if includeIntfList, ok := includeVar.([]interface{}); ok {
+			for _, val := range includeIntfList {
+				includeList = append(includeList, fmt.Sprintf("%v", val))
+			}
+		} else {
+			return errors.Errorf("invalid type %v for edge.sessions include configuration %v", reflect.TypeOf(includeVar))
+		}
+	}
+
+	if len(includeList) == 0 {
+		AddSessionEventHandler(handler)
+	} else {
+		for _, include := range includeList {
+			if include == SessionEventTypeCreated {
+				AddSessionEventHandler(&edgeSessionCreatedEventAdapter{
+					wrapped: handler,
+				})
+			} else if include == SessionEventTypeDeleted {
+				AddSessionEventHandler(&edgeSessionDeletedEventAdapter{
+					wrapped: handler,
+				})
+			} else {
+				return errors.Errorf("invalid include %v for fabric.sessions. valid values are ['created', 'deleted', 'circuitUpdated']", include)
+			}
+		}
+	}
+
+	return nil
+}
+
+
+type edgeSessionCreatedEventAdapter struct {
+	wrapped SessionEventHandler
+}
+
+func (adapter *edgeSessionCreatedEventAdapter) HandleSessionCreated(event *SessionCreatedEvent) {
+	adapter.wrapped.HandleSessionCreated(event)
+
+}
+
+func (adapter *edgeSessionCreatedEventAdapter) HandleSessionDeleted(event *SessionDeletedEvent) {
+}
+
+
+type edgeSessionDeletedEventAdapter struct {
+	wrapped SessionEventHandler
+}
+
+func (adapter *edgeSessionDeletedEventAdapter) HandleSessionCreated(event *SessionCreatedEvent) {
+}
+
+func (adapter *edgeSessionDeletedEventAdapter) HandleSessionDeleted(event *SessionDeletedEvent) {
+	adapter.wrapped.HandleSessionDeleted(event)
+}
+
+
+
