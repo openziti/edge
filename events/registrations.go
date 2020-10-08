@@ -1,8 +1,8 @@
 package events
 
 import (
-	"github.com/openziti/foundation/util/cowslice"
 	"github.com/openziti/fabric/events"
+	"github.com/openziti/foundation/util/cowslice"
 )
 
 
@@ -20,3 +20,6 @@ func AddSessionEventHandler(handler SessionEventHandler) {
 func RemoveSessionEventHandler(handler SessionEventHandler) {
 	cowslice.Delete(sessionEventHandlerRegistry, handler)
 }
+
+
+

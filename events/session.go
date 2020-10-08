@@ -33,15 +33,21 @@ type SessionEventHandler interface {
 var sessionEventHandlerRegistry = cowslice.NewCowSlice(make([]SessionEventHandler, 0))
 
 func getSessionEventHandlers() []SessionEventHandler {
+
 	return sessionEventHandlerRegistry.Value().([]SessionEventHandler)
 }
 
 func Init(sessionStore persistence.SessionStore) {
 	sessionStore.AddListener(boltz.EventCreate, sessionCreated)
 	sessionStore.AddListener(boltz.EventDelete, sessionDeleted)
+
 }
 
 func sessionCreated(args ...interface{}) {
+
+	logger := pfxlog.Logger()
+	logger.Info("EDGE SESSION CREATED LINE 44")
+
 	var session *persistence.Session
 	if len(args) == 1 {
 		session, _ = args[0].(*persistence.Session)
@@ -90,10 +96,14 @@ func sessionDeleted(args ...interface{}) {
 
 
 func registerSessionEventHandler(val interface{}, config map[interface{}]interface{}) error {
+	logger := pfxlog.Logger()
+	logger.Infof("ATTEMPT TO REGISTER THE EDGE SESSION HANDLER: %v", reflect.TypeOf(val))
 
-	handler, ok := val.(SessionEventHandler)
+	// handler, ok := val.(SessionEventHandler)
+	handler, ok := registerEdgeEventHandlerType(config)
 
 	if !ok {
+		logger.Errorf("Failed to register event handler type: %v", reflect.TypeOf(val))
 		return errors.Errorf("type %v doesn't implement github.com/openziti/edge/events/SessionEventHandler interface.", reflect.TypeOf(val))
 	}
 
@@ -123,10 +133,13 @@ func registerSessionEventHandler(val interface{}, config map[interface{}]interfa
 					wrapped: handler,
 				})
 			} else {
-				return errors.Errorf("invalid include %v for fabric.sessions. valid values are ['created', 'deleted', 'circuitUpdated']", include)
+				return errors.Errorf("invalid include %v for edge.sessions. valid values are ['created', 'deleted']", include)
 			}
 		}
 	}
+
+	// @FIX ME - not sure why this isn't firing up on it's own
+	// handler.run()
 
 	return nil
 }

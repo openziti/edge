@@ -24,6 +24,7 @@ import (
 	"github.com/openziti/edge/build"
 	"github.com/openziti/edge/controller/model"
 	"github.com/openziti/edge/controller/persistence"
+	edge_events "github.com/openziti/edge/events"
 	"github.com/openziti/edge/pb/edge_ctrl_pb"
 	"github.com/openziti/fabric/controller/network"
 	"github.com/openziti/foundation/channel2"
@@ -166,6 +167,9 @@ type Broker struct {
 }
 
 func NewBroker(ae *AppEnv) *Broker {
+
+
+
 	b := &Broker{
 		ae: ae,
 		edgeRouterMap: &edgeRouterMap{
@@ -194,8 +198,9 @@ func NewBroker(ae *AppEnv) *Broker {
 			},
 		},
 	}
-
 	b.registerEventHandlers()
+	pfxlog.Logger().Info("NEW BROKER - Initialize the events framework!")
+	edge_events.Init(b.ae.GetStores().Session)
 
 	ae.HostController.GetNetwork().AddRouterPresenceHandler(b)
 
@@ -436,6 +441,9 @@ func (b *Broker) sendSessionDeletes(session *persistence.Session) {
 }
 
 func (b *Broker) sessionCreateEventHandler(args ...interface{}) {
+
+	pfxlog.Logger().Info("sessionCreateEventHandler")
+
 	var session *persistence.Session
 	if len(args) == 1 {
 		session, _ = args[0].(*persistence.Session)
@@ -448,9 +456,13 @@ func (b *Broker) sessionCreateEventHandler(args ...interface{}) {
 	}
 
 	b.sendSessionCreates(session)
+
 }
 
 func (b *Broker) sendSessionCreates(session *persistence.Session) {
+
+	pfxlog.Logger().Info("A SESSION WAS CREATED IN THE BROKER!")
+
 	sessionAdded := &edge_ctrl_pb.SessionAdded{}
 
 	service, err := b.ae.Handlers.EdgeService.Read(session.ServiceId)
@@ -503,6 +515,9 @@ func (b *Broker) modelServiceToProto(service *model.Service) (*edge_ctrl_pb.Serv
 }
 
 func (b *Broker) registerEventHandlers() {
+
+	pfxlog.Logger().Info("EDGE: REGISTER EVENT HANDLERS")
+
 	for emitter, eventNameMap := range b.events {
 		for en, ls := range eventNameMap {
 			for _, l := range ls {

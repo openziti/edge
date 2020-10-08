@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
-	fabricEvents "github.com/openziti/fabric/events"
 	"github.com/openziti/foundation/metrics/metrics_pb"
 	"github.com/openziti/foundation/util/iomonad"
 	"github.com/pkg/errors"
 	"os"
 )
 
-func registerFileLoggerEventHandlerType(config map[interface{}]interface{}) (fabricEvents.EventHandlerFactory, bool)  {
+func registerEdgeEventHandlerType(config map[interface{}]interface{}) (*EdgeHandler, bool)  {
 
 	rep := &EdgeHandler{
 		config: config,
@@ -28,21 +27,11 @@ type EdgeHandler struct {
 	maxsizemb int
 }
 
-// Will work for all fabric session event types
-type SessionMessage struct {
-	Namespace string
-	EventType string
-	SessionId string
-	ClientId string
-	ServiceId string
-	Circuit string
-}
-
 
 func (handler *EdgeHandler) NewEventHandler(config map[interface{}]interface{}) (interface{}, error) {
 
 	logger := pfxlog.Logger()
-	logger.Info("REGISTERING NEW EVENT HANDLER FOR EDGE SESSIONS")
+	logger.Info("Registering new event handler: EdgeHandler")
 
 	// allow config to increase the buffer size
 	bufferSize := 10
@@ -78,7 +67,7 @@ func (handler *EdgeHandler) NewEventHandler(config map[interface{}]interface{}) 
 		return nil, errors.New("missing required 'path' config for events FileLogger handler")
 	}
 
-	fabHandler :=  &EdgeHandler{
+	edgeHandler :=  &EdgeHandler{
 		name: "EdgeHandler",
 		config: config,
 		path: filepath,
@@ -86,32 +75,25 @@ func (handler *EdgeHandler) NewEventHandler(config map[interface{}]interface{}) 
 		eventsChan: make(chan interface{}, bufferSize),
 	}
 
-	go fabHandler.run()
-	return fabHandler, nil
+	go edgeHandler.run()
+	return edgeHandler, nil
 
 }
 
 func (handler *EdgeHandler) HandleSessionCreated(event *SessionCreatedEvent) {
-
-
-
-	// handler.eventsChan <- message
+	 // handler.eventsChan <- event
+	handler.Handle(event)
 }
 
-func (handler *EdgeHandler) HandleSessionDeleted(event *SessionCreatedEvent) {
-
-	//message := &events.SessionMessage{
-	//	Namespace: "fabric.sessions",
-	//	EventType: "deleted",
-	//	SessionId: sessionId.Token,
-	//	ClientId: clientId.Token,
-	//}
-	//
-	//handler.eventsChan <- message
-
+func (handler *EdgeHandler) HandleSessionDeleted(event *SessionDeletedEvent) {
+	// handler.eventsChan <- event
+	handler.Handle(event)
 }
 
 func (handler *EdgeHandler) AcceptMetrics(message *metrics_pb.MetricsMessage) {
+
+	// @TODO - Will be extracting and logging the usage metrics for sessions as their own metric events
+
 
 	logger := pfxlog.Logger()
 	counters := message.GetIntervalCounters()
@@ -126,14 +108,13 @@ func (handler *EdgeHandler) AcceptMetrics(message *metrics_pb.MetricsMessage) {
 					timestamp := value.IntervalStartUTC
 					vals := value.GetValues()
 					for k, v := range vals {
-						logger.Infof("Interval metric: %s [%v] %v - %v",name, timestamp, k, v)
+						logger.Infof("Edge Interval metric: %s [%v] %v - %v",name, timestamp, k, v)
 					}
 				}
 			}
-
-
 		}
 	}
+
 
 }
 
