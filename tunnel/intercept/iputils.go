@@ -45,7 +45,7 @@ func getInterceptIP(hostname string, resolver dns.Resolver) (net.IP, error) {
 		log.Debugf("net.LookupIp(%s) failed: %s", hostname, err)
 	}
 
-	ip, _ := utils.NextIP(net.IP{169, 254, 1, 1}, net.IP{169, 254, 254, 254})
+	ip, _ := utils.NextIP(net.IP{100, 64, 0, 1}, net.IP{100, 127, 255, 254})
 	if ip == nil {
 		return nil, fmt.Errorf("invalid IP address or unresolvable hostname: %s", hostname)
 	}
