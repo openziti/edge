@@ -3573,6 +3573,18 @@ definitions:
     x-omitempty: false
     items:
       type: string
+  namedRole:
+    type: object
+    properties:
+      role:
+        type: string
+      name:
+        type: string
+  namedRoles:
+    type: array
+    x-omitempty: false
+    items:
+      $ref: '#/definitions/namedRole'
   semantic:
     type: string
     enum:
@@ -3587,6 +3599,25 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/dialBind'
+  versionInfo:
+    type: object
+    required:
+      - os
+      - version
+      - arch
+      - builDate
+      - revision
+    properties:
+      os:
+        type: string
+      version:
+        type: string
+      arch:
+        type: string
+      builDate:
+        type: string
+      revision:
+        type: string
   ###################################################################
   # Authentication
   ##################################################################
@@ -4341,6 +4372,11 @@ definitions:
           - hostname
           - supportedProtocols
           - roleAttributes
+          - os
+          - version
+          - arch
+          - builDate
+          - revision
         properties:
           name:
             type: string
@@ -4372,6 +4408,8 @@ definitions:
             $ref: '#/definitions/attributes'
           fingerprint:
             type: string
+          versionInfo:
+            $ref: '#/definitions/versionInfo'
     example:
       id: b0766b8d-bd1a-4d28-8415-639b29d3c83d
       createdAt: '2020-03-16T17:13:31.5807454Z'
@@ -4382,7 +4420,7 @@ definitions:
         self:
           href: "./edge-routers/b0766b8d-bd1a-4d28-8415-639b29d3c83d"
       tags: { }
-      name: TestGateway-e33c837f-3222-4b40-bcd6-b3458fd5156e
+      name: TestRouter-e33c837f-3222-4b40-bcd6-b3458fd5156e
       fingerprint:
       roleAttributes:
         - eastCoast
@@ -4457,20 +4495,22 @@ definitions:
           - name
           - semantic
           - edgeRouterRoles
+          - edgeRouterRolesDisplay
           - identityRoles
+          - identityRolesDisplay
         properties:
           name:
             type: string
           semantic:
             $ref: '#/definitions/semantic'
           edgeRouterRoles:
-            type: array
-            items:
-              type: string
+            $ref: '#/definitions/roles'
+          edgeRouterRolesDisplay:
+            $ref: '#/definitions/namedRoles'
           identityRoles:
-            type: array
-            items:
-              type: string
+            $ref: '#/definitions/roles'
+          identityRolesDisplay:
+            $ref: '#/definitions/namedRoles'
   ###################################################################
   # Service Policies
   ##################################################################
@@ -4488,7 +4528,9 @@ definitions:
           - type
           - semantic
           - serviceRoles
+          - serviceRolesDisplay
           - identityRoles
+          - identityRolesDisplay
         properties:
           name:
             type: string
@@ -4498,8 +4540,12 @@ definitions:
             $ref: '#/definitions/semantic'
           serviceRoles:
             $ref: '#/definitions/roles'
+          serviceRolesDisplay:
+            $ref: '#/definitions/namedRoles'
           identityRoles:
             $ref: '#/definitions/roles'
+          identityRolesDisplay:
+            $ref: '#/definitions/namedRoles'
   servicePolicyCreate:
     type: object
     required:
@@ -4754,7 +4800,9 @@ definitions:
           - name
           - semantic
           - edgeRouterRoles
+          - edgeRouterRolesDisplay
           - serviceRoles
+          - serviceRolesDisplay
         properties:
           name:
             type: string
@@ -4762,8 +4810,12 @@ definitions:
             $ref: '#/definitions/semantic'
           edgeRouterRoles:
             $ref: '#/definitions/roles'
+          edgeRouterRolesDisplay:
+            $ref: '#/definitions/namedRoles'
           serviceRoles:
             $ref: '#/definitions/roles'
+          serviceRolesDisplay:
+            $ref: '#/definitions/namedRoles'
   serviceEdgeRouterPolicyCreate:
     type: object
     required:

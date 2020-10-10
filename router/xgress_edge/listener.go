@@ -20,7 +20,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
-	"github.com/openziti/edge/gateway/internal/fabric"
+	"github.com/openziti/edge/router/internal/fabric"
 	"github.com/openziti/edge/internal/cert"
 	"github.com/openziti/edge/pb/edge_ctrl_pb"
 	"github.com/openziti/fabric/pb/ctrl_pb"
@@ -40,14 +40,16 @@ type listener struct {
 	options          *Options
 	bindHandler      xgress.BindHandler
 	underlayListener channel2.UnderlayListener
+	headers          map[int32][]byte
 }
 
 // newListener creates a new xgress edge listener
-func newListener(id *identity.TokenId, factory *Factory, options *Options) xgress.Listener {
+func newListener(id *identity.TokenId, factory *Factory, options *Options, headers map[int32][]byte) xgress.Listener {
 	return &listener{
 		id:      id,
 		factory: factory,
 		options: options,
+		headers: headers,
 	}
 }
 
@@ -62,7 +64,8 @@ func (listener *listener) Listen(address string, bindHandler xgress.BindHandler)
 	pfxlog.Logger().WithField("address", addr).Info("starting channel listener")
 
 	listener.underlayListener = channel2.NewClassicListenerWithTransportConfiguration(
-		listener.id, addr, listener.options.channelOptions.ConnectOptions, listener.factory.config.Tcfg)
+		listener.id, addr, listener.options.channelOptions.ConnectOptions, listener.factory.config.Tcfg, listener.headers)
+
 	if err := listener.underlayListener.Listen(); err != nil {
 		return err
 	}
