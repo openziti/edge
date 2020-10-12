@@ -26,15 +26,6 @@ import (
 
 var dnsIpLow, dnsIpHigh net.IP
 
-func incIP(ip net.IP) {
-	for j := len(ip) - 1; j >= 0; j-- {
-		ip[j]++
-		if ip[j] > 0 {
-			break
-		}
-	}
-}
-
 func SetDnsInterceptIpRange(cidr string) error {
 	ip, ipnet, err := net.ParseCIDR(cidr)
 	if err != nil {
@@ -42,7 +33,7 @@ func SetDnsInterceptIpRange(cidr string) error {
 	}
 
 	var ips []net.IP
-	for ip = ip.Mask(ipnet.Mask); ipnet.Contains(ip); incIP(ip) {
+	for ip = ip.Mask(ipnet.Mask); ipnet.Contains(ip); utils.IncIP(ip) {
 		a := make(net.IP, len(ip))
 		copy(a, ip)
 		ips = append(ips, a)
