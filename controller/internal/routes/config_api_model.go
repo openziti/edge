@@ -44,7 +44,7 @@ func MapCreateConfigToModel(config *rest_model.ConfigCreate) *model.Config {
 	dataMap := config.Data.(map[string]interface{})
 	ret.Data = dataMap
 
-	narrowJsonTypes(ret.Data)
+	narrowJsonTypesMap(ret.Data)
 
 	return ret
 }
@@ -62,7 +62,7 @@ func MapUpdateConfigToModel(id string, config *rest_model.ConfigUpdate) *model.C
 		ret.Data = dataMap
 	}
 
-	narrowJsonTypes(ret.Data)
+	narrowJsonTypesMap(ret.Data)
 
 	return ret
 }
@@ -80,7 +80,7 @@ func MapPatchConfigToModel(id string, config *rest_model.ConfigPatch) *model.Con
 		ret.Data = dataMap
 	}
 
-	narrowJsonTypes(ret.Data)
+	narrowJsonTypesMap(ret.Data)
 
 	return ret
 }
@@ -125,27 +125,47 @@ func MapConfigToRestModel(ae *env.AppEnv, config *model.Config) (*rest_model.Con
 	return ret, nil
 }
 
-func narrowJsonTypes(m map[string]interface{}) {
-	for k, v := range m {
-		if parsedNumber, ok := v.(ParsedNumber); ok {
-			//floats don't parse as int, try int fist, then float, else give up
-			if intVal, err := parsedNumber.Int64(); err == nil {
-				v = intVal
-				m[k] = intVal
-			} else if floatVal, err := parsedNumber.Float64(); err == nil {
-				v = floatVal
-				m[k] = floatVal
+func narrowJsonType(v *interface{}) {
+	if parsedNumber, ok := (*v).(ParsedNumber); ok {
+		//floats don't parse as int, try int first, then float, else give up
+		if intVal, err := parsedNumber.Int64(); err == nil {
+			*v = intVal
+		} else if floatVal, err := parsedNumber.Float64(); err == nil {
+			*v = floatVal
+			intVal := math.Trunc(floatVal)
+			if intVal == floatVal {
+				*v = intVal
 			}
 		}
+	}
+}
+
+func narrowJsonTypesList(l []interface{}) {
+	for i, v := range l {
+		narrowJsonType(&v)
 
 		switch val := v.(type) {
-		case float64:
-			intVal := math.Trunc(val)
-			if intVal == val {
-				m[k] = intVal
-			}
+		case int64, float64:
+			l[i] = v
+		case []interface{}:
+			narrowJsonTypesList(val)
 		case map[string]interface{}:
-			narrowJsonTypes(val)
+			narrowJsonTypesMap(val)
+		}
+	}
+}
+
+func narrowJsonTypesMap(m map[string]interface{}) {
+	for k, v := range m {
+		narrowJsonType(&v)
+
+		switch val := v.(type) {
+		case int64, float64:
+			m[k] = v
+		case []interface{}:
+			narrowJsonTypesList(val)
+		case map[string]interface{}:
+			narrowJsonTypesMap(val)
 		}
 	}
 }
