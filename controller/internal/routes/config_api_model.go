@@ -125,28 +125,25 @@ func MapConfigToRestModel(ae *env.AppEnv, config *model.Config) (*rest_model.Con
 	return ret, nil
 }
 
-func narrowJsonType(v *interface{}) {
-	if parsedNumber, ok := (*v).(ParsedNumber); ok {
-		//floats don't parse as int, try int first, then float, else give up
-		if intVal, err := parsedNumber.Int64(); err == nil {
-			*v = intVal
-		} else if floatVal, err := parsedNumber.Float64(); err == nil {
-			*v = floatVal
-			intVal := math.Trunc(floatVal)
-			if intVal == floatVal {
-				*v = intVal
-			}
-		}
-	}
-}
-
 func narrowJsonTypesList(l []interface{}) {
 	for i, v := range l {
-		narrowJsonType(&v)
+		if parsedNumber, ok := (v).(ParsedNumber); ok {
+			//floats don't parse as int, try int first, then float, else give up
+			if intVal, err := parsedNumber.Int64(); err == nil {
+				v = intVal
+				l[i] = intVal
+			} else if floatVal, err := parsedNumber.Float64(); err == nil {
+				v = floatVal
+				l[i] = floatVal
+			}
+		}
 
 		switch val := v.(type) {
-		case int64, float64:
-			l[i] = v
+		case float64:
+			intVal := math.Trunc(val)
+			if intVal == val {
+				l[i] = intVal
+			}
 		case []interface{}:
 			narrowJsonTypesList(val)
 		case map[string]interface{}:
@@ -157,11 +154,23 @@ func narrowJsonTypesList(l []interface{}) {
 
 func narrowJsonTypesMap(m map[string]interface{}) {
 	for k, v := range m {
-		narrowJsonType(&v)
+		if parsedNumber, ok := (v).(ParsedNumber); ok {
+			//floats don't parse as int, try int first, then float, else give up
+			if intVal, err := parsedNumber.Int64(); err == nil {
+				v = intVal
+				m[k] = intVal
+			} else if floatVal, err := parsedNumber.Float64(); err == nil {
+				v = floatVal
+				m[k] = floatVal
+			}
+		}
 
 		switch val := v.(type) {
-		case int64, float64:
-			m[k] = v
+		case float64:
+			intVal := math.Trunc(val)
+			if intVal == val {
+				m[k] = intVal
+			}
 		case []interface{}:
 			narrowJsonTypesList(val)
 		case map[string]interface{}:
