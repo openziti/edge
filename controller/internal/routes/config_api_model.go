@@ -127,7 +127,7 @@ func MapConfigToRestModel(ae *env.AppEnv, config *model.Config) (*rest_model.Con
 
 func narrowJsonTypesList(l []interface{}) {
 	for i, v := range l {
-		if parsedNumber, ok := (v).(ParsedNumber); ok {
+		if parsedNumber, ok := v.(ParsedNumber); ok {
 			//floats don't parse as int, try int first, then float, else give up
 			if intVal, err := parsedNumber.Int64(); err == nil {
 				v = intVal
@@ -154,7 +154,7 @@ func narrowJsonTypesList(l []interface{}) {
 
 func narrowJsonTypesMap(m map[string]interface{}) {
 	for k, v := range m {
-		if parsedNumber, ok := (v).(ParsedNumber); ok {
+		if parsedNumber, ok := v.(ParsedNumber); ok {
 			//floats don't parse as int, try int first, then float, else give up
 			if intVal, err := parsedNumber.Int64(); err == nil {
 				v = intVal
