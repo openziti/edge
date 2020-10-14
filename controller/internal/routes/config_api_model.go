@@ -25,6 +25,7 @@ import (
 	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/util/stringz"
+	"math"
 )
 
 const EntityNameConfig = "configs"
@@ -131,6 +132,10 @@ func resolveParsedNumber(v interface{}) interface{} {
 			v = intVal
 		} else if floatVal, err := parsedNumber.Float64(); err == nil {
 			v = floatVal
+			intVal := math.Trunc(floatVal)
+			if intVal == floatVal {
+				v = intVal
+			}
 		}
 	}
 	return v
