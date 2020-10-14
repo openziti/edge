@@ -25,7 +25,6 @@ import (
 	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/util/stringz"
-	"math"
 )
 
 const EntityNameConfig = "configs"
@@ -125,56 +124,44 @@ func MapConfigToRestModel(ae *env.AppEnv, config *model.Config) (*rest_model.Con
 	return ret, nil
 }
 
+func resolveParsedNumber(v interface{}) interface{} {
+	if parsedNumber, ok := v.(ParsedNumber); ok {
+		//floats don't parse as int, try int first, then float, else give up
+		if intVal, err := parsedNumber.Int64(); err == nil {
+			v = intVal
+		} else if floatVal, err := parsedNumber.Float64(); err == nil {
+			v = floatVal
+		}
+	}
+	return v
+}
+
 func narrowJsonTypesList(l []interface{}) {
 	for i, v := range l {
-		if parsedNumber, ok := v.(ParsedNumber); ok {
-			//floats don't parse as int, try int first, then float, else give up
-			if intVal, err := parsedNumber.Int64(); err == nil {
-				v = intVal
-				l[i] = intVal
-			} else if floatVal, err := parsedNumber.Float64(); err == nil {
-				v = floatVal
-				l[i] = floatVal
-			}
-		}
+		v = resolveParsedNumber(v)
 
 		switch val := v.(type) {
-		case float64:
-			intVal := math.Trunc(val)
-			if intVal == val {
-				l[i] = intVal
-			}
 		case []interface{}:
 			narrowJsonTypesList(val)
 		case map[string]interface{}:
 			narrowJsonTypesMap(val)
+		default:
+			l[i] = v
 		}
 	}
 }
 
 func narrowJsonTypesMap(m map[string]interface{}) {
 	for k, v := range m {
-		if parsedNumber, ok := v.(ParsedNumber); ok {
-			//floats don't parse as int, try int first, then float, else give up
-			if intVal, err := parsedNumber.Int64(); err == nil {
-				v = intVal
-				m[k] = intVal
-			} else if floatVal, err := parsedNumber.Float64(); err == nil {
-				v = floatVal
-				m[k] = floatVal
-			}
-		}
+		v = resolveParsedNumber(v)
 
 		switch val := v.(type) {
-		case float64:
-			intVal := math.Trunc(val)
-			if intVal == val {
-				m[k] = intVal
-			}
 		case []interface{}:
 			narrowJsonTypesList(val)
 		case map[string]interface{}:
 			narrowJsonTypesMap(val)
+		default:
+			m[k] = v
 		}
 	}
 }
