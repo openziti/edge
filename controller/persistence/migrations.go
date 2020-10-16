@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	CurrentDbVersion = 12
+	CurrentDbVersion = 16
 	FieldVersion     = "version"
 )
 
@@ -104,6 +104,10 @@ func (m *Migrations) migrate(step *boltz.MigrationStep) int {
 
 	if step.CurrentVersion < 12 {
 		m.addPostureCheckTypes(step)
+	}
+
+	if step.CurrentVersion < 16 {
+		m.createTunnelerClientV2dot0ConfigType(step)
 	}
 
 	// current version

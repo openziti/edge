@@ -34,6 +34,7 @@ func (m *Migrations) initialize(step *boltz.MigrationStep) int {
 	m.createGeoRegionsV1(step)
 	m.createIdentityTypesV1(step)
 	m.createInitialTunnelerConfigTypes(step)
+	m.createTunnelerClientV2dot0ConfigType(step) // todo is this the only way to run on init?
 
 	return CurrentDbVersion
 }
@@ -98,7 +99,6 @@ func (m *Migrations) createInitialTunnelerConfigTypes(step *boltz.MigrationStep)
 				"port",
 			},
 			"properties": map[string]interface{}{
-				// TODO: Add protocol list here, so we know which protocols to listen on
 				"hostname": map[string]interface{}{
 					"type": "string",
 				},
