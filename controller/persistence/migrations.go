@@ -107,7 +107,7 @@ func (m *Migrations) migrate(step *boltz.MigrationStep) int {
 	}
 
 	if step.CurrentVersion < 13 {
-		m.createTunnelerClientV2dot0ConfigType(step)
+		m.createTunnelerClientV2dot0ConfigType(step) // also called from Migrations.initialize()
 	}
 
 	// current version

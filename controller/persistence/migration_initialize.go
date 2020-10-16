@@ -34,7 +34,7 @@ func (m *Migrations) initialize(step *boltz.MigrationStep) int {
 	m.createGeoRegionsV1(step)
 	m.createIdentityTypesV1(step)
 	m.createInitialTunnelerConfigTypes(step)
-	m.createTunnelerClientV2dot0ConfigType(step)
+	m.createTunnelerClientV2dot0ConfigType(step) // also called for migration in v13
 
 	return CurrentDbVersion
 }
