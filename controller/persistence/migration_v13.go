@@ -21,12 +21,6 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 					"type": "string",
 					"enum": []interface{}{"tcp", "udp"},
 				},
-				"protocolsRequired": map[string]interface{}{
-					"anyOf": []interface{}{
-						map[string]interface{}{"required": []interface{}{"protocol"}},
-						map[string]interface{}{"required": []interface{}{"protocols"}},
-					},
-				},
 				"ipAddressFormat": map[string]interface{}{
 					"oneOf": []interface{}{
 						map[string]interface{}{"format": "ipv4"},
@@ -60,12 +54,6 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 						map[string]interface{}{"$ref": "#/$defs/cidr"},
 					},
 				},
-				"addressesRequired": map[string]interface{}{
-					"anyOf": []interface{}{
-						map[string]interface{}{"required": []interface{}{"address"}},
-						map[string]interface{}{"required": []interface{}{"addresses"}},
-					},
-				},
 				"portNumber": map[string]interface{}{
 					"type":    "integer",
 					"minimum": float64(0),
@@ -77,14 +65,6 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 					"properties": map[string]interface{}{
 						"low":  map[string]interface{}{"$ref": "#/$defs/portNumber"},
 						"high": map[string]interface{}{"$ref": "#/$defs/portNumber"},
-					},
-				},
-				"portsRequired": map[string]interface{}{
-					"anyOf": []interface{}{
-						map[string]interface{}{"required": []interface{}{"port"}},
-						map[string]interface{}{"required": []interface{}{"ports"}},
-						map[string]interface{}{"required": []interface{}{"portRange"}},
-						map[string]interface{}{"required": []interface{}{"portRanges"}},
 					},
 				},
 				"inhabitedSet": map[string]interface{}{
@@ -137,15 +117,65 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 						},
 					},
 				},
+				"listenOptions": map[string]interface{}{
+					"type":                 "object",
+					"additionalProperties": false,
+					"properties": map[string]interface{}{
+						"cost": map[string]interface{}{
+							"type":        "integer",
+							"minimum":     0,
+							"maximum":     65535,
+							"description": "defaults to 0",
+						},
+						"precedence": map[string]interface{}{
+							"$ref":        "#/$defs/precedenceName",
+							"description": "defaults to 'default'",
+						},
+						"connectTimeoutSeconds": map[string]interface{}{
+							"$ref":        "#/$defs/timeoutSeconds",
+							"description": "defaults to 5",
+						},
+						"maxConnections": map[string]interface{}{
+							"type":        "integer",
+							"minimum":     1,
+							"description": "defaults to 3",
+						},
+						"identity": map[string]interface{}{
+							"type":        "string",
+							"description": "Associate the hosting terminator with the specified identity. '$hosting_tunneler_id.name' resolves to the name of the hosting tunneler's identity. '$hosting_tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the hosting tunneler's identity.",
+						},
+						"bindUsingEdgeIdentity": map[string]interface{}{
+							"type":        "boolean",
+							"description": "Associate the hosting terminator with the name of the hosting tunneler's identity. Setting this to 'true' is equivalent to setting 'identiy=$hosting_tunneler_id.name'",
+						},
+					},
+				},
 				"sourceIp": map[string]interface{}{
 					"$ref":        "#/$defs/ipAddress",
 					"description": "the source address to spoof when the connection is egressed from the hosting tunneler",
 				},
 			},
 			"allOf": []interface{}{
-				map[string]interface{}{"$ref": "#/$defs/protocolsRequired"},
-				map[string]interface{}{"$ref": "#/$defs/addressesRequired"},
-				map[string]interface{}{"$ref": "#/$defs/portsRequired"},
+				map[string]interface{}{
+					"anyOf": []interface{}{
+						map[string]interface{}{"required": []interface{}{"protocol"}},
+						map[string]interface{}{"required": []interface{}{"protocols"}},
+					},
+				},
+				map[string]interface{}{
+					"anyOf": []interface{}{
+						map[string]interface{}{"required": []interface{}{"address"}},
+						map[string]interface{}{"required": []interface{}{"addresses"}},
+					},
+				},
+				map[string]interface{}{
+					"anyOf": []interface{}{
+						map[string]interface{}{"required": []interface{}{"port"}},
+						map[string]interface{}{"required": []interface{}{"ports"}},
+						map[string]interface{}{"required": []interface{}{"portRange"}},
+						map[string]interface{}{"required": []interface{}{"portRanges"}},
+					},
+				},
 			},
 		},
 	}
