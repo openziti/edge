@@ -34,9 +34,9 @@ func (m *Migrations) initialize(step *boltz.MigrationStep) int {
 	m.createGeoRegionsV1(step)
 	m.createIdentityTypesV1(step)
 	m.createInitialTunnelerConfigTypes(step)
-	m.createTunnelerClientV2dot0ConfigType(step) // todo is this the only way to run on init?
+	m.createTunnelerClientV2dot0ConfigType(step)
 
-	return CurrentDbVersion // todo I think we should either return 1 here or run all migrations here.
+	return CurrentDbVersion
 }
 
 var geoRegionsV1 = map[string]string{
