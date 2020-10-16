@@ -67,6 +67,15 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 						"high": map[string]interface{}{"$ref": "#/$defs/portNumber"},
 					},
 				},
+				"precedenceName": map[string]interface{}{
+					"type": "string",
+					"enum": []interface{}{"default", "required", "failed"},
+				},
+				"timeoutSeconds": map[string]interface{}{
+					"type":    "integer",
+					"minimum": float64(0),
+					"maximum": float64(math.MaxInt32),
+				},
 				"inhabitedSet": map[string]interface{}{
 					"type":        "array",
 					"minItems":    1,
@@ -110,10 +119,9 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 							"type":        "string",
 							"description": "Dial a terminator with the specified identity. '$intercepted_protocol', '$intercepted_ip', '$intercepted_port are resolved to the corresponding value of the intercepted address.",
 						},
-						"connectTimeoutMillis": map[string]interface{}{
-							"type":    "integer",
-							"minimum": float64(0),
-							"maximum": float64(math.MaxInt32), // TODO size appropriately
+						"connectTimeoutSeconds": map[string]interface{}{
+							"$ref":        "#/$defs/timeoutSeconds",
+							"description": "defaults to 5 seconds if no dialOptions are defined. defaults to 15 if dialOptions are defined but connectTimeoutSeconds is not specified.",
 						},
 					},
 				},
