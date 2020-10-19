@@ -83,28 +83,18 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 				},
 			},
 			"properties": map[string]interface{}{
-				"protocol": map[string]interface{}{"$ref": "#/$defs/protocolName"},
 				"protocols": map[string]interface{}{
 					"allOf": []interface{}{
 						map[string]interface{}{"$ref": "#/$defs/inhabitedSet"},
 						map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/protocolName"}},
 					},
 				},
-				"address": map[string]interface{}{"$ref": "#/$defs/address"},
 				"addresses": map[string]interface{}{
 					"allOf": []interface{}{
 						map[string]interface{}{"$ref": "#/$defs/inhabitedSet"},
 						map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/address"}},
 					},
 				},
-				"port": map[string]interface{}{"$ref": "#/$defs/portNumber"},
-				"ports": map[string]interface{}{
-					"allOf": []interface{}{
-						map[string]interface{}{"$ref": "#/$defs/inhabitedSet"},
-						map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/portNumber"}},
-					},
-				},
-				"portRange": map[string]interface{}{"$ref": "#/$defs/portRange"},
 				"portRanges": map[string]interface{}{
 					"allOf": []interface{}{
 						map[string]interface{}{"$ref": "#/$defs/inhabitedSet"},
@@ -150,40 +140,23 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 						},
 						"identity": map[string]interface{}{
 							"type":        "string",
-							"description": "Associate the hosting terminator with the specified identity. '$hosting_tunneler_id.name' resolves to the name of the hosting tunneler's identity. '$hosting_tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the hosting tunneler's identity.",
+							"description": "Associate the hosting terminator with the specified identity. '$tunneler_id.name' resolves to the name of the hosting tunneler's identity. '$tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the hosting tunneler's identity.",
 						},
 						"bindUsingEdgeIdentity": map[string]interface{}{
 							"type":        "boolean",
-							"description": "Associate the hosting terminator with the name of the hosting tunneler's identity. Setting this to 'true' is equivalent to setting 'identiy=$hosting_tunneler_id.name'",
+							"description": "Associate the hosting terminator with the name of the hosting tunneler's identity. Setting this to 'true' is equivalent to setting 'identiy=$tunneler_id.name'",
 						},
 					},
 				},
 				"sourceIp": map[string]interface{}{
-					"$ref":        "#/$defs/ipAddress",
-					"description": "the source address to spoof when the connection is egressed from the hosting tunneler",
+					"type":        "string",
+					"description": "The source IP to spoof when the connection is egressed from the hosting tunneler. '$tunneler_id.name' resolves to the name of the client tunneler's identity. '$tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the client tunneler's identity.",
 				},
 			},
-			"allOf": []interface{}{
-				map[string]interface{}{
-					"anyOf": []interface{}{
-						map[string]interface{}{"required": []interface{}{"protocol"}},
-						map[string]interface{}{"required": []interface{}{"protocols"}},
-					},
-				},
-				map[string]interface{}{
-					"anyOf": []interface{}{
-						map[string]interface{}{"required": []interface{}{"address"}},
-						map[string]interface{}{"required": []interface{}{"addresses"}},
-					},
-				},
-				map[string]interface{}{
-					"anyOf": []interface{}{
-						map[string]interface{}{"required": []interface{}{"port"}},
-						map[string]interface{}{"required": []interface{}{"ports"}},
-						map[string]interface{}{"required": []interface{}{"portRange"}},
-						map[string]interface{}{"required": []interface{}{"portRanges"}},
-					},
-				},
+			"required": []interface{}{
+				"protocols",
+				"addresses",
+				"portRanges",
 			},
 		},
 	}
