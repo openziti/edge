@@ -20,9 +20,9 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
-	"github.com/openziti/edge/router/internal/fabric"
 	"github.com/openziti/edge/internal/cert"
 	"github.com/openziti/edge/pb/edge_ctrl_pb"
+	"github.com/openziti/edge/router/internal/fabric"
 	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
 	"github.com/openziti/foundation/channel2"
@@ -153,7 +153,10 @@ func (proxy *ingressProxy) processConnect(req *channel2.Message, ch channel2.Cha
 	// fabric connect
 	log.Debug("dialing fabric")
 	peerData := make(map[uint32][]byte)
-	peerData[edge.PublicKeyHeader] = req.Headers[edge.PublicKeyHeader]
+
+	if pk, found := req.Headers[edge.PublicKeyHeader]; found {
+		peerData[edge.PublicKeyHeader] = pk
+	}
 
 	if callerId, found := req.Headers[edge.CallerIdHeader]; found {
 		peerData[edge.CallerIdHeader] = callerId
