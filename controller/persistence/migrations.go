@@ -106,7 +106,7 @@ func (m *Migrations) migrate(step *boltz.MigrationStep) int {
 		m.addPostureCheckTypes(step)
 	}
 
-	if step.CurrentVersion < 13 {
+	if step.CurrentVersion < 14 {
 		m.createL4InterceptV1ConfigType(step) // also called from Migrations.initialize()
 	}
 
