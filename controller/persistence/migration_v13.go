@@ -6,20 +6,20 @@ import (
 	"math"
 )
 
-func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationStep) {
-	configName := "ziti-tunneler-client.v2.0"
-	clientConfigV2dot0TypeId := "g7cIWbcGg"
-	clientConfigTypeV2dot0 := &ConfigType{
-		BaseExtEntity: boltz.BaseExtEntity{Id: clientConfigV2dot0TypeId},
+func (m *Migrations) createL4InterceptV1ConfigType(step *boltz.MigrationStep) {
+	configName := "l4-intercept.v1"
+	l4InterceptConfigV1TypeId := "g7cIWbcGg"
+	l4InterceptConfigTypeV1 := &ConfigType{
+		BaseExtEntity: boltz.BaseExtEntity{Id: l4InterceptConfigV1TypeId},
 		Name:          configName,
 		Schema: map[string]interface{}{
-			"$id":                  "http://edge.openziti.org/schemas/ziti-tunneler-client.v2.0.config.json",
+			"$id":                  "http://edge.openziti.org/schemas/l4-intercept.v1.config.json",
 			"type":                 "object",
 			"additionalProperties": false,
 			"$defs": map[string]interface{}{
 				"protocolName": map[string]interface{}{
 					"type": "string",
-					"enum": []interface{}{"tcp", "udp"},
+					"enum": []interface{}{"tcp", "udp", "sctp"},
 				},
 				"ipAddressFormat": map[string]interface{}{
 					"oneOf": []interface{}{
@@ -163,7 +163,7 @@ func (m *Migrations) createTunnelerClientV2dot0ConfigType(step *boltz.MigrationS
 
 	cfg, _ := m.stores.ConfigType.LoadOneByName(step.Ctx.Tx(), configName)
 	if cfg == nil {
-		step.SetError(m.stores.ConfigType.Create(step.Ctx, clientConfigTypeV2dot0))
+		step.SetError(m.stores.ConfigType.Create(step.Ctx, l4InterceptConfigTypeV1))
 	} else {
 		log.Debugf("'%s' config type already exists. not creating.", configName)
 	}
