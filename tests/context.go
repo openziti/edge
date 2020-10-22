@@ -29,9 +29,9 @@ import (
 	"encoding/pem"
 	"fmt"
 	"github.com/openziti/edge/eid"
+	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/edge/router/enroll"
 	"github.com/openziti/edge/router/xgress_edge"
-	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/fabric/controller/xt_smartrouting"
 	"github.com/openziti/fabric/router"
 	"github.com/openziti/fabric/router/xgress"
@@ -269,7 +269,9 @@ func (ctx *TestContext) createAndEnrollEdgeRouter(roleAttributes ...string) *edg
 
 	enroller := enroll.NewRestEnroller()
 	ctx.Req.NoError(enroller.LoadConfig(cfgmap))
-	ctx.Req.NoError(enroller.Enroll([]byte(jwt), true, ""))
+	var keyAlg sdkconfig.KeyAlgVar
+	keyAlg.Set("RSA")
+	ctx.Req.NoError(enroller.Enroll([]byte(jwt), true, "", keyAlg))
 
 	return ctx.edgeRouterEntity
 }
@@ -291,7 +293,9 @@ func (ctx *TestContext) createAndEnrollTransitRouter() *transitRouter {
 
 	enroller := enroll.NewRestEnroller()
 	ctx.Req.NoError(enroller.LoadConfig(cfgmap))
-	ctx.Req.NoError(enroller.Enroll([]byte(jwt), true, ""))
+	var keyAlg sdkconfig.KeyAlgVar
+	keyAlg.Set("RSA")
+	ctx.Req.NoError(enroller.Enroll([]byte(jwt), true, "", keyAlg))
 
 	return ctx.transitRouterEntity
 }
@@ -339,8 +343,8 @@ func (ctx *TestContext) EnrollIdentity(identityId string) *sdkconfig.Config {
 	ctx.Req.NoError(err)
 
 	flags := sdkenroll.EnrollmentFlags{
-		Token: tkn,
-		KeyAlg: "EC",
+		Token:  tkn,
+		KeyAlg: "RSA",
 	}
 	conf, err := sdkenroll.Enroll(flags)
 	ctx.Req.NoError(err)
