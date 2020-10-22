@@ -6,14 +6,14 @@ import (
 	"math"
 )
 
-func (m *Migrations) createL4InterceptV1ConfigType(step *boltz.MigrationStep) {
-	configName := "l4-intercept.v1"
-	l4InterceptConfigV1TypeId := "g7cIWbcGg"
-	l4InterceptConfigTypeV1 := &ConfigType{
-		BaseExtEntity: boltz.BaseExtEntity{Id: l4InterceptConfigV1TypeId},
-		Name:          configName,
+func (m *Migrations) createInterceptV1ConfigType(step *boltz.MigrationStep) {
+	configTypeName := "intercept.v1"
+	configTypeId := "g7cIWbcGg"
+	configType := &ConfigType{
+		BaseExtEntity: boltz.BaseExtEntity{Id: configTypeId},
+		Name:          configTypeName,
 		Schema: map[string]interface{}{
-			"$id":                  "http://edge.openziti.org/schemas/l4-intercept.v1.config.json",
+			"$id":                  "http://edge.openziti.org/schemas/intercept.v1.config.json",
 			"type":                 "object",
 			"additionalProperties": false,
 			"$defs": map[string]interface{}{
@@ -67,10 +67,6 @@ func (m *Migrations) createL4InterceptV1ConfigType(step *boltz.MigrationStep) {
 						"high": map[string]interface{}{"$ref": "#/$defs/portNumber"},
 					},
 				},
-				"precedenceName": map[string]interface{}{
-					"type": "string",
-					"enum": []interface{}{"default", "required", "failed"},
-				},
 				"timeoutSeconds": map[string]interface{}{
 					"type":    "integer",
 					"minimum": float64(0),
@@ -115,39 +111,6 @@ func (m *Migrations) createL4InterceptV1ConfigType(step *boltz.MigrationStep) {
 						},
 					},
 				},
-				"listenOptions": map[string]interface{}{
-					"type":                 "object",
-					"additionalProperties": false,
-					"properties": map[string]interface{}{
-						"cost": map[string]interface{}{
-							"type":        "integer",
-							"minimum":     0,
-							"maximum":     65535,
-							"description": "defaults to 0",
-						},
-						"precedence": map[string]interface{}{
-							"$ref":        "#/$defs/precedenceName",
-							"description": "defaults to 'default'",
-						},
-						"connectTimeoutSeconds": map[string]interface{}{
-							"$ref":        "#/$defs/timeoutSeconds",
-							"description": "defaults to 5",
-						},
-						"maxConnections": map[string]interface{}{
-							"type":        "integer",
-							"minimum":     1,
-							"description": "defaults to 3",
-						},
-						"identity": map[string]interface{}{
-							"type":        "string",
-							"description": "Associate the hosting terminator with the specified identity. '$tunneler_id.name' resolves to the name of the hosting tunneler's identity. '$tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the hosting tunneler's identity.",
-						},
-						"bindUsingEdgeIdentity": map[string]interface{}{
-							"type":        "boolean",
-							"description": "Associate the hosting terminator with the name of the hosting tunneler's identity. Setting this to 'true' is equivalent to setting 'identiy=$tunneler_id.name'",
-						},
-					},
-				},
 				"sourceIp": map[string]interface{}{
 					"type":        "string",
 					"description": "The source IP to spoof when the connection is egressed from the hosting tunneler. '$tunneler_id.name' resolves to the name of the client tunneler's identity. '$tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the client tunneler's identity.",
@@ -161,10 +124,121 @@ func (m *Migrations) createL4InterceptV1ConfigType(step *boltz.MigrationStep) {
 		},
 	}
 
-	cfg, _ := m.stores.ConfigType.LoadOneByName(step.Ctx.Tx(), configName)
+	cfg, _ := m.stores.ConfigType.LoadOneByName(step.Ctx.Tx(), configTypeName)
 	if cfg == nil {
-		step.SetError(m.stores.ConfigType.Create(step.Ctx, l4InterceptConfigTypeV1))
+		step.SetError(m.stores.ConfigType.Create(step.Ctx, configType))
 	} else {
-		log.Debugf("'%s' config type already exists. not creating.", configName)
+		log.Debugf("'%s' config type already exists. not creating.", configTypeName)
+	}
+}
+
+func (m *Migrations) createHostV1ConfigType(step *boltz.MigrationStep) {
+	configTypeName := "host.v1"
+	configTypeId := "NH5p4FpGR"
+	configType := &ConfigType{
+		BaseExtEntity: boltz.BaseExtEntity{Id: configTypeId},
+		Name:          configTypeName,
+		Schema: map[string]interface{}{
+			"$id": "http://ziti-edge.netfoundry.io/schemas/host-v1.schema.json",
+			"$defs": map[string]interface{}{
+				"ipAddressFormat": map[string]interface{}{
+					"oneOf": []interface{}{
+						map[string]interface{}{"format": "ipv4"},
+						map[string]interface{}{"format": "ipv6"},
+					},
+					"ipAddress": map[string]interface{}{
+						"type": "string",
+						"$ref": "#/$defs/ipAddressFormat",
+					},
+					"hostname": map[string]interface{}{
+						"type":   "string",
+						"format": "hostname",
+						"not":    map[string]interface{}{"$ref": "#/$defs/ipAddressFormat"},
+					},
+					"address": map[string]interface{}{
+						"oneOf": []interface{}{
+							map[string]interface{}{"$ref": "#/$defs/ipAddress"},
+							map[string]interface{}{"$ref": "#/$defs/hostname"},
+						},
+					},
+				},
+				"type": "object",
+				"properties": map[string]interface{}{
+					"dialAddress": map[string]interface{}{
+						"type":                 "object",
+						"additionalProperties": false,
+						"properties": map[string]interface{}{
+							"protocol": map[string]interface{}{
+								"type": "string",
+								"enum": []interface{}{"tcp", "udp", "sctp"},
+							},
+							"address": map[string]interface{}{
+								"$ref": "#/$defs/address",
+							},
+							"port": map[string]interface{}{
+								"type":    "integer",
+								"minimum": 0,
+								"maximum": 65535,
+							},
+						},
+						"required":    []interface{}{"protocol", "address", "port"},
+						"description": "The protocol:address:port to dial when a ziti client connects to the associated service. 'dialAddress' and 'dialIntercptedAddress' are mutually exclusive.",
+					},
+					"dialInterceptedAddress": map[string]interface{}{
+						"type":        "boolean",
+						"enum":        []interface{}{true},
+						"description": "Connect to the same address that was intercepted at the client tunneler. This is intended to be used with intercept configurations that specify multiple intercept addresses (e.g. portRange, CIDR addresses, multiple addresses and/or protocols). If specified, the value of `dialInterceptedAddress' must be true. 'dialInterceptedAddress' and 'dialAddress' are mutually exclusive.",
+					},
+					"listenOptions": map[string]interface{}{
+						"type":                 "object",
+						"additionalProperties": false,
+						"properties": map[string]interface{}{
+							"cost": map[string]interface{}{
+								"type":        "integer",
+								"minimum":     0,
+								"maximum":     65535,
+								"description": "defaults to 0",
+							},
+							"precedence": map[string]interface{}{
+								"type":        "string",
+								"enum":        []interface{}{"default", "required", "failed"},
+								"description": "defaults to 'default'",
+							},
+							"connectTimeoutSeconds": map[string]interface{}{
+								"type":        "integer",
+								"minimum":     0,
+								"maximum":     2147483647,
+								"description": "defaults to 5",
+							},
+							"maxConnections": map[string]interface{}{
+								"type":        "integer",
+								"minimum":     1,
+								"description": "defaults to 3",
+							},
+							"identity": map[string]interface{}{
+								"type":        "string",
+								"description": "Associate the hosting terminator with the specified identity. '$tunneler_id.name' resolves to the name of the hosting tunneler's identity. '$tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the hosting tunneler's identity.",
+							},
+							"bindUsingEdgeIdentity": map[string]interface{}{
+								"type":        "boolean",
+								"description": "Associate the hosting terminator with the name of the hosting tunneler's identity. Setting this to 'true' is equivalent to setting 'identiy=$tunneler_id.name'",
+							},
+						},
+					},
+				},
+				"additionalProperties": false,
+				"oneOf": []interface{}{
+					map[string]interface{}{"required": []interface{}{"dialAddress"}},
+					map[string]interface{}{"required": []interface{}{"dialInterceptedAddress"}},
+				},
+			},
+		},
+	}
+
+	cfg, _ := m.stores.ConfigType.LoadOneByName(step.Ctx.Tx(), configTypeName)
+	if cfg == nil {
+		step.SetError(m.stores.ConfigType.Create(step.Ctx, configType))
+	} else {
+		log.Debugf("'%s' config type already exists. not creating.", configTypeName)
 	}
 }

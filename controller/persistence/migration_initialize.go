@@ -35,7 +35,8 @@ func (m *Migrations) initialize(step *boltz.MigrationStep) int {
 	m.createIdentityTypesV1(step)
 	m.createInitialTunnelerConfigTypes(step)
 	m.addPostureCheckTypes(step)
-	m.createL4InterceptV1ConfigType(step)
+	m.createInterceptV1ConfigType(step)
+	m.createHostV1ConfigType(step)
 
 	return CurrentDbVersion
 }

@@ -112,7 +112,8 @@ func (m *Migrations) migrate(step *boltz.MigrationStep) int {
 	}
 
 	if step.CurrentVersion < 14 {
-		m.createL4InterceptV1ConfigType(step)
+		m.createInterceptV1ConfigType(step)
+		m.createHostV1ConfigType(step)
 	}
 
 	// current version
