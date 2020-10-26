@@ -146,90 +146,111 @@ func (m *Migrations) createHostV1ConfigType(step *boltz.MigrationStep) {
 						map[string]interface{}{"format": "ipv4"},
 						map[string]interface{}{"format": "ipv6"},
 					},
-					"ipAddress": map[string]interface{}{
-						"type": "string",
-						"$ref": "#/$defs/ipAddressFormat",
+				},
+				"ipAddress": map[string]interface{}{
+					"type": "string",
+					"$ref": "#/$defs/ipAddressFormat",
+				},
+				"hostname": map[string]interface{}{
+					"type":   "string",
+					"format": "hostname",
+					"not":    map[string]interface{}{"$ref": "#/$defs/ipAddressFormat"},
+				},
+				"address": map[string]interface{}{
+					"oneOf": []interface{}{
+						map[string]interface{}{"$ref": "#/$defs/ipAddress"},
+						map[string]interface{}{"$ref": "#/$defs/hostname"},
 					},
-					"hostname": map[string]interface{}{
-						"type":   "string",
-						"format": "hostname",
-						"not":    map[string]interface{}{"$ref": "#/$defs/ipAddressFormat"},
-					},
-					"address": map[string]interface{}{
-						"oneOf": []interface{}{
-							map[string]interface{}{"$ref": "#/$defs/ipAddress"},
-							map[string]interface{}{"$ref": "#/$defs/hostname"},
+				},
+			},
+			"type": "object",
+			"properties": map[string]interface{}{
+				"protocol": map[string]interface{}{
+					"type":        "string",
+					"enum":        []interface{}{"tcp", "udp", "sctp"},
+					"description": "Dial the specified protocol when a ziti client connects to the service.",
+				},
+				"dialInterceptedProtocol": map[string]interface{}{
+					"type":        "boolean",
+					"enum":        []interface{}{true},
+					"description": "Dial the same protocol that was intercepted at the client tunneler. 'protocol' and 'dialInterceptedProtocol' are mutually exclusive.",
+				},
+				"address": map[string]interface{}{
+					"$ref":        "#/$defs/address",
+					"description": "Dial the specified ip address or hostname when a ziti client connects to the service.",
+				},
+				"dialInterceptedAddress": map[string]interface{}{
+					"type":        "boolean",
+					"enum":        []interface{}{true},
+					"description": "Dial the same ip address that was intercepted at the client tunneler. 'address' and 'dialInterceptedAddress' are mutually exclusive.",
+				},
+				"port": map[string]interface{}{
+					"type":        "integer",
+					"minimum":     0,
+					"maximum":     65535,
+					"description": "Dial the specified port when a ziti client connects to the service.",
+				},
+				"dialInterceptedPort": map[string]interface{}{
+					"type":        "boolean",
+					"enum":        []interface{}{true},
+					"description": "Dial the same port that was intercepted at the client tunneler. 'port' and 'dialInterceptedPort' are mutually exclusive.",
+				},
+				"listenOptions": map[string]interface{}{
+					"type":                 "object",
+					"additionalProperties": false,
+					"properties": map[string]interface{}{
+						"cost": map[string]interface{}{
+							"type":        "integer",
+							"minimum":     0,
+							"maximum":     65535,
+							"description": "defaults to 0",
+						},
+						"precedence": map[string]interface{}{
+							"type":        "string",
+							"enum":        []interface{}{"default", "required", "failed"},
+							"description": "defaults to 'default'",
+						},
+						"connectTimeoutSeconds": map[string]interface{}{
+							"type":        "integer",
+							"minimum":     0,
+							"maximum":     2147483647,
+							"description": "defaults to 5",
+						},
+						"maxConnections": map[string]interface{}{
+							"type":        "integer",
+							"minimum":     1,
+							"description": "defaults to 3",
+						},
+						"identity": map[string]interface{}{
+							"type":        "string",
+							"description": "Associate the hosting terminator with the specified identity. '$tunneler_id.name' resolves to the name of the hosting tunneler's identity. '$tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the hosting tunneler's identity.",
+						},
+						"bindUsingEdgeIdentity": map[string]interface{}{
+							"type":        "boolean",
+							"description": "Associate the hosting terminator with the name of the hosting tunneler's identity. Setting this to 'true' is equivalent to setting 'identiy=$tunneler_id.name'",
 						},
 					},
 				},
-				"type": "object",
-				"properties": map[string]interface{}{
-					"dialAddress": map[string]interface{}{
-						"type":                 "object",
-						"additionalProperties": false,
-						"properties": map[string]interface{}{
-							"protocol": map[string]interface{}{
-								"type": "string",
-								"enum": []interface{}{"tcp", "udp", "sctp"},
-							},
-							"address": map[string]interface{}{
-								"$ref": "#/$defs/address",
-							},
-							"port": map[string]interface{}{
-								"type":    "integer",
-								"minimum": 0,
-								"maximum": 65535,
-							},
-						},
-						"required":    []interface{}{"protocol", "address", "port"},
-						"description": "The protocol:address:port to dial when a ziti client connects to the associated service. 'dialAddress' and 'dialIntercptedAddress' are mutually exclusive.",
-					},
-					"dialInterceptedAddress": map[string]interface{}{
-						"type":        "boolean",
-						"enum":        []interface{}{true},
-						"description": "Connect to the same address that was intercepted at the client tunneler. This is intended to be used with intercept configurations that specify multiple intercept addresses (e.g. portRange, CIDR addresses, multiple addresses and/or protocols). If specified, the value of `dialInterceptedAddress' must be true. 'dialInterceptedAddress' and 'dialAddress' are mutually exclusive.",
-					},
-					"listenOptions": map[string]interface{}{
-						"type":                 "object",
-						"additionalProperties": false,
-						"properties": map[string]interface{}{
-							"cost": map[string]interface{}{
-								"type":        "integer",
-								"minimum":     0,
-								"maximum":     65535,
-								"description": "defaults to 0",
-							},
-							"precedence": map[string]interface{}{
-								"type":        "string",
-								"enum":        []interface{}{"default", "required", "failed"},
-								"description": "defaults to 'default'",
-							},
-							"connectTimeoutSeconds": map[string]interface{}{
-								"type":        "integer",
-								"minimum":     0,
-								"maximum":     2147483647,
-								"description": "defaults to 5",
-							},
-							"maxConnections": map[string]interface{}{
-								"type":        "integer",
-								"minimum":     1,
-								"description": "defaults to 3",
-							},
-							"identity": map[string]interface{}{
-								"type":        "string",
-								"description": "Associate the hosting terminator with the specified identity. '$tunneler_id.name' resolves to the name of the hosting tunneler's identity. '$tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the hosting tunneler's identity.",
-							},
-							"bindUsingEdgeIdentity": map[string]interface{}{
-								"type":        "boolean",
-								"description": "Associate the hosting terminator with the name of the hosting tunneler's identity. Setting this to 'true' is equivalent to setting 'identiy=$tunneler_id.name'",
-							},
-						},
+			},
+			"additionalProperties": false,
+			"allOf": []interface{}{
+				map[string]interface{}{
+					"oneOf": []interface{}{
+						map[string]interface{}{"required": []interface{}{"protocol"}},
+						map[string]interface{}{"required": []interface{}{"dialInterceptedProtocol"}},
 					},
 				},
-				"additionalProperties": false,
-				"oneOf": []interface{}{
-					map[string]interface{}{"required": []interface{}{"dialAddress"}},
-					map[string]interface{}{"required": []interface{}{"dialInterceptedAddress"}},
+				map[string]interface{}{
+					"oneOf": []interface{}{
+						map[string]interface{}{"required": []interface{}{"address"}},
+						map[string]interface{}{"required": []interface{}{"dialInterceptedAddress"}},
+					},
+				},
+				map[string]interface{}{
+					"oneOf": []interface{}{
+						map[string]interface{}{"required": []interface{}{"port"}},
+						map[string]interface{}{"required": []interface{}{"dialInterceptedPort"}},
+					},
 				},
 			},
 		},
