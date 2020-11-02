@@ -53,7 +53,8 @@ type IdentityLinkFactoryImpl struct {
 func (factory *IdentityLinkFactoryImpl) Links(entity models.Entity) rest_model.Links {
 	links := factory.BasicLinkFactory.Links(entity)
 	links[EntityNameEdgeRouterPolicy] = factory.NewNestedLink(entity, EntityNameEdgeRouter)
-	links[EntityNameEdgeRouterPolicy] = factory.NewNestedLink(entity, EntityNameEdgeRouter)
+	links[EntityNameServicePolicy] = factory.NewNestedLink(entity, EntityNameServicePolicy)
+	links[EntityNamePostureData] = factory.NewNestedLink(entity, EntityNamePostureData)
 
 	return links
 }
@@ -160,14 +161,18 @@ func MapIdentityToRestModel(ae *env.AppEnv, identity *model.Identity) (*rest_mod
 		return nil, err
 	}
 
+	hasApiSession := identity.ApiSessionCount > 0
+
 	ret := &rest_model.IdentityDetail{
-		BaseEntity:     BaseEntityToRestModel(identity, IdentityLinkFactory),
-		IsAdmin:        &identity.IsAdmin,
-		IsDefaultAdmin: &identity.IsDefaultAdmin,
-		Name:           &identity.Name,
-		RoleAttributes: identity.RoleAttributes,
-		Type:           ToEntityRef(identityType.Name, identityType, IdentityTypeLinkFactory),
-		TypeID:         &identityType.Id,
+		BaseEntity:              BaseEntityToRestModel(identity, IdentityLinkFactory),
+		IsAdmin:                 &identity.IsAdmin,
+		IsDefaultAdmin:          &identity.IsDefaultAdmin,
+		Name:                    &identity.Name,
+		RoleAttributes:          identity.RoleAttributes,
+		Type:                    ToEntityRef(identityType.Name, identityType, IdentityTypeLinkFactory),
+		TypeID:                  &identityType.Id,
+		HasEdgeRouterConnection: &identity.HasHeartbeat,
+		HasAPISession:           &hasApiSession,
 	}
 	fillInfo(ret, identity.EnvInfo, identity.SdkInfo)
 
@@ -305,10 +310,10 @@ func GetNamedIdentityRoles(identityHandler *model.IdentityHandler, roles []strin
 			}
 
 			result = append(result, &rest_model.NamedRole{
-				Role:   role,
+				Role: role,
 				Name: "@" + identity.Name,
 			})
-		}else {
+		} else {
 			result = append(result, &rest_model.NamedRole{
 				Role: role,
 				Name: role,
