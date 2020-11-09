@@ -51,6 +51,7 @@ import (
 type Controller struct {
 	config          *edgeconfig.Config
 	apiServer       *apiServer
+	wsapiServer     *wsapiServer
 	AppEnv          *env.AppEnv
 	xmgmt           *submgmt
 	xctrl           *subctrl
@@ -224,7 +225,6 @@ func (c *Controller) Run() {
 		log.Panic("edge not initialized")
 	}
 
-
 	log.Info("starting edge")
 
 	//after InitPersistence
@@ -294,6 +294,9 @@ func (c *Controller) Run() {
 	as.corsOptions = corsOpts
 	c.apiServer = as
 
+	wsas := newWSApiServer(c.config, c.AppEnv, timeoutHandler)
+	c.wsapiServer = wsas
+
 	admin, err := c.AppEnv.Handlers.Identity.ReadDefaultAdmin()
 
 	if err != nil {
@@ -311,6 +314,16 @@ func (c *Controller) Run() {
 			log.
 				WithField("cause", err).
 				Fatal("error starting API server", err)
+		}
+	}()
+
+	go func() {
+		err := c.wsapiServer.Start()
+
+		if err != nil {
+			log.
+				WithField("cause", err).
+				Fatal("error starting WSAPI server", err)
 		}
 	}()
 
