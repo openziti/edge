@@ -537,6 +537,18 @@ func (ctx *TestContext) validateDateFieldsForCreate(start time.Time, jsonEntity 
 	return createdAt
 }
 
+func (ctx *TestContext) newPostureCheckDomain(domains []string, roleAttributes []string) *postureCheckDomain {
+	return &postureCheckDomain{
+		postureCheck: postureCheck{
+			name:           eid.New(),
+			typeId:         "DOMAIN",
+			roleAttributes: roleAttributes,
+			tags:           nil,
+		},
+		domains: domains,
+	}
+}
+
 func (ctx *TestContext) newService(roleAttributes, configs []string) *service {
 	return &service{
 		Name:               eid.New(),

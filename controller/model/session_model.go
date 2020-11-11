@@ -60,12 +60,59 @@ func (entity *Session) toBoltEntityForCreate(tx *bbolt.Tx, handler Handler) (bol
 		return nil, err
 	}
 
+	if entity.Type == "" {
+		entity.Type = persistence.SessionTypeDial
+	}
+
 	if persistence.SessionTypeDial == entity.Type && !stringz.Contains(service.Permissions, persistence.PolicyTypeDialName) {
 		return nil, validation.NewFieldError("service not found", "ServiceId", entity.ServiceId)
 	}
 
 	if persistence.SessionTypeBind == entity.Type && !stringz.Contains(service.Permissions, persistence.PolicyTypeBindName) {
 		return nil, validation.NewFieldError("service not found", "ServiceId", entity.ServiceId)
+	}
+
+	checkCache := map[string]bool{} //cache individual check status
+	validPosture := false
+	hasMatchingPolicies := false
+
+	postureCheckMap := handler.GetEnv().GetHandlers().EdgeService.GetPostureChecks(apiSession.IdentityId, entity.ServiceId)
+
+	for policyId, postureChecks := range postureCheckMap {
+		policy, err := handler.GetEnv().GetHandlers().ServicePolicy.Read(policyId)
+
+		if err != nil {
+			continue
+		}
+
+		if policy.PolicyType != entity.Type {
+			continue
+		}
+		hasMatchingPolicies = true
+		isPolicyPassing := true
+
+		for _, postureCheck := range postureChecks {
+
+			isCheckPassing := true
+			found := false
+			if isCheckPassing, found = checkCache[postureCheck.Id]; !found {
+				isCheckPassing = handler.GetEnv().GetHandlers().PostureResponse.Evaluate(apiSession.IdentityId, postureCheck)
+				checkCache[postureCheck.Id] = isCheckPassing
+			}
+
+			if !isCheckPassing {
+				isPolicyPassing = false //failed, move to next policy
+				break
+			}
+		}
+		if isPolicyPassing {
+			validPosture = true
+			break
+		}
+	}
+
+	if hasMatchingPolicies && !validPosture {
+		return nil, apierror.NewInvalidPosture()
 	}
 
 	maxRows := 1

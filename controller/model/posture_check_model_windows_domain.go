@@ -20,10 +20,25 @@ import (
 	"fmt"
 	"github.com/openziti/edge/controller/persistence"
 	"go.etcd.io/bbolt"
+	"strings"
 )
 
 type PostureCheckWindowsDomains struct {
 	Domains []string
+}
+
+func (p *PostureCheckWindowsDomains) Evaluate(pd *PostureData) bool {
+	if pd.Domain.TimedOut {
+		return false
+	}
+
+	for _, domain := range p.Domains {
+		if strings.ToLower(domain) == strings.ToLower(pd.Domain.Name) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func newPostureCheckWindowsDomains() PostureCheckSubType {

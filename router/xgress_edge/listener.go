@@ -20,9 +20,9 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
-	"github.com/openziti/edge/router/internal/fabric"
 	"github.com/openziti/edge/internal/cert"
 	"github.com/openziti/edge/pb/edge_ctrl_pb"
+	"github.com/openziti/edge/router/internal/fabric"
 	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
 	"github.com/openziti/foundation/channel2"
@@ -160,6 +160,10 @@ func (proxy *ingressProxy) processConnect(req *channel2.Message, ch channel2.Cha
 
 	if callerId, found := req.Headers[edge.CallerIdHeader]; found {
 		peerData[edge.CallerIdHeader] = callerId
+	}
+
+	if appData, found := req.Headers[edge.AppDataHeader]; found {
+		peerData[edge.AppDataHeader] = appData
 	}
 
 	if ns.Service.EncryptionRequired && req.Headers[edge.PublicKeyHeader] == nil {
