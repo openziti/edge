@@ -78,7 +78,6 @@ func (wsas *wsapiServer) handleWebsocket(w http.ResponseWriter, r *http.Request)
 
 func newWSApiServer(c *config.Config, ae *env.AppEnv, r http.Handler) *wsapiServer {
 	logWriter := pfxlog.Logger().Writer()
-	logger := pfxlog.Logger()
 
 	// Set up the HTTP -> Websocket upgrader options (once, before we start listening)
 	upgrader.HandshakeTimeout = c.WSApi.HandshakeTimeout
@@ -86,8 +85,6 @@ func newWSApiServer(c *config.Config, ae *env.AppEnv, r http.Handler) *wsapiServ
 	upgrader.WriteBufferSize = c.WSApi.WriteBufferSize
 	upgrader.EnableCompression = c.WSApi.EnableCompression
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true } // Allow all origins
-
-	logger.Infof("WSAPI WriteBufferSize [%d]", upgrader.WriteBufferSize)
 
 	router := mux.NewRouter()
 

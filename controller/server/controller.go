@@ -294,8 +294,12 @@ func (c *Controller) Run() {
 	as.corsOptions = corsOpts
 	c.apiServer = as
 
-	wsas := newWSApiServer(c.config, c.AppEnv, timeoutHandler)
-	c.wsapiServer = wsas
+	if c.config.WSApi.Valid {
+		wsas := newWSApiServer(c.config, c.AppEnv, timeoutHandler)
+		c.wsapiServer = wsas
+	} else {
+		log.Info("no WSApi config specified -- start of WSApi server is bypassed")
+	}
 
 	admin, err := c.AppEnv.Handlers.Identity.ReadDefaultAdmin()
 
@@ -317,15 +321,17 @@ func (c *Controller) Run() {
 		}
 	}()
 
-	go func() {
-		err := c.wsapiServer.Start()
+	if c.config.WSApi.Valid {
+		go func() {
+			err := c.wsapiServer.Start()
 
-		if err != nil {
-			log.
-				WithField("cause", err).
-				Fatal("error starting WSAPI server", err)
-		}
-	}()
+			if err != nil {
+				log.
+					WithField("cause", err).
+					Fatal("error starting WSAPI server", err)
+			}
+		}()
+	}
 
 	go func() {
 		err := c.policyEngine.Start()

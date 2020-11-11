@@ -76,6 +76,7 @@ type WSApi struct {
 	ReadBufferSize        int
 	WriteBufferSize       int
 	EnableCompression     bool
+	Valid                 bool
 }
 
 type Config struct {
@@ -337,6 +338,7 @@ func (c *Config) loadWSApiSection(edgeConfigMap map[interface{}]interface{}) err
 				return errors.New("invalid 'enableCompression' value")
 			}
 		}
+		c.WSApi.Valid = true
 	}
 
 	return nil
