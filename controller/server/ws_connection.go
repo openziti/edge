@@ -30,8 +30,10 @@ import (
 	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/config"
 	"github.com/openziti/edge/controller/env"
+	"github.com/openziti/edge/controller/internal/permissions"
 	"github.com/openziti/edge/controller/internal/routes"
 	"github.com/openziti/edge/controller/model"
+	"github.com/openziti/edge/controller/response"
 	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/channel2"
@@ -292,7 +294,7 @@ type ConfigTypesObj struct {
 	ConfigTypesArray []string `json:"configTypes"`
 }
 
-func (c *WSConnection) handleAuthenticate(b []byte) *WSRestResponse {
+func (c *WSConnection) handleAuthenticate(rc *response.RequestContext, b []byte) *WSRestResponse {
 	// start := time.Now()
 	c.logger.Debug("handleAuthenticate() entered")
 
@@ -512,7 +514,7 @@ func (c *WSConnection) GetRequestPaging(queryParamsMap url.Values) (*routes.Pagi
 	return p, nil
 }
 
-func (c *WSConnection) handleServices(queryParams string, sessionToken string, b []byte) *WSRestResponse {
+func (c *WSConnection) handleServices(rc *response.RequestContext, queryParams string, sessionToken string, b []byte) *WSRestResponse {
 	c.logger.Debug("handleServices() entered")
 
 	apiSession, err := c.AppEnv.GetHandlers().ApiSession.ReadByToken(sessionToken)
@@ -555,7 +557,7 @@ func (c *WSConnection) handleServices(queryParams string, sessionToken string, b
 		// rc.RespondWithError(err)
 		// return
 	}
-	apiEntities, err = routes.MapServicesToRestEntity(c.AppEnv, nil, result.Services)
+	apiEntities, err = routes.MapServicesToRestEntity(c.AppEnv, rc, result.Services)
 	if err != nil {
 		// rc.RespondWithError(err)
 		// return
@@ -606,7 +608,7 @@ func (c *WSConnection) handleServices(queryParams string, sessionToken string, b
 
 }
 
-func (c *WSConnection) handleSessions(queryParams string, sessionToken string, b []byte) *WSRestResponse {
+func (c *WSConnection) handleSessions(rc *response.RequestContext, queryParams string, sessionToken string, b []byte) *WSRestResponse {
 	c.logger.Debug("handleSessions() entered ")
 
 	apiSession, err := c.AppEnv.GetHandlers().ApiSession.ReadByToken(sessionToken)
@@ -708,19 +710,62 @@ func (c *WSConnection) requestHandler() {
 		var resp *WSRestResponse
 		var respBody []byte
 
+		rc := &response.RequestContext{
+			Id:                "",
+			Body:              nil,
+			Identity:          nil,
+			ApiSession:        nil,
+			ActivePermissions: []string{},
+			ResponseWriter:    nil,
+			Request:           nil,
+			EventLogger:       nil,
+		}
+
+		rc.ApiSession, err = c.AppEnv.GetHandlers().ApiSession.ReadByToken(ztSession)
+		if err != nil {
+			c.logger.WithError(err).Debugf("looking up API session for %s resulted in an error, request will continue unauthenticated", rc.SessionToken)
+			rc.ApiSession = nil
+			rc.SessionToken = ""
+		}
+
+		if rc.ApiSession != nil {
+			var err error
+			rc.Identity, err = c.AppEnv.GetHandlers().Identity.Read(rc.ApiSession.IdentityId)
+			if err != nil {
+				// if boltz.IsErrNotFoundErr(err) {
+				// 	apiErr := apierror.NewUnauthorized()
+				// 	apiErr.Cause = fmt.Errorf("associated identity %s not found", rc.ApiSession.IdentityId)
+				// 	apiErr.AppendCause = true
+				// 	return apiErr
+				// } else {
+				// 	return err
+				// }
+			}
+		}
+
+		if rc.Identity != nil {
+			rc.ActivePermissions = append(rc.ActivePermissions, permissions.AuthenticatedPermission)
+
+			if rc.Identity.IsAdmin {
+				rc.ActivePermissions = append(rc.ActivePermissions, permissions.AdminPermission)
+			}
+		}
+
+		// requestContext.Responder = response.NewResponder(requestContext)
+
 		switch path {
 
 		case "/version":
 			c.handleVersion(method, path, queryParams, body)
 
 		case "/authenticate":
-			resp = c.handleAuthenticate(b)
+			resp = c.handleAuthenticate(rc, b)
 
 		case "/services":
-			resp = c.handleServices(queryParams, ztSession, b)
+			resp = c.handleServices(rc, queryParams, ztSession, b)
 
 		case "/sessions":
-			resp = c.handleSessions(queryParams, ztSession, b)
+			resp = c.handleSessions(rc, queryParams, ztSession, b)
 
 		default:
 			panic("unknown path")
@@ -825,7 +870,6 @@ func (self *WSConnection) Writer() io.Writer {
 }
 
 func (self *WSConnection) Conn() net.Conn {
-	self.logger.Debug("Conn() entered, returning TLS connection that wraps the websocket")
 	return self.tlsConn // Obtain the TLS connection that wraps the websocket
 }
 
