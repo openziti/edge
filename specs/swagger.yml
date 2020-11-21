@@ -2521,7 +2521,7 @@ paths:
     get:
       summary: List of terminators assigned to a service
       description: |
-        Retrieves a list of terminator resources that are assigned specific service; supports filtering, sorting, and pagination. Requires admin access.
+        Retrieves a list of terminator resources that are assigned specific service; supports filtering, sorting, and pagination.
       security:
         - ztSession: [ ]
       tags:
@@ -3890,6 +3890,7 @@ definitions:
     type: string
     enum:
       - Windows
+      - WindowsServer
       - Android
       - iOS
       - Linux
@@ -5856,6 +5857,25 @@ definitions:
             $ref: '#/definitions/terminatorPrecedence'
           dynamicCost:
             $ref: '#/definitions/terminatorCost'
+  terminatorDetailLimited:
+    type: object
+    allOf:
+      - $ref: '#/definitions/baseEntity'
+      - type: object
+        required:
+          - serviceId
+          - service
+          - routerId
+          - identity
+        properties:
+          serviceId:
+            type: string
+          service:
+            $ref: '#/definitions/entityRef'
+          routerId:
+            type: string
+          identity:
+            type: string
 
   terminatorCreate:
     type: object
@@ -6631,10 +6651,10 @@ definitions:
         properties:
           isRunning:
             type: boolean
-          isSigned:
-            type: boolean
           hash:
             type: string
-          signerFingerprint:
-            type: string
+          signerFingerprints:
+            type: array
+            items:
+              type: string
     x-class: "PROCESS"

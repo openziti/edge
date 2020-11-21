@@ -51,11 +51,8 @@ type PostureResponseProcessCreate struct {
 	// is running
 	IsRunning bool `json:"isRunning,omitempty"`
 
-	// is signed
-	IsSigned bool `json:"isSigned,omitempty"`
-
-	// signer fingerprint
-	SignerFingerprint string `json:"signerFingerprint,omitempty"`
+	// signer fingerprints
+	SignerFingerprints []string `json:"signerFingerprints"`
 }
 
 // ID gets the id of this subtype
@@ -87,11 +84,8 @@ func (m *PostureResponseProcessCreate) UnmarshalJSON(raw []byte) error {
 		// is running
 		IsRunning bool `json:"isRunning,omitempty"`
 
-		// is signed
-		IsSigned bool `json:"isSigned,omitempty"`
-
-		// signer fingerprint
-		SignerFingerprint string `json:"signerFingerprint,omitempty"`
+		// signer fingerprints
+		SignerFingerprints []string `json:"signerFingerprints"`
 	}
 	buf := bytes.NewBuffer(raw)
 	dec := json.NewDecoder(buf)
@@ -127,8 +121,7 @@ func (m *PostureResponseProcessCreate) UnmarshalJSON(raw []byte) error {
 
 	result.Hash = data.Hash
 	result.IsRunning = data.IsRunning
-	result.IsSigned = data.IsSigned
-	result.SignerFingerprint = data.SignerFingerprint
+	result.SignerFingerprints = data.SignerFingerprints
 
 	*m = result
 
@@ -147,20 +140,15 @@ func (m PostureResponseProcessCreate) MarshalJSON() ([]byte, error) {
 		// is running
 		IsRunning bool `json:"isRunning,omitempty"`
 
-		// is signed
-		IsSigned bool `json:"isSigned,omitempty"`
-
-		// signer fingerprint
-		SignerFingerprint string `json:"signerFingerprint,omitempty"`
+		// signer fingerprints
+		SignerFingerprints []string `json:"signerFingerprints"`
 	}{
 
 		Hash: m.Hash,
 
 		IsRunning: m.IsRunning,
 
-		IsSigned: m.IsSigned,
-
-		SignerFingerprint: m.SignerFingerprint,
+		SignerFingerprints: m.SignerFingerprints,
 	})
 	if err != nil {
 		return nil, err
