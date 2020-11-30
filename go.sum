@@ -480,6 +480,7 @@ github.com/openziti/foundation v0.14.18 h1:VTc9hDk7yGNw0J+xJWrAEbotfpB4bUnKCgDrf
 github.com/openziti/foundation v0.14.18/go.mod h1:z98OIbCyr2B57EtamNgvDVIoQXct+zVVxOif9KsOOaM=
 github.com/openziti/foundation v0.14.20 h1:VJtU+Ou81Qm753p2a2JEpNunWWSvIVt0IGPS/JA+juU=
 github.com/openziti/foundation v0.14.20/go.mod h1:66CpRUbr6d6Tb5EZZBgjuncl6/VhEPDtRqWwOm6rt/A=
+github.com/openziti/foundation v0.14.22/go.mod h1:4aHjFQGzz1TlQ31GcXeUrPH1QIUMhb4SfstAY8c2ayY=
 github.com/openziti/sdk-golang v0.14.13 h1:hGumROc5z0IF+VyfocuCa1BQJxkc1DGs7fy5U7MjZOM=
 github.com/openziti/sdk-golang v0.14.13/go.mod h1:v2Qthj66Cbm2vWWRv8HkbNnziB9EXY/VFmxc2PhoXo8=
 github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6 h1:lNCW6THrCKBiJBpz8kbVGjC7MgdCGKwuvBgc7LoD6sw=
@@ -888,6 +889,7 @@ gopkg.in/yaml.v2 v2.2.5/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 gopkg.in/yaml.v2 v2.2.8/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 gopkg.in/yaml.v2 v2.3.0 h1:clyUAQHOM3G0M3f5vQj7LuJrETvjVot3Z5el9nffUtU=
 gopkg.in/yaml.v2 v2.3.0/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
+gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gopkg.in/yaml.v3 v3.0.0-20200605160147-a5ece683394c h1:grhR+C34yXImVGp7EzNk+DTIk+323eIUWOmEevy6bDo=
 gopkg.in/yaml.v3 v3.0.0-20200605160147-a5ece683394c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
