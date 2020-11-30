@@ -57,7 +57,7 @@ type localListener struct {
 func (conn *localMessageSink) newSink(connId uint32, options *Options) *localMessageSink {
 	result := &localMessageSink{
 		MsgChannel: *edge.NewEdgeMsgChannel(conn.Channel, connId),
-		seq:        sequencer.NewSingleWriterSeq(options.MaxOutOfOrderMsgs),
+		seq:        sequencer.NewNoopSequencer(16),
 		closeCB:    conn.closeCB,
 		newSinkCB:  conn.newSinkCB,
 	}
