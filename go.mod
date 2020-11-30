@@ -27,7 +27,7 @@ require (
 	github.com/go-openapi/swag v0.19.9
 	github.com/go-openapi/validate v0.19.11
 	github.com/golang/protobuf v1.4.3
-	github.com/google/go-cmp v0.5.3
+	github.com/google/go-cmp v0.5.4
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
@@ -38,11 +38,11 @@ require (
 	github.com/mdlayher/netlink v1.1.1
 	github.com/michaelquigley/pfxlog v0.0.0-20190813191113-2be43bd0dccc
 	github.com/miekg/dns v1.1.35
-	github.com/mitchellh/mapstructure v1.3.3
+	github.com/mitchellh/mapstructure v1.4.0
 	github.com/netfoundry/secretstream v0.1.2
 	github.com/openziti/fabric v0.14.19
-	github.com/openziti/foundation v0.14.20
-	github.com/openziti/sdk-golang v0.14.13
+	github.com/openziti/foundation v0.14.21
+	github.com/openziti/sdk-golang v0.14.14
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.7.0
@@ -58,6 +58,6 @@ require (
 	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/resty.v1 v1.12.0
-	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 )
