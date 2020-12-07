@@ -34,6 +34,7 @@ import (
 	"github.com/openziti/edge/controller/internal/routes"
 	"github.com/openziti/edge/controller/model"
 	"github.com/openziti/edge/controller/response"
+	"github.com/openziti/edge/internal/version"
 	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/channel2"
@@ -290,6 +291,41 @@ func (c *WSConnection) pinger() {
 func (c *WSConnection) handleVersion(method string, path string, queryParams string, body string) {
 }
 
+func (c *WSConnection) RespondWithError(e error, statusCode int) *WSRestResponse {
+	resp := NewWSRestResponse()
+	resp.WriteHeader(statusCode)
+	// var envelope interface{}
+	producer := runtime.JSONProducer()
+	// err := producer.Produce(resp, envelope)
+	// return resp
+
+	var apiError *apierror.ApiError
+	var ok bool
+
+	if apiError, ok = e.(*apierror.ApiError); !ok {
+		apiError = apierror.NewUnhandled(e)
+	}
+
+	data := &rest_model.APIErrorEnvelope{
+		Error: apiError.ToRestModel("requestId"),
+		Meta: &rest_model.Meta{
+			APIEnrolmentVersion: version.GetApiVersion(),
+			APIVersion:          version.GetApiEnrollmentVersion(),
+		},
+	}
+
+	resp.Header().Set("content-type", "application/json")
+
+	resp.WriteHeader(apiError.Status)
+	err := producer.Produce(resp, data)
+
+	if err != nil {
+		c.logger.WithError(err).Error("could not respond with error, producer errored")
+	}
+
+	return resp
+}
+
 type ConfigTypesObj struct {
 	ConfigTypesArray []string `json:"configTypes"`
 }
@@ -325,8 +361,7 @@ func (c *WSConnection) handleAuthenticate(rc *response.RequestContext, b []byte)
 	identity, err := c.AppEnv.Handlers.Authenticator.IsAuthorized(authContext)
 
 	if err != nil {
-		// rc.RespondWithError(err)
-		// return
+		return c.RespondWithError(err, http.StatusUnauthorized)
 	}
 
 	if identity == nil {
