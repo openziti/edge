@@ -2106,6 +2106,31 @@ func init() {
         }
       ]
     },
+    "/enroll/otf": {
+      "post": {
+        "description": "Enroll an identity On-The-Fly. This enrollment method expects a PEM encoded CSR to be provided for fulfillment. \nIt is up to the enrolling identity to manage the private key backing the CSR request.\n",
+        "consumes": [
+          "application/x-pem-file"
+        ],
+        "produces": [
+          "application/x-pem-file",
+          "application/json"
+        ],
+        "tags": [
+          "Enroll"
+        ],
+        "summary": "Enroll an identity On-The-Fly",
+        "operationId": "enrollOtf",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/zitiSignedCert"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          }
+        }
+      }
+    },
     "/enroll/ott": {
       "post": {
         "description": "Enroll an identity via a one-time-token which is supplied via a query string parameter. This enrollment method\nexpects a PEM encoded CSRs to be provided for fulfillment. It is up to the enrolling identity to manage the\nprivate key backing the CSR request.\n",
@@ -2137,7 +2162,7 @@ func init() {
     },
     "/enroll/ottca": {
       "post": {
-        "description": "Enroll an identity via a one-time-token that also requires a pre-exchanged client certificate to match a\nCertificate Authority that has been added and verified (See POST /cas and POST /cas{id}/verify). The client\nmust present a client certificate signed by CA associated with the enrollment. This enrollment is similar to\nCA auto enrollment except that is required the identity to be pre-created.\n\nAs the client certificat has been pre-exchanged there is no CSR input to this enrollment method.\n",
+        "description": "Enroll an identity via a one-time-token that also requires a pre-exchanged client certificate to match a\nCertificate Authority that has been added and verified (See POST /cas and POST /cas{id}/verify). The client\nmust present a client certificate signed by CA associated with the enrollment. This enrollment is similar to\nCA auto enrollment except that is required the identity to be pre-created.\n\nAs the client certificate has been pre-exchanged there is no CSR input to this enrollment method.\n",
         "tags": [
           "Enroll"
         ],
@@ -2161,7 +2186,7 @@ func init() {
         "tags": [
           "Enroll"
         ],
-        "summary": "Enroll an identity vvia one-time-token",
+        "summary": "Enroll an identity via one-time-token",
         "operationId": "ernollUpdb",
         "responses": {
           "200": {
@@ -15335,6 +15360,60 @@ func init() {
         }
       ]
     },
+    "/enroll/otf": {
+      "post": {
+        "description": "Enroll an identity On-The-Fly. This enrollment method expects a PEM encoded CSR to be provided for fulfillment. \nIt is up to the enrolling identity to manage the private key backing the CSR request.\n",
+        "consumes": [
+          "application/x-pem-file"
+        ],
+        "produces": [
+          "application/json",
+          "application/x-pem-file"
+        ],
+        "tags": [
+          "Enroll"
+        ],
+        "summary": "Enroll an identity On-The-Fly",
+        "operationId": "enrollOtf",
+        "responses": {
+          "200": {
+            "description": "A PEM encoded certificate signed by the internal Ziti CA",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "application/x-x509-user-cert": "-----BEGIN CERTIFICATE-----\nMIICzDCCAlGgAwIBAgIRAPkVg1jVKqnNGFpSB3lPbaIwCgYIKoZIzj0EAwIwXjEL\nMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk5DMRMwEQYDVQQKDApOZXRGb3VuZHJ5MS0w\nKwYDVQQDDCROZXRGb3VuZHJ5IFppdGkgRXh0ZXJuYWwgQVBJIFJvb3QgQ0EwHhcN\nMTgxMTE1MTI1NzE3WhcNMTkxMTI1MTI1NzE3WjBrMQswCQYDVQQGEwJVUzELMAkG\nA1UECAwCTkMxEjAQBgNVBAcMCUNoYXJsb3R0ZTETMBEGA1UECgwKTmV0Rm91bmRy\neTEPMA0GA1UECwwGQWR2RGV2MRUwEwYDVQQDDAxaaXRpQ2xpZW50MDEwdjAQBgcq\nhkjOPQIBBgUrgQQAIgNiAATTl2ft+/K9RvDgki9gSr9udNcV2bxD4LrWEdCdXNzF\niVUiEcEte9z/M0JRt8lgo17OjFvS+ecrAmLtIZNmQnH3+9YeafjeNPpvQsMKxlTN\nMnU7Hka11GHc6swQZSyHvlKjgcUwgcIwCQYDVR0TBAIwADARBglghkgBhvhCAQEE\nBAMCBaAwMwYJYIZIAYb4QgENBCYWJE9wZW5TU0wgR2VuZXJhdGVkIENsaWVudCBD\nZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQUtx+Tej6lSYdjb8Jbc2QuvoEsI/swHwYDVR0j\nBBgwFoAUcdTlRrnP43ZbQ3PGAbZMPE26+H4wDgYDVR0PAQH/BAQDAgXgMB0GA1Ud\nJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDAKBggqhkjOPQQDAgNpADBmAjEAuXDS\nH7KKMr+la+Yuh8d8Q9cLtXzdS0j6a8e7iOyPJmdWq2WuzNdbCfAfLgKXuxhSAjEA\nsadZrXl1OBv11RGAKdYBIyRmfYUotCFAtCNKcfgBUxci0TDaKDA7r3jnjKT1d7Fs\n-----END CERTIFICATE-----\n"
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {
+                      "id": "71a3000f-7dda-491a-9b90-a19f4ee6c406"
+                    }
+                  },
+                  "cause": null,
+                  "causeMessage": "",
+                  "code": "NOT_FOUND",
+                  "message": "The resource requested was not found or is no longer available",
+                  "requestId": "270908d6-f2ef-4577-b973-67bec18ae376"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/enroll/ott": {
       "post": {
         "description": "Enroll an identity via a one-time-token which is supplied via a query string parameter. This enrollment method\nexpects a PEM encoded CSRs to be provided for fulfillment. It is up to the enrolling identity to manage the\nprivate key backing the CSR request.\n",
@@ -15399,7 +15478,7 @@ func init() {
     },
     "/enroll/ottca": {
       "post": {
-        "description": "Enroll an identity via a one-time-token that also requires a pre-exchanged client certificate to match a\nCertificate Authority that has been added and verified (See POST /cas and POST /cas{id}/verify). The client\nmust present a client certificate signed by CA associated with the enrollment. This enrollment is similar to\nCA auto enrollment except that is required the identity to be pre-created.\n\nAs the client certificat has been pre-exchanged there is no CSR input to this enrollment method.\n",
+        "description": "Enroll an identity via a one-time-token that also requires a pre-exchanged client certificate to match a\nCertificate Authority that has been added and verified (See POST /cas and POST /cas{id}/verify). The client\nmust present a client certificate signed by CA associated with the enrollment. This enrollment is similar to\nCA auto enrollment except that is required the identity to be pre-created.\n\nAs the client certificate has been pre-exchanged there is no CSR input to this enrollment method.\n",
         "tags": [
           "Enroll"
         ],
@@ -15430,7 +15509,7 @@ func init() {
         "tags": [
           "Enroll"
         ],
-        "summary": "Enroll an identity vvia one-time-token",
+        "summary": "Enroll an identity via one-time-token",
         "operationId": "ernollUpdb",
         "responses": {
           "200": {

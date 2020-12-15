@@ -45,10 +45,15 @@ type Enrollment struct {
 	SigningCertCaPem  []byte
 	EdgeIdentity      EnrollmentOption
 	EdgeRouter        EnrollmentOption
+	OtfIdentity       OtfEnrollmentOption
 }
 
 type EnrollmentOption struct {
 	DurationMinutes time.Duration
+}
+
+type OtfEnrollmentOption struct {
+	DurationMinutes int
 }
 
 type Api struct {
@@ -504,6 +509,23 @@ func (c *Config) loadEnrollmentSection(edgeConfigMap map[interface{}]interface{}
 
 		} else {
 			return errors.New("required configuration section [edge.enrollment.edgeRouter] missing")
+		}
+
+		c.Enrollment.OtfIdentity = OtfEnrollmentOption{DurationMinutes: 720} // default
+		if value, found := submap["otfIdentity"]; found {
+			if value != nil {
+				submap := value.(map[interface{}]interface{})
+
+				var otfIdentityDurationInt = 0
+				if value, found := submap["durationMinutes"]; found {
+					otfIdentityDurationInt = value.(int)
+				}
+
+				c.Enrollment.OtfIdentity = OtfEnrollmentOption{DurationMinutes: otfIdentityDurationInt}
+			}
+
+			// } else {
+			// c.Enrollment.OtfIdentity = OtfEnrollmentOption{DurationMinutes: 720}
 		}
 
 	} else {
