@@ -24,6 +24,7 @@ import (
 	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/edge/rest_server/operations/current_api_session"
 	"net/http"
+	"time"
 )
 
 func init() {
@@ -46,6 +47,24 @@ func (router *CurrentSessionRouter) Register(ae *env.AppEnv) {
 	ae.Api.CurrentAPISessionDeleteCurrentAPISessionHandler = current_api_session.DeleteCurrentAPISessionHandlerFunc(func(params current_api_session.DeleteCurrentAPISessionParams, i interface{}) middleware.Responder {
 		return ae.IsAllowed(router.Delete, params.HTTPRequest, "", "", permissions.IsAuthenticated())
 	})
+
+	ae.Api.CurrentAPISessionListCurrentAPISessionCertificatesHandler = current_api_session.ListCurrentAPISessionCertificatesHandlerFunc(func(params current_api_session.ListCurrentAPISessionCertificatesParams, i interface{}) middleware.Responder {
+		return ae.IsAllowed(router.ListCertificates, params.HTTPRequest, "", "", permissions.IsAuthenticated())
+	})
+
+	ae.Api.CurrentAPISessionCreateCurrentAPISessionCertificateHandler = current_api_session.CreateCurrentAPISessionCertificateHandlerFunc(func(params current_api_session.CreateCurrentAPISessionCertificateParams, i interface{}) middleware.Responder {
+		return ae.IsAllowed(func(ae *env.AppEnv, rc *response.RequestContext) {
+			router.CreateCertificate(ae, rc, params)
+		}, params.HTTPRequest, "", "", permissions.IsAuthenticated())
+	})
+
+	ae.Api.CurrentAPISessionDetailCurrentAPISessionCertificateHandler = current_api_session.DetailCurrentAPISessionCertificateHandlerFunc(func(params current_api_session.DetailCurrentAPISessionCertificateParams, i interface{}) middleware.Responder {
+		return ae.IsAllowed(router.DetailCertificate, params.HTTPRequest, params.ID, "", permissions.IsAuthenticated())
+	})
+
+	ae.Api.CurrentAPISessionDeleteCurrentAPISessionCertificateHandler = current_api_session.DeleteCurrentAPISessionCertificateHandlerFunc(func(params current_api_session.DeleteCurrentAPISessionCertificateParams, i interface{}) middleware.Responder {
+		return ae.IsAllowed(router.DeleteCertificate, params.HTTPRequest, params.ID, "", permissions.IsAuthenticated())
+	})
 }
 
 func (router *CurrentSessionRouter) Detail(ae *env.AppEnv, rc *response.RequestContext) {
@@ -57,6 +76,79 @@ func (router *CurrentSessionRouter) Delete(ae *env.AppEnv, rc *response.RequestC
 	err := ae.GetHandlers().ApiSession.Delete(rc.ApiSession.Id)
 
 	if err != nil {
+		rc.RespondWithError(err)
+		return
+	}
+
+	rc.RespondWithEmptyOk()
+}
+
+func (router *CurrentSessionRouter) ListCertificates(ae *env.AppEnv, rc *response.RequestContext) {
+	ListWithEnvelopeFactory(rc, defaultToListEnvelope, func(rc *response.RequestContext, queryOptions *QueryOptions) (*QueryResult, error) {
+		query, err := queryOptions.getFullQuery(ae.GetStores().ApiSessionCertificate)
+		if err != nil {
+			return nil, err
+		}
+
+		result, err := ae.GetHandlers().ApiSessionCertificate.BasePreparedList(query)
+		if err != nil {
+			return nil, err
+		}
+
+		apiEntities, err := modelToApi(ae, rc, MapApiSessionCertificateToRestEntity, result.GetEntities())
+		if err != nil {
+			return nil, err
+		}
+
+		return NewQueryResult(apiEntities, result.GetMetaData()), nil
+	})
+}
+
+func (router *CurrentSessionRouter) CreateCertificate(ae *env.AppEnv, rc *response.RequestContext, params current_api_session.CreateCurrentAPISessionCertificateParams) {
+	Create(rc, rc, CurrentApiSessionCertificateLinkFactory, func() (string, error) {
+		return ae.GetHandlers().ApiSessionCertificate.CreateFromCSR(rc.ApiSession.Id, 12*time.Hour, []byte(*params.Body.Csr))
+	})
+}
+
+func (router *CurrentSessionRouter) DetailCertificate(ae *env.AppEnv, rc *response.RequestContext) {
+	certId, _ := rc.GetEntityId()
+	cert, err := ae.GetHandlers().ApiSessionCertificate.Read(certId)
+
+	if err != nil {
+		rc.RespondWithError(err)
+		return
+	}
+
+	if cert.ApiSessionId != rc.ApiSession.Id {
+		rc.RespondWithNotFound()
+		return
+	}
+
+	entity, err := MapApiSessionCertificateToRestEntity(ae, rc, cert)
+
+	if err != nil {
+		rc.RespondWithError(err)
+		return
+	}
+
+	rc.RespondWithOk(entity, nil)
+}
+
+func (router *CurrentSessionRouter) DeleteCertificate(ae *env.AppEnv, rc *response.RequestContext) {
+	certId, _ := rc.GetEntityId()
+	cert, err := ae.GetHandlers().ApiSessionCertificate.Read(certId)
+
+	if err != nil {
+		rc.RespondWithError(err)
+		return
+	}
+
+	if cert.ApiSessionId != rc.ApiSession.Id {
+		rc.RespondWithNotFound()
+		return
+	}
+
+	if err := ae.GetHandlers().ApiSessionCertificate.Delete(certId); err != nil {
 		rc.RespondWithError(err)
 		return
 	}
