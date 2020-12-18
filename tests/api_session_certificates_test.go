@@ -71,6 +71,13 @@ func Test_Api_Session_Certs(t *testing.T) {
 			ctx.Req.True(ok)
 			ctx.Req.NotEmpty(createdId)
 
+			certificate := createdResponseBody.Path("data.certificate").Data().(string)
+			ctx.Req.NotEmpty(certificate)
+
+			x509Cert, err := certtools.LoadCert([]byte(certificate))
+			ctx.Req.NotEmpty(x509Cert)
+			ctx.Req.NoError(err)
+
 		})
 
 		t.Run("can be listed", func(t *testing.T) {
@@ -107,6 +114,13 @@ func Test_Api_Session_Certs(t *testing.T) {
 
 				validTo := children[0].Path("validTo").Data().(string)
 				ctx.Req.NotEmpty(validTo)
+
+				certificate := children[0].Path("certificate").Data().(string)
+				ctx.Req.NotEmpty(certificate)
+
+				x509Cert, err := certtools.LoadCert([]byte(certificate))
+				ctx.Req.NotEmpty(x509Cert)
+				ctx.Req.NoError(err)
 			})
 		})
 
@@ -117,7 +131,7 @@ func Test_Api_Session_Certs(t *testing.T) {
 			ctx.Req.NoError(err)
 
 			ctx.Req.Equal(http.StatusOK, resp.StatusCode())
-			
+
 			t.Run("contains proper values", func(t *testing.T) {
 				ctx.testContextChanged(t)
 
@@ -139,6 +153,13 @@ func Test_Api_Session_Certs(t *testing.T) {
 
 				validTo := data.Path("validTo").Data().(string)
 				ctx.Req.NotEmpty(validTo)
+
+				certificate := data.Path("certificate").Data().(string)
+				ctx.Req.NotEmpty(certificate)
+
+				x509Cert, err := certtools.LoadCert([]byte(certificate))
+				ctx.Req.NotEmpty(x509Cert)
+				ctx.Req.NoError(err)
 			})
 		})
 

@@ -43,7 +43,7 @@ type CreateCurrentAPISessionCertificateEnvelope struct {
 
 	// data
 	// Required: true
-	Data *CurrentAPISessionCertificateCreate `json:"data"`
+	Data *CurrentAPISessionCertificateCreateResponse `json:"data"`
 
 	// meta
 	// Required: true

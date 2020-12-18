@@ -105,7 +105,8 @@ func (router *CurrentSessionRouter) ListCertificates(ae *env.AppEnv, rc *respons
 }
 
 func (router *CurrentSessionRouter) CreateCertificate(ae *env.AppEnv, rc *response.RequestContext, params current_api_session.CreateCurrentAPISessionCertificateParams) {
-	Create(rc, rc, CurrentApiSessionCertificateLinkFactory, func() (string, error) {
+	responder := &ApiSessionCertificateCreateResponder{ae: ae, Responder: rc}
+	CreateWithResponder(rc, responder, CurrentApiSessionCertificateLinkFactory, func() (string, error) {
 		return ae.GetHandlers().ApiSessionCertificate.CreateFromCSR(rc.ApiSession.Id, 12*time.Hour, []byte(*params.Body.Csr))
 	})
 }
@@ -154,4 +155,26 @@ func (router *CurrentSessionRouter) DeleteCertificate(ae *env.AppEnv, rc *respon
 	}
 
 	rc.RespondWithEmptyOk()
+}
+
+type ApiSessionCertificateCreateResponder struct {
+	response.Responder
+	ae *env.AppEnv
+}
+
+func (nsr *ApiSessionCertificateCreateResponder) RespondWithCreatedId(id string, link rest_model.Link) {
+	sessionCert, _ := nsr.ae.GetHandlers().ApiSessionCertificate.Read(id)
+	certString := string(sessionCert.PEM)
+	newSessionEnvelope := &rest_model.CreateCurrentAPISessionCertificateEnvelope{
+		Data: &rest_model.CurrentAPISessionCertificateCreateResponse{
+			CreateLocation: rest_model.CreateLocation{
+				Links: CurrentApiSessionCertificateLinkFactory.Links(sessionCert),
+				ID:    sessionCert.Id,
+			},
+			Certificate: &certString,
+		},
+		Meta: &rest_model.Meta{},
+	}
+
+	nsr.Respond(newSessionEnvelope, http.StatusCreated)
 }

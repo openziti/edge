@@ -94,17 +94,18 @@ func MapApiSessionCertificateToRestEntity(appEnv *env.AppEnv, context *response.
 	return al, nil
 }
 
-func MapApiSessionCertificateToRestModel(i *model.ApiSessionCertificate) (*rest_model.CurrentAPISessionCertificateDetail, error) {
+func MapApiSessionCertificateToRestModel(apiSessionCert *model.ApiSessionCertificate) (*rest_model.CurrentAPISessionCertificateDetail, error) {
 
-	validFrom := strfmt.DateTime(*i.ValidAfter)
-	validTo := strfmt.DateTime(*i.ValidBefore)
+	validFrom := strfmt.DateTime(*apiSessionCert.ValidAfter)
+	validTo := strfmt.DateTime(*apiSessionCert.ValidBefore)
 
 	ret := &rest_model.CurrentAPISessionCertificateDetail{
-		BaseEntity:  BaseEntityToRestModel(i, CurrentApiSessionCertificateLinkFactory),
-		Fingerprint: &i.Fingerprint,
-		Subject:     &i.Subject,
+		BaseEntity:  BaseEntityToRestModel(apiSessionCert, CurrentApiSessionCertificateLinkFactory),
+		Fingerprint: &apiSessionCert.Fingerprint,
+		Subject:     &apiSessionCert.Subject,
 		ValidFrom:   &validFrom,
 		ValidTo:     &validTo,
+		Certificate: &apiSessionCert.PEM,
 	}
 
 	return ret, nil

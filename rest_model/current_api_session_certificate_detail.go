@@ -42,6 +42,10 @@ import (
 type CurrentAPISessionCertificateDetail struct {
 	BaseEntity
 
+	// certificate
+	// Required: true
+	Certificate *string `json:"certificate"`
+
 	// fingerprint
 	// Required: true
 	Fingerprint *string `json:"fingerprint"`
@@ -72,6 +76,8 @@ func (m *CurrentAPISessionCertificateDetail) UnmarshalJSON(raw []byte) error {
 
 	// AO1
 	var dataAO1 struct {
+		Certificate *string `json:"certificate"`
+
 		Fingerprint *string `json:"fingerprint"`
 
 		Subject *string `json:"subject"`
@@ -83,6 +89,8 @@ func (m *CurrentAPISessionCertificateDetail) UnmarshalJSON(raw []byte) error {
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
 	}
+
+	m.Certificate = dataAO1.Certificate
 
 	m.Fingerprint = dataAO1.Fingerprint
 
@@ -105,6 +113,8 @@ func (m CurrentAPISessionCertificateDetail) MarshalJSON() ([]byte, error) {
 	}
 	_parts = append(_parts, aO0)
 	var dataAO1 struct {
+		Certificate *string `json:"certificate"`
+
 		Fingerprint *string `json:"fingerprint"`
 
 		Subject *string `json:"subject"`
@@ -113,6 +123,8 @@ func (m CurrentAPISessionCertificateDetail) MarshalJSON() ([]byte, error) {
 
 		ValidTo *strfmt.DateTime `json:"validTo"`
 	}
+
+	dataAO1.Certificate = m.Certificate
 
 	dataAO1.Fingerprint = m.Fingerprint
 
@@ -139,6 +151,10 @@ func (m *CurrentAPISessionCertificateDetail) Validate(formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.validateCertificate(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateFingerprint(formats); err != nil {
 		res = append(res, err)
 	}
@@ -158,6 +174,15 @@ func (m *CurrentAPISessionCertificateDetail) Validate(formats strfmt.Registry) e
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CurrentAPISessionCertificateDetail) validateCertificate(formats strfmt.Registry) error {
+
+	if err := validate.Required("certificate", "body", m.Certificate); err != nil {
+		return err
+	}
+
 	return nil
 }
 
