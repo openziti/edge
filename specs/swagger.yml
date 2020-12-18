@@ -5579,7 +5579,7 @@ definitions:
       meta:
         $ref: '#/definitions/meta'
       data:
-        $ref: '#/definitions/currentApiSessionCertificateCreate'
+        $ref: '#/definitions/currentApiSessionCertificateCreateResponse'
   detailCurrentApiSessionCertificateEnvelope:
     required:
       - meta
@@ -6840,6 +6840,7 @@ definitions:
           - fingerprint
           - validFrom
           - validTo
+          - certificate
         properties:
           subject:
             type: string
@@ -6851,6 +6852,8 @@ definitions:
           validTo:
             type: string
             format: date-time
+          certificate:
+            type: string
   currentApiSessionCertificateCreate:
     type: object
     required:
@@ -6858,3 +6861,12 @@ definitions:
     properties:
       csr:
         type: string
+  currentApiSessionCertificateCreateResponse:
+    allOf:
+      - $ref: '#/definitions/createLocation'
+      - type: object
+        required:
+          - certificate
+        properties:
+          certificate:
+            type: string

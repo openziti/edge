@@ -6443,7 +6443,7 @@ func init() {
       ],
       "properties": {
         "data": {
-          "$ref": "#/definitions/currentApiSessionCertificateCreate"
+          "$ref": "#/definitions/currentApiSessionCertificateCreateResponse"
         },
         "meta": {
           "$ref": "#/definitions/meta"
@@ -6498,6 +6498,24 @@ func init() {
         }
       }
     },
+    "currentApiSessionCertificateCreateResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/createLocation"
+        },
+        {
+          "type": "object",
+          "required": [
+            "certificate"
+          ],
+          "properties": {
+            "certificate": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "currentApiSessionCertificateDetail": {
       "type": "object",
       "allOf": [
@@ -6510,9 +6528,13 @@ func init() {
             "subject",
             "fingerprint",
             "validFrom",
-            "validTo"
+            "validTo",
+            "certificate"
           ],
           "properties": {
+            "certificate": {
+              "type": "string"
+            },
             "fingerprint": {
               "type": "string"
             },
@@ -24666,7 +24688,7 @@ func init() {
       ],
       "properties": {
         "data": {
-          "$ref": "#/definitions/currentApiSessionCertificateCreate"
+          "$ref": "#/definitions/currentApiSessionCertificateCreateResponse"
         },
         "meta": {
           "$ref": "#/definitions/meta"
@@ -24721,6 +24743,24 @@ func init() {
         }
       }
     },
+    "currentApiSessionCertificateCreateResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/createLocation"
+        },
+        {
+          "type": "object",
+          "required": [
+            "certificate"
+          ],
+          "properties": {
+            "certificate": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "currentApiSessionCertificateDetail": {
       "type": "object",
       "allOf": [
@@ -24733,9 +24773,13 @@ func init() {
             "subject",
             "fingerprint",
             "validFrom",
-            "validTo"
+            "validTo",
+            "certificate"
           ],
           "properties": {
+            "certificate": {
+              "type": "string"
+            },
             "fingerprint": {
               "type": "string"
             },
