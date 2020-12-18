@@ -884,7 +884,7 @@ paths:
       security:
         - ztSession: [ ]
       tags:
-        - CurrentAPI Session
+        - Current API Session
       responses:
         200:
           $ref: '#/responses/emptyResponse'
