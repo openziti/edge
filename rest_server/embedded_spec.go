@@ -1154,7 +1154,7 @@ func init() {
         ],
         "description": "Terminates the current API session",
         "tags": [
-          "CurrentAPI Session"
+          "Current API Session"
         ],
         "summary": "Logout",
         "responses": {
@@ -13044,7 +13044,7 @@ func init() {
         ],
         "description": "Terminates the current API session",
         "tags": [
-          "CurrentAPI Session"
+          "Current API Session"
         ],
         "summary": "Logout",
         "responses": {
