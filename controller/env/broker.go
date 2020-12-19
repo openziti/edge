@@ -302,6 +302,7 @@ func (b *Broker) sendApiSessionCreates(apiSession *persistence.ApiSession) {
 	apiSessionMsg.ApiSessions = append(apiSessionMsg.ApiSessions, &edge_ctrl_pb.ApiSession{
 		Token:            apiSession.Token,
 		CertFingerprints: fingerprints,
+		Id:               apiSession.Id,
 	})
 
 	byteMsg, err := proto.Marshal(apiSessionMsg)
@@ -349,6 +350,7 @@ func (b *Broker) sendApiSessionUpdates(apiSession *persistence.ApiSession) {
 	apiSessionMsg.ApiSessions = append(apiSessionMsg.ApiSessions, &edge_ctrl_pb.ApiSession{
 		Token:            apiSession.Token,
 		CertFingerprints: fingerprints,
+		Id:               apiSession.Id,
 	})
 
 	byteMsg, err := proto.Marshal(apiSessionMsg)
@@ -493,6 +495,7 @@ func (b *Broker) sendSessionCreates(session *persistence.Session) {
 		Service:          svc,
 		CertFingerprints: fps,
 		Type:             sessionType,
+		ApiSessionId:     session.ApiSessionId,
 	})
 
 	if buf, err := proto.Marshal(sessionAdded); err == nil {
@@ -665,6 +668,7 @@ func (b *Broker) modelApiSessionToProto(token, identityId, apiSessionId string) 
 	return &edge_ctrl_pb.ApiSession{
 		Token:            token,
 		CertFingerprints: fingerprints,
+		Id:               apiSessionId,
 	}, nil
 }
 
@@ -697,6 +701,7 @@ func (b *Broker) modelSessionToProto(ns *model.Session) (*edge_ctrl_pb.Session, 
 		Service:          svc,
 		CertFingerprints: fps,
 		Type:             sessionType,
+		ApiSessionId:     ns.ApiSessionId,
 	}, nil
 }
 
@@ -785,7 +790,7 @@ func (b *Broker) RouterDisconnected(r *network.Router) {
 	}()
 }
 
-func (b *Broker) apiSessionCertificateEventHandler(args ...interface{}){
+func (b *Broker) apiSessionCertificateEventHandler(args ...interface{}) {
 	var apiSessionCert *persistence.ApiSessionCertificate
 	if len(args) == 1 {
 		apiSessionCert, _ = args[0].(*persistence.ApiSessionCertificate)
