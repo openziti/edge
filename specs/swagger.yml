@@ -6850,3 +6850,5 @@ definitions:
         properties:
           certificate:
             type: string
+          cas:
+            type: string

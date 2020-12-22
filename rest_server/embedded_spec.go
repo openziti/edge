@@ -6484,6 +6484,9 @@ func init() {
             "certificate"
           ],
           "properties": {
+            "cas": {
+              "type": "string"
+            },
             "certificate": {
               "type": "string"
             }
@@ -24675,6 +24678,9 @@ func init() {
             "certificate"
           ],
           "properties": {
+            "cas": {
+              "type": "string"
+            },
             "certificate": {
               "type": "string"
             }

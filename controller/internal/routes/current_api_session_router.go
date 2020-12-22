@@ -165,6 +165,7 @@ type ApiSessionCertificateCreateResponder struct {
 func (nsr *ApiSessionCertificateCreateResponder) RespondWithCreatedId(id string, link rest_model.Link) {
 	sessionCert, _ := nsr.ae.GetHandlers().ApiSessionCertificate.Read(id)
 	certString := string(sessionCert.PEM)
+
 	newSessionEnvelope := &rest_model.CreateCurrentAPISessionCertificateEnvelope{
 		Data: &rest_model.CurrentAPISessionCertificateCreateResponse{
 			CreateLocation: rest_model.CreateLocation{
@@ -172,6 +173,7 @@ func (nsr *ApiSessionCertificateCreateResponder) RespondWithCreatedId(id string,
 				ID:    sessionCert.Id,
 			},
 			Certificate: &certString,
+			Cas:         string(nsr.ae.Config.CaPems()),
 		},
 		Meta: &rest_model.Meta{},
 	}
