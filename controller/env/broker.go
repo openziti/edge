@@ -470,7 +470,7 @@ func (b *Broker) sendSessionCreates(session *persistence.Session) {
 		return
 	}
 
-	fps, err := b.getActiveFingerprints(session.Id)
+	fps, err := b.getFingerprintsByApiSessionId(session.ApiSessionId)
 
 	if err != nil {
 		pfxlog.Logger().Errorf("could not obtain a fingerprint for the api session [%s] and session [%s]", session.ApiSessionId, session.Id)
@@ -596,31 +596,14 @@ func (b *Broker) streamSessions(edgeRouterId string, chunkSize int, callback fun
 	})
 }
 
-func (b *Broker) getActiveFingerprints(sessionId string) ([]string, error) {
-	certs, err := b.ae.Handlers.Session.ReadSessionCerts(sessionId)
-	if err != nil {
-		return nil, err
-	}
-	var ret []string
-
-	now := time.Now()
-	for _, c := range certs {
-		if (now.Equal(c.ValidFrom) || now.After(c.ValidFrom)) && now.Before(c.ValidTo) {
-			ret = append(ret, c.Fingerprint)
-		}
-	}
-
-	return ret, nil
-}
-
 func (b *Broker) getFingerprints(identityId, apiSessionId string) ([]string, error) {
-	identityPrints, err := b.getIdentityFingerprints(identityId)
+	identityPrints, err := b.getIdentityAuthenticatorFingerprints(identityId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	apiSessionPrints, err := b.getApiSessionFingerprints(apiSessionId)
+	apiSessionPrints, err := b.getApiSessionCertificateFingerprints(apiSessionId)
 
 	if err != nil {
 		return nil, err
@@ -633,7 +616,17 @@ func (b *Broker) getFingerprints(identityId, apiSessionId string) ([]string, err
 	return identityPrints, nil
 }
 
-func (b *Broker) getIdentityFingerprints(identityId string) ([]string, error) {
+func (b *Broker) getFingerprintsByApiSessionId(apiSessionId string) ([]string, error) {
+	apiSession, err := b.ae.GetHandlers().ApiSession.Read(apiSessionId)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not query fingerprints by api session id [%s]: %s", apiSessionId, err)
+	}
+
+	return b.getFingerprints(apiSession.IdentityId, apiSessionId)
+}
+
+func (b *Broker) getIdentityAuthenticatorFingerprints(identityId string) ([]string, error) {
 	fingerprintsMap := map[string]struct{}{}
 
 	err := b.ae.Handlers.Identity.CollectAuthenticators(identityId, func(authenticator *model.Authenticator) error {
@@ -655,8 +648,24 @@ func (b *Broker) getIdentityFingerprints(identityId string) ([]string, error) {
 	return fingerprints, nil
 }
 
-func (b *Broker) getApiSessionFingerprints(apiSessionId string) ([]string, error) {
-	return b.ae.GetHandlers().ApiSessionCertificate.ReadFingerprintsByApiSessionId(apiSessionId)
+func (b *Broker) getApiSessionCertificateFingerprints(apiSessionId string) ([]string, error) {
+	apiSessionCerts, err := b.ae.GetHandlers().ApiSessionCertificate.ReadByApiSessionId(apiSessionId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var validPrints []string
+
+	now := time.Now()
+	for _, apiSessionCert := range apiSessionCerts {
+		if apiSessionCert.ValidAfter != nil && now.After(*apiSessionCert.ValidAfter) &&
+			apiSessionCert.ValidBefore != nil && now.Before(*apiSessionCert.ValidBefore) {
+			validPrints = append(validPrints, apiSessionCert.Fingerprint)
+		}
+	}
+
+	return validPrints, nil
 }
 
 func (b *Broker) modelApiSessionToProto(token, identityId, apiSessionId string) (*edge_ctrl_pb.ApiSession, error) {
@@ -678,7 +687,7 @@ func (b *Broker) modelSessionToProto(ns *model.Session) (*edge_ctrl_pb.Session, 
 		return nil, fmt.Errorf("could not convert to session proto, could not find service: %s", err)
 	}
 
-	fps, err := b.getActiveFingerprints(ns.Id)
+	fps, err := b.getFingerprintsByApiSessionId(ns.ApiSessionId)
 
 	if err != nil {
 		return nil, fmt.Errorf("could not get fingerprints for network session: %s", err)

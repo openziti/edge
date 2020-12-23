@@ -42,6 +42,9 @@ import (
 type CurrentAPISessionCertificateCreateResponse struct {
 	CreateLocation
 
+	// cas
+	Cas string `json:"cas,omitempty"`
+
 	// certificate
 	// Required: true
 	Certificate *string `json:"certificate"`
@@ -58,11 +61,15 @@ func (m *CurrentAPISessionCertificateCreateResponse) UnmarshalJSON(raw []byte) e
 
 	// AO1
 	var dataAO1 struct {
+		Cas string `json:"cas,omitempty"`
+
 		Certificate *string `json:"certificate"`
 	}
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
 	}
+
+	m.Cas = dataAO1.Cas
 
 	m.Certificate = dataAO1.Certificate
 
@@ -79,8 +86,12 @@ func (m CurrentAPISessionCertificateCreateResponse) MarshalJSON() ([]byte, error
 	}
 	_parts = append(_parts, aO0)
 	var dataAO1 struct {
+		Cas string `json:"cas,omitempty"`
+
 		Certificate *string `json:"certificate"`
 	}
+
+	dataAO1.Cas = m.Cas
 
 	dataAO1.Certificate = m.Certificate
 

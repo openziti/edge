@@ -128,20 +128,14 @@ func (handler *ApiSessionCertificateHandler) Query(query string) (*ApiSessionCer
 	return result, nil
 }
 
-func (handler *ApiSessionCertificateHandler) ReadFingerprintsByApiSessionId(apiSessionId string) ([]string, error) {
-	fingerprints := []string{}
-
+func (handler *ApiSessionCertificateHandler) ReadByApiSessionId(apiSessionId string) ([]*ApiSessionCertificate, error) {
 	result, err := handler.Query(fmt.Sprintf(`apiSession = "%s"`, apiSessionId))
 
 	if err != nil {
 		return nil, err
 	}
 
-	for _, cert := range result.ApiSessionCertificates {
-		fingerprints = append(fingerprints, cert.Fingerprint)
-	}
-
-	return fingerprints, nil
+	return result.ApiSessionCertificates, nil
 }
 
 type ApiSessionCertificateListResult struct {

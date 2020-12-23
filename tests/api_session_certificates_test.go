@@ -205,3 +205,4 @@ func generateCsr() ([]byte, crypto.PrivateKey, error) {
 
 	return csr, privateKey, nil
 }
+
