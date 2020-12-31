@@ -27,7 +27,7 @@ require (
 	github.com/go-openapi/validate v0.19.11
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.4
-	github.com/google/uuid v1.1.2
+	github.com/google/uuid v1.1.3
 	github.com/gorilla/handlers v1.5.1
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/kataras/go-events v0.0.3-0.20201007151548-c411dc70c0a6
