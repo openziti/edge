@@ -2,9 +2,11 @@ module github.com/openziti/edge
 
 go 1.15
 
-// replace github.com/openziti/foundation => ../foundation
+replace github.com/openziti/dilithium => ../dilithium
 
-// replace github.com/openziti/fabric => ../fabric
+replace github.com/openziti/foundation => ../foundation
+
+replace github.com/openziti/fabric => ../fabric
 
 // replace github.com/openziti/sdk-golang => ../sdk-golang
 
@@ -27,18 +29,18 @@ require (
 	github.com/go-openapi/validate v0.19.11
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.4
-	github.com/google/uuid v1.1.2
+	github.com/google/uuid v1.1.4
 	github.com/gorilla/handlers v1.5.1
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/kataras/go-events v0.0.3-0.20201007151548-c411dc70c0a6
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mdlayher/netlink v1.1.1
-	github.com/michaelquigley/pfxlog v0.0.0-20190813191113-2be43bd0dccc
+	github.com/michaelquigley/pfxlog v0.3.1
 	github.com/miekg/dns v1.1.35
 	github.com/mitchellh/mapstructure v1.4.0
 	github.com/netfoundry/secretstream v0.1.2
 	github.com/openziti/fabric v0.15.5
-	github.com/openziti/foundation v0.14.24
+	github.com/openziti/foundation v0.14.25
 	github.com/openziti/sdk-golang v0.15.2
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
 	github.com/pkg/errors v0.9.1
@@ -49,7 +51,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	go.etcd.io/bbolt v1.3.5-0.20200615073812-232d8fc87f50
 	go.mongodb.org/mongo-driver v1.4.2 // indirect
-	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899
+	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 	golang.org/x/net v0.0.0-20201010224723-4f7140c49acb
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
 	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634
