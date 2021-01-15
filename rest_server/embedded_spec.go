@@ -1288,6 +1288,30 @@ func init() {
         }
       ]
     },
+    "/current-api-session/service-updates": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves data indicating the last time data relevant to this API Session was altered that would necessitate\nservice refreshes.\n",
+        "tags": [
+          "Current API Session",
+          "Services"
+        ],
+        "summary": "Returns data indicating whether a client should updates it service list",
+        "operationId": "listServiceUpdates",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listCurrentApiSessionServiceUpdates"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
+      }
+    },
     "/current-identity": {
       "get": {
         "security": [
@@ -5085,6 +5109,18 @@ func init() {
     }
   },
   "definitions": {
+    "CurrentApiSessionServiceUpdateList": {
+      "type": "object",
+      "required": [
+        "lastChangeAt"
+      ],
+      "properties": {
+        "lastChangeAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "PostureCheckCreate": {
       "type": "object",
       "required": [
@@ -6547,9 +6583,13 @@ func init() {
         {
           "type": "object",
           "required": [
-            "expiresAt"
+            "expiresAt",
+            "expirationSeconds"
           ],
           "properties": {
+            "expirationSeconds": {
+              "type": "integer"
+            },
             "expiresAt": {
               "type": "string",
               "format": "date-time"
@@ -7473,6 +7513,12 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "enrollment": {
           "type": "object",
           "properties": {
@@ -7530,6 +7576,12 @@ func init() {
           "properties": {
             "authenticators": {
               "$ref": "#/definitions/identityAuthenticators"
+            },
+            "defaultHostingCost": {
+              "$ref": "#/definitions/terminatorCost"
+            },
+            "defaultHostingPrecedence": {
+              "$ref": "#/definitions/terminatorPrecedence"
             },
             "enrollment": {
               "$ref": "#/definitions/identityEnrollments"
@@ -7634,6 +7686,12 @@ func init() {
     "identityPatch": {
       "type": "object",
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "isAdmin": {
           "type": "boolean"
         },
@@ -7689,6 +7747,12 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "isAdmin": {
           "type": "boolean"
         },
@@ -7811,6 +7875,21 @@ func init() {
       "properties": {
         "data": {
           "$ref": "#/definitions/currentApiSessionCertificateList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
+    "listCurrentApiSessionServiceUpdatesEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/CurrentApiSessionServiceUpdateList"
         },
         "meta": {
           "$ref": "#/definitions/meta"
@@ -9881,6 +9960,12 @@ func init() {
       "description": "A list of the current API Session's certificate",
       "schema": {
         "$ref": "#/definitions/listCurrentAPISessionCertificatesEnvelope"
+      }
+    },
+    "listCurrentApiSessionServiceUpdates": {
+      "description": "Data indicating necessary service updates",
+      "schema": {
+        "$ref": "#/definitions/listCurrentApiSessionServiceUpdatesEnvelope"
       }
     },
     "listEdgeRouterPolicies": {
@@ -13377,6 +13462,54 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/current-api-session/service-updates": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves data indicating the last time data relevant to this API Session was altered that would necessitate\nservice refreshes.\n",
+        "tags": [
+          "Current API Session",
+          "Services"
+        ],
+        "summary": "Returns data indicating whether a client should updates it service list",
+        "operationId": "listServiceUpdates",
+        "responses": {
+          "200": {
+            "description": "Data indicating necessary service updates",
+            "schema": {
+              "$ref": "#/definitions/listCurrentApiSessionServiceUpdatesEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/current-identity": {
       "get": {
@@ -23198,6 +23331,18 @@ func init() {
     }
   },
   "definitions": {
+    "CurrentApiSessionServiceUpdateList": {
+      "type": "object",
+      "required": [
+        "lastChangeAt"
+      ],
+      "properties": {
+        "lastChangeAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "IdentityAuthenticatorsCert": {
       "type": "object",
       "properties": {
@@ -24741,9 +24886,13 @@ func init() {
         {
           "type": "object",
           "required": [
-            "expiresAt"
+            "expiresAt",
+            "expirationSeconds"
           ],
           "properties": {
+            "expirationSeconds": {
+              "type": "integer"
+            },
             "expiresAt": {
               "type": "string",
               "format": "date-time"
@@ -25667,6 +25816,12 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "enrollment": {
           "type": "object",
           "properties": {
@@ -25724,6 +25879,12 @@ func init() {
           "properties": {
             "authenticators": {
               "$ref": "#/definitions/identityAuthenticators"
+            },
+            "defaultHostingCost": {
+              "$ref": "#/definitions/terminatorCost"
+            },
+            "defaultHostingPrecedence": {
+              "$ref": "#/definitions/terminatorPrecedence"
             },
             "enrollment": {
               "$ref": "#/definitions/identityEnrollments"
@@ -25828,6 +25989,12 @@ func init() {
     "identityPatch": {
       "type": "object",
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "isAdmin": {
           "type": "boolean"
         },
@@ -25883,6 +26050,12 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "isAdmin": {
           "type": "boolean"
         },
@@ -26005,6 +26178,21 @@ func init() {
       "properties": {
         "data": {
           "$ref": "#/definitions/currentApiSessionCertificateList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
+    "listCurrentApiSessionServiceUpdatesEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/CurrentApiSessionServiceUpdateList"
         },
         "meta": {
           "$ref": "#/definitions/meta"
@@ -28076,6 +28264,12 @@ func init() {
       "description": "A list of the current API Session's certificate",
       "schema": {
         "$ref": "#/definitions/listCurrentAPISessionCertificatesEnvelope"
+      }
+    },
+    "listCurrentApiSessionServiceUpdates": {
+      "description": "Data indicating necessary service updates",
+      "schema": {
+        "$ref": "#/definitions/listCurrentApiSessionServiceUpdatesEnvelope"
       }
     },
     "listEdgeRouterPolicies": {

@@ -964,6 +964,26 @@ paths:
           $ref: '#/responses/badRequestResponse'
         '401':
           $ref: '#/responses/unauthorizedResponse'
+  ###################################################################
+  # Current API Session - Service Updates
+  #################################################################
+  '/current-api-session/service-updates':
+    get:
+      summary: Returns data indicating whether a client should updates it service list
+      description: |
+        Retrieves data indicating the last time data relevant to this API Session was altered that would necessitate
+        service refreshes.
+      security:
+        - ztSession: [ ]
+      tags:
+        - Current API Session
+        - Services
+      operationId: listServiceUpdates
+      responses:
+        '200':
+          $ref: '#/responses/listCurrentApiSessionServiceUpdates'
+        '401':
+          $ref: '#/responses/unauthorizedResponse'
   '/current-identity':
     get:
       summary: Return the current identity
@@ -3859,7 +3879,13 @@ responses:
     description: Retrieves a singular posture check by id
     schema:
       $ref: '#/definitions/detailPostureCheckEnvelope'
-
+  ###################################################################
+  # List Service Updates
+  ##################################################################
+  listCurrentApiSessionServiceUpdates:
+    description: Data indicating necessary service updates
+    schema:
+      $ref: '#/definitions/listCurrentApiSessionServiceUpdatesEnvelope'
 
 #######################################################################################################################
 #
@@ -4110,10 +4136,13 @@ definitions:
       - type: object
         required:
           - expiresAt
+          - expirationSeconds
         properties:
           expiresAt:
             type: string
             format: date-time
+          expirationSeconds:
+            type: integer
   ###################################################################
   # Identities
   ##################################################################
@@ -4150,6 +4179,10 @@ definitions:
         $ref: '#/definitions/attributes'
       tags:
         $ref: '#/definitions/tags'
+      defaultHostingPrecedence:
+        $ref: '#/definitions/terminatorPrecedence'
+      defaultHostingCost:
+        $ref: '#/definitions/terminatorCost'
   identityUpdate:
     type: object
     required:
@@ -4167,6 +4200,10 @@ definitions:
         $ref: '#/definitions/attributes'
       tags:
         $ref: '#/definitions/tags'
+      defaultHostingPrecedence:
+        $ref: '#/definitions/terminatorPrecedence'
+      defaultHostingCost:
+        $ref: '#/definitions/terminatorCost'
   identityPatch:
     type: object
     properties:
@@ -4180,6 +4217,10 @@ definitions:
         $ref: '#/definitions/attributes'
       tags:
         $ref: '#/definitions/tags'
+      defaultHostingPrecedence:
+        $ref: '#/definitions/terminatorPrecedence'
+      defaultHostingCost:
+        $ref: '#/definitions/terminatorCost'
   identityList:
     description: A list of identities
     type: array
@@ -4229,6 +4270,10 @@ definitions:
             type: boolean
           hasApiSession:
             type: boolean
+          defaultHostingPrecedence:
+            $ref: '#/definitions/terminatorPrecedence'
+          defaultHostingCost:
+            $ref: '#/definitions/terminatorCost'
   identityAuthenticators:
     type: object
     properties:
@@ -6852,3 +6897,24 @@ definitions:
             type: string
           cas:
             type: string
+  ###################################################################
+  # Current API Session: Service Updates
+  ##################################################################
+  listCurrentApiSessionServiceUpdatesEnvelope:
+    type: object
+    required:
+      - meta
+      - data
+    properties:
+      meta:
+        $ref: '#/definitions/meta'
+      data:
+        $ref: '#/definitions/CurrentApiSessionServiceUpdateList'
+  CurrentApiSessionServiceUpdateList:
+    type: object
+    required:
+      - lastChangeAt
+    properties:
+      lastChangeAt:
+        type: string
+        format: 'date-time'
