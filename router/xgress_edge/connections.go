@@ -53,7 +53,14 @@ func (handler *sessionConnectionHandler) BindChannel(ch channel2.Channel) error 
 
 		if apiSession == nil {
 			_ = ch.Close()
-			return fmt.Errorf("no api session found for token [%s]", token)
+
+			subjects := []string{}
+
+			for _, cert := range certificates {
+				subjects = append(subjects, cert.Subject.String())
+			}
+
+			return fmt.Errorf("no api session found for token [%s], fingerprints: [%v], subjects [%v]", token, fingerprints, subjects)
 		}
 
 		for _, fingerprint := range apiSession.CertFingerprints {

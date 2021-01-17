@@ -473,6 +473,9 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		ServiceListServiceTerminatorsHandler: service.ListServiceTerminatorsHandlerFunc(func(params service.ListServiceTerminatorsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation service.ListServiceTerminators has not yet been implemented")
 		}),
+		CurrentAPISessionListServiceUpdatesHandler: current_api_session.ListServiceUpdatesHandlerFunc(func(params current_api_session.ListServiceUpdatesParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation current_api_session.ListServiceUpdates has not yet been implemented")
+		}),
 		ServiceListServicesHandler: service.ListServicesHandlerFunc(func(params service.ListServicesParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation service.ListServices has not yet been implemented")
 		}),
@@ -896,6 +899,8 @@ type ZitiEdgeAPI struct {
 	ServiceListServiceServicePoliciesHandler service.ListServiceServicePoliciesHandler
 	// ServiceListServiceTerminatorsHandler sets the operation handler for the list service terminators operation
 	ServiceListServiceTerminatorsHandler service.ListServiceTerminatorsHandler
+	// CurrentAPISessionListServiceUpdatesHandler sets the operation handler for the list service updates operation
+	CurrentAPISessionListServiceUpdatesHandler current_api_session.ListServiceUpdatesHandler
 	// ServiceListServicesHandler sets the operation handler for the list services operation
 	ServiceListServicesHandler service.ListServicesHandler
 	// SessionListSessionsHandler sets the operation handler for the list sessions operation
@@ -1433,6 +1438,9 @@ func (o *ZitiEdgeAPI) Validate() error {
 	}
 	if o.ServiceListServiceTerminatorsHandler == nil {
 		unregistered = append(unregistered, "service.ListServiceTerminatorsHandler")
+	}
+	if o.CurrentAPISessionListServiceUpdatesHandler == nil {
+		unregistered = append(unregistered, "current_api_session.ListServiceUpdatesHandler")
 	}
 	if o.ServiceListServicesHandler == nil {
 		unregistered = append(unregistered, "service.ListServicesHandler")
@@ -2138,6 +2146,10 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/services/{id}/terminators"] = service.NewListServiceTerminators(o.context, o.ServiceListServiceTerminatorsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/current-api-session/service-updates"] = current_api_session.NewListServiceUpdates(o.context, o.CurrentAPISessionListServiceUpdatesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

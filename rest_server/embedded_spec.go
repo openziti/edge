@@ -1288,6 +1288,30 @@ func init() {
         }
       ]
     },
+    "/current-api-session/service-updates": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves data indicating the last time data relevant to this API Session was altered that would necessitate\nservice refreshes.\n",
+        "tags": [
+          "Current API Session",
+          "Services"
+        ],
+        "summary": "Returns data indicating whether a client should updates it service list",
+        "operationId": "listServiceUpdates",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listCurrentApiSessionServiceUpdates"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
+      }
+    },
     "/current-identity": {
       "get": {
         "security": [
@@ -5110,6 +5134,18 @@ func init() {
     }
   },
   "definitions": {
+    "CurrentApiSessionServiceUpdateList": {
+      "type": "object",
+      "required": [
+        "lastChangeAt"
+      ],
+      "properties": {
+        "lastChangeAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "PostureCheckCreate": {
       "type": "object",
       "required": [
@@ -6572,9 +6608,13 @@ func init() {
         {
           "type": "object",
           "required": [
-            "expiresAt"
+            "expiresAt",
+            "expirationSeconds"
           ],
           "properties": {
+            "expirationSeconds": {
+              "type": "integer"
+            },
             "expiresAt": {
               "type": "string",
               "format": "date-time"
@@ -7498,6 +7538,12 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "enrollment": {
           "type": "object",
           "properties": {
@@ -7555,6 +7601,12 @@ func init() {
           "properties": {
             "authenticators": {
               "$ref": "#/definitions/identityAuthenticators"
+            },
+            "defaultHostingCost": {
+              "$ref": "#/definitions/terminatorCost"
+            },
+            "defaultHostingPrecedence": {
+              "$ref": "#/definitions/terminatorPrecedence"
             },
             "enrollment": {
               "$ref": "#/definitions/identityEnrollments"
@@ -7659,6 +7711,12 @@ func init() {
     "identityPatch": {
       "type": "object",
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "isAdmin": {
           "type": "boolean"
         },
@@ -7714,6 +7772,12 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "isAdmin": {
           "type": "boolean"
         },
@@ -7836,6 +7900,21 @@ func init() {
       "properties": {
         "data": {
           "$ref": "#/definitions/currentApiSessionCertificateList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
+    "listCurrentApiSessionServiceUpdatesEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/CurrentApiSessionServiceUpdateList"
         },
         "meta": {
           "$ref": "#/definitions/meta"
@@ -9906,6 +9985,12 @@ func init() {
       "description": "A list of the current API Session's certificate",
       "schema": {
         "$ref": "#/definitions/listCurrentAPISessionCertificatesEnvelope"
+      }
+    },
+    "listCurrentApiSessionServiceUpdates": {
+      "description": "Data indicating necessary service updates",
+      "schema": {
+        "$ref": "#/definitions/listCurrentApiSessionServiceUpdatesEnvelope"
       }
     },
     "listEdgeRouterPolicies": {
@@ -13328,6 +13413,347 @@ func init() {
             "description": "The delete request was successful and the resource has been removed",
             "schema": {
               "$ref": "#/definitions/empty"
+            }
+          },
+          "400": {
+            "description": "The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": {
+                    "details": {
+                      "context": "(root)",
+                      "field": "(root)",
+                      "property": "fooField3"
+                    },
+                    "field": "(root)",
+                    "message": "(root): fooField3 is required",
+                    "type": "required",
+                    "value": {
+                      "fooField": "abc",
+                      "fooField2": "def"
+                    }
+                  },
+                  "causeMessage": "schema validation failed",
+                  "code": "COULD_NOT_VALIDATE",
+                  "message": "The supplied request contains an invalid document",
+                  "requestId": "ac6766d6-3a09-44b3-8d8a-1b541d97fdd9"
+                },
+                "meta": {}
+              }
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Terminates the current API session",
+        "tags": [
+          "Current API Session"
+        ],
+        "summary": "Logout",
+        "responses": {
+          "200": {
+            "description": "Base empty response",
+            "schema": {
+              "$ref": "#/definitions/empty"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/current-api-session/certificates": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a list of certificate resources for the current API session; supports filtering, sorting, and pagination",
+        "tags": [
+          "Current API Session"
+        ],
+        "summary": "List the ephemeral certificates available for the current API Session",
+        "operationId": "listCurrentApiSessionCertificates",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "filter",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of the current API Session's certificate",
+            "schema": {
+              "$ref": "#/definitions/listCurrentAPISessionCertificatesEnvelope"
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Creates an ephemeral certificate for the current API Session. This endpoint expects a PEM encoded CSRs to be provided for fulfillment as a property of a JSON payload. It is up to the client to manage the private key backing the CSR request.",
+        "tags": [
+          "Current API Session"
+        ],
+        "summary": "Creates an ephemeral certificate for the current API Session",
+        "operationId": "createCurrentApiSessionCertificate",
+        "parameters": [
+          {
+            "description": "The payload describing the CSR used to create a session certificate",
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/currentApiSessionCertificateCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A response of a create API Session certificate",
+            "schema": {
+              "$ref": "#/definitions/createCurrentApiSessionCertificateEnvelope"
+            }
+          },
+          "400": {
+            "description": "The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": {
+                    "details": {
+                      "context": "(root)",
+                      "field": "(root)",
+                      "property": "fooField3"
+                    },
+                    "field": "(root)",
+                    "message": "(root): fooField3 is required",
+                    "type": "required",
+                    "value": {
+                      "fooField": "abc",
+                      "fooField2": "def"
+                    }
+                  },
+                  "causeMessage": "schema validation failed",
+                  "code": "COULD_NOT_VALIDATE",
+                  "message": "The supplied request contains an invalid document",
+                  "requestId": "ac6766d6-3a09-44b3-8d8a-1b541d97fdd9"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/current-api-session/certificates/{id}": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves a single ephemeral certificate by id",
+        "tags": [
+          "Current API Session"
+        ],
+        "summary": "Retrieves an ephemeral certificate",
+        "operationId": "detailCurrentApiSessionCertificate",
+        "responses": {
+          "200": {
+            "description": "A response containing a single API Session certificate",
+            "schema": {
+              "$ref": "#/definitions/detailCurrentApiSessionCertificateEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {
+                      "id": "71a3000f-7dda-491a-9b90-a19f4ee6c406"
+                    }
+                  },
+                  "cause": null,
+                  "causeMessage": "",
+                  "code": "NOT_FOUND",
+                  "message": "The resource requested was not found or is no longer available",
+                  "requestId": "270908d6-f2ef-4577-b973-67bec18ae376"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/current-api-session/service-updates": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Retrieves data indicating the last time data relevant to this API Session was altered that would necessitate\nservice refreshes.\n",
+        "tags": [
+          "Current API Session",
+          "Services"
+        ],
+        "summary": "Returns data indicating whether a client should updates it service list",
+        "operationId": "listServiceUpdates",
+        "responses": {
+          "200": {
+            "description": "Data indicating necessary service updates",
+            "schema": {
+              "$ref": "#/definitions/listCurrentApiSessionServiceUpdatesEnvelope"
             }
           },
           "400": {
@@ -23277,6 +23703,18 @@ func init() {
     }
   },
   "definitions": {
+    "CurrentApiSessionServiceUpdateList": {
+      "type": "object",
+      "required": [
+        "lastChangeAt"
+      ],
+      "properties": {
+        "lastChangeAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "IdentityAuthenticatorsCert": {
       "type": "object",
       "properties": {
@@ -24820,9 +25258,13 @@ func init() {
         {
           "type": "object",
           "required": [
-            "expiresAt"
+            "expiresAt",
+            "expirationSeconds"
           ],
           "properties": {
+            "expirationSeconds": {
+              "type": "integer"
+            },
             "expiresAt": {
               "type": "string",
               "format": "date-time"
@@ -25746,6 +26188,12 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "enrollment": {
           "type": "object",
           "properties": {
@@ -25803,6 +26251,12 @@ func init() {
           "properties": {
             "authenticators": {
               "$ref": "#/definitions/identityAuthenticators"
+            },
+            "defaultHostingCost": {
+              "$ref": "#/definitions/terminatorCost"
+            },
+            "defaultHostingPrecedence": {
+              "$ref": "#/definitions/terminatorPrecedence"
             },
             "enrollment": {
               "$ref": "#/definitions/identityEnrollments"
@@ -25907,6 +26361,12 @@ func init() {
     "identityPatch": {
       "type": "object",
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "isAdmin": {
           "type": "boolean"
         },
@@ -25962,6 +26422,12 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "defaultHostingCost": {
+          "$ref": "#/definitions/terminatorCost"
+        },
+        "defaultHostingPrecedence": {
+          "$ref": "#/definitions/terminatorPrecedence"
+        },
         "isAdmin": {
           "type": "boolean"
         },
@@ -26084,6 +26550,21 @@ func init() {
       "properties": {
         "data": {
           "$ref": "#/definitions/currentApiSessionCertificateList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
+    "listCurrentApiSessionServiceUpdatesEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/CurrentApiSessionServiceUpdateList"
         },
         "meta": {
           "$ref": "#/definitions/meta"
@@ -28155,6 +28636,12 @@ func init() {
       "description": "A list of the current API Session's certificate",
       "schema": {
         "$ref": "#/definitions/listCurrentAPISessionCertificatesEnvelope"
+      }
+    },
+    "listCurrentApiSessionServiceUpdates": {
+      "description": "Data indicating necessary service updates",
+      "schema": {
+        "$ref": "#/definitions/listCurrentApiSessionServiceUpdatesEnvelope"
       }
     },
     "listEdgeRouterPolicies": {
