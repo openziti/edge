@@ -19,11 +19,11 @@ require (
 	github.com/coreos/go-iptables v0.5.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fullsailor/pkcs7 v0.0.0-20190404230743-d7302db945fa
-	github.com/go-openapi/errors v0.19.7
+	github.com/go-openapi/errors v0.19.8
 	github.com/go-openapi/loads v0.19.5
 	github.com/go-openapi/runtime v0.19.22
 	github.com/go-openapi/spec v0.19.9
-	github.com/go-openapi/strfmt v0.19.6
+	github.com/go-openapi/strfmt v0.20.0
 	github.com/go-openapi/swag v0.19.9
 	github.com/go-openapi/validate v0.19.11
 	github.com/golang/protobuf v1.4.3
@@ -50,7 +50,6 @@ require (
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf
 	github.com/xeipuuv/gojsonschema v1.2.0
 	go.etcd.io/bbolt v1.3.5-0.20200615073812-232d8fc87f50
-	go.mongodb.org/mongo-driver v1.4.2 // indirect
 	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899
 	golang.org/x/net v0.0.0-20201010224723-4f7140c49acb
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
