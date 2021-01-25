@@ -17,15 +17,15 @@
 package model
 
 import (
-	"encoding/pem"
+	// "encoding/pem"
 	"fmt"
 	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/edge/eid"
 	"github.com/openziti/edge/internal/cert"
-	"github.com/openziti/edge/rest_model"
-	"github.com/openziti/fabric/controller/models"
-	"time"
+	// "github.com/openziti/edge/rest_model"
+	// "github.com/openziti/fabric/controller/models"
+	// "time"
 )
 
 type EnrollModuleOtf struct {
@@ -84,9 +84,9 @@ func (module *EnrollModuleOtf) Process(ctx EnrollmentContext) (*EnrollmentResult
 		IsAdmin:        false,
 	}
 
-	certRaw, err := module.env.GetApiClientCsrSigner().Sign(ctx.GetDataAsByteArray(), &cert.SigningOpts{
-		NotAfter: time.Now().Add(time.Minute * time.Duration(module.env.GetConfig().Enrollment.OtfIdentity.DurationMinutes)),
-	})
+	// certRaw, err := module.env.GetApiClientCsrSigner().Sign(ctx.GetDataAsByteArray(), &cert.SigningOpts{
+	// NotAfter: time.Now().Add(time.Minute * time.Duration(module.env.GetConfig().Enrollment.OtfIdentity.DurationMinutes)),
+	// })
 
 	if err != nil {
 		apiErr := apierror.NewCouldNotProcessCsr()
@@ -95,41 +95,41 @@ func (module *EnrollModuleOtf) Process(ctx EnrollmentContext) (*EnrollmentResult
 		return nil, apiErr
 	}
 
-	fp := module.fingerprintGenerator.FromRaw(certRaw)
+	// fp := module.fingerprintGenerator.FromRaw(certRaw)
 
-	certPem := pem.EncodeToMemory(&pem.Block{
-		Type:  "CERTIFICATE",
-		Bytes: certRaw,
-	})
+	// certPem := pem.EncodeToMemory(&pem.Block{
+	// 	Type:  "CERTIFICATE",
+	// 	Bytes: certRaw,
+	// })
 
-	newAuthenticator := &Authenticator{
-		BaseEntity: models.BaseEntity{
-			Id: identityId,
-		},
-		Method:     persistence.MethodAuthenticatorCert,
-		IdentityId: identity.Id,
-		SubType: &AuthenticatorCert{
-			Fingerprint: fp,
-			Pem:         string(certPem),
-		},
-	}
+	// newAuthenticator := &Authenticator{
+	// 	BaseEntity: models.BaseEntity{
+	// 		Id: identityId,
+	// 	},
+	// 	Method:     persistence.MethodAuthenticatorCert,
+	// 	IdentityId: identity.Id,
+	// 	SubType: &AuthenticatorCert{
+	// 		Fingerprint: fp,
+	// 		Pem:         string(certPem),
+	// 	},
+	// }
 
-	_, _, err = module.env.GetHandlers().Identity.CreateWithAuthenticator(identity, newAuthenticator)
+	// _, _, err = module.env.GetHandlers().Identity.CreateWithAuthenticator(identity, newAuthenticator)
 
 	if err != nil {
 		return nil, err
 	}
 
-	content := &rest_model.EnrollmentCerts{
-		Cert: string(certPem),
-	}
+	// content := &rest_model.EnrollmentCerts{
+	// 	Cert: string(certPem),
+	// }
 
 	return &EnrollmentResult{
-		Identity:      identity,
-		Authenticator: newAuthenticator,
-		Content:       content,
-		TextContent:   certPem,
-		Status:        200,
+		Identity: identity,
+		// Authenticator: newAuthenticator,
+		// Content:       content,
+		// TextContent:   certPem,
+		Status: 200,
 	}, nil
 
 }
