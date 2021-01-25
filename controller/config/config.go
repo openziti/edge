@@ -63,6 +63,7 @@ type Api struct {
 	Identity              identity.Identity
 	IdentityConfig        identity.IdentityConfig
 	IdentityCaPem         []byte
+	HttpTimeouts          HttpTimeouts
 }
 
 type WSApi struct {
@@ -95,6 +96,13 @@ type Config struct {
 	caPems             [][]byte
 	caPemsBuf          []byte
 	caPemsOnce         sync.Once
+}
+
+type HttpTimeouts struct {
+	ReadTimeoutDuration       time.Duration
+	ReadHeaderTimeoutDuration time.Duration
+	WriteTimeoutDuration      time.Duration
+	IdleTimeoutsDuration      time.Duration
 }
 
 func (c *Config) SessionTimeoutDuration() time.Duration {
@@ -229,6 +237,10 @@ func (c *Config) loadApiSection(edgeConfigMap map[interface{}]interface{}) error
 
 		if err = c.loadAPIIdentity(apiIdentitySubMap, &c.Api); err != nil {
 			return fmt.Errorf("error loading Edge API Identity: %s", err)
+		}
+
+		if err = c.loadHttpTimeouts(submap); err != nil {
+			return fmt.Errorf("error loading Edge API Http Timeouts: %s", err)
 		}
 
 	} else {
@@ -530,6 +542,67 @@ func (c *Config) loadEnrollmentSection(edgeConfigMap map[interface{}]interface{}
 
 	} else {
 		return errors.New("required configuration section [edge.enrollment] missing")
+	}
+
+	return nil
+}
+
+func (c *Config) loadHttpTimeouts(apiSubMap map[interface{}]interface{}) error {
+	c.Api.HttpTimeouts = HttpTimeouts{
+		ReadTimeoutDuration:       5 * time.Second,
+		ReadHeaderTimeoutDuration: 0,
+		WriteTimeoutDuration:      10 * time.Second,
+		IdleTimeoutsDuration:      5 * time.Second,
+	}
+
+	if value, found := apiSubMap["httpTimeouts"]; found && value != nil {
+		httpTimeoutsSubMap := value.(map[interface{}]interface{})
+
+		if value, found := httpTimeoutsSubMap["readTimeoutMs"]; found {
+			readTimeoutMs := value.(int)
+			if readTimeoutMs < 0 {
+				readTimeoutMs = 0
+			}
+			c.Api.HttpTimeouts.ReadTimeoutDuration = time.Duration(readTimeoutMs) * time.Millisecond
+		} else {
+			pfxlog.Logger().Warnf("[edge.api.httpTimeouts.readTimeoutMs] defaulted to %v", c.Api.HttpTimeouts.ReadTimeoutDuration.Milliseconds())
+		}
+
+		if value, found := httpTimeoutsSubMap["readHeaderTimeoutMs"]; found {
+			readHeaderTimeoutMs := value.(int)
+			if readHeaderTimeoutMs < 0 {
+				readHeaderTimeoutMs = 0
+			}
+
+			c.Api.HttpTimeouts.ReadHeaderTimeoutDuration = time.Duration(readHeaderTimeoutMs) * time.Millisecond
+		} else {
+			pfxlog.Logger().Warnf("[edge.api.httpTimeouts.readHeaderTimeoutMs] defaulted to %v", c.Api.HttpTimeouts.ReadHeaderTimeoutDuration.Milliseconds())
+		}
+
+		if value, found := httpTimeoutsSubMap["writeTimeoutMs"]; found {
+			writeTimeoutMs := value.(int)
+			if writeTimeoutMs < 0 {
+				writeTimeoutMs = 0
+			}
+
+			c.Api.HttpTimeouts.WriteTimeoutDuration = time.Duration(writeTimeoutMs) * time.Millisecond
+		} else {
+			pfxlog.Logger().Warnf("[edge.api.httpTimeouts.writeTimeoutMs] defaulted to %v", c.Api.HttpTimeouts.ReadHeaderTimeoutDuration.Milliseconds())
+		}
+
+		if value, found := httpTimeoutsSubMap["idleTimeoutMs"]; found {
+			idleTimeoutMs := value.(int)
+			if idleTimeoutMs < 0 {
+				idleTimeoutMs = 0
+			}
+
+			c.Api.HttpTimeouts.IdleTimeoutsDuration = time.Duration(idleTimeoutMs) * time.Millisecond
+		} else {
+			pfxlog.Logger().Warnf("[edge.api.httpTimeouts.idleTimeoutMs] defaulted to %v", c.Api.HttpTimeouts.ReadHeaderTimeoutDuration.Milliseconds())
+		}
+
+	} else {
+		pfxlog.Logger().Warn("using default edge.api.httpTimeouts, no config section found")
 	}
 
 	return nil
