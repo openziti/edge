@@ -18,7 +18,7 @@ require (
 	github.com/achanda/go-sysctl v0.0.0-20160222034550-6be7678c45d2
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef // indirect
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/coreos/go-iptables v0.4.5
+	github.com/coreos/go-iptables v0.5.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fullsailor/pkcs7 v0.0.0-20190404230743-d7302db945fa
 	github.com/go-openapi/errors v0.19.7
@@ -30,19 +30,19 @@ require (
 	github.com/go-openapi/validate v0.19.11
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.4
-	github.com/google/uuid v1.1.5
+	github.com/google/uuid v1.2.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/kataras/go-events v0.0.3-0.20201007151548-c411dc70c0a6
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mdlayher/netlink v1.1.1
-	github.com/michaelquigley/pfxlog v0.3.1
+	github.com/michaelquigley/pfxlog v0.3.6
 	github.com/miekg/dns v1.1.35
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/netfoundry/secretstream v0.1.2
-	github.com/openziti/fabric v0.15.6
-	github.com/openziti/foundation v0.15.1
-	github.com/openziti/sdk-golang v0.15.5
+	github.com/openziti/fabric v0.15.12
+	github.com/openziti/foundation v0.15.9
+	github.com/openziti/sdk-golang v0.15.10
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
 	github.com/pkg/errors v0.9.1
 	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0

@@ -112,7 +112,7 @@ func (proxy *ingressProxy) processConnect(req *channel2.Message, ch channel2.Cha
 	}
 	log.Debug("validating network session")
 	sm := fabric.GetStateManager()
-	ns := sm.GetSessionWithTimeout(token, time.Second*5)
+	ns := sm.GetSessionWithTimeout(token, proxy.listener.options.lookupSessionTimeout)
 
 	if ns == nil || ns.Type != edge_ctrl_pb.SessionType_Dial {
 		log.WithField("token", token).Error("session not found")
@@ -177,7 +177,7 @@ func (proxy *ingressProxy) processConnect(req *channel2.Message, ch channel2.Cha
 	if terminatorIdentity, found := req.GetStringHeader(edge.TerminatorIdentityHeader); found {
 		service = terminatorIdentity + "@" + service
 	}
-	sessionInfo, err := xgress.GetSession(proxy.listener.factory, ns.Id, service, peerData)
+	sessionInfo, err := xgress.GetSession(proxy.listener.factory, ns.Id, service, proxy.listener.options.Options.GetSessionTimeout, peerData)
 	if err != nil {
 		log.WithError(err).Warn("failed to dial fabric")
 		proxy.sendStateClosedReply(err.Error(), req)
@@ -211,7 +211,7 @@ func (proxy *ingressProxy) processBind(req *channel2.Message, ch channel2.Channe
 	}
 	log.Debug("validating network session")
 	sm := fabric.GetStateManager()
-	ns := sm.GetSessionWithTimeout(token, time.Second*5)
+	ns := sm.GetSessionWithTimeout(token, proxy.listener.options.lookupSessionTimeout)
 
 	if ns == nil || ns.Type != edge_ctrl_pb.SessionType_Bind {
 		log.WithField("token", token).Error("session not found")
