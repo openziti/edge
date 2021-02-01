@@ -28,12 +28,14 @@ import (
 type helloHandler struct {
 	supportedProtocols []string
 	hostname           string
+	protoPorts         []string
 }
 
-func NewHelloHandler(hostname string, supportedProtocols []string) *helloHandler {
+func NewHelloHandler(hostname string, supportedProtocols []string, protoPorts []string) *helloHandler {
 	return &helloHandler{
 		hostname:           hostname,
 		supportedProtocols: supportedProtocols,
+		protoPorts:         protoPorts,
 	}
 }
 
@@ -48,9 +50,10 @@ func (h *helloHandler) HandleReceive(msg *channel2.Message, ch channel2.Channel)
 			pfxlog.Logger().Info("received server hello, replying")
 
 			clientHello := &edge_ctrl_pb.ClientHello{
-				Version:   build.GetBuildInfo().Version(),
-				Hostname:  h.hostname,
-				Protocols: h.supportedProtocols,
+				Version:    build.GetBuildInfo().Version(),
+				Hostname:   h.hostname,
+				Protocols:  h.supportedProtocols,
+				Protoports: h.protoPorts,
 			}
 
 			clientHelloBuff, err := proto.Marshal(clientHello)

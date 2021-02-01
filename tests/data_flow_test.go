@@ -64,6 +64,40 @@ func Test_Dataflow(t *testing.T) {
 	conn.ReadExpected("hello, "+name, time.Second)
 	conn.WriteString("quit", time.Second)
 	conn.ReadExpected("ok", time.Second)
+	t.Run("dial service", func(t *testing.T) {
+		ctx.testContextChanged(t)
+		conn := ctx.WrapConn(clientContext.Dial(service.Name))
+
+		t.Run("send/recieve data", func(t *testing.T) {
+			var wg sync.WaitGroup
+			wg.Add(5)
+
+			name := eid.New()
+			go func() {
+				defer wg.Done()
+				conn.WriteString(name, time.Second)
+			}()
+
+			go func() {
+				defer wg.Done()
+				conn.ReadExpected("hello, "+name, time.Second)
+			}()
+			go func() {
+				defer wg.Done()
+				conn.WriteString("quit", time.Second)
+			}()
+			go func() {
+				defer wg.Done()
+				conn.ReadExpected("ok", time.Second)
+			}()
+			go func() {
+				defer wg.Done()
+				testServer.waitForDone(ctx, 5*time.Second)
+			}()
+
+			wg.Wait()
+		})
+	})
 
 	testServer.waitForDone(ctx, 5*time.Second)
 }
