@@ -50,7 +50,14 @@ func (factory *Factory) Enabled() bool {
 
 func (factory *Factory) BindChannel(ch channel2.Channel) error {
 	factory.ctrl = ch
-	ch.AddReceiveHandler(handler_edge_ctrl.NewHelloHandler(factory.config.Advertise, []string{"tls", "ws"}))
+	if factory.config.Advertise != "" {
+		ch.AddReceiveHandler(handler_edge_ctrl.NewHelloHandler(factory.config.Advertise, []string{"tls"}))
+		fmt.Printf("==========> added tls receiveHandler \n")
+	}
+	if factory.config.WSAdvertise != "" {
+		ch.AddReceiveHandler(handler_edge_ctrl.NewHelloHandler(factory.config.WSAdvertise, []string{"ws"}))
+		fmt.Printf("==========> added ws receiveHandler \n")
+	}
 
 	ch.AddReceiveHandler(handler_edge_ctrl.NewSessionAddedHandler(factory.stateManager))
 	ch.AddReceiveHandler(handler_edge_ctrl.NewSessionRemovedHandler(factory.stateManager))

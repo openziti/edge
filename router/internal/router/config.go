@@ -39,6 +39,7 @@ type Config struct {
 	Enabled                  bool
 	ApiProxy                 ApiProxy
 	Advertise                string
+	WSAdvertise              string
 	Csr                      Csr
 	IdentityConfig           identity.IdentityConfig
 	HeartbeatIntervalSeconds int
@@ -273,7 +274,7 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 					return errors.New("required value [listeners.edge.options.advertise] was not a string or was not found")
 				}
 
-				config.Advertise = advertise
+				config.WSAdvertise = advertise
 			} else {
 				return errors.New("required value [listeners.edge.options.advertise] was not found")
 			}
