@@ -187,7 +187,9 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 	}
 
 	var edgeBinding map[interface{}]interface{}
+	var edgeListenPort string
 	var edgeWsBinding map[interface{}]interface{}
+	var edgeWsListenPort string
 
 	for i, value := range listeners {
 		submap := value.(map[interface{}]interface{})
@@ -216,12 +218,14 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 							return errors.New("multiple edge listeners found in [listeners], only one 'ws' address is allowed")
 						}
 						edgeWsBinding = submap
+						edgeWsListenPort = tokens[2]
 
 					} else {
 						if edgeBinding != nil {
 							return errors.New("multiple edge listeners found in [listeners], only one non-'ws' is allowed")
 						}
 						edgeBinding = submap
+						edgeListenPort = tokens[2]
 					}
 				} else {
 					return errors.New("required value [listeners.edge.address] was not found")
@@ -249,6 +253,12 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 					return errors.New("required value [listeners.edge.options.advertise] was not a string or was not found")
 				}
 
+				parts := strings.Split(advertise, ":")
+				if parts[1] != edgeListenPort {
+					msg := fmt.Sprintf("port in [listeners.edge.options.advertise] must equal port in [listeners.edge.address] but did not. Got [%s] [%s]", parts[1], edgeListenPort)
+					return errors.New(msg)
+				}
+
 				config.Advertise = advertise
 			} else {
 				return errors.New("required value [listeners.edge.options.advertise] was not found")
@@ -272,6 +282,17 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 
 				if advertise == "" {
 					return errors.New("required value [listeners.edge.options.advertise] was not a string or was not found")
+				}
+
+				parts := strings.Split(advertise, ":")
+				if parts[1] != edgeWsListenPort {
+					msg := fmt.Sprintf("port in [listeners.edge.options.advertise] must equal port in [listeners.edge.address] but did not. Got [%s] [%s]", parts[1], edgeWsListenPort)
+					return errors.New(msg)
+				}
+
+				if edgeListenPort == edgeWsListenPort {
+					msg := fmt.Sprintf("ports for multiple [listeners.edge.options.advertise] must not be equal. Got [%s] [%s]", edgeListenPort, edgeWsListenPort)
+					return errors.New(msg)
 				}
 
 				config.WSAdvertise = advertise

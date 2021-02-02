@@ -21,6 +21,7 @@ package tests
 import (
 	"github.com/openziti/edge/eid"
 	"github.com/openziti/fabric/controller/xt_smartrouting"
+	"sync"
 	"testing"
 	"time"
 )
