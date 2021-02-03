@@ -762,7 +762,7 @@ func (b *Broker) ReceiveHello(r *network.Router, edgeRouter *model.EdgeRouter, r
 	entry := pfxlog.Logger().
 		WithField("hostname", respHello.Hostname).
 		WithField("protocols", respHello.Protocols).
-		WithField("protoports", respHello.Protoports).
+		WithField("protocolPorts", respHello.ProtocolPorts).
 		WithField("data", respHello.Data)
 
 	if r.VersionInfo != nil {
@@ -776,7 +776,7 @@ func (b *Broker) ReceiveHello(r *network.Router, edgeRouter *model.EdgeRouter, r
 	entry.Info("edge router responded with client hello")
 
 	protocols := map[string]string{}
-	for _, p := range respHello.Protoports {
+	for _, p := range respHello.ProtocolPorts {
 		parts := strings.Split(p, ":")
 		ingressUrl := fmt.Sprintf("%s://%s:%s", parts[0], respHello.Hostname, parts[1])
 		protocols[parts[0]] = ingressUrl

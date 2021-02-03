@@ -235,7 +235,7 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 	}
 
 	if (edgeBinding == nil) && (edgeWsBinding == nil) {
-		return errors.New("required binding [edge] not found in [listeners]")
+		return errors.New("required binding [edge] not found in [listeners], at least one edge binding is required")
 	}
 
 	if edgeBinding != nil {
@@ -255,8 +255,7 @@ func (config *Config) loadListener(rootConfigMap map[interface{}]interface{}) er
 
 				parts := strings.Split(advertise, ":")
 				if parts[1] != edgeListenPort {
-					msg := fmt.Sprintf("port in [listeners.edge.options.advertise] must equal port in [listeners.edge.address] but did not. Got [%s] [%s]", parts[1], edgeListenPort)
-					return errors.New(msg)
+					pfxlog.Logger().Warnf("port in [listeners.edge.options.advertise] must equal port in [listeners.edge.address] but did not. Got [%s] [%s]", parts[1], edgeListenPort)
 				}
 
 				config.Advertise = advertise
