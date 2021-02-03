@@ -57,14 +57,14 @@ func (factory *Factory) BindChannel(ch channel2.Channel) error {
 	var parts []string
 	var hostname string
 	var supportedProtocols []string
-	var ProtocolPorts []string
+	var protocolPorts []string
 
 	if factory.config.Advertise != "" {
 		parts = strings.Split(factory.config.Advertise, ":")
 		hostname = parts[0]
 		supportedProtocols = append(supportedProtocols, "tls")
-		ProtocolPorts = append(ProtocolPorts, "tls:"+parts[1])
-		pfxlog.Logger().Debugf("HelloHandler will contain hostname=[%s] supportedProtocols=%v ProtocolPorts=%v", hostname, supportedProtocols, ProtocolPorts)
+		protocolPorts = append(protocolPorts, "tls:"+parts[1])
+		pfxlog.Logger().Debugf("HelloHandler will contain hostname=[%s] supportedProtocols=%v protocolPorts=%v", hostname, supportedProtocols, protocolPorts)
 	}
 	if factory.config.WSAdvertise != "" {
 		parts := strings.Split(factory.config.WSAdvertise, ":")
@@ -76,10 +76,10 @@ func (factory *Factory) BindChannel(ch channel2.Channel) error {
 			hostname = parts[0]
 		}
 		supportedProtocols = append(supportedProtocols, "ws")
-		ProtocolPorts = append(ProtocolPorts, "ws:"+parts[1])
-		pfxlog.Logger().Debugf("HelloHandler will contain hostname=[%s] supportedProtocols=%v ProtocolPorts=%v", hostname, supportedProtocols, ProtocolPorts)
+		protocolPorts = append(protocolPorts, "ws:"+parts[1])
+		pfxlog.Logger().Debugf("HelloHandler will contain hostname=[%s] supportedProtocols=%v protocolPorts=%v", hostname, supportedProtocols, protocolPorts)
 	}
-	ch.AddReceiveHandler(handler_edge_ctrl.NewHelloHandler(hostname, supportedProtocols, ProtocolPorts))
+	ch.AddReceiveHandler(handler_edge_ctrl.NewHelloHandler(hostname, supportedProtocols, protocolPorts))
 
 	ch.AddReceiveHandler(handler_edge_ctrl.NewSessionAddedHandler(factory.stateManager))
 	ch.AddReceiveHandler(handler_edge_ctrl.NewSessionRemovedHandler(factory.stateManager))
