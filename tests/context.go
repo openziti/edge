@@ -257,6 +257,7 @@ func (ctx *TestContext) StartServerFor(test string, clean bool) {
 	ctx.Req.NoError(err)
 }
 
+
 func (ctx *TestContext) createAndEnrollEdgeRouter(roleAttributes ...string) *edgeRouter {
 	// If an edge router has already been created, delete it and create a new one
 	if ctx.edgeRouterEntity != nil {
@@ -274,7 +275,9 @@ func (ctx *TestContext) createAndEnrollEdgeRouter(roleAttributes ...string) *edg
 
 	enroller := enroll.NewRestEnroller()
 	ctx.Req.NoError(enroller.LoadConfig(cfgmap))
-	ctx.Req.NoError(enroller.Enroll([]byte(jwt), true, ""))
+	var keyAlg sdkconfig.KeyAlgVar
+	keyAlg.Set("RSA")
+	ctx.Req.NoError(enroller.Enroll([]byte(jwt), true, "", keyAlg))
 
 	return ctx.edgeRouterEntity
 }
@@ -296,7 +299,9 @@ func (ctx *TestContext) createAndEnrollTransitRouter() *transitRouter {
 
 	enroller := enroll.NewRestEnroller()
 	ctx.Req.NoError(enroller.LoadConfig(cfgmap))
-	ctx.Req.NoError(enroller.Enroll([]byte(jwt), true, ""))
+	var keyAlg sdkconfig.KeyAlgVar
+	keyAlg.Set("RSA")
+	ctx.Req.NoError(enroller.Enroll([]byte(jwt), true, "", keyAlg))
 
 	return ctx.transitRouterEntity
 }
@@ -345,7 +350,7 @@ func (ctx *TestContext) EnrollIdentity(identityId string) *sdkconfig.Config {
 
 	flags := sdkenroll.EnrollmentFlags{
 		Token:  tkn,
-		KeyAlg: "EC",
+		KeyAlg: "RSA",
 	}
 	conf, err := sdkenroll.Enroll(flags)
 	ctx.Req.NoError(err)

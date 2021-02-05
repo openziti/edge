@@ -1511,6 +1511,30 @@ func init() {
         }
       ]
     },
+    "/current-identity/edge-routers": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Lists the Edge Routers that the current identity has access to via policies. The data returned\nincludes their address and online status\n",
+        "tags": [
+          "Current Identity",
+          "Edge Router"
+        ],
+        "summary": "Return this list of Edge Routers the identity has access to",
+        "operationId": "getCurrentIdentityEdgeRouters",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listCurrentIdentityEdgeRouters"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          }
+        }
+      }
+    },
     "/current-identity/mfa": {
       "get": {
         "security": [
@@ -2574,7 +2598,7 @@ func init() {
     },
     "/enroll/ottca": {
       "post": {
-        "description": "Enroll an identity via a one-time-token that also requires a pre-exchanged client certificate to match a\nCertificate Authority that has been added and verified (See POST /cas and POST /cas{id}/verify). The client\nmust present a client certificate signed by CA associated with the enrollment. This enrollment is similar to\nCA auto enrollment except that is required the identity to be pre-created.\n\nAs the client certificat has been pre-exchanged there is no CSR input to this enrollment method.\n",
+        "description": "Enroll an identity via a one-time-token that also requires a pre-exchanged client certificate to match a\nCertificate Authority that has been added and verified (See POST /cas and POST /cas{id}/verify). The client\nmust present a client certificate signed by CA associated with the enrollment. This enrollment is similar to\nCA auto enrollment except that is required the identity to be pre-created.\n\nAs the client certificate has been pre-exchanged there is no CSR input to this enrollment method.\n",
         "tags": [
           "Enroll"
         ],
@@ -2598,7 +2622,7 @@ func init() {
         "tags": [
           "Enroll"
         ],
-        "summary": "Enroll an identity vvia one-time-token",
+        "summary": "Enroll an identity via one-time-token",
         "operationId": "ernollUpdb",
         "responses": {
           "200": {
@@ -5642,12 +5666,6 @@ func init() {
       ],
       "x-class": "DOMAIN"
     },
-    "PostureCheckList": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/PostureCheckDetail"
-      }
-    },
     "PostureCheckMacAddressCreate": {
       "allOf": [
         {
@@ -7046,6 +7064,48 @@ func init() {
         "meta": {
           "$ref": "#/definitions/meta"
         }
+      }
+    },
+    "currentIdentityEdgeRouterDetail": {
+      "description": "A detail edge router resource",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
+        },
+        {
+          "type": "object",
+          "required": [
+            "name",
+            "isOnline",
+            "hostname",
+            "supportedProtocols"
+          ],
+          "properties": {
+            "hostname": {
+              "type": "string"
+            },
+            "isOnline": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "supportedProtocols": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "currentIdentityEdgeRouterList": {
+      "description": "A list of edge router resources",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/currentIdentityEdgeRouterDetail"
       }
     },
     "dataIntegrityCheckDetail": {
@@ -8452,6 +8512,21 @@ func init() {
         }
       }
     },
+    "listCurrentIdentityEdgeRoutersEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/currentIdentityEdgeRouterList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
     "listEdgeRouterPoliciesEnvelope": {
       "type": "object",
       "required": [
@@ -8550,7 +8625,10 @@ func init() {
       ],
       "properties": {
         "data": {
-          "$ref": "#/definitions/PostureCheckList"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PostureCheckDetail"
+          }
         },
         "meta": {
           "$ref": "#/definitions/meta"
@@ -10602,6 +10680,12 @@ func init() {
       "description": "Data indicating necessary service updates",
       "schema": {
         "$ref": "#/definitions/listCurrentApiSessionServiceUpdatesEnvelope"
+      }
+    },
+    "listCurrentIdentityEdgeRouters": {
+      "description": "A list of edge routers",
+      "schema": {
+        "$ref": "#/definitions/listCurrentIdentityEdgeRoutersEnvelope"
       }
     },
     "listEdgeRouterPolicies": {
@@ -14669,6 +14753,54 @@ func init() {
         }
       ]
     },
+    "/current-identity/edge-routers": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Lists the Edge Routers that the current identity has access to via policies. The data returned\nincludes their address and online status\n",
+        "tags": [
+          "Current Identity",
+          "Edge Router"
+        ],
+        "summary": "Return this list of Edge Routers the identity has access to",
+        "operationId": "getCurrentIdentityEdgeRouters",
+        "responses": {
+          "200": {
+            "description": "A list of edge routers",
+            "schema": {
+              "$ref": "#/definitions/listCurrentIdentityEdgeRoutersEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/current-identity/mfa": {
       "get": {
         "security": [
@@ -17367,7 +17499,7 @@ func init() {
     },
     "/enroll/ottca": {
       "post": {
-        "description": "Enroll an identity via a one-time-token that also requires a pre-exchanged client certificate to match a\nCertificate Authority that has been added and verified (See POST /cas and POST /cas{id}/verify). The client\nmust present a client certificate signed by CA associated with the enrollment. This enrollment is similar to\nCA auto enrollment except that is required the identity to be pre-created.\n\nAs the client certificat has been pre-exchanged there is no CSR input to this enrollment method.\n",
+        "description": "Enroll an identity via a one-time-token that also requires a pre-exchanged client certificate to match a\nCertificate Authority that has been added and verified (See POST /cas and POST /cas{id}/verify). The client\nmust present a client certificate signed by CA associated with the enrollment. This enrollment is similar to\nCA auto enrollment except that is required the identity to be pre-created.\n\nAs the client certificate has been pre-exchanged there is no CSR input to this enrollment method.\n",
         "tags": [
           "Enroll"
         ],
@@ -17398,7 +17530,7 @@ func init() {
         "tags": [
           "Enroll"
         ],
-        "summary": "Enroll an identity vvia one-time-token",
+        "summary": "Enroll an identity via one-time-token",
         "operationId": "ernollUpdb",
         "responses": {
           "200": {
@@ -25044,12 +25176,6 @@ func init() {
       ],
       "x-class": "DOMAIN"
     },
-    "PostureCheckList": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/PostureCheckDetail"
-      }
-    },
     "PostureCheckMacAddressCreate": {
       "allOf": [
         {
@@ -26448,6 +26574,48 @@ func init() {
         "meta": {
           "$ref": "#/definitions/meta"
         }
+      }
+    },
+    "currentIdentityEdgeRouterDetail": {
+      "description": "A detail edge router resource",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/baseEntity"
+        },
+        {
+          "type": "object",
+          "required": [
+            "name",
+            "isOnline",
+            "hostname",
+            "supportedProtocols"
+          ],
+          "properties": {
+            "hostname": {
+              "type": "string"
+            },
+            "isOnline": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "supportedProtocols": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "currentIdentityEdgeRouterList": {
+      "description": "A list of edge router resources",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/currentIdentityEdgeRouterDetail"
       }
     },
     "dataIntegrityCheckDetail": {
@@ -27854,6 +28022,21 @@ func init() {
         }
       }
     },
+    "listCurrentIdentityEdgeRoutersEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/currentIdentityEdgeRouterList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
+      }
+    },
     "listEdgeRouterPoliciesEnvelope": {
       "type": "object",
       "required": [
@@ -27952,7 +28135,10 @@ func init() {
       ],
       "properties": {
         "data": {
-          "$ref": "#/definitions/PostureCheckList"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PostureCheckDetail"
+          }
         },
         "meta": {
           "$ref": "#/definitions/meta"
@@ -30005,6 +30191,12 @@ func init() {
       "description": "Data indicating necessary service updates",
       "schema": {
         "$ref": "#/definitions/listCurrentApiSessionServiceUpdatesEnvelope"
+      }
+    },
+    "listCurrentIdentityEdgeRouters": {
+      "description": "A list of edge routers",
+      "schema": {
+        "$ref": "#/definitions/listCurrentIdentityEdgeRoutersEnvelope"
       }
     },
     "listEdgeRouterPolicies": {
