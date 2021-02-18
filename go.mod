@@ -44,7 +44,7 @@ require (
 	github.com/orcaman/concurrent-map v0.0.0-20210106121528-16402b402231
 	github.com/pkg/errors v0.9.1
 	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0
-	github.com/sirupsen/logrus v1.7.1
+	github.com/sirupsen/logrus v1.8.0
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/spf13/cobra v1.1.1
 	github.com/stretchr/testify v1.7.0
