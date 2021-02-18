@@ -39,7 +39,10 @@ func newApiServer(c *config.Config, r http.Handler) *apiServer {
 
 	tlsConfig := c.Api.Identity.ServerTLSConfig()
 
-	tlsConfig.ClientAuth = tls.RequestClientCert
+	// NoClientCert indicates that no client certificate should be requested during the handshake,
+	// and if any certificates are sent they will not be verified.  This is necessary to keep
+	// browZers from rendering popup's requesting user to select a cert (which we don't need anyway)
+	tlsConfig.ClientAuth = tls.NoClientCert
 
 	return &apiServer{
 		logWriter: logWriter,
