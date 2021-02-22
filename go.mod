@@ -33,7 +33,7 @@ require (
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/kataras/go-events v0.0.3-0.20201007151548-c411dc70c0a6
 	github.com/lucsky/cuid v1.0.2
-	github.com/mdlayher/netlink v1.2.1
+	github.com/mdlayher/netlink v1.3.1
 	github.com/michaelquigley/pfxlog v0.3.6
 	github.com/miekg/dns v1.1.38
 	github.com/mitchellh/mapstructure v1.4.1
@@ -54,7 +54,7 @@ require (
 	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899
 	golang.org/x/net v0.0.0-20210119194325-5f4716e94777
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
-	golang.org/x/sys v0.0.0-20210110051926-789bb1bd4061
+	golang.org/x/sys v0.0.0-20210216163648-f7da38b97c65
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/resty.v1 v1.12.0
 	gopkg.in/yaml.v2 v2.4.0
