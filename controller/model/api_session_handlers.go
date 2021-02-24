@@ -18,11 +18,14 @@ package model
 
 import (
 	"fmt"
+	"github.com/lucsky/cuid"
 	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/storage/ast"
 	"github.com/openziti/foundation/storage/boltz"
+	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
+	"time"
 )
 
 func NewApiSessionHandler(env Env) *ApiSessionHandler {
@@ -43,6 +46,7 @@ func (handler *ApiSessionHandler) newModelEntity() boltEntitySink {
 }
 
 func (handler *ApiSessionHandler) Create(entity *ApiSession) (string, error) {
+	entity.Id = cuid.New() //use cuids which are longer than shortids but are monotonic
 	return handler.createEntity(entity)
 }
 
@@ -88,23 +92,40 @@ func (handler *ApiSessionHandler) Delete(id string) error {
 	return handler.deleteEntity(id)
 }
 
-func (handler *ApiSessionHandler) MarkActivity(tokens []string) error {
-	return handler.GetDb().Batch(func(tx *bbolt.Tx) error {
+// MarkActivity returns tokens that were not found if any and/or an error.
+func (handler *ApiSessionHandler) MarkActivity(tokens []string) ([]string, error) {
+	var notFoundTokens []string
+
+	err := handler.GetDb().Batch(func(tx *bbolt.Tx) error {
 		store := handler.Store.(persistence.ApiSessionStore)
 		mutCtx := boltz.NewMutateContext(tx)
 		for _, token := range tokens {
 			apiSession, err := store.LoadOneByToken(tx, token)
 			if err != nil {
-				return err
+				if boltz.IsErrNotFoundErr(err) {
+					notFoundTokens = append(notFoundTokens, token)
+				} else {
+					return err
+				}
+
 			}
 			if err = store.Update(mutCtx, apiSession, persistence.UpdateTimeOnlyFieldChecker{}); err != nil {
-				return err
+				if err != nil {
+					if boltz.IsErrNotFoundErr(err) {
+						notFoundTokens = append(notFoundTokens, token)
+					} else {
+						return err
+					}
+
+				}
 			}
 
 			handler.env.GetHandlers().Identity.SetActive(apiSession.IdentityId)
 		}
 		return nil
 	})
+
+	return notFoundTokens, err
 }
 
 func (handler *ApiSessionHandler) Stream(query string, collect func(*ApiSession, error) error) error {
@@ -152,6 +173,39 @@ func (handler *ApiSessionHandler) Query(query string) (*ApiSessionListResult, er
 		return nil, err
 	}
 	return result, nil
+}
+
+func (handler *ApiSessionHandler) VisitFingerprintsForApiSessionId(apiSessionId string, visitor func(fingerprint string) bool) error {
+	apiSession, err := handler.Read(apiSessionId)
+
+	if err != nil {
+		return errors.Wrapf(err, "could not query fingerprints by api session id [%s]", apiSessionId)
+	}
+
+	return handler.VisitFingerprintsForApiSession(apiSession.IdentityId, apiSessionId, visitor)
+}
+
+func (handler *ApiSessionHandler) VisitFingerprintsForApiSession(identityId, apiSessionId string, visitor func(fingerprint string) bool) error {
+	if stopVisiting, err := handler.env.GetHandlers().Identity.VisitIdentityAuthenticatorFingerprints(identityId, visitor); stopVisiting || err != nil {
+		return err
+	}
+
+	apiSessionCerts, err := handler.env.GetHandlers().ApiSessionCertificate.ReadByApiSessionId(apiSessionId)
+	if err != nil {
+		return err
+	}
+
+	now := time.Now()
+	for _, apiSessionCert := range apiSessionCerts {
+		if apiSessionCert.ValidAfter != nil && now.After(*apiSessionCert.ValidAfter) &&
+			apiSessionCert.ValidBefore != nil && now.Before(*apiSessionCert.ValidBefore) {
+			if visitor(apiSessionCert.Fingerprint) {
+				return nil
+			}
+		}
+	}
+
+	return nil
 }
 
 type ApiSessionListResult struct {

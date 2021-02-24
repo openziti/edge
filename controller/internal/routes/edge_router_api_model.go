@@ -111,7 +111,7 @@ func MapEdgeRouterToRestEntity(ae *env.AppEnv, _ *response.RequestContext, e mod
 }
 
 func MapEdgeRouterToRestModel(ae *env.AppEnv, router *model.EdgeRouter) (*rest_model.EdgeRouterDetail, error) {
-	hostname := ""
+	var hostname *string
 	protocols := map[string]string{}
 	os := ""
 	arch := ""
@@ -119,12 +119,13 @@ func MapEdgeRouterToRestModel(ae *env.AppEnv, router *model.EdgeRouter) (*rest_m
 	revision := ""
 	version := ""
 
-	onlineEdgeRouter := ae.Broker.GetOnlineEdgeRouter(router.Id)
+	onlineEdgeRouter, syncStatus := ae.Broker.GetOnlineEdgeRouter(router.Id)
+	syncStatusStr := string(syncStatus)
 
 	isOnline := onlineEdgeRouter != nil
 
 	if isOnline {
-		hostname = *onlineEdgeRouter.Hostname
+		hostname = onlineEdgeRouter.Hostname
 		protocols = onlineEdgeRouter.EdgeRouterProtocols
 
 		if onlineEdgeRouter.VersionInfo != nil {
@@ -147,8 +148,9 @@ func MapEdgeRouterToRestModel(ae *env.AppEnv, router *model.EdgeRouter) (*rest_m
 		IsOnline:            &isOnline,
 		IsVerified:          &router.IsVerified,
 		Fingerprint:         stringz.OrEmpty(router.Fingerprint),
-		Hostname:            &hostname,
+		Hostname:            hostname,
 		SupportedProtocols:  protocols,
+		SyncStatus:          &syncStatusStr,
 		VersionInfo: &rest_model.VersionInfo{
 			Os:        &os,
 			Arch:      &arch,

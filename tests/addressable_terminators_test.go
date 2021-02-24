@@ -24,6 +24,7 @@ import (
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/pkg/errors"
 	"net"
+	"strings"
 	"testing"
 	"time"
 )
@@ -41,7 +42,7 @@ func Test_AddressableTerminators(t *testing.T) {
 	type host struct {
 		id       *identity
 		context  ziti.Context
-		listener net.Listener
+		listener edge.Listener
 	}
 
 	var hosts []*host
@@ -52,10 +53,13 @@ func Test_AddressableTerminators(t *testing.T) {
 		hosts = append(hosts, host)
 
 		host.id, host.context = ctx.AdminSession.RequireCreateSdkContext()
+		defer host.context.Close()
+
 		host.listener, err = host.context.ListenWithOptions(service.Name, &ziti.ListenOptions{
 			BindUsingEdgeIdentity: true,
 		})
 		ctx.Req.NoError(err)
+		ctx.requireNListener(1, host.listener, 5*time.Second)
 	}
 
 	type client struct {
@@ -69,6 +73,7 @@ func Test_AddressableTerminators(t *testing.T) {
 		client := &client{}
 		clients = append(clients, client)
 		client.id, client.context = ctx.AdminSession.RequireCreateSdkContext()
+		defer client.context.Close()
 	}
 
 	waitForConn := func(listener net.Listener, timeout time.Duration) (net.Conn, error) {
@@ -127,6 +132,8 @@ func Test_AddressableTerminatorSameIdentity(t *testing.T) {
 	}
 
 	identity, context := ctx.AdminSession.RequireCreateSdkContext()
+	defer context.Close()
+
 	listener, err := context.ListenWithOptions(service.Name, &ziti.ListenOptions{
 		BindUsingEdgeIdentity: true,
 		ConnectTimeout:        5 * time.Second,
@@ -171,6 +178,8 @@ func Test_AddressableTerminatorDifferentIdentity(t *testing.T) {
 	}
 
 	_, context := ctx.AdminSession.RequireCreateSdkContext()
+	defer context.Close()
+
 	listener, err := context.ListenWithOptions(service.Name, &ziti.ListenOptions{
 		Identity:       "foobar",
 		ConnectTimeout: 5 * time.Second,
@@ -180,6 +189,8 @@ func Test_AddressableTerminatorDifferentIdentity(t *testing.T) {
 	defer func() { _ = listener.Close() }()
 
 	_, context2 := ctx.AdminSession.RequireCreateSdkContext()
+	defer context2.Close()
+
 	listener2, err := context2.ListenWithOptions(service.Name, &ziti.ListenOptions{
 		Identity:       "foobar",
 		ConnectTimeout: 5 * time.Second,
@@ -194,5 +205,8 @@ func Test_AddressableTerminatorDifferentIdentity(t *testing.T) {
 		err = nil
 	}
 	ctx.Req.Error(err)
+	if !strings.Contains(err.Error(), "shared identity foobar belongs to different identity") {
+		time.Sleep(1 * time.Hour)
+	}
 	ctx.Req.Contains(err.Error(), "shared identity foobar belongs to different identity")
 }

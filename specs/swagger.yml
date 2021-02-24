@@ -4612,6 +4612,8 @@ definitions:
       updb:
         type: object
         properties:
+          id:
+            type: string
           token:
             type: string
           jwt:
@@ -4622,6 +4624,8 @@ definitions:
       ott:
         type: object
         properties:
+          id:
+            type: string
           token:
             type: string
           jwt:
@@ -4632,6 +4636,8 @@ definitions:
       ottca:
         type: object
         properties:
+          id:
+            type: string
           token:
             type: string
           jwt:
@@ -5191,6 +5197,7 @@ definitions:
           - arch
           - buildDate
           - revision
+          - syncStatus
         properties:
           name:
             type: string
@@ -5221,6 +5228,8 @@ definitions:
           roleAttributes:
             $ref: '#/definitions/attributes'
           fingerprint:
+            type: string
+          syncStatus:
             type: string
           versionInfo:
             $ref: '#/definitions/versionInfo'
@@ -5766,6 +5775,9 @@ definitions:
     properties:
       args:
         $ref: '#/definitions/apiErrorArgs'
+      data:
+        type: object
+        additionalProperties: true
       causeMessage:
         type: string
       code:
@@ -6809,9 +6821,12 @@ definitions:
         required:
           - queryType
           - isPassing
+          - timeout
         properties:
           isPassing:
             type: boolean
+          timeout:
+            type: integer
           queryType:
             $ref: '#/definitions/postureCheckType'
           process:

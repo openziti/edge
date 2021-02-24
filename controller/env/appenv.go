@@ -118,7 +118,7 @@ func (ae *AppEnv) GetEnrollRegistry() model.EnrollmentRegistry {
 }
 
 func (ae *AppEnv) IsEdgeRouterOnline(id string) bool {
-	return ae.Broker.GetOnlineEdgeRouter(id) != nil
+	return ae.Broker.IsEdgeRouterOnline(id)
 }
 
 func (ae *AppEnv) GetApiClientCsrSigner() cert.Signer {
@@ -137,6 +137,7 @@ type HostController interface {
 	RegisterXctrl(x xctrl.Xctrl) error
 	RegisterXmgmt(x xmgmt.Xmgmt) error
 	GetNetwork() *network.Network
+	GetCloseNotifyChannel() <-chan struct{}
 }
 
 type Schemes struct {

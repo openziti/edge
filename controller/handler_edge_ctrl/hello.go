@@ -21,16 +21,19 @@ import (
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/controller/env"
 	"github.com/openziti/edge/pb/edge_ctrl_pb"
+	"github.com/openziti/fabric/controller/network"
 	"github.com/openziti/foundation/channel2"
 )
 
 type helloHandler struct {
-	appEnv *env.AppEnv
+	appEnv   *env.AppEnv
+	callback func(r *network.Router, respHello *edge_ctrl_pb.ClientHello)
 }
 
-func NewHelloHandler(appEnv *env.AppEnv) *helloHandler {
+func NewHelloHandler(appEnv *env.AppEnv, callback func(r *network.Router, respHello *edge_ctrl_pb.ClientHello)) *helloHandler {
 	return &helloHandler{
-		appEnv: appEnv,
+		appEnv:   appEnv,
+		callback: callback,
 	}
 }
 
@@ -52,17 +55,5 @@ func (h *helloHandler) HandleReceive(msg *channel2.Message, ch channel2.Channel)
 		return
 	}
 
-	if r.Fingerprint == nil {
-		pfxlog.Logger().Errorf("router %v is not enrolled, closing channel", ch.Id().Token)
-		_ = ch.Close()
-		return
-	}
-
-	edgeRouter, _ := h.appEnv.Handlers.EdgeRouter.ReadOneByFingerprint(*r.Fingerprint)
-	if edgeRouter == nil {
-		pfxlog.Logger().Errorf("edge hello received for non-edge router %v", ch.Id().Token)
-		return
-	}
-
-	h.appEnv.Broker.ReceiveHello(r, edgeRouter, respHello)
+	h.callback(r, respHello)
 }

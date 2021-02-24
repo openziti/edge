@@ -23,7 +23,10 @@ import (
 	"github.com/openziti/edge/controller"
 	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/response"
+	sync2 "github.com/openziti/edge/controller/sync_strats"
 	"github.com/openziti/edge/controller/timeout"
+	"github.com/openziti/edge/edge_common"
+	"github.com/openziti/edge/pb/edge_ctrl_pb"
 	"github.com/openziti/edge/rest_server"
 	"github.com/openziti/fabric/controller/xtv"
 	"net/http"
@@ -126,10 +129,14 @@ func (c *Controller) SetHostController(h env.HostController) {
 	}
 }
 
-func (c *Controller) GetCtrlHandlers() []channel2.ReceiveHandler {
+func (c *Controller) GetCtrlHandlers(ch channel2.Channel) []channel2.ReceiveHandler {
 	return []channel2.ReceiveHandler{
 		handler_edge_ctrl.NewSessionHeartbeatHandler(c.AppEnv),
-		handler_edge_ctrl.NewHelloHandler(c.AppEnv),
+		handler_edge_ctrl.NewCreateCircuitHandler(c.AppEnv, ch),
+		handler_edge_ctrl.NewCreateTerminatorHandler(c.AppEnv, ch),
+		handler_edge_ctrl.NewUpdateTerminatorHandler(c.AppEnv, ch),
+		handler_edge_ctrl.NewRemoveTerminatorHandler(c.AppEnv, ch),
+		handler_edge_ctrl.NewValidateSessionsHandler(c.AppEnv, ch),
 	}
 }
 
@@ -188,7 +195,15 @@ func (c *Controller) Initialize() {
 	}
 
 	//after InitPersistence
-	c.AppEnv.Broker = env.NewBroker(c.AppEnv)
+	c.AppEnv.Broker = env.NewBroker(c.AppEnv, sync2.NewInstantStrategy(c.AppEnv, sync2.InstantStrategyOptions{
+		MaxQueuedRouterConnects:  100,
+		MaxQueuedClientHellos:    100,
+		RouterConnectWorkerCount: 10,
+		SyncWorkerCount:          10,
+		RouterTxBufferSize:       100,
+		HelloSendTimeout:         10 * time.Second,
+		SessionChunkSize:         100,
+	}))
 
 	servicePolicyEnforcer := policy.NewServicePolicyEnforcer(c.AppEnv, policyAppWanFreq)
 	if err := c.policyEngine.AddOperation(servicePolicyEnforcer); err != nil {
@@ -207,7 +222,7 @@ func (c *Controller) Initialize() {
 
 	}
 
-	xtv.RegisterValidator("edge", env.NewEdgeTerminatorValidator(c.AppEnv))
+	xtv.RegisterValidator(edge_common.Binding, env.NewEdgeTerminatorValidator(c.AppEnv))
 	if err := xtv.InitializeMappings(); err != nil {
 		log.Fatalf("error initializing xtv: %+v", err)
 	}
@@ -318,7 +333,7 @@ func (c *Controller) Run() {
 	}()
 
 	go func() {
-		err := c.policyEngine.Start()
+		err := c.policyEngine.Start(c.AppEnv.HostController.GetCloseNotifyChannel())
 
 		if err != nil {
 			log.
@@ -341,10 +356,12 @@ func (c *Controller) waitForShutdown() {
 
 	<-ch
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
-	defer cancel()
+	if c.config.Enabled {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+		defer cancel()
 
-	c.apiServer.Shutdown(ctx)
+		c.apiServer.Shutdown(ctx)
+	}
 
 	log.Info("shutting down")
 	os.Exit(0)
@@ -355,7 +372,9 @@ func (c *Controller) Shutdown() {
 	defer cancel()
 
 	c.apiServer.Shutdown(ctx)
-	_ = c.policyEngine.Stop()
+	// _ = c.policyEngine.Stop()
+
+	c.AppEnv.Broker.Stop()
 
 	pfxlog.Logger().Info("edge controller shutting down")
 }
@@ -363,6 +382,15 @@ func (c *Controller) Shutdown() {
 type subctrl struct {
 	parent  *Controller
 	channel channel2.Channel
+}
+
+func (c *subctrl) GetTraceDecoders() []channel2.TraceMessageDecoder {
+	return []channel2.TraceMessageDecoder{
+		&edge_ctrl_pb.Decoder{},
+	}
+}
+
+func (c *subctrl) NotifyOfReconnect() {
 }
 
 func (c *subctrl) LoadConfig(cfgmap map[interface{}]interface{}) error {
@@ -374,7 +402,7 @@ func (c *subctrl) Enabled() bool {
 }
 
 func (c *subctrl) BindChannel(ch channel2.Channel) error {
-	for _, h := range c.parent.GetCtrlHandlers() {
+	for _, h := range c.parent.GetCtrlHandlers(ch) {
 		ch.AddReceiveHandler(h)
 	}
 	c.channel = ch

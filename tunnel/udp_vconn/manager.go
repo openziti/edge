@@ -22,6 +22,7 @@ import (
 	"github.com/openziti/edge/tunnel"
 	"github.com/openziti/foundation/util/mempool"
 	"github.com/openziti/sdk-golang/ziti"
+	"github.com/sirupsen/logrus"
 	"io"
 	"net"
 	"time"
@@ -97,7 +98,7 @@ func (manager *manager) CreateWriteQueue(srcAddr net.Addr, service string, write
 	conn.markUsed()
 	manager.connMap[srcAddr.String()] = conn
 	pfxlog.Logger().WithField("udpConnId", srcAddr.String()).Debug("created new virtual UDP connection")
-	go tunnel.DialAndRun(manager.context, service, conn)
+	go tunnel.DialAndRun(manager.context, service, conn, false)
 	return conn, nil
 }
 
@@ -137,6 +138,11 @@ func (manager *manager) close(conn *udpConn) {
 		conn.closed = true
 		delete(manager.connMap, conn.srcAddr.String())
 		close(conn.readC)
+		if err := conn.writeConn.Close(); err != nil {
+			logrus.WithField("service", conn.service).
+				WithField("src_addr", conn.srcAddr).
+				WithError(err).Error("error while closing udp connection")
+		}
 	}
 }
 

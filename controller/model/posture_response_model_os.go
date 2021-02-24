@@ -14,24 +14,20 @@
 	limitations under the License.
 */
 
-package router
+package model
 
 import (
-	"net"
-	"net/url"
 	"time"
 )
 
-type Memory struct {
-	Path     string        `yaml:"path"`
-	Interval time.Duration `yaml:"intervalMs"`
+type PostureResponseOs struct {
+	*PostureResponse
+	Type    string `json:"type"`
+	Version string `json:"version"`
+	Build   string `json:"build"`
 }
 
-type Sans struct {
-	DnsAddresses       []string `yaml:"dns" mapstructure:"dns"`
-	IpAddresses        []string `yaml:"ip" mapstructure:"ip"`
-	IpAddressesParsed  []net.IP
-	EmailAddresses     []string `yaml:"email" mapstructure:"email"`
-	UriAddresses       []string `yaml:"uri" mapstructure:"uri"`
-	UriAddressesParsed []*url.URL
+func (pr *PostureResponseOs) Apply(postureData *PostureData) {
+	postureData.Os = pr
+	postureData.Os.LastUpdatedAt = time.Now()
 }

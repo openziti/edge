@@ -6127,6 +6127,10 @@ func init() {
         "code": {
           "type": "string"
         },
+        "data": {
+          "type": "object",
+          "additionalProperties": true
+        },
         "message": {
           "type": "string"
         },
@@ -7641,7 +7645,8 @@ func init() {
             "version",
             "arch",
             "buildDate",
-            "revision"
+            "revision",
+            "syncStatus"
           ],
           "properties": {
             "enrollmentCreatedAt": {
@@ -7685,6 +7690,9 @@ func init() {
               "additionalProperties": {
                 "type": "string"
               }
+            },
+            "syncStatus": {
+              "type": "string"
             },
             "versionInfo": {
               "$ref": "#/definitions/versionInfo"
@@ -8246,6 +8254,9 @@ func init() {
               "type": "string",
               "format": "date-time"
             },
+            "id": {
+              "type": "string"
+            },
             "jwt": {
               "type": "string"
             },
@@ -8267,6 +8278,9 @@ func init() {
               "type": "string",
               "format": "date-time"
             },
+            "id": {
+              "type": "string"
+            },
             "jwt": {
               "type": "string"
             },
@@ -8281,6 +8295,9 @@ func init() {
             "expiresAt": {
               "type": "string",
               "format": "date-time"
+            },
+            "id": {
+              "type": "string"
             },
             "jwt": {
               "type": "string"
@@ -9072,7 +9089,8 @@ func init() {
           "type": "object",
           "required": [
             "queryType",
-            "isPassing"
+            "isPassing",
+            "timeout"
           ],
           "properties": {
             "isPassing": {
@@ -9083,6 +9101,9 @@ func init() {
             },
             "queryType": {
               "$ref": "#/definitions/postureCheckType"
+            },
+            "timeout": {
+              "type": "integer"
             }
           }
         }
@@ -24975,6 +24996,9 @@ func init() {
           "type": "string",
           "format": "date-time"
         },
+        "id": {
+          "type": "string"
+        },
         "jwt": {
           "type": "string"
         },
@@ -24996,6 +25020,9 @@ func init() {
           "type": "string",
           "format": "date-time"
         },
+        "id": {
+          "type": "string"
+        },
         "jwt": {
           "type": "string"
         },
@@ -25010,6 +25037,9 @@ func init() {
         "expiresAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "id": {
+          "type": "string"
         },
         "jwt": {
           "type": "string"
@@ -25636,6 +25666,10 @@ func init() {
         },
         "code": {
           "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": true
         },
         "message": {
           "type": "string"
@@ -27151,7 +27185,8 @@ func init() {
             "version",
             "arch",
             "buildDate",
-            "revision"
+            "revision",
+            "syncStatus"
           ],
           "properties": {
             "enrollmentCreatedAt": {
@@ -27195,6 +27230,9 @@ func init() {
               "additionalProperties": {
                 "type": "string"
               }
+            },
+            "syncStatus": {
+              "type": "string"
             },
             "versionInfo": {
               "$ref": "#/definitions/versionInfo"
@@ -27756,6 +27794,9 @@ func init() {
               "type": "string",
               "format": "date-time"
             },
+            "id": {
+              "type": "string"
+            },
             "jwt": {
               "type": "string"
             },
@@ -27777,6 +27818,9 @@ func init() {
               "type": "string",
               "format": "date-time"
             },
+            "id": {
+              "type": "string"
+            },
             "jwt": {
               "type": "string"
             },
@@ -27791,6 +27835,9 @@ func init() {
             "expiresAt": {
               "type": "string",
               "format": "date-time"
+            },
+            "id": {
+              "type": "string"
             },
             "jwt": {
               "type": "string"
@@ -28582,7 +28629,8 @@ func init() {
           "type": "object",
           "required": [
             "queryType",
-            "isPassing"
+            "isPassing",
+            "timeout"
           ],
           "properties": {
             "isPassing": {
@@ -28593,6 +28641,9 @@ func init() {
             },
             "queryType": {
               "$ref": "#/definitions/postureCheckType"
+            },
+            "timeout": {
+              "type": "integer"
             }
           }
         }
