@@ -417,8 +417,14 @@ func (ctx *TestContext) login(username, password string) (*session, error) {
 func (ctx *TestContext) Teardown() {
 	pfxlog.Logger().Info("tearing down test context")
 	ctx.shutdownRouter()
-	ctx.EdgeController.Shutdown()
-	ctx.fabricController.Shutdown()
+	if ctx.EdgeController != nil {
+		ctx.EdgeController.Shutdown()
+		ctx.EdgeController = nil
+	}
+	if ctx.fabricController != nil {
+		ctx.fabricController.Shutdown()
+		ctx.fabricController = nil
+	}
 }
 
 func (ctx *TestContext) newRequest() *resty.Request {
@@ -582,11 +588,13 @@ func (ctx *TestContext) newService(roleAttributes, configs []string) *service {
 
 func (ctx *TestContext) newTerminator(serviceId, routerId, binding, address string) *terminator {
 	return &terminator{
-		serviceId: serviceId,
-		routerId:  routerId,
-		binding:   binding,
-		address:   address,
-		tags:      nil,
+		serviceId:  serviceId,
+		routerId:   routerId,
+		binding:    binding,
+		address:    address,
+		cost:       0,
+		precedence: "default",
+		tags:       nil,
 	}
 }
 
