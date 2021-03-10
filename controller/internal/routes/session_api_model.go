@@ -28,8 +28,25 @@ import (
 )
 
 const EntityNameSession = "sessions"
+const EntityNameRoutePath = "route-path"
 
-var SessionLinkFactory = NewBasicLinkFactory(EntityNameSession)
+var SessionLinkFactory = NewSessionLinkFactory()
+
+type SessionLinkFactoryImpl struct {
+	BasicLinkFactory
+}
+
+func NewSessionLinkFactory() *SessionLinkFactoryImpl {
+	return &SessionLinkFactoryImpl{
+		BasicLinkFactory: *NewBasicLinkFactory(EntityNameSession),
+	}
+}
+
+func (factory *SessionLinkFactoryImpl) Links(entity models.Entity) rest_model.Links {
+	links := factory.BasicLinkFactory.Links(entity)
+	links[EntityNameRoutePath] = factory.NewNestedLink(entity, EntityNameRoutePath)
+	return links
+}
 
 func MapCreateSessionToModel(apiSessionId string, session *rest_model.SessionCreate) *model.Session {
 	ret := &model.Session{
@@ -121,26 +138,23 @@ func getSessionEdgeRouters(ae *env.AppEnv, ns *model.Session) ([]*rest_model.Ses
 	}
 
 	for _, edgeRouter := range edgeRoutersForSession.EdgeRouters {
-		onlineEdgeRouter, erSyncStatus := ae.Broker.GetOnlineEdgeRouter(edgeRouter.Id)
+		state := ae.Broker.GetEdgeRouterState(edgeRouter.Id)
 
-		if onlineEdgeRouter != nil {
-			syncStatus := string(erSyncStatus)
-			isOnline := true
-			restModel := &rest_model.SessionEdgeRouter{
-				CommonEdgeRouterProperties: rest_model.CommonEdgeRouterProperties{
-					Hostname:           onlineEdgeRouter.Hostname,
-					IsOnline:           &isOnline,
-					Name:               &edgeRouter.Name,
-					SupportedProtocols: onlineEdgeRouter.EdgeRouterProtocols,
-					SyncStatus:         &syncStatus,
-				},
-				// `urls` is deprecated and should be removed once older SDKs that rely on it are not longer in use
-				Urls: onlineEdgeRouter.EdgeRouterProtocols,
-			}
-
-			pfxlog.Logger().Debugf("Returning %+v to %+v, with urls: %+v", edgeRouter, restModel, restModel.Urls)
-			edgeRouters = append(edgeRouters, restModel)
+		syncStatus := string(state.SyncStatus)
+		restModel := &rest_model.SessionEdgeRouter{
+			CommonEdgeRouterProperties: rest_model.CommonEdgeRouterProperties{
+				Hostname:           &state.Hostname,
+				IsOnline:           &state.IsOnline,
+				Name:               &edgeRouter.Name,
+				SupportedProtocols: state.Protocols,
+				SyncStatus:         &syncStatus,
+			},
+			// `urls` is deprecated and should be removed once older SDKs that rely on it are not longer in use
+			Urls: state.Protocols,
 		}
+
+		pfxlog.Logger().Debugf("Returning %+v to %+v, with urls: %+v", edgeRouter, restModel, restModel.Urls)
+		edgeRouters = append(edgeRouters, restModel)
 	}
 
 	return edgeRouters, nil

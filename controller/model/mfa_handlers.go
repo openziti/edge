@@ -24,6 +24,7 @@ import (
 	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/fabric/controller/models"
+	"github.com/openziti/foundation/util/errorz"
 	"github.com/skip2/go-qrcode"
 	"go.etcd.io/bbolt"
 	"strings"
@@ -51,7 +52,7 @@ func (handler *MfaHandler) newModelEntity() boltEntitySink {
 }
 
 func (handler *MfaHandler) CreateForIdentity(identity *Identity) (string, error) {
-	secretBytes := make([]byte, 80)
+	secretBytes := make([]byte, 10)
 	_, _ = rand.Read(secretBytes)
 	secret := base32.StdEncoding.EncodeToString(secretBytes)
 
@@ -164,7 +165,7 @@ func (handler *MfaHandler) DeleteForIdentity(identity *Identity, code string) er
 	}
 
 	if mfa == nil {
-		return apierror.NewNotFound()
+		return errorz.NewNotFound()
 	}
 
 	if mfa.IsVerified {
