@@ -13,7 +13,7 @@ go 1.16
 replace go.etcd.io/bbolt => github.com/openziti/bbolt v1.3.6-0.20210317142109-547da822475e
 
 require (
-	github.com/AppsFlyer/go-sundheit v0.2.0
+	github.com/AppsFlyer/go-sundheit v0.3.1
 	github.com/Jeffail/gabs v1.4.0
 	github.com/achanda/go-sysctl v0.0.0-20160222034550-6be7678c45d2
 	github.com/blang/semver v3.5.1+incompatible
