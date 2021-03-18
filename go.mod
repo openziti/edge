@@ -12,6 +12,8 @@ replace github.com/openziti/fabric => ../fabric
 
 //replace github.com/kataras/go-events => ../go-events
 
+replace go.etcd.io/bbolt => github.com/openziti/bbolt v1.3.6-0.20210317142109-547da822475e
+
 require (
 	github.com/AppsFlyer/go-sundheit v0.2.0
 	github.com/Jeffail/gabs v1.4.0
@@ -41,13 +43,13 @@ require (
 	github.com/miekg/dns v1.1.40
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/netfoundry/secretstream v0.1.2
-	github.com/openziti/fabric v0.16.27
-	github.com/openziti/foundation v0.15.35
-	github.com/openziti/sdk-golang v0.15.21
+	github.com/openziti/fabric v0.16.31
+	github.com/openziti/foundation v0.15.38
+	github.com/openziti/sdk-golang v0.15.24
 	github.com/orcaman/concurrent-map v0.0.0-20210106121528-16402b402231
 	github.com/pkg/errors v0.9.1
 	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0
-	github.com/sirupsen/logrus v1.8.0
+	github.com/sirupsen/logrus v1.8.1
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/spf13/cobra v1.1.3
 	github.com/stretchr/testify v1.7.0
