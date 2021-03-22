@@ -16,6 +16,11 @@
 
 package tproxy
 
+import (
+	"github.com/openziti/edge/tunnel/intercept"
+	"github.com/pkg/errors"
+)
+
 func New() (intercept.Interceptor, error) {
 	return nil, errors.New("tproxy not supported on windows")
 }
