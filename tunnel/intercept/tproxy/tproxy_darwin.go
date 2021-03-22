@@ -24,3 +24,7 @@ import (
 func New() (intercept.Interceptor, error) {
 	return nil, errors.New("tproxy not supported on darwin")
 }
+
+func NewWithLanIf(lanIf string) (intercept.Interceptor, error) {
+	return nil, errors.New("tproxy not supported on darwin")
+}
