@@ -43,7 +43,7 @@ type GetIdentityPostureDataEnvelope struct {
 
 	// data
 	// Required: true
-	Data PostureData `json:"data"`
+	Data *PostureData `json:"data"`
 
 	// meta
 	// Required: true
@@ -72,6 +72,15 @@ func (m *GetIdentityPostureDataEnvelope) validateData(formats strfmt.Registry) e
 
 	if err := validate.Required("data", "body", m.Data); err != nil {
 		return err
+	}
+
+	if m.Data != nil {
+		if err := m.Data.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("data")
+			}
+			return err
+		}
 	}
 
 	return nil

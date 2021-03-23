@@ -63,6 +63,8 @@ type ClientService interface {
 
 	DisassociateIdentitysServiceConfigs(params *DisassociateIdentitysServiceConfigsParams, authInfo runtime.ClientAuthInfoWriter) (*DisassociateIdentitysServiceConfigsOK, error)
 
+	GetIdentityFailedServiceRequests(params *GetIdentityFailedServiceRequestsParams, authInfo runtime.ClientAuthInfoWriter) (*GetIdentityFailedServiceRequestsOK, error)
+
 	GetIdentityPolicyAdvice(params *GetIdentityPolicyAdviceParams, authInfo runtime.ClientAuthInfoWriter) (*GetIdentityPolicyAdviceOK, error)
 
 	GetIdentityPostureData(params *GetIdentityPostureDataParams, authInfo runtime.ClientAuthInfoWriter) (*GetIdentityPostureDataOK, error)
@@ -309,6 +311,46 @@ func (a *Client) DisassociateIdentitysServiceConfigs(params *DisassociateIdentit
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for disassociateIdentitysServiceConfigs: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  GetIdentityFailedServiceRequests retrieves a list of the most recent service failure requests due to posture checks
+
+  Returns a list of service session requests that failed due to posture checks. The entries will contain
+every policy that was verified against and every failed check in each policy. Each check will include
+the historical posture data and posture check configuration.
+
+*/
+func (a *Client) GetIdentityFailedServiceRequests(params *GetIdentityFailedServiceRequestsParams, authInfo runtime.ClientAuthInfoWriter) (*GetIdentityFailedServiceRequestsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetIdentityFailedServiceRequestsParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "getIdentityFailedServiceRequests",
+		Method:             "GET",
+		PathPattern:        "/identities/{id}/failed-service-requests",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetIdentityFailedServiceRequestsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetIdentityFailedServiceRequestsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for getIdentityFailedServiceRequests: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

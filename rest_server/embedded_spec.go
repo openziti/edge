@@ -3072,6 +3072,37 @@ func init() {
         }
       ]
     },
+    "/identities/{id}/failed-service-requests": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Returns a list of service session requests that failed due to posture checks. The entries will contain\nevery policy that was verified against and every failed check in each policy. Each check will include\nthe historical posture data and posture check configuration.\n",
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Retrieve a list of the most recent service failure requests due to posture checks",
+        "operationId": "getIdentityFailedServiceRequests",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/getIdentityFailedServiceRequest"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorizedResponse"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/id"
+        }
+      ]
+    },
     "/identities/{id}/mfa": {
       "delete": {
         "security": [
@@ -5838,7 +5869,11 @@ func init() {
           ],
           "properties": {
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             }
           }
         }
@@ -5857,7 +5892,10 @@ func init() {
           ],
           "properties": {
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             }
           }
         }
@@ -5873,7 +5911,11 @@ func init() {
           "type": "object",
           "properties": {
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             }
           }
         }
@@ -5892,7 +5934,11 @@ func init() {
           ],
           "properties": {
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             }
           }
         }
@@ -6004,7 +6050,10 @@ func init() {
               "type": "string"
             },
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             },
             "version": {
               "type": "string"
@@ -6243,11 +6292,17 @@ func init() {
             "identityId",
             "configTypes",
             "ipAddress",
-            "authQueries"
+            "authQueries",
+            "cachedUpdatedAt",
+            "isMfaEnabled"
           ],
           "properties": {
             "authQueries": {
               "$ref": "#/definitions/authQueryList"
+            },
+            "cachedLastActivityAt": {
+              "type": "string",
+              "format": "date-time"
             },
             "configTypes": {
               "type": "array",
@@ -6264,6 +6319,13 @@ func init() {
             "ipAddress": {
               "type": "string"
             },
+            "isMfaEnabled": {
+              "type": "boolean"
+            },
+            "lastActivityAt": {
+              "type": "string",
+              "format": "date-time"
+            },
             "token": {
               "type": "string"
             }
@@ -6275,6 +6337,17 @@ func init() {
       "type": "array",
       "items": {
         "$ref": "#/definitions/apiSessionDetail"
+      }
+    },
+    "apiSessionPostureData": {
+      "type": "object",
+      "required": [
+        "mfa"
+      ],
+      "properties": {
+        "mfa": {
+          "$ref": "#/definitions/postureDataMfa"
+        }
       }
     },
     "apiVersion": {
@@ -7675,6 +7748,9 @@ func init() {
         "name"
       ],
       "properties": {
+        "isTunnelerEnabled": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
@@ -7705,7 +7781,8 @@ func init() {
             "version",
             "arch",
             "buildDate",
-            "revision"
+            "revision",
+            "isTunnelerEnabled"
           ],
           "properties": {
             "enrollmentCreatedAt": {
@@ -7728,6 +7805,9 @@ func init() {
             },
             "fingerprint": {
               "type": "string"
+            },
+            "isTunnelerEnabled": {
+              "type": "boolean"
             },
             "isVerified": {
               "type": "boolean"
@@ -7759,6 +7839,7 @@ func init() {
         "hostname": "",
         "id": "b0766b8d-bd1a-4d28-8415-639b29d3c83d",
         "isOnline": false,
+        "isTunnelerEnabled": false,
         "isVerified": false,
         "name": "TestRouter-e33c837f-3222-4b40-bcd6-b3458fd5156e",
         "roleAttributes": [
@@ -7782,6 +7863,9 @@ func init() {
       "description": "An edge router patch object",
       "type": "object",
       "properties": {
+        "isTunnelerEnabled": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
@@ -7908,6 +7992,9 @@ func init() {
         "name"
       ],
       "properties": {
+        "isTunnelerEnabled": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
@@ -8089,6 +8176,39 @@ func init() {
         }
       }
     },
+    "failedServiceRequestList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/failedSessionRequest"
+      }
+    },
+    "failedSessionRequest": {
+      "type": "object",
+      "properties": {
+        "apiSessionId": {
+          "type": "string"
+        },
+        "policyFailures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/policyFailure"
+          }
+        },
+        "serviceId": {
+          "type": "string"
+        },
+        "serviceName": {
+          "type": "string"
+        },
+        "sessionType": {
+          "$ref": "#/definitions/dialBind"
+        },
+        "when": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "geoRegionDetail": {
       "type": "object",
       "allOf": [
@@ -8112,6 +8232,21 @@ func init() {
       "type": "array",
       "items": {
         "$ref": "#/definitions/geoRegionDetail"
+      }
+    },
+    "getIdentityFailedServiceRequestEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/failedServiceRequestList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
       }
     },
     "getIdentityPolicyAdviceEnvelope": {
@@ -8388,7 +8523,8 @@ func init() {
       "enum": [
         "User",
         "Device",
-        "Service"
+        "Service",
+        "Router"
       ]
     },
     "identityTypeDetail": {
@@ -8997,13 +9133,6 @@ func init() {
         }
       }
     },
-    "operatingSystemArray": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "#/definitions/operatingSystem"
-      }
-    },
     "osType": {
       "type": "string",
       "enum": [
@@ -9085,18 +9214,381 @@ func init() {
         }
       }
     },
+    "policyFailure": {
+      "type": "object",
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/postureCheckFailure"
+          }
+        },
+        "policyId": {
+          "type": "string"
+        },
+        "policyName": {
+          "type": "string"
+        }
+      }
+    },
+    "postureCheckFailure": {
+      "type": "object",
+      "required": [
+        "postureCheckId",
+        "postureCheckName",
+        "postureCheckType"
+      ],
+      "properties": {
+        "postureCheckId": {
+          "type": "string"
+        },
+        "postureCheckName": {
+          "type": "string"
+        },
+        "postureCheckType": {
+          "type": "string"
+        }
+      },
+      "discriminator": "postureCheckType"
+    },
+    "postureCheckFailureDomain": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "type": "string"
+            },
+            "expectedValue": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "x-class": "DOMAIN"
+    },
+    "postureCheckFailureMacAddress": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "expectedValue": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "x-class": "MAC"
+    },
+    "postureCheckFailureMfa": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "type": "boolean"
+            },
+            "expectedValue": {
+              "type": "boolean"
+            }
+          }
+        }
+      ],
+      "x-class": "MFA"
+    },
+    "postureCheckFailureOperatingSystem": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "$ref": "#/definitions/postureCheckFailureOperatingSystemActual"
+            },
+            "expectedValue": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
+            }
+          }
+        }
+      ],
+      "x-class": "OS"
+    },
+    "postureCheckFailureOperatingSystemActual": {
+      "type": "object",
+      "required": [
+        "type",
+        "version"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "postureCheckFailureProcess": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "$ref": "#/definitions/postureCheckFailureProcessActual"
+            },
+            "expectedValue": {
+              "$ref": "#/definitions/process"
+            }
+          }
+        }
+      ],
+      "x-class": "PROCESS"
+    },
+    "postureCheckFailureProcessActual": {
+      "type": "object",
+      "required": [
+        "isRunning",
+        "hash",
+        "signerFingerprints"
+      ],
+      "properties": {
+        "hash": {
+          "type": "string"
+        },
+        "isRunning": {
+          "type": "boolean"
+        },
+        "osType": {
+          "$ref": "#/definitions/osType"
+        },
+        "signerFingerprints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "postureCheckType": {
       "type": "string",
       "enum": [
         "OS",
         "PROCESS",
         "DOMAIN",
-        "MAC"
+        "MAC",
+        "MFA"
       ]
     },
     "postureData": {
       "type": "object",
-      "additionalProperties": true
+      "required": [
+        "mac",
+        "domain",
+        "os",
+        "processes",
+        "apiSessionPostureData"
+      ],
+      "properties": {
+        "apiSessionPostureData": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/apiSessionPostureData"
+          }
+        },
+        "domain": {
+          "$ref": "#/definitions/postureDataDomain"
+        },
+        "mac": {
+          "$ref": "#/definitions/postureDataMac"
+        },
+        "os": {
+          "$ref": "#/definitions/postureDataOs"
+        },
+        "processes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/postureDataProcess"
+          }
+        }
+      }
+    },
+    "postureDataBase": {
+      "type": "object",
+      "required": [
+        "postureCheckId",
+        "timedOut",
+        "lastUpdatedAt"
+      ],
+      "properties": {
+        "lastUpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "postureCheckId": {
+          "type": "string"
+        },
+        "timedOut": {
+          "type": "boolean"
+        }
+      }
+    },
+    "postureDataDomain": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureDataBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "domain"
+          ],
+          "properties": {
+            "domain": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "postureDataMac": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureDataBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "addresses"
+          ],
+          "properties": {
+            "addresses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "postureDataMfa": {
+      "type": "object",
+      "required": [
+        "apiSessionId",
+        "passedMfa"
+      ],
+      "properties": {
+        "apiSessionId": {
+          "type": "string"
+        },
+        "passedMfa": {
+          "type": "boolean"
+        }
+      }
+    },
+    "postureDataOs": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureDataBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "version",
+            "build"
+          ],
+          "properties": {
+            "build": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "postureDataProcess": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureDataBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "binaryHash": {
+              "type": "string"
+            },
+            "isRunning": {
+              "type": "boolean"
+            },
+            "signerFingerprints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
     },
     "postureQueries": {
       "type": "object",
@@ -10548,10 +11040,10 @@ func init() {
             "type": {
               "_links": {
                 "self": {
-                  "href": "./identity-types/577104f2-1e3a-4947-a927-7383baefbc9a"
+                  "href": "./identity-types/User"
                 }
               },
-              "id": "577104f2-1e3a-4947-a927-7383baefbc9a",
+              "id": "User",
               "name": "User",
               "urlName": "identity-types"
             },
@@ -10685,6 +11177,12 @@ func init() {
       "description": "A response containing the edge routers signed certificates (server chain, server cert, CAs).",
       "schema": {
         "$ref": "#/definitions/enrollmentCertsEnvelope"
+      }
+    },
+    "getIdentityFailedServiceRequest": {
+      "description": "Returns a list of service request failures",
+      "schema": {
+        "$ref": "#/definitions/getIdentityFailedServiceRequestEnvelope"
       }
     },
     "getIdentityPolicyAdvice": {
@@ -14412,10 +14910,10 @@ func init() {
                   "type": {
                     "_links": {
                       "self": {
-                        "href": "./identity-types/577104f2-1e3a-4947-a927-7383baefbc9a"
+                        "href": "./identity-types/User"
                       }
                     },
-                    "id": "577104f2-1e3a-4947-a927-7383baefbc9a",
+                    "id": "User",
                     "name": "User",
                     "urlName": "identity-types"
                   },
@@ -18740,6 +19238,88 @@ func init() {
             "description": "A list of edge routers",
             "schema": {
               "$ref": "#/definitions/listEdgeRoutersEnvelope"
+            }
+          },
+          "401": {
+            "description": "The currently supplied session does not have the correct access rights to request this resource",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {}
+                  },
+                  "cause": "",
+                  "causeMessage": "",
+                  "code": "UNAUTHORIZED",
+                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
+                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/apiErrorEnvelope"
+            },
+            "examples": {
+              "application/json": {
+                "error": {
+                  "args": {
+                    "urlVars": {
+                      "id": "71a3000f-7dda-491a-9b90-a19f4ee6c406"
+                    }
+                  },
+                  "cause": null,
+                  "causeMessage": "",
+                  "code": "NOT_FOUND",
+                  "message": "The resource requested was not found or is no longer available",
+                  "requestId": "270908d6-f2ef-4577-b973-67bec18ae376"
+                },
+                "meta": {
+                  "apiEnrolmentVersion": "0.0.1",
+                  "apiVersion": "0.0.1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "The id of the requested resource",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/identities/{id}/failed-service-requests": {
+      "get": {
+        "security": [
+          {
+            "ztSession": []
+          }
+        ],
+        "description": "Returns a list of service session requests that failed due to posture checks. The entries will contain\nevery policy that was verified against and every failed check in each policy. Each check will include\nthe historical posture data and posture check configuration.\n",
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Retrieve a list of the most recent service failure requests due to posture checks",
+        "operationId": "getIdentityFailedServiceRequests",
+        "responses": {
+          "200": {
+            "description": "Returns a list of service request failures",
+            "schema": {
+              "$ref": "#/definitions/getIdentityFailedServiceRequestEnvelope"
             }
           },
           "401": {
@@ -25491,7 +26071,11 @@ func init() {
           ],
           "properties": {
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             }
           }
         }
@@ -25510,7 +26094,10 @@ func init() {
           ],
           "properties": {
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             }
           }
         }
@@ -25526,7 +26113,11 @@ func init() {
           "type": "object",
           "properties": {
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             }
           }
         }
@@ -25545,7 +26136,11 @@ func init() {
           ],
           "properties": {
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             }
           }
         }
@@ -25657,7 +26252,10 @@ func init() {
               "type": "string"
             },
             "operatingSystems": {
-              "$ref": "#/definitions/operatingSystemArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
             },
             "version": {
               "type": "string"
@@ -25896,11 +26494,17 @@ func init() {
             "identityId",
             "configTypes",
             "ipAddress",
-            "authQueries"
+            "authQueries",
+            "cachedUpdatedAt",
+            "isMfaEnabled"
           ],
           "properties": {
             "authQueries": {
               "$ref": "#/definitions/authQueryList"
+            },
+            "cachedLastActivityAt": {
+              "type": "string",
+              "format": "date-time"
             },
             "configTypes": {
               "type": "array",
@@ -25917,6 +26521,13 @@ func init() {
             "ipAddress": {
               "type": "string"
             },
+            "isMfaEnabled": {
+              "type": "boolean"
+            },
+            "lastActivityAt": {
+              "type": "string",
+              "format": "date-time"
+            },
             "token": {
               "type": "string"
             }
@@ -25928,6 +26539,17 @@ func init() {
       "type": "array",
       "items": {
         "$ref": "#/definitions/apiSessionDetail"
+      }
+    },
+    "apiSessionPostureData": {
+      "type": "object",
+      "required": [
+        "mfa"
+      ],
+      "properties": {
+        "mfa": {
+          "$ref": "#/definitions/postureDataMfa"
+        }
       }
     },
     "apiVersion": {
@@ -27328,6 +27950,9 @@ func init() {
         "name"
       ],
       "properties": {
+        "isTunnelerEnabled": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
@@ -27358,7 +27983,8 @@ func init() {
             "version",
             "arch",
             "buildDate",
-            "revision"
+            "revision",
+            "isTunnelerEnabled"
           ],
           "properties": {
             "enrollmentCreatedAt": {
@@ -27381,6 +28007,9 @@ func init() {
             },
             "fingerprint": {
               "type": "string"
+            },
+            "isTunnelerEnabled": {
+              "type": "boolean"
             },
             "isVerified": {
               "type": "boolean"
@@ -27412,6 +28041,7 @@ func init() {
         "hostname": "",
         "id": "b0766b8d-bd1a-4d28-8415-639b29d3c83d",
         "isOnline": false,
+        "isTunnelerEnabled": false,
         "isVerified": false,
         "name": "TestRouter-e33c837f-3222-4b40-bcd6-b3458fd5156e",
         "roleAttributes": [
@@ -27435,6 +28065,9 @@ func init() {
       "description": "An edge router patch object",
       "type": "object",
       "properties": {
+        "isTunnelerEnabled": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
@@ -27561,6 +28194,9 @@ func init() {
         "name"
       ],
       "properties": {
+        "isTunnelerEnabled": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
@@ -27742,6 +28378,39 @@ func init() {
         }
       }
     },
+    "failedServiceRequestList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/failedSessionRequest"
+      }
+    },
+    "failedSessionRequest": {
+      "type": "object",
+      "properties": {
+        "apiSessionId": {
+          "type": "string"
+        },
+        "policyFailures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/policyFailure"
+          }
+        },
+        "serviceId": {
+          "type": "string"
+        },
+        "serviceName": {
+          "type": "string"
+        },
+        "sessionType": {
+          "$ref": "#/definitions/dialBind"
+        },
+        "when": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "geoRegionDetail": {
       "type": "object",
       "allOf": [
@@ -27765,6 +28434,21 @@ func init() {
       "type": "array",
       "items": {
         "$ref": "#/definitions/geoRegionDetail"
+      }
+    },
+    "getIdentityFailedServiceRequestEnvelope": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/failedServiceRequestList"
+        },
+        "meta": {
+          "$ref": "#/definitions/meta"
+        }
       }
     },
     "getIdentityPolicyAdviceEnvelope": {
@@ -28041,7 +28725,8 @@ func init() {
       "enum": [
         "User",
         "Device",
-        "Service"
+        "Service",
+        "Router"
       ]
     },
     "identityTypeDetail": {
@@ -28650,13 +29335,6 @@ func init() {
         }
       }
     },
-    "operatingSystemArray": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "#/definitions/operatingSystem"
-      }
-    },
     "osType": {
       "type": "string",
       "enum": [
@@ -28738,18 +29416,381 @@ func init() {
         }
       }
     },
+    "policyFailure": {
+      "type": "object",
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/postureCheckFailure"
+          }
+        },
+        "policyId": {
+          "type": "string"
+        },
+        "policyName": {
+          "type": "string"
+        }
+      }
+    },
+    "postureCheckFailure": {
+      "type": "object",
+      "required": [
+        "postureCheckId",
+        "postureCheckName",
+        "postureCheckType"
+      ],
+      "properties": {
+        "postureCheckId": {
+          "type": "string"
+        },
+        "postureCheckName": {
+          "type": "string"
+        },
+        "postureCheckType": {
+          "type": "string"
+        }
+      },
+      "discriminator": "postureCheckType"
+    },
+    "postureCheckFailureDomain": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "type": "string"
+            },
+            "expectedValue": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "x-class": "DOMAIN"
+    },
+    "postureCheckFailureMacAddress": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "expectedValue": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "x-class": "MAC"
+    },
+    "postureCheckFailureMfa": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "type": "boolean"
+            },
+            "expectedValue": {
+              "type": "boolean"
+            }
+          }
+        }
+      ],
+      "x-class": "MFA"
+    },
+    "postureCheckFailureOperatingSystem": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "$ref": "#/definitions/postureCheckFailureOperatingSystemActual"
+            },
+            "expectedValue": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/operatingSystem"
+              }
+            }
+          }
+        }
+      ],
+      "x-class": "OS"
+    },
+    "postureCheckFailureOperatingSystemActual": {
+      "type": "object",
+      "required": [
+        "type",
+        "version"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "postureCheckFailureProcess": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureCheckFailure"
+        },
+        {
+          "type": "object",
+          "required": [
+            "actualValue",
+            "expectedValue"
+          ],
+          "properties": {
+            "actualValue": {
+              "$ref": "#/definitions/postureCheckFailureProcessActual"
+            },
+            "expectedValue": {
+              "$ref": "#/definitions/process"
+            }
+          }
+        }
+      ],
+      "x-class": "PROCESS"
+    },
+    "postureCheckFailureProcessActual": {
+      "type": "object",
+      "required": [
+        "isRunning",
+        "hash",
+        "signerFingerprints"
+      ],
+      "properties": {
+        "hash": {
+          "type": "string"
+        },
+        "isRunning": {
+          "type": "boolean"
+        },
+        "osType": {
+          "$ref": "#/definitions/osType"
+        },
+        "signerFingerprints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "postureCheckType": {
       "type": "string",
       "enum": [
         "OS",
         "PROCESS",
         "DOMAIN",
-        "MAC"
+        "MAC",
+        "MFA"
       ]
     },
     "postureData": {
       "type": "object",
-      "additionalProperties": true
+      "required": [
+        "mac",
+        "domain",
+        "os",
+        "processes",
+        "apiSessionPostureData"
+      ],
+      "properties": {
+        "apiSessionPostureData": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/apiSessionPostureData"
+          }
+        },
+        "domain": {
+          "$ref": "#/definitions/postureDataDomain"
+        },
+        "mac": {
+          "$ref": "#/definitions/postureDataMac"
+        },
+        "os": {
+          "$ref": "#/definitions/postureDataOs"
+        },
+        "processes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/postureDataProcess"
+          }
+        }
+      }
+    },
+    "postureDataBase": {
+      "type": "object",
+      "required": [
+        "postureCheckId",
+        "timedOut",
+        "lastUpdatedAt"
+      ],
+      "properties": {
+        "lastUpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "postureCheckId": {
+          "type": "string"
+        },
+        "timedOut": {
+          "type": "boolean"
+        }
+      }
+    },
+    "postureDataDomain": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureDataBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "domain"
+          ],
+          "properties": {
+            "domain": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "postureDataMac": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureDataBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "addresses"
+          ],
+          "properties": {
+            "addresses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "postureDataMfa": {
+      "type": "object",
+      "required": [
+        "apiSessionId",
+        "passedMfa"
+      ],
+      "properties": {
+        "apiSessionId": {
+          "type": "string"
+        },
+        "passedMfa": {
+          "type": "boolean"
+        }
+      }
+    },
+    "postureDataOs": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureDataBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "version",
+            "build"
+          ],
+          "properties": {
+            "build": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "postureDataProcess": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/postureDataBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "binaryHash": {
+              "type": "string"
+            },
+            "isRunning": {
+              "type": "boolean"
+            },
+            "signerFingerprints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
     },
     "postureQueries": {
       "type": "object",
@@ -30202,10 +31243,10 @@ func init() {
             "type": {
               "_links": {
                 "self": {
-                  "href": "./identity-types/577104f2-1e3a-4947-a927-7383baefbc9a"
+                  "href": "./identity-types/User"
                 }
               },
-              "id": "577104f2-1e3a-4947-a927-7383baefbc9a",
+              "id": "User",
               "name": "User",
               "urlName": "identity-types"
             },
@@ -30339,6 +31380,12 @@ func init() {
       "description": "A response containing the edge routers signed certificates (server chain, server cert, CAs).",
       "schema": {
         "$ref": "#/definitions/enrollmentCertsEnvelope"
+      }
+    },
+    "getIdentityFailedServiceRequest": {
+      "description": "Returns a list of service request failures",
+      "schema": {
+        "$ref": "#/definitions/getIdentityFailedServiceRequestEnvelope"
       }
     },
     "getIdentityPolicyAdvice": {

@@ -32,9 +32,10 @@ func NewEdgeRouterHandler(env Env) *EdgeRouterHandler {
 	handler := &EdgeRouterHandler{
 		baseHandler: newBaseHandler(env, env.GetStores().EdgeRouter),
 		allowedFieldsChecker: boltz.MapFieldChecker{
-			persistence.FieldName:           struct{}{},
-			persistence.FieldRoleAttributes: struct{}{},
-			boltz.FieldTags:                 struct{}{},
+			persistence.FieldName:                        struct{}{},
+			persistence.FieldEdgeRouterIsTunnelerEnabled: struct{}{},
+			persistence.FieldRoleAttributes:              struct{}{},
+			boltz.FieldTags:                              struct{}{},
 		},
 	}
 	handler.impl = handler
@@ -136,6 +137,17 @@ func (handler *EdgeRouterHandler) ListForSession(sessionId string) (*EdgeRouterL
 		return err
 	})
 	return result, err
+}
+
+func (handler *EdgeRouterHandler) ListForIdentityAndService(identityId, serviceId string, limit *int) (*EdgeRouterListResult, error) {
+	var list *EdgeRouterListResult
+	var err error
+	handler.env.GetDbProvider().GetDb().View(func(tx *bbolt.Tx) error {
+		list, err = handler.ListForIdentityAndServiceWithTx(tx, identityId, serviceId, limit)
+		return nil
+	})
+
+	return list, err
 }
 
 func (handler *EdgeRouterHandler) ListForIdentityAndServiceWithTx(tx *bbolt.Tx, identityId, serviceId string, limit *int) (*EdgeRouterListResult, error) {

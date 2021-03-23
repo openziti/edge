@@ -364,6 +364,9 @@ func NewZitiEdgeAPI(spec *loads.Document) *ZitiEdgeAPI {
 		CurrentIdentityGetCurrentIdentityEdgeRoutersHandler: current_identity.GetCurrentIdentityEdgeRoutersHandlerFunc(func(params current_identity.GetCurrentIdentityEdgeRoutersParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation current_identity.GetCurrentIdentityEdgeRouters has not yet been implemented")
 		}),
+		IdentityGetIdentityFailedServiceRequestsHandler: identity.GetIdentityFailedServiceRequestsHandlerFunc(func(params identity.GetIdentityFailedServiceRequestsParams, principal interface{}) middleware.Responder {
+			return middleware.NotImplemented("operation identity.GetIdentityFailedServiceRequests has not yet been implemented")
+		}),
 		IdentityGetIdentityPolicyAdviceHandler: identity.GetIdentityPolicyAdviceHandlerFunc(func(params identity.GetIdentityPolicyAdviceParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation identity.GetIdentityPolicyAdvice has not yet been implemented")
 		}),
@@ -866,6 +869,8 @@ type ZitiEdgeAPI struct {
 	CurrentIdentityGetCurrentIdentityHandler current_identity.GetCurrentIdentityHandler
 	// CurrentIdentityGetCurrentIdentityEdgeRoutersHandler sets the operation handler for the get current identity edge routers operation
 	CurrentIdentityGetCurrentIdentityEdgeRoutersHandler current_identity.GetCurrentIdentityEdgeRoutersHandler
+	// IdentityGetIdentityFailedServiceRequestsHandler sets the operation handler for the get identity failed service requests operation
+	IdentityGetIdentityFailedServiceRequestsHandler identity.GetIdentityFailedServiceRequestsHandler
 	// IdentityGetIdentityPolicyAdviceHandler sets the operation handler for the get identity policy advice operation
 	IdentityGetIdentityPolicyAdviceHandler identity.GetIdentityPolicyAdviceHandler
 	// IdentityGetIdentityPostureDataHandler sets the operation handler for the get identity posture data operation
@@ -1395,6 +1400,9 @@ func (o *ZitiEdgeAPI) Validate() error {
 	}
 	if o.CurrentIdentityGetCurrentIdentityEdgeRoutersHandler == nil {
 		unregistered = append(unregistered, "current_identity.GetCurrentIdentityEdgeRoutersHandler")
+	}
+	if o.IdentityGetIdentityFailedServiceRequestsHandler == nil {
+		unregistered = append(unregistered, "identity.GetIdentityFailedServiceRequestsHandler")
 	}
 	if o.IdentityGetIdentityPolicyAdviceHandler == nil {
 		unregistered = append(unregistered, "identity.GetIdentityPolicyAdviceHandler")
@@ -2104,6 +2112,10 @@ func (o *ZitiEdgeAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/current-identity/edge-routers"] = current_identity.NewGetCurrentIdentityEdgeRouters(o.context, o.CurrentIdentityGetCurrentIdentityEdgeRoutersHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/identities/{id}/failed-service-requests"] = identity.NewGetIdentityFailedServiceRequests(o.context, o.IdentityGetIdentityFailedServiceRequestsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

@@ -34,6 +34,7 @@ import (
 	"os/signal"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/openziti/edge/controller/internal/policy"
@@ -69,6 +70,8 @@ const (
 	policyMaxFreq     = 1 * time.Hour
 	policyAppWanFreq  = 1 * time.Second
 	policySessionFreq = 5 * time.Second
+
+	ZitiInstanceId = "ziti-instance-id"
 )
 
 func NewController(cfg config.Configurable) (*Controller, error) {
@@ -82,6 +85,8 @@ func NewController(cfg config.Configurable) (*Controller, error) {
 	}
 
 	ae := env.NewAppEnv(c.config)
+
+	pfxlog.Logger().Infof("edge controller instance id: %s", ae.InstanceId)
 
 	pe, err := runner.NewRunner(policyMinFreq, policyMaxFreq, func(e error, enforcer runner.Operation) {
 		pfxlog.Logger().
@@ -130,6 +135,7 @@ func (c *Controller) SetHostController(h env.HostController) {
 }
 
 func (c *Controller) GetCtrlHandlers(ch channel2.Channel) []channel2.ReceiveHandler {
+	tunnelState := &handler_edge_ctrl.TunnelState{}
 	return []channel2.ReceiveHandler{
 		handler_edge_ctrl.NewSessionHeartbeatHandler(c.AppEnv),
 		handler_edge_ctrl.NewCreateCircuitHandler(c.AppEnv, ch),
@@ -137,6 +143,12 @@ func (c *Controller) GetCtrlHandlers(ch channel2.Channel) []channel2.ReceiveHand
 		handler_edge_ctrl.NewUpdateTerminatorHandler(c.AppEnv, ch),
 		handler_edge_ctrl.NewRemoveTerminatorHandler(c.AppEnv, ch),
 		handler_edge_ctrl.NewValidateSessionsHandler(c.AppEnv, ch),
+		handler_edge_ctrl.NewCreateApiSessionHandler(c.AppEnv, ch, tunnelState),
+		handler_edge_ctrl.NewCreateCircuitForTunnelHandler(c.AppEnv, ch, tunnelState),
+		handler_edge_ctrl.NewCreateTunnelTerminatorHandler(c.AppEnv, ch, tunnelState),
+		handler_edge_ctrl.NewUpdateTunnelTerminatorHandler(c.AppEnv, ch),
+		handler_edge_ctrl.NewRemoveTunnelTerminatorHandler(c.AppEnv, ch),
+		handler_edge_ctrl.NewListTunnelServicesHandler(c.AppEnv, ch, tunnelState),
 	}
 }
 
@@ -222,7 +234,7 @@ func (c *Controller) Initialize() {
 
 	}
 
-	xtv.RegisterValidator(edge_common.Binding, env.NewEdgeTerminatorValidator(c.AppEnv))
+	xtv.RegisterValidator(edge_common.EdgeBinding, env.NewEdgeTerminatorValidator(c.AppEnv))
 	if err := xtv.InitializeMappings(); err != nil {
 		log.Fatalf("error initializing xtv: %+v", err)
 	}
@@ -280,16 +292,12 @@ func (c *Controller) Run() {
 			//after request context is filled so that api session is present for session expiration headers
 			response.AddHeaders(rc)
 
-			//attempt to patch in cookie support, Swagger/Open API 2.0 doesn't support defining it
-			if r.Header.Get(c.AppEnv.AuthHeaderName) == "" {
-				r.Header.Set(c.AppEnv.AuthHeaderName, c.AppEnv.GetSessionTokenFromRequest(r))
-			}
-
 			handler.ServeHTTP(rw, r)
 		})
 	})
 
 	handler := http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Header().Set(ZitiInstanceId, c.AppEnv.InstanceId)
 		//if not edge prefix, translate to "/edge/v<latest>"
 		if !strings.HasPrefix(request.URL.Path, controller.RestApiBase) {
 			request.URL.Path = controller.RestApiBaseUrlLatest + request.URL.Path
@@ -350,33 +358,38 @@ func (c *Controller) RunAndWait() {
 }
 
 func (c *Controller) waitForShutdown() {
-	log := pfxlog.Logger()
+
 	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, os.Interrupt)
+	signal.Notify(ch, os.Interrupt, syscall.SIGTERM)
 
 	<-ch
-
-	if c.config.Enabled {
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
-		defer cancel()
-
-		c.apiServer.Shutdown(ctx)
-	}
-
-	log.Info("shutting down")
-	os.Exit(0)
+	c.Shutdown()
 }
 
 func (c *Controller) Shutdown() {
+	log := pfxlog.Logger()
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 	defer cancel()
 
+	pfxlog.Logger().Info("edge controller: shutting down...")
 	c.apiServer.Shutdown(ctx)
-	// _ = c.policyEngine.Stop()
 
 	c.AppEnv.Broker.Stop()
 
-	pfxlog.Logger().Info("edge controller shutting down")
+	c.AppEnv.GetHandlers().ApiSession.HeartbeatCollector.Stop()
+
+	pfxlog.Logger().Info("edge controller: stopped")
+
+	pfxlog.Logger().Info("fabric controller: shutting down...")
+
+	c.AppEnv.GetHostController().Shutdown()
+
+	pfxlog.Logger().Info("fabric controller: stopped")
+
+	log.Info("shutdown complete")
+
+	//if we reach here and the controller is still running, something hasn't been stopped
 }
 
 type subctrl struct {
