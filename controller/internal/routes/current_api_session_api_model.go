@@ -64,7 +64,7 @@ func MapToCurrentApiSessionRestModel(ae *env.AppEnv, apiSession *model.ApiSessio
 		authQueries = append(authQueries, newAuthCheckZitiMfa())
 	}
 
-	lastActivityAt := apiSession.LastActivityAt
+	lastActivityAt := apiSession.CachedLastActivityAt
 	var cachedLastActivityAt time.Time
 	var ok bool
 

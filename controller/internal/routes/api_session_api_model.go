@@ -86,7 +86,7 @@ func MapApiSessionToRestModel(ae *env.AppEnv, apiSession *model.ApiSession) (*re
 		authQueries = append(authQueries, newAuthCheckZitiMfa())
 	}
 
-	lastActivityAt := strfmt.DateTime(apiSession.LastActivityAt)
+	lastActivityAt := strfmt.DateTime(apiSession.CachedLastActivityAt)
 
 	ret := &rest_model.APISessionDetail{
 		BaseEntity:     BaseEntityToRestModel(apiSession, ApiSessionLinkFactory),

@@ -126,11 +126,11 @@ func (ro *AuthRouter) authHandler(ae *env.AppEnv, rc *response.RequestContext, p
 
 	logger.Debugf("client %v requesting configTypes: %v", identity.Name, configTypes)
 	newApiSession := &model.ApiSession{
-		IdentityId:     identity.Id,
-		Token:          token,
-		ConfigTypes:    configTypes,
-		IPAddress:      remoteIpStr,
-		LastActivityAt: time.Now().UTC(),
+		IdentityId:           identity.Id,
+		Token:                token,
+		ConfigTypes:          configTypes,
+		IPAddress:            remoteIpStr,
+		CachedLastActivityAt: time.Now().UTC(),
 	}
 
 	mfa, err := ae.Handlers.Mfa.ReadByIdentityId(identity.Id)
