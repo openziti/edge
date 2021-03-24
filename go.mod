@@ -2,11 +2,11 @@ module github.com/openziti/edge
 
 go 1.16
 
-replace github.com/openziti/foundation => ../foundation
+//replace github.com/openziti/foundation => ../foundation
 
-replace github.com/openziti/fabric => ../fabric
+//replace github.com/openziti/fabric => ../fabric
 
-replace github.com/openziti/sdk-golang => ../sdk-golang
+//replace github.com/openziti/sdk-golang => ../sdk-golang
 
 //replace github.com/kataras/go-events => ../go-events
 
