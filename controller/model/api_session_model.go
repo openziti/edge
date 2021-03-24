@@ -30,16 +30,16 @@ import (
 
 type ApiSession struct {
 	models.BaseEntity
-	Token              string
-	IdentityId         string
-	Identity           *Identity
-	IPAddress          string
-	ConfigTypes        map[string]struct{}
-	MfaComplete        bool
-	MfaRequired        bool
-	ExpiresAt          time.Time
-	ExpirationDuration time.Duration
-	LastActivityAt     time.Time
+	Token                string
+	IdentityId           string
+	Identity             *Identity
+	IPAddress            string
+	ConfigTypes          map[string]struct{}
+	MfaComplete          bool
+	MfaRequired          bool
+	ExpiresAt            time.Time
+	ExpirationDuration   time.Duration
+	CachedLastActivityAt time.Time
 }
 
 func (entity *ApiSession) toBoltEntity(tx *bbolt.Tx, handler Handler) (boltz.Entity, error) {
@@ -55,7 +55,7 @@ func (entity *ApiSession) toBoltEntity(tx *bbolt.Tx, handler Handler) (boltz.Ent
 		IPAddress:      entity.IPAddress,
 		MfaComplete:    entity.MfaComplete,
 		MfaRequired:    entity.MfaRequired,
-		LastActivityAt: entity.LastActivityAt,
+		LastActivityAt: entity.CachedLastActivityAt,
 	}
 
 	return boltEntity, nil
@@ -87,7 +87,7 @@ func (entity *ApiSession) fillFrom(handler Handler, tx *bbolt.Tx, boltEntity bol
 	entity.MfaComplete = boltApiSession.MfaComplete
 	entity.ExpiresAt = entity.UpdatedAt.Add(handler.GetEnv().GetConfig().Api.SessionTimeoutSeconds)
 	entity.ExpirationDuration = handler.GetEnv().GetConfig().Api.SessionTimeoutSeconds
-	entity.LastActivityAt = boltApiSession.LastActivityAt
+	entity.CachedLastActivityAt = boltApiSession.LastActivityAt
 
 	boltIdentity, err := handler.GetEnv().GetStores().Identity.LoadOneById(tx, boltApiSession.IdentityId)
 	if err != nil {
