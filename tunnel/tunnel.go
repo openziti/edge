@@ -17,19 +17,54 @@
 package tunnel
 
 import (
+	"encoding/json"
+	"time"
+
+	//"github.com/openziti/edge/tunnel/entities"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/sirupsen/logrus"
 	"io"
 	"net"
+	"strings"
 )
 
 var log = logrus.StandardLogger()
 
-func DialAndRun(provider FabricProvider, service string, clientConn net.Conn, halfClose bool) {
-	if err := provider.TunnelService(clientConn, service, halfClose); err != nil {
-		log.WithError(err).WithField("service", service).Error("tunnel failed")
+type Service interface {
+	GetName() string
+	GetDialTimeout() time.Duration
+}
+
+func DialAndRun(provider FabricProvider, service Service, clientConn net.Conn, appInfo map[string]string, halfClose bool) {
+	appInfoJson, err := json.Marshal(appInfo)
+	if err != nil {
+		log.WithError(err).WithField("service", service.GetName()).Error("unable to marshal appInfo")
+		_ = clientConn.Close()
+		return
+	}
+
+	if err := provider.TunnelService(service, clientConn, halfClose, appInfoJson); err != nil {
+		log.WithError(err).WithField("service", service.GetName()).Error("tunnel failed")
 		_ = clientConn.Close()
 	}
+}
+
+func GetIpAndPort(ipPort string) (string, string) {
+	if idx := strings.LastIndexByte(ipPort, ':'); idx > 0 {
+		return ipPort[0:idx], ipPort[idx+1:]
+	}
+	return "", ""
+}
+
+func GetAppInfo(protocol, sourceIp, sourcePort, sourceAddr string) map[string]string {
+	result := map[string]string{}
+	result[DestinationProtocolKey] = protocol
+	result[DestinationIpKey] = sourceIp
+	result[DestinationPortKey] = sourcePort
+	if sourceAddr != "" {
+		result[SourceAddrKey] = sourceAddr
+	}
+	return result
 }
 
 func Run(zitiConn net.Conn, clientConn net.Conn, halfClose bool) {

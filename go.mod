@@ -15,7 +15,6 @@ replace go.etcd.io/bbolt => github.com/openziti/bbolt v1.3.6-0.20210317142109-54
 require (
 	github.com/AppsFlyer/go-sundheit v0.3.1
 	github.com/Jeffail/gabs v1.4.0
-	github.com/achanda/go-sysctl v0.0.0-20160222034550-6be7678c45d2
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/coreos/go-iptables v0.5.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -43,7 +42,7 @@ require (
 	github.com/netfoundry/secretstream v0.1.2
 	github.com/openziti/fabric v0.16.47
 	github.com/openziti/foundation v0.15.44
-	github.com/openziti/sdk-golang v0.15.32
+	github.com/openziti/sdk-golang v0.15.8-0.20210402153811-2fc89c86fd43
 	github.com/orcaman/concurrent-map v0.0.0-20210106121528-16402b402231
 	github.com/pkg/errors v0.9.1
 	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0
