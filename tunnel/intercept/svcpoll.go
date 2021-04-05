@@ -297,8 +297,8 @@ func (self *ServiceListener) configureSourceAddrProvider(svc *entities.Service) 
 	}
 
 	svc.SourceAddrProvider = func(sourceAddr, destAddr net.Addr) string {
-		sourceAddrIp, sourceAddrPort := tunnel.GetIpAndPort(sourceAddr.String())
-		destAddrIp, destAddrPort := tunnel.GetIpAndPort(destAddr.String())
+		sourceAddrIp, sourceAddrPort := tunnel.GetIpAndPort(sourceAddr)
+		destAddrIp, destAddrPort := tunnel.GetIpAndPort(destAddr)
 		result := strings.ReplaceAll(sourceIp, sourceIpTemplKey, sourceAddrIp)
 		result = strings.ReplaceAll(result, sourcePortTemplKey, sourceAddrPort)
 		result = strings.ReplaceAll(result, destIpTemplKey, destAddrIp)

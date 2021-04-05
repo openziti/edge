@@ -238,7 +238,7 @@ func (self *tProxy) acceptTCP(provider tunnel.FabricProvider) {
 			return
 		}
 		log.Infof("received connection: %s --> %s", client.LocalAddr().String(), client.RemoteAddr().String())
-		sourceIp, sourcePort := tunnel.GetIpAndPort(client.LocalAddr().String())
+		sourceIp, sourcePort := tunnel.GetIpAndPort(client.LocalAddr())
 		sourceAddr := self.service.GetSourceAddr(client.RemoteAddr(), client.LocalAddr())
 		appInfo := tunnel.GetAppInfo("tcp", sourceIp, sourcePort, sourceAddr)
 		go tunnel.DialAndRun(provider, self.service, client, appInfo, true)

@@ -18,6 +18,7 @@ package tunnel
 
 import (
 	"encoding/json"
+	"strconv"
 	"time"
 
 	//"github.com/openziti/edge/tunnel/entities"
@@ -49,10 +50,19 @@ func DialAndRun(provider FabricProvider, service Service, clientConn net.Conn, a
 	}
 }
 
-func GetIpAndPort(ipPort string) (string, string) {
+func GetIpAndPort(addr net.Addr) (string, string) {
+	if tcpAddr, ok := addr.(*net.TCPAddr); ok {
+		return tcpAddr.IP.String(), strconv.Itoa(tcpAddr.Port)
+	}
+	if udpAddr, ok := addr.(*net.UDPAddr); ok {
+		return udpAddr.IP.String(), strconv.Itoa(udpAddr.Port)
+	}
+
+	ipPort := addr.String()
 	if idx := strings.LastIndexByte(ipPort, ':'); idx > 0 {
 		return ipPort[0:idx], ipPort[idx+1:]
 	}
+
 	return "", ""
 }
 
