@@ -73,15 +73,16 @@ type HostV1ListenOptions struct {
 }
 
 type HostV1Config struct {
-	Protocol          string
-	ForwardProtocol   bool
-	AllowedProtocols  []string
-	Address           string
-	ForwardAddress    bool
-	AllowedAddresses  []string
-	Port              int
-	ForwardPort       bool
-	AllowedPortRanges []*PortRange
+	Protocol               string
+	ForwardProtocol        bool
+	AllowedProtocols       []string
+	Address                string
+	ForwardAddress         bool
+	AllowedAddresses       []string
+	Port                   int
+	ForwardPort            bool
+	AllowedPortRanges      []*PortRange
+	AllowedSourceAddresses []string
 
 	PortChecks []*health.PortCheckDefinition
 	HttpChecks []*health.HttpCheckDefinition
@@ -91,17 +92,18 @@ type HostV1Config struct {
 
 func (self *HostV1Config) ToHostV2Config() *HostV2Config {
 	terminator := &HostV2Terminator{
-		Protocol:          self.Protocol,
-		ForwardProtocol:   self.ForwardProtocol,
-		AllowedProtocols:  self.AllowedProtocols,
-		Address:           self.Address,
-		ForwardAddress:    self.ForwardAddress,
-		AllowedAddresses:  self.AllowedAddresses,
-		Port:              self.Port,
-		ForwardPort:       self.ForwardPort,
-		AllowedPortRanges: self.AllowedPortRanges,
-		PortChecks:        self.PortChecks,
-		HttpChecks:        self.HttpChecks,
+		Protocol:               self.Protocol,
+		ForwardProtocol:        self.ForwardProtocol,
+		AllowedProtocols:       self.AllowedProtocols,
+		Address:                self.Address,
+		ForwardAddress:         self.ForwardAddress,
+		AllowedAddresses:       self.AllowedAddresses,
+		Port:                   self.Port,
+		ForwardPort:            self.ForwardPort,
+		AllowedPortRanges:      self.AllowedPortRanges,
+		AllowedSourceAddresses: self.AllowedSourceAddresses,
+		PortChecks:             self.PortChecks,
+		HttpChecks:             self.HttpChecks,
 	}
 
 	if self.ListenOptions != nil {
@@ -133,15 +135,16 @@ type HostV2ListenOptions struct {
 }
 
 type HostV2Terminator struct {
-	Protocol          string
-	ForwardProtocol   bool
-	AllowedProtocols  []string
-	Address           string
-	ForwardAddress    bool
-	AllowedAddresses  []string
-	Port              int
-	ForwardPort       bool
-	AllowedPortRanges []*PortRange
+	Protocol               string
+	ForwardProtocol        bool
+	AllowedProtocols       []string
+	Address                string
+	ForwardAddress         bool
+	AllowedAddresses       []string
+	Port                   int
+	ForwardPort            bool
+	AllowedPortRanges      []*PortRange
+	AllowedSourceAddresses []string
 
 	PortChecks []*health.PortCheckDefinition
 	HttpChecks []*health.HttpCheckDefinition
