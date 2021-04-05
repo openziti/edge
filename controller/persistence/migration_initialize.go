@@ -382,12 +382,6 @@ var hostV1SchemaSansDefs = map[string]interface{}{
 				},
 				"description": "hosting tunnelers establish local routes for the specified source addresses so binding will succeed",
 			},
-			"portChecks": map[string]interface{}{
-				"$ref": "#/definitions/portCheckList",
-			},
-			"httpChecks": map[string]interface{}{
-				"$ref": "#/definitions/httpCheckList",
-			},
 			"listenOptions": map[string]interface{}{
 				"type":                 "object",
 				"additionalProperties": false,
