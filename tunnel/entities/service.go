@@ -42,19 +42,20 @@ func (s *ServiceConfig) String() string {
 type HostV1ListenOptions struct {
 	BindUsingEdgeIdentity bool
 	ConnectTimeoutSeconds *int
-	Cost                  *int
 	Identity              string
 	MaxConnections        int
-	Precedence            *string
 }
 
 type HostV1Config struct {
-	Protocol                string
-	DialInterceptedProtocol bool
-	Address                 string
-	DialInterceptedAddress  bool
-	Port                    int
-	DialInterceptedPort     bool
+	Protocol         string
+	ForwardProtocol  bool
+	AllowedProtocols []string
+	Address          string
+	ForwardAddress   bool
+	AllowedAddresses []string
+	Port             int
+	ForwardPort      bool
+	//	AllowedPortRanges []*PortRange
 
 	PortChecks []*health.PortCheckDefinition
 	HttpChecks []*health.HttpCheckDefinition
@@ -64,14 +65,17 @@ type HostV1Config struct {
 
 func (self *HostV1Config) ToHostV2Config() *HostV2Config {
 	terminator := &HostV2Terminator{
-		Protocol:                self.Protocol,
-		DialInterceptedProtocol: self.DialInterceptedProtocol,
-		Address:                 self.Address,
-		DialInterceptedAddress:  self.DialInterceptedAddress,
-		Port:                    self.Port,
-		DialInterceptedPort:     self.DialInterceptedPort,
-		PortChecks:              self.PortChecks,
-		HttpChecks:              self.HttpChecks,
+		Protocol:         self.Protocol,
+		ForwardProtocol:  self.ForwardProtocol,
+		AllowedProtocols: self.AllowedProtocols,
+		Address:          self.Address,
+		ForwardAddress:   self.ForwardAddress,
+		AllowedAddresses: self.AllowedAddresses,
+		Port:             self.Port,
+		ForwardPort:      self.ForwardPort,
+		//		AllowedPortRanges: self.AllowedPortRanges,
+		PortChecks: self.PortChecks,
+		HttpChecks: self.HttpChecks,
 	}
 
 	if self.ListenOptions != nil {
@@ -83,10 +87,8 @@ func (self *HostV1Config) ToHostV2Config() *HostV2Config {
 		terminator.ListenOptions = &HostV2ListenOptions{
 			BindUsingEdgeIdentity: self.ListenOptions.BindUsingEdgeIdentity,
 			ConnectTimeout:        timeout,
-			Cost:                  self.ListenOptions.Cost,
 			Identity:              self.ListenOptions.Identity,
 			MaxConnections:        self.ListenOptions.MaxConnections,
-			Precedence:            self.ListenOptions.Precedence,
 		}
 	}
 
@@ -100,19 +102,20 @@ func (self *HostV1Config) ToHostV2Config() *HostV2Config {
 type HostV2ListenOptions struct {
 	BindUsingEdgeIdentity bool
 	ConnectTimeout        *time.Duration
-	Cost                  *int
 	Identity              string
 	MaxConnections        int
-	Precedence            *string
 }
 
 type HostV2Terminator struct {
-	Protocol                string
-	DialInterceptedProtocol bool
-	Address                 string
-	DialInterceptedAddress  bool
-	Port                    int
-	DialInterceptedPort     bool
+	Protocol         string
+	ForwardProtocol  bool
+	AllowedProtocols []string
+	Address          string
+	ForwardAddress   bool
+	AllowedAddresses []string
+	Port             int
+	ForwardPort      bool
+	//	AllowedPortRanges []*PortRange
 
 	PortChecks []*health.PortCheckDefinition
 	HttpChecks []*health.HttpCheckDefinition
@@ -121,14 +124,6 @@ type HostV2Terminator struct {
 }
 
 func (self *HostV2Terminator) SetListenOptions(options *ziti.ListenOptions) {
-	if self.ListenOptions != nil {
-		if self.ListenOptions.Cost != nil {
-			options.Cost = uint16(*self.ListenOptions.Cost)
-		}
-		if self.ListenOptions.Precedence != nil {
-			options.Precedence = ziti.GetPrecedenceForLabel(*self.ListenOptions.Precedence)
-		}
-	}
 }
 
 func (self *HostV2Terminator) GetDialTimeout(defaultTimeout time.Duration) time.Duration {
@@ -159,21 +154,21 @@ func (self *HostV2Terminator) getValue(options map[string]interface{}, key strin
 }
 
 func (self *HostV2Terminator) GetProtocol(options map[string]interface{}) (string, error) {
-	if self.DialInterceptedProtocol {
+	if self.ForwardProtocol {
 		return self.getValue(options, tunnel.DestinationProtocolKey)
 	}
 	return self.Protocol, nil
 }
 
 func (self *HostV2Terminator) GetAddress(options map[string]interface{}) (string, error) {
-	if self.DialInterceptedAddress {
+	if self.ForwardAddress {
 		return self.getValue(options, tunnel.DestinationIpKey)
 	}
 	return self.Address, nil
 }
 
 func (self *HostV2Terminator) GetPort(options map[string]interface{}) (string, error) {
-	if self.DialInterceptedPort {
+	if self.ForwardPort {
 		return self.getValue(options, tunnel.DestinationPortKey)
 	}
 	return strconv.Itoa(self.Port), nil
