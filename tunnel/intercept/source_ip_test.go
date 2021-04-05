@@ -18,7 +18,7 @@ func (self *testProvider) PrepForUse(serviceId string) {
 func (self *testProvider) GetCurrentIdentity() (*edge.CurrentIdentity, error) {
 	return &edge.CurrentIdentity{
 		Name: "foo.bar",
-		Tags: map[string]interface{}{
+		AppData: map[string]interface{}{
 			"srcip":      "123.456.789.10:5555",
 			"sourceIp":   "15.14.13.12",
 			"sourcePort": 1999,
@@ -64,6 +64,6 @@ func Test_SourceIp(t *testing.T) {
 	testMatch("$dst_ip:$src_port", "5.6.7.8:5432")
 	testMatch("$dst_ip:$dst_port", "5.6.7.8:80")
 	testMatch("$tunneler_id.name", "foo.bar")
-	testMatch("$tunneler_id.tag[srcip]", "123.456.789.10:5555")
-	testMatch("$tunneler_id.tag[sourceIp]:$tunneler_id.tag[sourcePort]", "15.14.13.12:1999")
+	testMatch("$tunneler_id.appData[srcip]", "123.456.789.10:5555")
+	testMatch("$tunneler_id.appData[sourceIp]:$tunneler_id.appData[sourcePort]", "15.14.13.12:1999")
 }
