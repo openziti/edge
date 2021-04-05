@@ -310,7 +310,7 @@ func (self *ServiceListener) configureSourceAddrProvider(svc *entities.Service) 
 }
 
 func (self *ServiceListener) replaceIdTags(sourceIp string, currentIdentity *edge.CurrentIdentity) (string, error) {
-	start := "$tunneler_id.tag["
+	start := "$tunneler_id.appData["
 	for {
 		index := strings.Index(sourceIp, start)
 		if index < 0 {
@@ -319,13 +319,13 @@ func (self *ServiceListener) replaceIdTags(sourceIp string, currentIdentity *edg
 		postStr := sourceIp[index+len(start):]
 		closeIdx := strings.IndexByte(postStr, ']')
 		if closeIdx == -1 {
-			return "", errors.New("sourceIp contains unclosed $tunneler_id.tag[")
+			return "", errors.New("sourceIp contains unclosed $tunneler_id.appData[")
 		}
 		tagName := postStr[0:closeIdx]
 
 		tagValue := ""
-		if currentIdentity.Tags != nil {
-			val, found := currentIdentity.Tags[tagName]
+		if currentIdentity.AppData != nil {
+			val, found := currentIdentity.AppData[tagName]
 			if found {
 				tagValue = fmt.Sprintf("%v", val)
 			}
