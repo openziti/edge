@@ -350,7 +350,7 @@ var hostV1SchemaSansDefs = map[string]interface{}{
 			"forwardAddress": map[string]interface{}{
 				"type":        "boolean",
 				"enum":        []interface{}{true},
-				"description": "Dial the same ip address that was intercepted at the client tunneler. 'address' and 'dialInterceptedAddress' are mutually exclusive.",
+				"description": "Dial the same ip address that was intercepted at the client tunneler. 'address' and 'forwardAddress' are mutually exclusive.",
 			},
 			"allowedAddresses": map[string]interface{}{
 				"allOf": []interface{}{
@@ -366,7 +366,7 @@ var hostV1SchemaSansDefs = map[string]interface{}{
 			"forwardPort": map[string]interface{}{
 				"type":        "boolean",
 				"enum":        []interface{}{true},
-				"description": "Dial the same port that was intercepted at the client tunneler. 'port' and 'dialInterceptedPort' are mutually exclusive.",
+				"description": "Dial the same port that was intercepted at the client tunneler. 'port' and 'forwardPort' are mutually exclusive.",
 			},
 			"allowedPortRanges": map[string]interface{}{
 				"allOf": []interface{}{
