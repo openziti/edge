@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/openziti/edge/health"
 	"github.com/openziti/edge/tunnel"
+	"github.com/openziti/edge/tunnel/intercept"
+	"github.com/openziti/foundation/util/stringz"
 	"github.com/openziti/sdk-golang/ziti"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/pkg/errors"
@@ -184,23 +186,67 @@ func (self *HostV2Terminator) getValue(options map[string]interface{}, key strin
 
 func (self *HostV2Terminator) GetProtocol(options map[string]interface{}) (string, error) {
 	if self.ForwardProtocol {
-		return self.getValue(options, tunnel.DestinationProtocolKey)
+		protocol, err := self.getValue(options, tunnel.DestinationProtocolKey)
+		if err != nil {
+			return protocol, err
+		}
+		if stringz.Contains(self.AllowedProtocols, protocol) {
+			return protocol, nil
+		}
+		return "", errors.Errorf("protocol '%s' is not in allowed protocols", protocol)
 	}
 	return self.Protocol, nil
 }
 
 func (self *HostV2Terminator) GetAddress(options map[string]interface{}) (string, error) {
 	if self.ForwardAddress {
-		return self.getValue(options, tunnel.DestinationIpKey)
+		address, err := self.getValue(options, tunnel.DestinationIpKey)
+		if err != nil {
+			return address, err
+		}
+		routes, err := self.GetAllowedSourceAddressRoutes()
+		if err != nil {
+			return "", err
+		}
+		ip := net.ParseIP(address)
+		for _, route := range routes {
+			if route.Contains(ip) {
+				return address, nil
+			}
+		}
+		return "", errors.Errorf("address '%s' is not in allowed addresses", address)
 	}
 	return self.Address, nil
 }
 
 func (self *HostV2Terminator) GetPort(options map[string]interface{}) (string, error) {
 	if self.ForwardPort {
-		return self.getValue(options, tunnel.DestinationPortKey)
+		portStr, err := self.getValue(options, tunnel.DestinationPortKey)
+		if err != nil {
+			return portStr, err
+		}
+		port, err := strconv.Atoi(portStr)
+		for _, portRange := range self.AllowedPortRanges {
+			if uint16(port) >= portRange.Low || uint16(port) <= portRange.High {
+				return portStr, nil
+			}
+		}
+		return "", errors.Errorf("port %d is not in allowed port ranges", port)
 	}
 	return strconv.Itoa(self.Port), nil
+}
+
+func (self *HostV2Terminator) GetAllowedSourceAddressRoutes() ([]*net.IPNet, error) {
+	var routes []*net.IPNet
+	for _, addr := range self.AllowedSourceAddresses {
+		// need to get CIDR from address - iputils.getInterceptIp?
+		_, ipNet, err := intercept.GetDialIP(addr)
+		if err != nil {
+			return nil, errors.Errorf("failed to parse allowed source address '%s': %v", addr, err)
+		}
+		routes = append(routes, ipNet)
+	}
+	return routes, nil
 }
 
 type HostV2Config struct {

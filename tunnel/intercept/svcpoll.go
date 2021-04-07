@@ -177,7 +177,7 @@ func (self *ServiceListener) addService(svc *entities.Service) {
 
 		if found && err == nil {
 			log.Infof("Hosting newly available service %s", svc.Name)
-			go self.host(svc)
+			go self.host(svc, self.addrTracker)
 		} else if !found {
 			log.WithError(err).Warnf("service %v is hostable but no server config of type %v is available", svc.Name, entities.ServerConfigV1)
 		} else if err != nil {
@@ -211,7 +211,7 @@ func (self *ServiceListener) removeService(svc *entities.Service) {
 	}
 }
 
-func (self *ServiceListener) host(svc *entities.Service) {
+func (self *ServiceListener) host(svc *entities.Service, tracker AddressTracker) {
 	logger := pfxlog.Logger().WithField("service", svc.Name)
 
 	currentIdentity, err := self.provider.GetCurrentIdentity()
@@ -220,7 +220,7 @@ func (self *ServiceListener) host(svc *entities.Service) {
 		return
 	}
 
-	hostContexts := createHostingContexts(svc, currentIdentity)
+	hostContexts := createHostingContexts(svc, currentIdentity, tracker)
 
 	var hostControls []tunnel.HostControl
 
