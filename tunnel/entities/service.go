@@ -6,7 +6,6 @@ import (
 	"github.com/openziti/edge/tunnel"
 	"github.com/openziti/edge/tunnel/intercept"
 	"github.com/openziti/foundation/util/stringz"
-	"github.com/openziti/sdk-golang/ziti"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/pkg/errors"
 	"net"
@@ -152,9 +151,6 @@ type HostV2Terminator struct {
 	HttpChecks []*health.HttpCheckDefinition
 
 	ListenOptions *HostV2ListenOptions
-}
-
-func (self *HostV2Terminator) SetListenOptions(options *ziti.ListenOptions) {
 }
 
 func (self *HostV2Terminator) GetDialTimeout(defaultTimeout time.Duration) time.Duration {

@@ -40,19 +40,6 @@ func createHostingContexts(service *entities.Service, identity *edge.CurrentIden
 	return result
 }
 
-func localRoutes(config *entities.HostV2Terminator) ([]*net.IPNet, error) {
-	var routes []*net.IPNet
-	for _, addr := range config.AllowedSourceAddresses {
-		// need to get CIDR from address - iputils.getInterceptIp?
-		_, ipNet, err := GetDialIP(addr)
-		if err != nil {
-			return nil, errors.Errorf("failed to parse allowed source address '%s': %v", addr, err)
-		}
-		routes = append(routes, ipNet)
-	}
-	return routes, nil
-}
-
 func newDefaultHostingContext(identity *edge.CurrentIdentity, service *entities.Service, config *entities.HostV2Terminator, tracker AddressTracker) *hostingContext {
 	options := getDefaultOptions(identity)
 	config.SetListenOptions(options)
@@ -72,7 +59,7 @@ func newDefaultHostingContext(identity *edge.CurrentIdentity, service *entities.
 	}
 
 	// establish routes for allowedSourceAddresses
-	routes, err := localRoutes(config)
+	routes, err := config.GetAllowedSourceAddressRoutes()
 	if err != nil {
 		log.Errorf("failed adding routes for allowed source addresses: %v", err)
 		return nil
@@ -90,7 +77,7 @@ func newDefaultHostingContext(identity *edge.CurrentIdentity, service *entities.
 
 	return &hostingContext{
 		service:     service,
-		options:     options,
+		options:     getDefaultOptions(service, identity),
 		dialTimeout: config.GetDialTimeout(5 * time.Second),
 		config:      config,
 		addrTracker: tracker,
@@ -213,10 +200,23 @@ func (self *hostingContext) Dial(options map[string]interface{}) (net.Conn, bool
 	return self.dialAddress(options, protocol, address+":"+port)
 }
 
-func getDefaultOptions(identity *edge.CurrentIdentity) *ziti.ListenOptions {
+func getDefaultOptions(service *entities.Service, identity *edge.CurrentIdentity) *ziti.ListenOptions {
 	options := ziti.DefaultListenOptions()
 	options.ManualStart = true
 	options.Precedence = ziti.GetPrecedenceForLabel(identity.DefaultHostingPrecedence)
 	options.Cost = identity.DefaultHostingCost
+
+	if val, ok := identity.ServiceHostingPrecedences[service.Id]; ok {
+		if strVal, ok := val.(string); ok {
+			options.Precedence = ziti.GetPrecedenceForLabel(strVal)
+		}
+	}
+
+	if val, ok := identity.ServiceHostingCosts[service.Id]; ok {
+		if floatVal, ok := val.(float64); ok {
+			options.Cost = uint16(floatVal)
+		}
+	}
+
 	return options
 }

@@ -6798,6 +6798,9 @@ func init() {
         "isOnline"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "hostname": {
           "type": "string"
         },
@@ -7752,6 +7755,9 @@ func init() {
         "name"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "isTunnelerEnabled": {
           "type": "boolean"
         },
@@ -7867,6 +7873,9 @@ func init() {
       "description": "An edge router patch object",
       "type": "object",
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "isTunnelerEnabled": {
           "type": "boolean"
         },
@@ -7917,7 +7926,8 @@ func init() {
             "edgeRouterRoles",
             "edgeRouterRolesDisplay",
             "identityRoles",
-            "identityRolesDisplay"
+            "identityRolesDisplay",
+            "isSystem"
           ],
           "properties": {
             "edgeRouterRoles": {
@@ -7931,6 +7941,9 @@ func init() {
             },
             "identityRolesDisplay": {
               "$ref": "#/definitions/namedRoles"
+            },
+            "isSystem": {
+              "type": "boolean"
             },
             "name": {
               "type": "string"
@@ -7996,6 +8009,9 @@ func init() {
         "name"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "isTunnelerEnabled": {
           "type": "boolean"
         },
@@ -8313,6 +8329,9 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "defaultHostingCost": {
           "$ref": "#/definitions/terminatorCost"
         },
@@ -8341,6 +8360,12 @@ func init() {
         },
         "roleAttributes": {
           "$ref": "#/definitions/attributes"
+        },
+        "serviceHostingCosts": {
+          "$ref": "#/definitions/terminatorCostMap"
+        },
+        "serviceHostingPrecedences": {
+          "$ref": "#/definitions/terminatorPrecedenceMap"
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -8372,9 +8397,14 @@ func init() {
             "roleAttributes",
             "hasEdgeRouterConnection",
             "hasApiSession",
-            "isMfaEnabled"
+            "isMfaEnabled",
+            "serviceHostingPrecedences",
+            "serviceHostingCosts"
           ],
           "properties": {
+            "appData": {
+              "$ref": "#/definitions/tags"
+            },
             "authenticators": {
               "$ref": "#/definitions/identityAuthenticators"
             },
@@ -8413,6 +8443,12 @@ func init() {
             },
             "sdkInfo": {
               "$ref": "#/definitions/sdkInfo"
+            },
+            "serviceHostingCosts": {
+              "$ref": "#/definitions/terminatorCostMap"
+            },
+            "serviceHostingPrecedences": {
+              "$ref": "#/definitions/terminatorPrecedenceMap"
             },
             "type": {
               "$ref": "#/definitions/entityRef"
@@ -8499,6 +8535,9 @@ func init() {
     "identityPatch": {
       "type": "object",
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "defaultHostingCost": {
           "$ref": "#/definitions/terminatorCost"
         },
@@ -8513,6 +8552,12 @@ func init() {
         },
         "roleAttributes": {
           "$ref": "#/definitions/attributes"
+        },
+        "serviceHostingCosts": {
+          "$ref": "#/definitions/terminatorCostMap"
+        },
+        "serviceHostingPrecedences": {
+          "$ref": "#/definitions/terminatorPrecedenceMap"
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -8561,6 +8606,9 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "defaultHostingCost": {
           "$ref": "#/definitions/terminatorCost"
         },
@@ -8575,6 +8623,12 @@ func init() {
         },
         "roleAttributes": {
           "$ref": "#/definitions/attributes"
+        },
+        "serviceHostingCosts": {
+          "$ref": "#/definitions/terminatorCostMap"
+        },
+        "serviceHostingPrecedences": {
+          "$ref": "#/definitions/terminatorPrecedenceMap"
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -10389,8 +10443,13 @@ func init() {
     },
     "terminatorCost": {
       "type": "integer",
-      "maximum": 65535,
-      "x-nullable": true
+      "maximum": 65535
+    },
+    "terminatorCostMap": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/terminatorCost"
+      }
     },
     "terminatorCreate": {
       "type": "object",
@@ -10556,6 +10615,12 @@ func init() {
         "required",
         "failed"
       ]
+    },
+    "terminatorPrecedenceMap": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/terminatorPrecedence"
+      }
     },
     "terminatorUpdate": {
       "type": "object",
@@ -27004,6 +27069,9 @@ func init() {
         "isOnline"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "hostname": {
           "type": "string"
         },
@@ -27958,6 +28026,9 @@ func init() {
         "name"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "isTunnelerEnabled": {
           "type": "boolean"
         },
@@ -28073,6 +28144,9 @@ func init() {
       "description": "An edge router patch object",
       "type": "object",
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "isTunnelerEnabled": {
           "type": "boolean"
         },
@@ -28123,7 +28197,8 @@ func init() {
             "edgeRouterRoles",
             "edgeRouterRolesDisplay",
             "identityRoles",
-            "identityRolesDisplay"
+            "identityRolesDisplay",
+            "isSystem"
           ],
           "properties": {
             "edgeRouterRoles": {
@@ -28137,6 +28212,9 @@ func init() {
             },
             "identityRolesDisplay": {
               "$ref": "#/definitions/namedRoles"
+            },
+            "isSystem": {
+              "type": "boolean"
             },
             "name": {
               "type": "string"
@@ -28202,6 +28280,9 @@ func init() {
         "name"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "isTunnelerEnabled": {
           "type": "boolean"
         },
@@ -28519,6 +28600,9 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "defaultHostingCost": {
           "$ref": "#/definitions/terminatorCost"
         },
@@ -28547,6 +28631,12 @@ func init() {
         },
         "roleAttributes": {
           "$ref": "#/definitions/attributes"
+        },
+        "serviceHostingCosts": {
+          "$ref": "#/definitions/terminatorCostMap"
+        },
+        "serviceHostingPrecedences": {
+          "$ref": "#/definitions/terminatorPrecedenceMap"
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -28578,9 +28668,14 @@ func init() {
             "roleAttributes",
             "hasEdgeRouterConnection",
             "hasApiSession",
-            "isMfaEnabled"
+            "isMfaEnabled",
+            "serviceHostingPrecedences",
+            "serviceHostingCosts"
           ],
           "properties": {
+            "appData": {
+              "$ref": "#/definitions/tags"
+            },
             "authenticators": {
               "$ref": "#/definitions/identityAuthenticators"
             },
@@ -28619,6 +28714,12 @@ func init() {
             },
             "sdkInfo": {
               "$ref": "#/definitions/sdkInfo"
+            },
+            "serviceHostingCosts": {
+              "$ref": "#/definitions/terminatorCostMap"
+            },
+            "serviceHostingPrecedences": {
+              "$ref": "#/definitions/terminatorPrecedenceMap"
             },
             "type": {
               "$ref": "#/definitions/entityRef"
@@ -28705,6 +28806,9 @@ func init() {
     "identityPatch": {
       "type": "object",
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "defaultHostingCost": {
           "$ref": "#/definitions/terminatorCost"
         },
@@ -28719,6 +28823,12 @@ func init() {
         },
         "roleAttributes": {
           "$ref": "#/definitions/attributes"
+        },
+        "serviceHostingCosts": {
+          "$ref": "#/definitions/terminatorCostMap"
+        },
+        "serviceHostingPrecedences": {
+          "$ref": "#/definitions/terminatorPrecedenceMap"
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -28767,6 +28877,9 @@ func init() {
         "isAdmin"
       ],
       "properties": {
+        "appData": {
+          "$ref": "#/definitions/tags"
+        },
         "defaultHostingCost": {
           "$ref": "#/definitions/terminatorCost"
         },
@@ -28781,6 +28894,12 @@ func init() {
         },
         "roleAttributes": {
           "$ref": "#/definitions/attributes"
+        },
+        "serviceHostingCosts": {
+          "$ref": "#/definitions/terminatorCostMap"
+        },
+        "serviceHostingPrecedences": {
+          "$ref": "#/definitions/terminatorPrecedenceMap"
         },
         "tags": {
           "$ref": "#/definitions/tags"
@@ -30596,8 +30715,13 @@ func init() {
     "terminatorCost": {
       "type": "integer",
       "maximum": 65535,
-      "minimum": 0,
-      "x-nullable": true
+      "minimum": 0
+    },
+    "terminatorCostMap": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/terminatorCost"
+      }
     },
     "terminatorCreate": {
       "type": "object",
@@ -30763,6 +30887,12 @@ func init() {
         "required",
         "failed"
       ]
+    },
+    "terminatorPrecedenceMap": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/terminatorPrecedence"
+      }
     },
     "terminatorUpdate": {
       "type": "object",

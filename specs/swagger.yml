@@ -4566,6 +4566,13 @@ definitions:
         $ref: '#/definitions/terminatorPrecedence'
       defaultHostingCost:
         $ref: '#/definitions/terminatorCost'
+      serviceHostingPrecedences:
+        $ref: '#/definitions/terminatorPrecedenceMap'
+      serviceHostingCosts:
+        $ref: '#/definitions/terminatorCostMap'
+      appData:
+        $ref: '#/definitions/tags'
+
   identityUpdate:
     type: object
     required:
@@ -4587,6 +4594,13 @@ definitions:
         $ref: '#/definitions/terminatorPrecedence'
       defaultHostingCost:
         $ref: '#/definitions/terminatorCost'
+      serviceHostingPrecedences:
+        $ref: '#/definitions/terminatorPrecedenceMap'
+      serviceHostingCosts:
+        $ref: '#/definitions/terminatorCostMap'
+      appData:
+        $ref: '#/definitions/tags'
+
   identityPatch:
     type: object
     properties:
@@ -4604,6 +4618,13 @@ definitions:
         $ref: '#/definitions/terminatorPrecedence'
       defaultHostingCost:
         $ref: '#/definitions/terminatorCost'
+      serviceHostingPrecedences:
+        $ref: '#/definitions/terminatorPrecedenceMap'
+      serviceHostingCosts:
+        $ref: '#/definitions/terminatorCostMap'
+      appData:
+        $ref: '#/definitions/tags'
+
   identityList:
     description: A list of identities
     type: array
@@ -4629,6 +4650,8 @@ definitions:
           - hasEdgeRouterConnection
           - hasApiSession
           - isMfaEnabled
+          - serviceHostingPrecedences
+          - serviceHostingCosts
         properties:
           name:
             type: string
@@ -4660,6 +4683,13 @@ definitions:
             $ref: '#/definitions/terminatorPrecedence'
           defaultHostingCost:
             $ref: '#/definitions/terminatorCost'
+          serviceHostingPrecedences:
+            $ref: '#/definitions/terminatorPrecedenceMap'
+          serviceHostingCosts:
+            $ref: '#/definitions/terminatorCostMap'
+          appData:
+            $ref: '#/definitions/tags'
+
   identityAuthenticators:
     type: object
     properties:
@@ -5194,6 +5224,9 @@ definitions:
         $ref: '#/definitions/attributes'
       tags:
         $ref: '#/definitions/tags'
+      appData:
+        $ref: '#/definitions/tags'
+
   edgeRouterUpdate:
     description: An edge router update object
     type: object
@@ -5208,6 +5241,9 @@ definitions:
         $ref: '#/definitions/attributes'
       tags:
         $ref: '#/definitions/tags'
+      appData:
+        $ref: '#/definitions/tags'
+
   edgeRouterPatch:
     description: An edge router patch object
     type: object
@@ -5219,6 +5255,8 @@ definitions:
       roleAttributes:
         $ref: '#/definitions/attributes'
       tags:
+        $ref: '#/definitions/tags'
+      appData:
         $ref: '#/definitions/tags'
   currentIdentityEdgeRouterList:
     description: A list of edge router resources
@@ -5366,6 +5404,7 @@ definitions:
           - edgeRouterRolesDisplay
           - identityRoles
           - identityRolesDisplay
+          - isSystem
         properties:
           name:
             type: string
@@ -5379,6 +5418,8 @@ definitions:
             $ref: '#/definitions/roles'
           identityRolesDisplay:
             $ref: '#/definitions/namedRoles'
+          isSystem:
+            type: boolean
   ###################################################################
   # Service Policies
   ##################################################################
@@ -5831,6 +5872,8 @@ definitions:
         type: string
       isOnline:
         type: boolean
+      appData:
+        $ref: '#/definitions/tags'
   ###################################################################
   # Errors
   ##################################################################
@@ -6802,13 +6845,20 @@ definitions:
     type: integer
     minimum: 0
     maximum: 65535
-    x-nullable: true
   terminatorPrecedence:
     type: string
     enum:
       - default
       - required
       - failed
+  terminatorPrecedenceMap:
+    type: object
+    additionalProperties:
+      $ref: '#/definitions/terminatorPrecedence'
+  terminatorCostMap:
+    type: object
+    additionalProperties:
+      $ref: '#/definitions/terminatorCost'
   dataIntegrityCheckResultEnvelope:
     type: object
     required:
@@ -7833,3 +7883,4 @@ definitions:
       lastChangeAt:
         type: string
         format: 'date-time'
+

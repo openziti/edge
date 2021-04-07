@@ -61,11 +61,40 @@ func (factory *IdentityLinkFactoryImpl) Links(entity models.Entity) rest_model.L
 	return links
 }
 
-func getTerminatorCost(v *rest_model.TerminatorCost) uint16 {
-	if v == nil {
-		return 0
+func getDefaultHostingCost(v rest_model.TerminatorCost) uint16 {
+	return uint16(v)
+}
+
+func getServiceHostingPrecedences(v rest_model.TerminatorPrecedenceMap) map[string]ziti.Precedence {
+	result := map[string]ziti.Precedence{}
+	for k, v := range v {
+		result[k] = ziti.GetPrecedenceForLabel(string(v))
 	}
-	return uint16(*v)
+	return result
+}
+
+func getRestServiceHostingPrecedences(v map[string]ziti.Precedence) rest_model.TerminatorPrecedenceMap {
+	result := rest_model.TerminatorPrecedenceMap{}
+	for k, v := range v {
+		result[k] = rest_model.TerminatorPrecedence(v.String())
+	}
+	return result
+}
+
+func getServiceHostingCosts(v rest_model.TerminatorCostMap) map[string]uint16 {
+	result := map[string]uint16{}
+	for k, v := range v {
+		result[k] = uint16(v)
+	}
+	return result
+}
+
+func getRestServiceHostingCosts(v map[string]uint16) rest_model.TerminatorCostMap {
+	result := rest_model.TerminatorCostMap{}
+	for k, v := range v {
+		result[k] = rest_model.TerminatorCost(v)
+	}
+	return result
 }
 
 func MapCreateIdentityToModel(identity *rest_model.IdentityCreate, identityTypeId string) (*model.Identity, []*model.Enrollment) {
@@ -75,13 +104,16 @@ func MapCreateIdentityToModel(identity *rest_model.IdentityCreate, identityTypeI
 		BaseEntity: models.BaseEntity{
 			Tags: identity.Tags,
 		},
-		Name:                     stringz.OrEmpty(identity.Name),
-		IdentityTypeId:           identityTypeId,
-		IsDefaultAdmin:           false,
-		IsAdmin:                  *identity.IsAdmin,
-		RoleAttributes:           identity.RoleAttributes,
-		DefaultHostingPrecedence: ziti.GetPrecedenceForLabel(string(identity.DefaultHostingPrecedence)),
-		DefaultHostingCost:       getTerminatorCost(identity.DefaultHostingCost),
+		Name:                      stringz.OrEmpty(identity.Name),
+		IdentityTypeId:            identityTypeId,
+		IsDefaultAdmin:            false,
+		IsAdmin:                   *identity.IsAdmin,
+		RoleAttributes:            identity.RoleAttributes,
+		DefaultHostingPrecedence:  ziti.GetPrecedenceForLabel(string(identity.DefaultHostingPrecedence)),
+		DefaultHostingCost:        getDefaultHostingCost(identity.DefaultHostingCost),
+		ServiceHostingPrecedences: getServiceHostingPrecedences(identity.ServiceHostingPrecedences),
+		ServiceHostingCosts:       getServiceHostingCosts(identity.ServiceHostingCosts),
+		AppData:                   identity.AppData,
 	}
 
 	if identity.Enrollment != nil {
@@ -119,12 +151,15 @@ func MapUpdateIdentityToModel(id string, identity *rest_model.IdentityUpdate, id
 			Tags: identity.Tags,
 			Id:   id,
 		},
-		Name:                     stringz.OrEmpty(identity.Name),
-		IdentityTypeId:           identityTypeId,
-		IsAdmin:                  *identity.IsAdmin,
-		RoleAttributes:           identity.RoleAttributes,
-		DefaultHostingPrecedence: ziti.GetPrecedenceForLabel(string(identity.DefaultHostingPrecedence)),
-		DefaultHostingCost:       getTerminatorCost(identity.DefaultHostingCost),
+		Name:                      stringz.OrEmpty(identity.Name),
+		IdentityTypeId:            identityTypeId,
+		IsAdmin:                   *identity.IsAdmin,
+		RoleAttributes:            identity.RoleAttributes,
+		DefaultHostingPrecedence:  ziti.GetPrecedenceForLabel(string(identity.DefaultHostingPrecedence)),
+		DefaultHostingCost:        getDefaultHostingCost(identity.DefaultHostingCost),
+		ServiceHostingPrecedences: getServiceHostingPrecedences(identity.ServiceHostingPrecedences),
+		ServiceHostingCosts:       getServiceHostingCosts(identity.ServiceHostingCosts),
+		AppData:                   identity.AppData,
 	}
 
 	return ret
@@ -141,7 +176,8 @@ func MapPatchIdentityToModel(id string, identity *rest_model.IdentityPatch, iden
 		IsAdmin:                  identity.IsAdmin,
 		RoleAttributes:           identity.RoleAttributes,
 		DefaultHostingPrecedence: ziti.GetPrecedenceForLabel(string(identity.DefaultHostingPrecedence)),
-		DefaultHostingCost:       getTerminatorCost(identity.DefaultHostingCost),
+		DefaultHostingCost:       getDefaultHostingCost(identity.DefaultHostingCost),
+		AppData:                  identity.AppData,
 	}
 
 	return ret
@@ -188,21 +224,22 @@ func MapIdentityToRestModel(ae *env.AppEnv, identity *model.Identity) (*rest_mod
 		pfxlog.Logger().Errorf("error attempting to determine identity id's [%s] API session existence: %v", identity.Id, err)
 	}
 
-	defaultCost := rest_model.TerminatorCost(identity.DefaultHostingCost)
-
 	ret := &rest_model.IdentityDetail{
-		BaseEntity:               BaseEntityToRestModel(identity, IdentityLinkFactory),
-		IsAdmin:                  &identity.IsAdmin,
-		IsDefaultAdmin:           &identity.IsDefaultAdmin,
-		Name:                     &identity.Name,
-		RoleAttributes:           identity.RoleAttributes,
-		Type:                     ToEntityRef(identityType.Name, identityType, IdentityTypeLinkFactory),
-		TypeID:                   &identityType.Id,
-		HasEdgeRouterConnection:  &identity.HasHeartbeat,
-		HasAPISession:            &hasApiSession,
-		DefaultHostingPrecedence: rest_model.TerminatorPrecedence(identity.DefaultHostingPrecedence.String()),
-		DefaultHostingCost:       &defaultCost,
-		IsMfaEnabled:             &isMfaEnabled,
+		BaseEntity:                BaseEntityToRestModel(identity, IdentityLinkFactory),
+		IsAdmin:                   &identity.IsAdmin,
+		IsDefaultAdmin:            &identity.IsDefaultAdmin,
+		Name:                      &identity.Name,
+		RoleAttributes:            identity.RoleAttributes,
+		Type:                      ToEntityRef(identityType.Name, identityType, IdentityTypeLinkFactory),
+		TypeID:                    &identityType.Id,
+		HasEdgeRouterConnection:   &identity.HasHeartbeat,
+		HasAPISession:             &hasApiSession,
+		DefaultHostingPrecedence:  rest_model.TerminatorPrecedence(identity.DefaultHostingPrecedence.String()),
+		DefaultHostingCost:        rest_model.TerminatorCost(identity.DefaultHostingCost),
+		ServiceHostingPrecedences: getRestServiceHostingPrecedences(identity.ServiceHostingPrecedences),
+		ServiceHostingCosts:       getRestServiceHostingCosts(identity.ServiceHostingCosts),
+		IsMfaEnabled:              &isMfaEnabled,
+		AppData:                   identity.AppData,
 	}
 	fillInfo(ret, identity.EnvInfo, identity.SdkInfo)
 

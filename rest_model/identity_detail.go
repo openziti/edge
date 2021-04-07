@@ -42,12 +42,15 @@ import (
 type IdentityDetail struct {
 	BaseEntity
 
+	// app data
+	AppData Tags `json:"appData"`
+
 	// authenticators
 	// Required: true
 	Authenticators *IdentityAuthenticators `json:"authenticators"`
 
 	// default hosting cost
-	DefaultHostingCost *TerminatorCost `json:"defaultHostingCost,omitempty"`
+	DefaultHostingCost TerminatorCost `json:"defaultHostingCost,omitempty"`
 
 	// default hosting precedence
 	DefaultHostingPrecedence TerminatorPrecedence `json:"defaultHostingPrecedence,omitempty"`
@@ -92,6 +95,14 @@ type IdentityDetail struct {
 	// Required: true
 	SdkInfo *SdkInfo `json:"sdkInfo"`
 
+	// service hosting costs
+	// Required: true
+	ServiceHostingCosts TerminatorCostMap `json:"serviceHostingCosts"`
+
+	// service hosting precedences
+	// Required: true
+	ServiceHostingPrecedences TerminatorPrecedenceMap `json:"serviceHostingPrecedences"`
+
 	// type
 	// Required: true
 	Type *EntityRef `json:"type"`
@@ -112,9 +123,11 @@ func (m *IdentityDetail) UnmarshalJSON(raw []byte) error {
 
 	// AO1
 	var dataAO1 struct {
+		AppData Tags `json:"appData"`
+
 		Authenticators *IdentityAuthenticators `json:"authenticators"`
 
-		DefaultHostingCost *TerminatorCost `json:"defaultHostingCost,omitempty"`
+		DefaultHostingCost TerminatorCost `json:"defaultHostingCost,omitempty"`
 
 		DefaultHostingPrecedence TerminatorPrecedence `json:"defaultHostingPrecedence,omitempty"`
 
@@ -138,6 +151,10 @@ func (m *IdentityDetail) UnmarshalJSON(raw []byte) error {
 
 		SdkInfo *SdkInfo `json:"sdkInfo"`
 
+		ServiceHostingCosts TerminatorCostMap `json:"serviceHostingCosts"`
+
+		ServiceHostingPrecedences TerminatorPrecedenceMap `json:"serviceHostingPrecedences"`
+
 		Type *EntityRef `json:"type"`
 
 		TypeID *string `json:"typeId"`
@@ -145,6 +162,8 @@ func (m *IdentityDetail) UnmarshalJSON(raw []byte) error {
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
 	}
+
+	m.AppData = dataAO1.AppData
 
 	m.Authenticators = dataAO1.Authenticators
 
@@ -172,6 +191,10 @@ func (m *IdentityDetail) UnmarshalJSON(raw []byte) error {
 
 	m.SdkInfo = dataAO1.SdkInfo
 
+	m.ServiceHostingCosts = dataAO1.ServiceHostingCosts
+
+	m.ServiceHostingPrecedences = dataAO1.ServiceHostingPrecedences
+
 	m.Type = dataAO1.Type
 
 	m.TypeID = dataAO1.TypeID
@@ -189,9 +212,11 @@ func (m IdentityDetail) MarshalJSON() ([]byte, error) {
 	}
 	_parts = append(_parts, aO0)
 	var dataAO1 struct {
+		AppData Tags `json:"appData"`
+
 		Authenticators *IdentityAuthenticators `json:"authenticators"`
 
-		DefaultHostingCost *TerminatorCost `json:"defaultHostingCost,omitempty"`
+		DefaultHostingCost TerminatorCost `json:"defaultHostingCost,omitempty"`
 
 		DefaultHostingPrecedence TerminatorPrecedence `json:"defaultHostingPrecedence,omitempty"`
 
@@ -215,10 +240,16 @@ func (m IdentityDetail) MarshalJSON() ([]byte, error) {
 
 		SdkInfo *SdkInfo `json:"sdkInfo"`
 
+		ServiceHostingCosts TerminatorCostMap `json:"serviceHostingCosts"`
+
+		ServiceHostingPrecedences TerminatorPrecedenceMap `json:"serviceHostingPrecedences"`
+
 		Type *EntityRef `json:"type"`
 
 		TypeID *string `json:"typeId"`
 	}
+
+	dataAO1.AppData = m.AppData
 
 	dataAO1.Authenticators = m.Authenticators
 
@@ -246,6 +277,10 @@ func (m IdentityDetail) MarshalJSON() ([]byte, error) {
 
 	dataAO1.SdkInfo = m.SdkInfo
 
+	dataAO1.ServiceHostingCosts = m.ServiceHostingCosts
+
+	dataAO1.ServiceHostingPrecedences = m.ServiceHostingPrecedences
+
 	dataAO1.Type = m.Type
 
 	dataAO1.TypeID = m.TypeID
@@ -264,6 +299,10 @@ func (m *IdentityDetail) Validate(formats strfmt.Registry) error {
 
 	// validation for a type composition with BaseEntity
 	if err := m.BaseEntity.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAppData(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -319,6 +358,14 @@ func (m *IdentityDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateServiceHostingCosts(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateServiceHostingPrecedences(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateType(formats); err != nil {
 		res = append(res, err)
 	}
@@ -330,6 +377,22 @@ func (m *IdentityDetail) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *IdentityDetail) validateAppData(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.AppData) { // not required
+		return nil
+	}
+
+	if err := m.AppData.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("appData")
+		}
+		return err
+	}
+
 	return nil
 }
 
@@ -357,13 +420,11 @@ func (m *IdentityDetail) validateDefaultHostingCost(formats strfmt.Registry) err
 		return nil
 	}
 
-	if m.DefaultHostingCost != nil {
-		if err := m.DefaultHostingCost.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("defaultHostingCost")
-			}
-			return err
+	if err := m.DefaultHostingCost.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("defaultHostingCost")
 		}
+		return err
 	}
 
 	return nil
@@ -504,6 +565,30 @@ func (m *IdentityDetail) validateSdkInfo(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *IdentityDetail) validateServiceHostingCosts(formats strfmt.Registry) error {
+
+	if err := m.ServiceHostingCosts.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("serviceHostingCosts")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *IdentityDetail) validateServiceHostingPrecedences(formats strfmt.Registry) error {
+
+	if err := m.ServiceHostingPrecedences.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("serviceHostingPrecedences")
+		}
+		return err
 	}
 
 	return nil
