@@ -9,7 +9,6 @@ import (
 	"github.com/openziti/edge/tunnel/router"
 	"github.com/openziti/sdk-golang/ziti"
 	"github.com/openziti/sdk-golang/ziti/edge"
-	"github.com/pkg/errors"
 	"net"
 	"strconv"
 	"strings"
@@ -41,8 +40,6 @@ func createHostingContexts(service *entities.Service, identity *edge.CurrentIden
 }
 
 func newDefaultHostingContext(identity *edge.CurrentIdentity, service *entities.Service, config *entities.HostV2Terminator, tracker AddressTracker) *hostingContext {
-	options := getDefaultOptions(identity)
-	config.SetListenOptions(options)
 	log := pfxlog.Logger().WithField("service", service.Name)
 
 	if config.ForwardProtocol && len(config.AllowedProtocols) < 1 {
