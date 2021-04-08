@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/openziti/edge/health"
 	"github.com/openziti/edge/tunnel"
-	"github.com/openziti/edge/tunnel/intercept"
+	"github.com/openziti/edge/tunnel/utils"
 	"github.com/openziti/foundation/util/stringz"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/pkg/errors"
@@ -236,7 +236,7 @@ func (self *HostV2Terminator) GetAllowedSourceAddressRoutes() ([]*net.IPNet, err
 	var routes []*net.IPNet
 	for _, addr := range self.AllowedSourceAddresses {
 		// need to get CIDR from address - iputils.getInterceptIp?
-		_, ipNet, err := intercept.GetDialIP(addr)
+		_, ipNet, err := utils.GetDialIP(addr)
 		if err != nil {
 			return nil, errors.Errorf("failed to parse allowed source address '%s': %v", addr, err)
 		}

@@ -21,7 +21,6 @@ import (
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/tunnel/dns"
 	"github.com/openziti/edge/tunnel/utils"
-	"github.com/pkg/errors"
 	"net"
 )
 
@@ -52,25 +51,10 @@ func SetDnsInterceptIpRange(cidr string) error {
 	return nil
 }
 
-func GetDialIP(addr string) (net.IP, *net.IPNet, error) {
-	// hostname is an ip address, return it
-	if parsedIP := net.ParseIP(addr); parsedIP != nil {
-		prefixLen := addrBits(parsedIP)
-		ipNet := &net.IPNet{IP: parsedIP, Mask: net.CIDRMask(prefixLen, prefixLen)}
-		return parsedIP, ipNet, nil
-	}
-
-	if parsedIP, cidr, err := net.ParseCIDR(addr); err == nil {
-		return parsedIP, cidr, nil
-	}
-
-	return nil, nil, errors.Errorf("could not parse '%s' as IP or CIDR", addr)
-}
-
 func getInterceptIP(hostname string, resolver dns.Resolver) (net.IP, *net.IPNet, error) {
 	log := pfxlog.Logger()
 
-	ip, ipNet, err := GetDialIP(hostname)
+	ip, ipNet, err := utils.GetDialIP(hostname)
 	if err == nil {
 		return ip, ipNet, err
 	}
@@ -83,7 +67,7 @@ func getInterceptIP(hostname string, resolver dns.Resolver) (net.IP, *net.IPNet,
 		if len(addrs) > 0 {
 			ip := addrs[0].To4()
 			_ = resolver.AddHostname(hostname, ip)
-			prefixLen := addrBits(ip)
+			prefixLen := utils.AddrBits(ip)
 			ipNet := &net.IPNet{IP: ip, Mask: net.CIDRMask(prefixLen, prefixLen)}
 			return addrs[0], ipNet, nil
 		}
@@ -96,7 +80,7 @@ func getInterceptIP(hostname string, resolver dns.Resolver) (net.IP, *net.IPNet,
 		return nil, nil, fmt.Errorf("invalid IP address or unresolvable hostname: %s", hostname)
 	}
 	_ = resolver.AddHostname(hostname, ip)
-	prefixLen := addrBits(ip)
+	prefixLen := utils.AddrBits(ip)
 	ipNet = &net.IPNet{IP: ip, Mask: net.CIDRMask(prefixLen, prefixLen)}
 	return ip, ipNet, nil
 }

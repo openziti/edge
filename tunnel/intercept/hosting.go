@@ -7,6 +7,7 @@ import (
 	"github.com/openziti/edge/tunnel"
 	"github.com/openziti/edge/tunnel/entities"
 	"github.com/openziti/edge/tunnel/router"
+	"github.com/openziti/edge/tunnel/utils"
 	"github.com/openziti/sdk-golang/ziti"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"net"
@@ -142,7 +143,7 @@ func (self *hostingContext) SetCloseCallback(f func()) {
 func (self *hostingContext) OnClose() {
 	log := pfxlog.Logger().WithField("service", self.service.Name)
 	for _, addr := range self.config.AllowedSourceAddresses {
-		_, ipNet, err := GetDialIP(addr)
+		_, ipNet, err := utils.GetDialIP(addr)
 		if err != nil {
 			log.Errorf("failed to")
 		}
