@@ -200,12 +200,12 @@ func (self *HostV2Terminator) GetAddress(options map[string]interface{}) (string
 		if err != nil {
 			return address, err
 		}
-		routes, err := self.GetAllowedSourceAddressRoutes()
-		if err != nil {
-			return "", err
-		}
 		ip := net.ParseIP(address)
-		for _, route := range routes {
+		for _, allowed := range self.AllowedAddresses {
+			_, route, err := utils.GetDialIP(allowed)
+			if err != nil {
+				return "", errors.Errorf("failed to parse allowed address '%s': %v", allowed, err)
+			}
 			if route.Contains(ip) {
 				return address, nil
 			}
