@@ -509,19 +509,19 @@ var interceptV1ConfigType = &ConfigType{
 			"protocols": map[string]interface{}{
 				"allOf": []interface{}{
 					map[string]interface{}{"$ref": "#/definitions/inhabitedSet"},
-					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/protocolName"}},
+					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/definitions/protocolName"}},
 				},
 			},
 			"addresses": map[string]interface{}{
 				"allOf": []interface{}{
 					map[string]interface{}{"$ref": "#/definitions/inhabitedSet"},
-					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/listenAddress"}},
+					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/definitions/listenAddress"}},
 				},
 			},
 			"portRanges": map[string]interface{}{
 				"allOf": []interface{}{
 					map[string]interface{}{"$ref": "#/definitions/inhabitedSet"},
-					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/portRange"}},
+					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/definitions/portRange"}},
 				},
 			},
 			"dialOptions": map[string]interface{}{
@@ -530,7 +530,7 @@ var interceptV1ConfigType = &ConfigType{
 				"properties": map[string]interface{}{
 					"identity": map[string]interface{}{
 						"type":        "string",
-						"description": "Dial a terminator with the specified identity. '$intercepted_protocol', '$intercepted_ip', '$intercepted_port are resolved to the corresponding value of the intercepted address.",
+						"description": "Dial a terminator with the specified identity. '$dst_protocol', '$dst_ip', '$dst_port are resolved to the corresponding value of the destination address.",
 					},
 					"connectTimeoutSeconds": map[string]interface{}{
 						"$ref":        "#/definitions/timeoutSeconds",
