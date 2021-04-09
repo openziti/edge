@@ -258,72 +258,75 @@ var healthCheckSchema = map[string]interface{}{
 	},
 }
 
-var hostV1Definitions = combine(
-	healthCheckSchema["definitions"].(map[string]interface{}),
-	map[string]interface{}{
-		"ipAddressFormat": map[string]interface{}{
-			"oneOf": []interface{}{
-				map[string]interface{}{"format": "ipv4"},
-				map[string]interface{}{"format": "ipv6"},
-			},
-		},
-		"ipAddress": map[string]interface{}{
-			"type": "string",
-			"$ref": "#/definitions/ipAddressFormat",
-		},
-		"hostname": map[string]interface{}{
-			"type":   "string",
-			"format": "hostname",
-			"not":    map[string]interface{}{"$ref": "#/definitions/ipAddressFormat"},
-		},
-		"cidr": map[string]interface{}{
-			"type": "string",
-			"oneOf": []interface{}{
-				// JSON ipv4/ipv6 "format"s should work for cidrs also (see
-				// https://json-schema.org/understanding-json-schema/reference/string.html),
-				// but https://www.jsonschemavalidator.net disagreed, so using `pattern` instead.
-				// Patterns taken from https://blog.markhatton.co.uk/2011/03/15/regular-expressions-for-ip-addresses-cidr-ranges-and-hostnames/
-				map[string]interface{}{"pattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"},
-				map[string]interface{}{"pattern": "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/(12[0-8]|1[0-1][0-9]|[1-9][0-9]|[0-9]))$"},
-			},
-		},
-		"dialAddress": map[string]interface{}{
-			"oneOf": []interface{}{
-				map[string]interface{}{"$ref": "#/definitions/ipAddress"},
-				map[string]interface{}{"$ref": "#/definitions/hostname"},
-			},
-		},
-		"listenAddress": map[string]interface{}{
-			"oneOf": []interface{}{
-				map[string]interface{}{"$ref": "#/definitions/ipAddress"},
-				map[string]interface{}{"$ref": "#/definitions/hostname"},
-				map[string]interface{}{"$ref": "#/definitions/cidr"},
-			},
-		},
-		"inhabitedSet": map[string]interface{}{
-			"type":        "array",
-			"minItems":    1,
-			"uniqueItems": true,
-		},
-		"portNumber": map[string]interface{}{
-			"type":    "integer",
-			"minimum": float64(0),
-			"maximum": float64(math.MaxUint16),
-		},
-		"portRange": map[string]interface{}{
-			"type":                 "object",
-			"additionalProperties": false,
-			"properties": map[string]interface{}{
-				"low":  map[string]interface{}{"$ref": "#/definitions/portNumber"},
-				"high": map[string]interface{}{"$ref": "#/definitions/portNumber"},
-			},
-		},
-		"protocolName": map[string]interface{}{
-			"type": "string",
-			"enum": []interface{}{"tcp", "udp"},
+var hostV1Definitions = combine(healthCheckSchema["definitions"].(map[string]interface{}), tunnelDefinitions)
+var tunnelDefinitions = map[string]interface{}{
+	"ipAddressFormat": map[string]interface{}{
+		"oneOf": []interface{}{
+			map[string]interface{}{"format": "ipv4"},
+			map[string]interface{}{"format": "ipv6"},
 		},
 	},
-)
+	"ipAddress": map[string]interface{}{
+		"type": "string",
+		"$ref": "#/definitions/ipAddressFormat",
+	},
+	"hostname": map[string]interface{}{
+		"type":   "string",
+		"format": "hostname",
+		"not":    map[string]interface{}{"$ref": "#/definitions/ipAddressFormat"},
+	},
+	"cidr": map[string]interface{}{
+		"type": "string",
+		"oneOf": []interface{}{
+			// JSON ipv4/ipv6 "format"s should work for cidrs also (see
+			// https://json-schema.org/understanding-json-schema/reference/string.html),
+			// but https://www.jsonschemavalidator.net disagreed, so using `pattern` instead.
+			// Patterns taken from https://blog.markhatton.co.uk/2011/03/15/regular-expressions-for-ip-addresses-cidr-ranges-and-hostnames/
+			map[string]interface{}{"pattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"},
+			map[string]interface{}{"pattern": "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/(12[0-8]|1[0-1][0-9]|[1-9][0-9]|[0-9]))$"},
+		},
+	},
+	"dialAddress": map[string]interface{}{
+		"oneOf": []interface{}{
+			map[string]interface{}{"$ref": "#/definitions/ipAddress"},
+			map[string]interface{}{"$ref": "#/definitions/hostname"},
+		},
+	},
+	"listenAddress": map[string]interface{}{
+		"oneOf": []interface{}{
+			map[string]interface{}{"$ref": "#/definitions/ipAddress"},
+			map[string]interface{}{"$ref": "#/definitions/hostname"},
+			map[string]interface{}{"$ref": "#/definitions/cidr"},
+		},
+	},
+	"inhabitedSet": map[string]interface{}{
+		"type":        "array",
+		"minItems":    1,
+		"uniqueItems": true,
+	},
+	"portNumber": map[string]interface{}{
+		"type":    "integer",
+		"minimum": float64(0),
+		"maximum": float64(math.MaxUint16),
+	},
+	"portRange": map[string]interface{}{
+		"type":                 "object",
+		"additionalProperties": false,
+		"properties": map[string]interface{}{
+			"low":  map[string]interface{}{"$ref": "#/definitions/portNumber"},
+			"high": map[string]interface{}{"$ref": "#/definitions/portNumber"},
+		},
+	},
+	"protocolName": map[string]interface{}{
+		"type": "string",
+		"enum": []interface{}{"tcp", "udp"},
+	},
+	"timeoutSeconds": map[string]interface{}{
+		"type":    "integer",
+		"minimum": float64(0),
+		"maximum": float64(math.MaxInt32),
+	},
+}
 
 // hostV1 schema with ["$id"] and ["definitions"] excluded
 var hostV1SchemaSansDefs = map[string]interface{}{
@@ -387,9 +390,7 @@ var hostV1SchemaSansDefs = map[string]interface{}{
 				"additionalProperties": false,
 				"properties": map[string]interface{}{
 					"connectTimeoutSeconds": map[string]interface{}{
-						"type":        "integer",
-						"minimum":     0,
-						"maximum":     2147483647,
+						"$ref":        "#/definitions/timeoutSeconds",
 						"description": "defaults to 5",
 					},
 					"maxConnections": map[string]interface{}{
@@ -492,6 +493,60 @@ var hostV2ConfigType = &ConfigType{
 			"terminators": map[string]interface{}{
 				"$ref": "#/definitions/terminatorList",
 			},
+		},
+	},
+}
+
+var interceptV1ConfigType = &ConfigType{
+	BaseExtEntity: boltz.BaseExtEntity{Id: "g7cIWbcGg"},
+	Name:          "intercept.v1",
+	Schema: map[string]interface{}{
+		"$id":                  "http://edge.openziti.org/schemas/intercept.v1.config.json",
+		"type":                 "object",
+		"additionalProperties": false,
+		"definitions":          tunnelDefinitions,
+		"properties": map[string]interface{}{
+			"protocols": map[string]interface{}{
+				"allOf": []interface{}{
+					map[string]interface{}{"$ref": "#/definitions/inhabitedSet"},
+					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/protocolName"}},
+				},
+			},
+			"addresses": map[string]interface{}{
+				"allOf": []interface{}{
+					map[string]interface{}{"$ref": "#/definitions/inhabitedSet"},
+					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/listenAddress"}},
+				},
+			},
+			"portRanges": map[string]interface{}{
+				"allOf": []interface{}{
+					map[string]interface{}{"$ref": "#/definitions/inhabitedSet"},
+					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/$defs/portRange"}},
+				},
+			},
+			"dialOptions": map[string]interface{}{
+				"type":                 "object",
+				"additionalProperties": false,
+				"properties": map[string]interface{}{
+					"identity": map[string]interface{}{
+						"type":        "string",
+						"description": "Dial a terminator with the specified identity. '$intercepted_protocol', '$intercepted_ip', '$intercepted_port are resolved to the corresponding value of the intercepted address.",
+					},
+					"connectTimeoutSeconds": map[string]interface{}{
+						"$ref":        "#/definitions/timeoutSeconds",
+						"description": "defaults to 5 seconds if no dialOptions are defined. defaults to 15 if dialOptions are defined but connectTimeoutSeconds is not specified.",
+					},
+				},
+			},
+			"sourceIp": map[string]interface{}{
+				"type":        "string",
+				"description": "The source IP (and optional :port) to spoof when the connection is egressed from the hosting tunneler. '$tunneler_id.name' resolves to the name of the client tunneler's identity. '$tunneler_id.tag[tagName]' resolves to the value of the 'tagName' tag on the client tunneler's identity. '$src_ip' and '$src_port' resolve to the source IP / port of the originating client. '$dst_port' resolves to the port that the client is trying to connect.",
+			},
+		},
+		"required": []interface{}{
+			"protocols",
+			"addresses",
+			"portRanges",
 		},
 	},
 }
