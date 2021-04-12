@@ -41,6 +41,7 @@ import (
 // variables for substitutions in intercept.v1 sourceIp property
 var sourceIpVar = "$" + tunnel.SourceIpKey
 var sourcePortVar = "$" + tunnel.SourcePortKey
+var dstIpVar = "$" + tunnel.DestinationIpKey
 var destPortVar = "$" + tunnel.DestinationPortKey
 
 func NewServiceListener(interceptor Interceptor, resolver dns.Resolver) *ServiceListener {
@@ -288,9 +289,10 @@ func (self *ServiceListener) configureSourceAddrProvider(svc *entities.Service) 
 
 	svc.SourceAddrProvider = func(sourceAddr, destAddr net.Addr) string {
 		sourceAddrIp, sourceAddrPort := tunnel.GetIpAndPort(sourceAddr)
-		_, destAddrPort := tunnel.GetIpAndPort(destAddr)
+		destAddrIp, destAddrPort := tunnel.GetIpAndPort(destAddr)
 		result := strings.ReplaceAll(sourceIp, sourceIpVar, sourceAddrIp)
 		result = strings.ReplaceAll(result, sourcePortVar, sourceAddrPort)
+		result = strings.ReplaceAll(result, dstIpVar, destAddrIp)
 		result = strings.ReplaceAll(result, destPortVar, destAddrPort)
 		return result
 	}
