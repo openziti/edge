@@ -223,7 +223,7 @@ func (self *HostV2Terminator) GetPort(options map[string]interface{}) (string, e
 		}
 		port, err := strconv.Atoi(portStr)
 		for _, portRange := range self.AllowedPortRanges {
-			if uint16(port) >= portRange.Low || uint16(port) <= portRange.High {
+			if uint16(port) >= portRange.Low && uint16(port) <= portRange.High {
 				return portStr, nil
 			}
 		}
