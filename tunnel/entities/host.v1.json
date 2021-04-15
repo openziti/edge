@@ -136,7 +136,7 @@
       {
         "if": {
           "properties": {
-            "forwardProtocol": {
+            "forwardPort": {
               "const": true
             }
           },
