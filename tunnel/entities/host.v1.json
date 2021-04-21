@@ -71,7 +71,11 @@
           "high": {
             "$ref": "#/$defs/portNumber"
           }
-        }
+        },
+        "required": [
+          "low",
+          "high"
+        ]
       },
       "protocolName": {
         "type": "string",
@@ -173,7 +177,7 @@
           },
           {
             "items": {
-              "$ref": "#/$defs/dialAddress"
+              "$ref": "#/$defs/listenAddress"
             }
           }
         ]

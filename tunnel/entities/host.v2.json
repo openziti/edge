@@ -156,7 +156,11 @@
         "high": {
           "$ref": "#/definitions/portNumber"
         }
-      }
+      },
+      "required": [
+        "low",
+        "high"
+      ]
     },
     "protocolName": {
       "type": "string",
@@ -295,7 +299,7 @@
             },
             {
               "items": {
-                "$ref": "#/definitions/dialAddress"
+                "$ref": "#/definitions/listenAddress"
               }
             }
           ]
