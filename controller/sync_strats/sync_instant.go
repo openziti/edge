@@ -446,6 +446,7 @@ func (strategy *InstantStrategy) synchronize(rtx *RouterSender) {
 
 			if len(apiSessions) >= chunkSize {
 				state.IsLast = !cursor.IsValid()
+				logger.Infof("sending api session sync chunk %v, isLast=%v", state.Sequence, state.IsLast)
 				if err = strategy.sendApiSessionAdded(rtx, true, state, apiSessions); err != nil {
 					return err
 				}
@@ -457,6 +458,7 @@ func (strategy *InstantStrategy) synchronize(rtx *RouterSender) {
 
 		if len(apiSessions) > 0 {
 			state.IsLast = true
+			logger.Infof("sending api session sync chunk %v, isLast=%v", state.Sequence, state.IsLast)
 			if err := strategy.sendApiSessionAdded(rtx, true, state, apiSessions); err != nil {
 				return err
 			}
