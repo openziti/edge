@@ -182,7 +182,7 @@ func (broker *Broker) apiSessionCertificateHandler(delete bool, args ...interfac
 	})
 
 	if err != nil {
-		// If it's not found, it's because it was deleted, which
+		// If it's not found, it's because it was deleted, which is expected when the cert was deleted via session delete cascade
 		if !delete || !boltz.IsErrNotFoundErr(err) {
 			pfxlog.Logger().WithError(err).Error("could not process API Session certificate event, failed to query for parent API Session")
 		}
