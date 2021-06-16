@@ -322,6 +322,9 @@ func NewZitiEdgeManagementAPI(spec *loads.Document) *ZitiEdgeManagementAPI {
 		IdentityGetIdentityPostureDataHandler: identity.GetIdentityPostureDataHandlerFunc(func(params identity.GetIdentityPostureDataParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation identity.GetIdentityPostureData has not yet been implemented")
 		}),
+		InformationalHealthCheckHandler: informational.HealthCheckHandlerFunc(func(params informational.HealthCheckParams) middleware.Responder {
+			return middleware.NotImplemented("operation informational.HealthCheck has not yet been implemented")
+		}),
 		APISessionListAPISessionsHandler: api_session.ListAPISessionsHandlerFunc(func(params api_session.ListAPISessionsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation api_session.ListAPISessions has not yet been implemented")
 		}),
@@ -783,6 +786,8 @@ type ZitiEdgeManagementAPI struct {
 	IdentityGetIdentityPolicyAdviceHandler identity.GetIdentityPolicyAdviceHandler
 	// IdentityGetIdentityPostureDataHandler sets the operation handler for the get identity posture data operation
 	IdentityGetIdentityPostureDataHandler identity.GetIdentityPostureDataHandler
+	// InformationalHealthCheckHandler sets the operation handler for the health check operation
+	InformationalHealthCheckHandler informational.HealthCheckHandler
 	// APISessionListAPISessionsHandler sets the operation handler for the list API sessions operation
 	APISessionListAPISessionsHandler api_session.ListAPISessionsHandler
 	// AuthenticatorListAuthenticatorsHandler sets the operation handler for the list authenticators operation
@@ -1266,6 +1271,9 @@ func (o *ZitiEdgeManagementAPI) Validate() error {
 	}
 	if o.IdentityGetIdentityPostureDataHandler == nil {
 		unregistered = append(unregistered, "identity.GetIdentityPostureDataHandler")
+	}
+	if o.InformationalHealthCheckHandler == nil {
+		unregistered = append(unregistered, "informational.HealthCheckHandler")
 	}
 	if o.APISessionListAPISessionsHandler == nil {
 		unregistered = append(unregistered, "api_session.ListAPISessionsHandler")
@@ -1921,6 +1929,10 @@ func (o *ZitiEdgeManagementAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/identities/{id}/posture-data"] = identity.NewGetIdentityPostureData(o.context, o.IdentityGetIdentityPostureDataHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/health-check"] = informational.NewHealthCheck(o.context, o.InformationalHealthCheckHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

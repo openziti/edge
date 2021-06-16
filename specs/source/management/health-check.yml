@@ -1,0 +1,15 @@
+---
+paths:
+  health-check:
+    get:
+      summary: Returns OK or error depending on controller health status
+      description: Returns OK or error depending on controller health status
+      security: [ ]
+      tags:
+        - Informational
+      operationId: healthCheck
+      responses:
+        '200':
+          $ref: '../shared/standard-responses.yml#/responses/emptyResponse'
+        '401':
+          $ref: '../shared/standard-responses.yml#/responses/unauthorizedResponse'

@@ -3,7 +3,7 @@ swagger: '2.0'
 info:
   version: 0.19.12
   title: Ziti Edge Management
-  contact: { }
+  contact: {}
 host: demo.ziti.dev
 basePath: /edge/management/v1
 schemes:
@@ -115,6 +115,9 @@ paths:
     $ref: 'management/enrollments.yml#/paths/enrollments'
   '/enrollments/{id}':
     $ref: 'management/enrollments.yml#/paths/enrollments-id'
+
+  '/health-check':
+    $ref: 'management/health-check.yml#/paths/health-check'
 
   '/identities':
     $ref: 'management/identities.yml#/paths/identities'
