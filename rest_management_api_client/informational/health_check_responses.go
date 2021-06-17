@@ -53,8 +53,8 @@ func (o *HealthCheckReader) ReadResponse(response runtime.ClientResponse, consum
 			return nil, err
 		}
 		return result, nil
-	case 401:
-		result := NewHealthCheckUnauthorized()
+	case 503:
+		result := NewHealthCheckServiceUnavailable()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -96,27 +96,27 @@ func (o *HealthCheckOK) readResponse(response runtime.ClientResponse, consumer r
 	return nil
 }
 
-// NewHealthCheckUnauthorized creates a HealthCheckUnauthorized with default headers values
-func NewHealthCheckUnauthorized() *HealthCheckUnauthorized {
-	return &HealthCheckUnauthorized{}
+// NewHealthCheckServiceUnavailable creates a HealthCheckServiceUnavailable with default headers values
+func NewHealthCheckServiceUnavailable() *HealthCheckServiceUnavailable {
+	return &HealthCheckServiceUnavailable{}
 }
 
-/* HealthCheckUnauthorized describes a response with status code 401, with default header values.
+/* HealthCheckServiceUnavailable describes a response with status code 503, with default header values.
 
-The currently supplied session does not have the correct access rights to request this resource
+The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 */
-type HealthCheckUnauthorized struct {
+type HealthCheckServiceUnavailable struct {
 	Payload *rest_model.APIErrorEnvelope
 }
 
-func (o *HealthCheckUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /health-check][%d] healthCheckUnauthorized  %+v", 401, o.Payload)
+func (o *HealthCheckServiceUnavailable) Error() string {
+	return fmt.Sprintf("[GET /health-check][%d] healthCheckServiceUnavailable  %+v", 503, o.Payload)
 }
-func (o *HealthCheckUnauthorized) GetPayload() *rest_model.APIErrorEnvelope {
+func (o *HealthCheckServiceUnavailable) GetPayload() *rest_model.APIErrorEnvelope {
 	return o.Payload
 }
 
-func (o *HealthCheckUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *HealthCheckServiceUnavailable) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(rest_model.APIErrorEnvelope)
 

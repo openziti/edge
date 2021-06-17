@@ -6254,8 +6254,8 @@ func init() {
               "$ref": "#/definitions/empty"
             }
           },
-          "401": {
-            "description": "The currently supplied session does not have the correct access rights to request this resource",
+          "503": {
+            "description": "The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information",
             "schema": {
               "$ref": "#/definitions/apiErrorEnvelope"
             },
@@ -6265,11 +6265,24 @@ func init() {
                   "args": {
                     "urlVars": {}
                   },
-                  "cause": "",
-                  "causeMessage": "",
-                  "code": "UNAUTHORIZED",
-                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
-                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                  "cause": {
+                    "details": {
+                      "context": "(root)",
+                      "field": "(root)",
+                      "property": "fooField3"
+                    },
+                    "field": "(root)",
+                    "message": "(root): fooField3 is required",
+                    "type": "required",
+                    "value": {
+                      "fooField": "abc",
+                      "fooField2": "def"
+                    }
+                  },
+                  "causeMessage": "schema validation failed",
+                  "code": "COULD_NOT_VALIDATE",
+                  "message": "The supplied request contains an invalid document",
+                  "requestId": "ac6766d6-3a09-44b3-8d8a-1b541d97fdd9"
                 },
                 "meta": {
                   "apiEnrolmentVersion": "0.0.1",
@@ -24887,8 +24900,8 @@ func init() {
               "$ref": "#/definitions/empty"
             }
           },
-          "401": {
-            "description": "The currently supplied session does not have the correct access rights to request this resource",
+          "503": {
+            "description": "The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information",
             "schema": {
               "$ref": "#/definitions/apiErrorEnvelope"
             },
@@ -24898,11 +24911,24 @@ func init() {
                   "args": {
                     "urlVars": {}
                   },
-                  "cause": "",
-                  "causeMessage": "",
-                  "code": "UNAUTHORIZED",
-                  "message": "The request could not be completed. The session is not authorized or the credentials are invalid",
-                  "requestId": "0bfe7a04-9229-4b7a-812c-9eb3cc0eac0f"
+                  "cause": {
+                    "details": {
+                      "context": "(root)",
+                      "field": "(root)",
+                      "property": "fooField3"
+                    },
+                    "field": "(root)",
+                    "message": "(root): fooField3 is required",
+                    "type": "required",
+                    "value": {
+                      "fooField": "abc",
+                      "fooField2": "def"
+                    }
+                  },
+                  "causeMessage": "schema validation failed",
+                  "code": "COULD_NOT_VALIDATE",
+                  "message": "The supplied request contains an invalid document",
+                  "requestId": "ac6766d6-3a09-44b3-8d8a-1b541d97fdd9"
                 },
                 "meta": {
                   "apiEnrolmentVersion": "0.0.1",

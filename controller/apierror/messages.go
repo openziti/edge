@@ -150,6 +150,10 @@ const (
 	TimeoutMessage string = "The requested operation took too much time to reply"
 	TimeoutStatus  int    = http.StatusServiceUnavailable
 
+	ControllerUnhealthyCode    string = "CONTROLLER_UNHEALTHY"
+	ControllerUnhealthyMessage string = "The controller is in an unhealthy state"
+	ControllerUnhealthyStatus  int    = http.StatusServiceUnavailable
+
 	InvalidPostureCode    string = "INVALID_POSTURE"
 	InvalidPostureMessage string = "Posture response data is missing or wrong"
 	InvalidPostureStatus  int    = http.StatusConflict

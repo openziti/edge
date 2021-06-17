@@ -11,5 +11,5 @@ paths:
       responses:
         '200':
           $ref: '../shared/standard-responses.yml#/responses/emptyResponse'
-        '401':
-          $ref: '../shared/standard-responses.yml#/responses/unauthorizedResponse'
+        '503':
+          $ref: '../shared/standard-responses.yml#/responses/badRequestResponse'

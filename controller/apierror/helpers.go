@@ -278,6 +278,15 @@ func NewTimeoutError() *errorz.ApiError {
 	}
 }
 
+func NewControllerUnhealthyError(cause error) *errorz.ApiError {
+	return &errorz.ApiError{
+		Cause:   cause,
+		Code:    ControllerUnhealthyCode,
+		Message: ControllerUnhealthyMessage,
+		Status:  ControllerUnhealthyStatus,
+	}
+}
+
 func NewInvalidPosture(cause error) *errorz.ApiError {
 	return &errorz.ApiError{
 		Cause:   cause,

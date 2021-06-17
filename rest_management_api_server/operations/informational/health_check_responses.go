@@ -81,14 +81,14 @@ func (o *HealthCheckOK) WriteResponse(rw http.ResponseWriter, producer runtime.P
 	}
 }
 
-// HealthCheckUnauthorizedCode is the HTTP code returned for type HealthCheckUnauthorized
-const HealthCheckUnauthorizedCode int = 401
+// HealthCheckServiceUnavailableCode is the HTTP code returned for type HealthCheckServiceUnavailable
+const HealthCheckServiceUnavailableCode int = 503
 
-/*HealthCheckUnauthorized The currently supplied session does not have the correct access rights to request this resource
+/*HealthCheckServiceUnavailable The supplied request contains invalid fields or could not be parsed (json and non-json bodies). The error's code, message, and cause fields can be inspected for further information
 
-swagger:response healthCheckUnauthorized
+swagger:response healthCheckServiceUnavailable
 */
-type HealthCheckUnauthorized struct {
+type HealthCheckServiceUnavailable struct {
 
 	/*
 	  In: Body
@@ -96,27 +96,27 @@ type HealthCheckUnauthorized struct {
 	Payload *rest_model.APIErrorEnvelope `json:"body,omitempty"`
 }
 
-// NewHealthCheckUnauthorized creates HealthCheckUnauthorized with default headers values
-func NewHealthCheckUnauthorized() *HealthCheckUnauthorized {
+// NewHealthCheckServiceUnavailable creates HealthCheckServiceUnavailable with default headers values
+func NewHealthCheckServiceUnavailable() *HealthCheckServiceUnavailable {
 
-	return &HealthCheckUnauthorized{}
+	return &HealthCheckServiceUnavailable{}
 }
 
-// WithPayload adds the payload to the health check unauthorized response
-func (o *HealthCheckUnauthorized) WithPayload(payload *rest_model.APIErrorEnvelope) *HealthCheckUnauthorized {
+// WithPayload adds the payload to the health check service unavailable response
+func (o *HealthCheckServiceUnavailable) WithPayload(payload *rest_model.APIErrorEnvelope) *HealthCheckServiceUnavailable {
 	o.Payload = payload
 	return o
 }
 
-// SetPayload sets the payload to the health check unauthorized response
-func (o *HealthCheckUnauthorized) SetPayload(payload *rest_model.APIErrorEnvelope) {
+// SetPayload sets the payload to the health check service unavailable response
+func (o *HealthCheckServiceUnavailable) SetPayload(payload *rest_model.APIErrorEnvelope) {
 	o.Payload = payload
 }
 
 // WriteResponse to the client
-func (o *HealthCheckUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+func (o *HealthCheckServiceUnavailable) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
-	rw.WriteHeader(401)
+	rw.WriteHeader(503)
 	if o.Payload != nil {
 		payload := o.Payload
 		if err := producer.Produce(rw, payload); err != nil {

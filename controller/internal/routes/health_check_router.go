@@ -21,12 +21,14 @@ import (
 	health "github.com/AppsFlyer/go-sundheit"
 	"github.com/AppsFlyer/go-sundheit/checks"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/env"
 	"github.com/openziti/edge/controller/internal/permissions"
 	"github.com/openziti/edge/controller/response"
 	"github.com/openziti/edge/rest_management_api_server/operations/informational"
 	"github.com/openziti/foundation/metrics"
 	"github.com/openziti/foundation/util/concurrenz"
+	"github.com/openziti/foundation/util/errorz"
 	"github.com/openziti/sdk-golang/ziti/edge/impl"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -93,11 +95,13 @@ func (r *HealthCheckRouter) HealthCheck(ae *env.AppEnv, rc *response.RequestCont
 		}
 	}
 
+	var err *errorz.ApiError
 	if len(errs) == 1 {
-		rc.RespondWithError(errs[0])
+		err = apierror.NewControllerUnhealthyError(errs[0])
 	} else {
-		rc.RespondWithError(impl.MultipleErrors(errs))
+		err = apierror.NewControllerUnhealthyError(impl.MultipleErrors(errs))
 	}
+	rc.RespondWithApiError(err)
 }
 
 type boltPinger struct {
