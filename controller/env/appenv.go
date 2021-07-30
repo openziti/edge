@@ -23,7 +23,7 @@ import (
 	"crypto/rsa"
 	"crypto/tls"
 	"fmt"
-	jwt2 "github.com/dgrijalva/jwt-go"
+	jwt2 "github.com/golang-jwt/jwt"
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime"
 	openApiMiddleware "github.com/go-openapi/runtime/middleware"

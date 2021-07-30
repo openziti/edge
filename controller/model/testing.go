@@ -17,7 +17,7 @@
 package model
 
 import (
-	jwt2 "github.com/dgrijalva/jwt-go"
+	jwt2 "github.com/golang-jwt/jwt"
 	"github.com/openziti/edge/controller/config"
 	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/edge/eid"

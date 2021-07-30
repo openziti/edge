@@ -20,7 +20,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
-	jwt2 "github.com/dgrijalva/jwt-go"
+	jwt2 "github.com/golang-jwt/jwt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/controller/apierror"
