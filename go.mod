@@ -41,7 +41,7 @@ require (
 	github.com/mdlayher/netlink v1.4.1
 	github.com/michaelquigley/pfxlog v0.6.1
 	github.com/miekg/dns v1.1.43
-	github.com/mitchellh/mapstructure v1.4.1
+	github.com/mitchellh/mapstructure v1.4.2
 	github.com/netfoundry/secretstream v0.1.2
 	github.com/openziti/fabric v0.16.103
 	github.com/openziti/foundation v0.15.74
