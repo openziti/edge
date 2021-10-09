@@ -35,7 +35,7 @@ func (self *listener) Listen(string, xgress.BindHandler) error {
 		// Open UDP socket to listen for Geneve Packets
 		conn, err := net.ListenPacket("udp", ":6081")
 		if err != nil {
-			log.WithError(err).Errorf("failed to open geneve interface - udp: %v", err)
+			log.WithError(err).Errorf("failed to open geneve interface - udp")
 			// error but return gracefully
 			return
 		} else {
@@ -46,7 +46,7 @@ func (self *listener) Listen(string, xgress.BindHandler) error {
 		// Open a raw socket to send Modified Packets to Networking Stack
 		fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_RAW, syscall.IPPROTO_RAW)
 		if err != nil {
-			log.WithError(err).Errorf("failed to open geneve interface - fd: %v", err)
+			log.WithError(err).Errorf("failed to open geneve interface - fd")
 			// error but return gracefully
 			return
 		} else {
@@ -60,14 +60,14 @@ func (self *listener) Listen(string, xgress.BindHandler) error {
 			buf := make([]byte, 9000)
 			n, _, err := conn.ReadFrom(buf)
 			if err != nil {
-				log.WithError(err).Errorf("error reading from geneve interface - udp: %v", err)
+				log.WithError(err).Errorf("error reading from geneve interface - udp")
 				// error but continue to read packets
 				continue
 			}
 			// Remove Geneve layer
 			packet := gopacket.NewPacket(buf[:n], layers.LayerTypeGeneve, gopacket.DecodeOptions{NoCopy: true})
 			if err := packet.ErrorLayer(); err != nil {
-				log.WithError(err.Error()).Errorf("Error decoding some part of the packet:", err)
+				log.WithError(err.Error()).Errorf("Error decoding some part of the packet")
 				// error but continue to read packets
 				continue
 			}
@@ -88,7 +88,7 @@ func (self *listener) Listen(string, xgress.BindHandler) error {
 				// Send the new packet to be routed to Ziti TProxy
 				err = syscall.Sendto(fd, modifiedPacket, 0, &sockAddress)
 				if err != nil {
-					log.WithError(err).Errorf("failed to send modified packet to geneve interface - fd: %v\n", err)
+					log.WithError(err).Errorf("failed to send modified packet to geneve interface - fd")
 					// error but continue to send packets
 					continue
 				}
