@@ -38,9 +38,9 @@ func (self *listener) Listen(string, xgress.BindHandler) error {
 			log.WithError(err).Errorf("failed to open geneve interface - udp")
 			// error but return gracefully
 			return
-		} else {
-			log.Infof("geneve interface started successfully - udp: %s", conn.LocalAddr().String())
 		}
+		// if no error, will log success
+		log.Infof("geneve interface started successfully - udp: %s", conn.LocalAddr().String())
 		// Close it when done
 		defer conn.Close()
 		// Open a raw socket to send Modified Packets to Networking Stack
@@ -49,9 +49,9 @@ func (self *listener) Listen(string, xgress.BindHandler) error {
 			log.WithError(err).Errorf("failed to open geneve interface - fd")
 			// error but return gracefully
 			return
-		} else {
-			log.Infof("geneve interface started successfully - fd: %d", fd)
 		}
+		// if no error, will log success
+		log.Infof("geneve interface started successfully - fd: %d", fd)
 		// Close it when done
 		defer syscall.Close(fd)
 		// Loop to process packets
