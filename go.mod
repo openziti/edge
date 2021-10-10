@@ -30,6 +30,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-cmp v0.5.6
+	github.com/google/gopacket v1.1.19
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/jessevdk/go-flags v1.5.0
