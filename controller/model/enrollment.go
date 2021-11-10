@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"github.com/go-openapi/runtime"
 	"github.com/openziti/edge/controller/apierror"
+	apierror2 "github.com/openziti/fabric/controller/apierror"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -152,7 +153,7 @@ func (context *EnrollmentContextHttp) FillFromHttpRequest(request *http.Request)
 			err := json.Unmarshal(body, &data)
 
 			if err != nil {
-				err = apierror.GetJsonParseError(err, body)
+				err = apierror2.GetJsonParseError(err, body)
 				apiErr := apierror.NewCouldNotParseBody(err)
 				apiErr.AppendCause = true
 				return apiErr
