@@ -22,7 +22,7 @@ import (
 	"github.com/openziti/edge/internal/version"
 	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/fabric/controller/api"
-	apierror2 "github.com/openziti/fabric/controller/apierror"
+	"github.com/openziti/fabric/controller/apierror"
 	"github.com/openziti/foundation/util/errorz"
 	"net/http"
 )
@@ -75,7 +75,7 @@ func (self EdgeResponseMapper) toRestModel(e *errorz.ApiError, requestId string)
 			ret.Cause = &rest_model.APIErrorCause{
 				APIError: *self.toRestModel(causeApiError, requestId),
 			}
-		} else if causeJsonSchemaError, ok := e.Cause.(*apierror2.ValidationErrors); ok {
+		} else if causeJsonSchemaError, ok := e.Cause.(*apierror.ValidationErrors); ok {
 			//only possible from config type JSON schema validation
 			ret.Cause = &rest_model.APIErrorCause{
 				APIFieldError: rest_model.APIFieldError{
@@ -111,7 +111,7 @@ func (self EdgeResponseMapper) toRestModel(e *errorz.ApiError, requestId string)
 			ret.Code = errorz.CouldNotValidateCode
 			ret.Message = errorz.CouldNotValidateMessage
 
-		} else if genericErr, ok := e.Cause.(apierror2.GenericCauseError); ok {
+		} else if genericErr, ok := e.Cause.(apierror.GenericCauseError); ok {
 			ret.Cause = &rest_model.APIErrorCause{
 				APIError: rest_model.APIError{
 					Data:    genericErr.DataMap,

@@ -21,7 +21,7 @@ import (
 	"github.com/lucsky/cuid"
 	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/persistence"
-	apierror2 "github.com/openziti/fabric/controller/apierror"
+	fabricApiError "github.com/openziti/fabric/controller/apierror"
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/storage/ast"
 	"github.com/openziti/foundation/storage/boltz"
@@ -51,7 +51,7 @@ type SessionPostureResult struct {
 	Passed           bool
 	Failure          *PostureSessionRequestFailure
 	PassingPolicyIds []string
-	Cause            *apierror2.GenericCauseError
+	Cause            *fabricApiError.GenericCauseError
 }
 
 func (handler *SessionHandler) EvaluatePostureForService(identityId, apiSessionId, sessionType, serviceId, serviceName string) *SessionPostureResult {
@@ -129,7 +129,7 @@ func (handler *SessionHandler) EvaluatePostureForService(identityId, apiSessionI
 			sessionFailure.PolicyFailures = append(sessionFailure.PolicyFailures, policyFailure)
 		}
 
-		cause := &apierror2.GenericCauseError{
+		cause := &fabricApiError.GenericCauseError{
 			Message: fmt.Sprintf("Failed to pass posture checks for service policies: %v", failedPolicyIds),
 			DataMap: failureMap,
 		}

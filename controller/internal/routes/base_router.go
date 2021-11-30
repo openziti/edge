@@ -23,7 +23,7 @@ import (
 	"github.com/openziti/edge/controller/response"
 	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/fabric/controller/api"
-	apierror2 "github.com/openziti/fabric/controller/apierror"
+	"github.com/openziti/fabric/controller/apierror"
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/storage/ast"
 	"github.com/openziti/foundation/storage/boltz"
@@ -172,7 +172,7 @@ func CreateWithResponder(rc *response.RequestContext, rsp response.Responder, li
 			return
 		}
 
-		if sve, ok := err.(*apierror2.ValidationErrors); ok {
+		if sve, ok := err.(*apierror.ValidationErrors); ok {
 			rc.RespondWithValidationErrors(sve)
 			return
 		}
@@ -284,7 +284,7 @@ func UpdateAllowEmptyBody(rc *response.RequestContext, updateF ModelUpdateF) {
 			return
 		}
 
-		if sve, ok := err.(*apierror2.ValidationErrors); ok {
+		if sve, ok := err.(*apierror.ValidationErrors); ok {
 			rc.RespondWithValidationErrors(sve)
 			return
 		}
@@ -325,7 +325,7 @@ func Patch(rc *response.RequestContext, patchF ModelPatchF) {
 			return
 		}
 
-		if sve, ok := err.(*apierror2.ValidationErrors); ok {
+		if sve, ok := err.(*apierror.ValidationErrors); ok {
 			rc.RespondWithValidationErrors(sve)
 			return
 		}
