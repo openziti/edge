@@ -541,8 +541,18 @@ func (ae *AppEnv) IsAllowed(responderFunc func(ae *AppEnv, rc *response.RequestC
 		responderFunc(ae, rc)
 
 		if !rc.StartTime.IsZero() {
-			timer := ae.GetHostController().GetNetwork().GetMetricsRegistry().Timer(getMetricTimerName(rc.Request))
-			timer.UpdateSince(rc.StartTime)
+			urlMetricName := getMetricTimerName(rc.Request)
+
+			//endpoint metrics
+			urlTimer := ae.GetMetricsRegistry().Timer(urlMetricName)
+			urlTimer.UpdateSince(rc.StartTime)
+
+			//endpoint per identity metrics
+			if rc.Identity != nil {
+				urlIdentityTimer := ae.GetMetricsRegistry().Timer("identity." + rc.Identity.Id + "." + urlMetricName)
+				urlIdentityTimer.UpdateSince(rc.StartTime)
+			}
+
 		} else {
 			pfxlog.Logger().WithFields(map[string]interface{}{
 				"url": request.URL,
