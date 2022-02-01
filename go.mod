@@ -127,5 +127,5 @@ require (
 
 require (
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/openziti/channel v0.18.2
+	github.com/openziti/channel v0.18.4
 )
