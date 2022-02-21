@@ -17,13 +17,14 @@
 package persistence
 
 import (
+	"strings"
+
 	"github.com/openziti/fabric/controller/db"
 	"github.com/openziti/fabric/controller/network"
 	"github.com/openziti/foundation/storage/ast"
 	"github.com/openziti/foundation/storage/boltz"
 	"github.com/openziti/foundation/util/errorz"
 	"go.etcd.io/bbolt"
-	"strings"
 )
 
 type DbProvider interface {

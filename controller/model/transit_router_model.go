@@ -17,13 +17,14 @@
 package model
 
 import (
+	"reflect"
+
 	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/fabric/controller/db"
 	"github.com/openziti/fabric/controller/models"
 	"github.com/openziti/foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
-	"reflect"
 )
 
 type TransitRouter struct {
@@ -34,6 +35,7 @@ type TransitRouter struct {
 	IsBase                bool
 	UnverifiedFingerprint *string
 	UnverifiedCertPem     *string
+	Cost                  uint16
 }
 
 func (entity *TransitRouter) toBoltEntityForCreate(*bbolt.Tx, Handler) (boltz.Entity, error) {
@@ -44,6 +46,7 @@ func (entity *TransitRouter) toBoltEntityForCreate(*bbolt.Tx, Handler) (boltz.En
 			Fingerprint:   entity.Fingerprint,
 		},
 		IsVerified: false,
+		Cost:       entity.Cost,
 	}
 
 	return boltEntity, nil
@@ -56,9 +59,10 @@ func (entity *TransitRouter) toBoltEntityForUpdate(*bbolt.Tx, Handler) (boltz.En
 			Name:          entity.Name,
 			Fingerprint:   entity.Fingerprint,
 		},
-		IsVerified: entity.IsVerified,
+		IsVerified:            entity.IsVerified,
 		UnverifiedFingerprint: entity.UnverifiedFingerprint,
-		UnverifiedCertPem: entity.UnverifiedCertPem,
+		UnverifiedCertPem:     entity.UnverifiedCertPem,
+		Cost:                  entity.Cost,
 	}
 
 	return ret, nil
@@ -80,6 +84,7 @@ func (entity *TransitRouter) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.E
 	entity.Fingerprint = boltTransitRouter.Fingerprint
 	entity.UnverifiedFingerprint = boltTransitRouter.UnverifiedFingerprint
 	entity.UnverifiedCertPem = boltTransitRouter.UnverifiedCertPem
+	entity.Cost = boltTransitRouter.Cost
 
 	return nil
 }

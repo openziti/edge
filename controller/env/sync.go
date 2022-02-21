@@ -17,12 +17,13 @@
 package env
 
 import (
+	"sync"
+
 	"github.com/openziti/channel"
 	"github.com/openziti/edge/controller/model"
 	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/fabric/controller/network"
 	"github.com/openziti/foundation/common"
-	"sync"
 )
 
 // Aliased type for router strategies
