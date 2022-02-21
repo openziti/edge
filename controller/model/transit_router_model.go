@@ -44,9 +44,9 @@ func (entity *TransitRouter) toBoltEntityForCreate(*bbolt.Tx, Handler) (boltz.En
 			BaseExtEntity: *boltz.NewExtEntity(entity.Id, entity.Tags),
 			Name:          entity.Name,
 			Fingerprint:   entity.Fingerprint,
+			Cost:          entity.Cost,
 		},
 		IsVerified: false,
-		Cost:       entity.Cost,
 	}
 
 	return boltEntity, nil
@@ -58,11 +58,11 @@ func (entity *TransitRouter) toBoltEntityForUpdate(*bbolt.Tx, Handler) (boltz.En
 			BaseExtEntity: *boltz.NewExtEntity(entity.Id, entity.Tags),
 			Name:          entity.Name,
 			Fingerprint:   entity.Fingerprint,
+			Cost:          entity.Cost,
 		},
 		IsVerified:            entity.IsVerified,
 		UnverifiedFingerprint: entity.UnverifiedFingerprint,
 		UnverifiedCertPem:     entity.UnverifiedCertPem,
-		Cost:                  entity.Cost,
 	}
 
 	return ret, nil
