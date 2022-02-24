@@ -18,7 +18,6 @@ package persistence
 
 import (
 	"fmt"
-
 	"github.com/openziti/fabric/controller/db"
 	"github.com/openziti/foundation/storage/boltz"
 	"go.etcd.io/bbolt"

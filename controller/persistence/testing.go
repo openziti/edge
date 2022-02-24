@@ -16,9 +16,7 @@
 
 package persistence
 
-import (
-	"testing"
-
+import (	
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/eid"
 	"github.com/openziti/fabric/controller/db"
@@ -28,6 +26,7 @@ import (
 	"github.com/openziti/foundation/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
+	"testing"
 )
 
 type testDbProvider struct {
