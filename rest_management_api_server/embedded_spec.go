@@ -15870,9 +15870,14 @@ func init() {
         "supportedProtocols",
         "syncStatus",
         "isOnline",
-        "cost"
+        "cost",
+        "allowTraversal"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -16698,6 +16703,10 @@ func init() {
         "name"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -16803,6 +16812,7 @@ func init() {
             "href": "./edge-routers/b0766b8d-bd1a-4d28-8415-639b29d3c83d"
           }
         },
+        "allowTraversal": true,
         "cost": 0,
         "createdAt": "2020-03-16T17:13:31.5807454Z",
         "enrollmentCreatedAt": "2020-03-16T17:13:31.5777637Z",
@@ -16837,6 +16847,10 @@ func init() {
       "description": "An edge router patch object",
       "type": "object",
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -16980,6 +16994,10 @@ func init() {
         "name"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -19455,6 +19473,10 @@ func init() {
         "name"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "cost": {
           "type": "integer",
           "maximum": 65535,
@@ -19481,9 +19503,13 @@ func init() {
             "isVerified",
             "isOnline",
             "fingerprint",
-            "cost"
+            "cost",
+            "allowTraversal"
           ],
           "properties": {
+            "allowTraversal": {
+              "type": "boolean"
+            },
             "cost": {
               "type": "integer",
               "maximum": 65535
@@ -19560,6 +19586,10 @@ func init() {
     "routerPatch": {
       "type": "object",
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "cost": {
           "type": "integer",
           "maximum": 65535,
@@ -19579,6 +19609,10 @@ func init() {
         "name"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "cost": {
           "type": "integer",
           "maximum": 65535,
@@ -36491,9 +36525,14 @@ func init() {
         "supportedProtocols",
         "syncStatus",
         "isOnline",
-        "cost"
+        "cost",
+        "allowTraversal"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -37320,6 +37359,10 @@ func init() {
         "name"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -37426,6 +37469,7 @@ func init() {
             "href": "./edge-routers/b0766b8d-bd1a-4d28-8415-639b29d3c83d"
           }
         },
+        "allowTraversal": true,
         "cost": 0,
         "createdAt": "2020-03-16T17:13:31.5807454Z",
         "enrollmentCreatedAt": "2020-03-16T17:13:31.5777637Z",
@@ -37460,6 +37504,10 @@ func init() {
       "description": "An edge router patch object",
       "type": "object",
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -37604,6 +37652,10 @@ func init() {
         "name"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -40080,6 +40132,10 @@ func init() {
         "name"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "cost": {
           "type": "integer",
           "maximum": 65535,
@@ -40107,9 +40163,13 @@ func init() {
             "isVerified",
             "isOnline",
             "fingerprint",
-            "cost"
+            "cost",
+            "allowTraversal"
           ],
           "properties": {
+            "allowTraversal": {
+              "type": "boolean"
+            },
             "cost": {
               "type": "integer",
               "maximum": 65535,
@@ -40187,6 +40247,10 @@ func init() {
     "routerPatch": {
       "type": "object",
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "cost": {
           "type": "integer",
           "maximum": 65535,
@@ -40207,6 +40271,10 @@ func init() {
         "name"
       ],
       "properties": {
+        "allowTraversal": {
+          "type": "boolean",
+          "x-nullable": true
+        },
         "cost": {
           "type": "integer",
           "maximum": 65535,

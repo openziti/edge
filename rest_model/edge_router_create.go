@@ -43,6 +43,9 @@ import (
 // swagger:model edgeRouterCreate
 type EdgeRouterCreate struct {
 
+	// allow traversal
+	AllowTraversal *bool `json:"allowTraversal,omitempty"`
+
 	// app data
 	AppData *Tags `json:"appData,omitempty"`
 

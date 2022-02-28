@@ -2946,7 +2946,11 @@ definitions:
     - syncStatus
     - isOnline
     - cost
+    - allowTraversal
     properties:
+      allowTraversal:
+        type: boolean
+        x-nullable: true
       appData:
         $ref: '#/definitions/tags'
       cost:

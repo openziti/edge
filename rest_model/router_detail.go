@@ -44,6 +44,10 @@ import (
 type RouterDetail struct {
 	BaseEntity
 
+	// allow traversal
+	// Required: true
+	AllowTraversal *bool `json:"allowTraversal"`
+
 	// cost
 	// Required: true
 	// Maximum: 65535
@@ -98,6 +102,8 @@ func (m *RouterDetail) UnmarshalJSON(raw []byte) error {
 
 	// AO1
 	var dataAO1 struct {
+		AllowTraversal *bool `json:"allowTraversal"`
+
 		Cost *int64 `json:"cost"`
 
 		EnrollmentCreatedAt *strfmt.DateTime `json:"enrollmentCreatedAt,omitempty"`
@@ -123,6 +129,8 @@ func (m *RouterDetail) UnmarshalJSON(raw []byte) error {
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
 	}
+
+	m.AllowTraversal = dataAO1.AllowTraversal
 
 	m.Cost = dataAO1.Cost
 
@@ -159,6 +167,8 @@ func (m RouterDetail) MarshalJSON() ([]byte, error) {
 	}
 	_parts = append(_parts, aO0)
 	var dataAO1 struct {
+		AllowTraversal *bool `json:"allowTraversal"`
+
 		Cost *int64 `json:"cost"`
 
 		EnrollmentCreatedAt *strfmt.DateTime `json:"enrollmentCreatedAt,omitempty"`
@@ -181,6 +191,8 @@ func (m RouterDetail) MarshalJSON() ([]byte, error) {
 
 		UnverifiedFingerprint *string `json:"unverifiedFingerprint"`
 	}
+
+	dataAO1.AllowTraversal = m.AllowTraversal
 
 	dataAO1.Cost = m.Cost
 
@@ -221,6 +233,10 @@ func (m *RouterDetail) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateAllowTraversal(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCost(formats); err != nil {
 		res = append(res, err)
 	}
@@ -252,6 +268,15 @@ func (m *RouterDetail) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *RouterDetail) validateAllowTraversal(formats strfmt.Registry) error {
+
+	if err := validate.Required("allowTraversal", "body", m.AllowTraversal); err != nil {
+		return err
+	}
+
 	return nil
 }
 

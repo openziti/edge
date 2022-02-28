@@ -41,6 +41,7 @@ func NewEdgeRouterHandler(env Env) *EdgeRouterHandler {
 			persistence.FieldRoleAttributes:              struct{}{},
 			boltz.FieldTags:                              struct{}{},
 			db.FieldRouterCost:                           struct{}{},
+			db.FieldRouterAllowTraversal:                 struct{}{},
 		},
 	}
 	handler.impl = handler

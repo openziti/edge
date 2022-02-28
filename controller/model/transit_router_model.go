@@ -36,15 +36,17 @@ type TransitRouter struct {
 	UnverifiedFingerprint *string
 	UnverifiedCertPem     *string
 	Cost                  uint16
+	AllowTraversal        bool
 }
 
 func (entity *TransitRouter) toBoltEntityForCreate(*bbolt.Tx, Handler) (boltz.Entity, error) {
 	boltEntity := &persistence.TransitRouter{
 		Router: db.Router{
-			BaseExtEntity: *boltz.NewExtEntity(entity.Id, entity.Tags),
-			Name:          entity.Name,
-			Fingerprint:   entity.Fingerprint,
-			Cost:          entity.Cost,
+			BaseExtEntity:  *boltz.NewExtEntity(entity.Id, entity.Tags),
+			Name:           entity.Name,
+			Fingerprint:    entity.Fingerprint,
+			Cost:           entity.Cost,
+			AllowTraversal: entity.AllowTraversal,
 		},
 		IsVerified: false,
 	}
@@ -55,10 +57,11 @@ func (entity *TransitRouter) toBoltEntityForCreate(*bbolt.Tx, Handler) (boltz.En
 func (entity *TransitRouter) toBoltEntityForUpdate(*bbolt.Tx, Handler) (boltz.Entity, error) {
 	ret := &persistence.TransitRouter{
 		Router: db.Router{
-			BaseExtEntity: *boltz.NewExtEntity(entity.Id, entity.Tags),
-			Name:          entity.Name,
-			Fingerprint:   entity.Fingerprint,
-			Cost:          entity.Cost,
+			BaseExtEntity:  *boltz.NewExtEntity(entity.Id, entity.Tags),
+			Name:           entity.Name,
+			Fingerprint:    entity.Fingerprint,
+			Cost:           entity.Cost,
+			AllowTraversal: entity.AllowTraversal,
 		},
 		IsVerified:            entity.IsVerified,
 		UnverifiedFingerprint: entity.UnverifiedFingerprint,
@@ -85,6 +88,7 @@ func (entity *TransitRouter) fillFrom(_ Handler, _ *bbolt.Tx, boltEntity boltz.E
 	entity.UnverifiedFingerprint = boltTransitRouter.UnverifiedFingerprint
 	entity.UnverifiedCertPem = boltTransitRouter.UnverifiedCertPem
 	entity.Cost = boltTransitRouter.Cost
+	entity.AllowTraversal = boltTransitRouter.AllowTraversal
 
 	return nil
 }

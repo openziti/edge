@@ -43,6 +43,9 @@ import (
 // swagger:model routerUpdate
 type RouterUpdate struct {
 
+	// allow traversal
+	AllowTraversal *bool `json:"allowTraversal,omitempty"`
+
 	// cost
 	// Maximum: 65535
 	// Minimum: 0
