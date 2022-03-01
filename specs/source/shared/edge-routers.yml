@@ -9,7 +9,7 @@ definitions:
       - syncStatus
       - isOnline
       - cost
-      - allowTraversal
+      - noTraversal
     properties:
       hostname:
         type: string
@@ -28,7 +28,7 @@ definitions:
         minimum: 0
         maximum: 65535
         x-nullable: true
-      allowTraversal:
+      noTraversal:
         type: boolean
         x-nullable: true
       appData:

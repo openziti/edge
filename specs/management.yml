@@ -11478,11 +11478,8 @@ definitions:
     - syncStatus
     - isOnline
     - cost
-    - allowTraversal
+    - noTraversal
     properties:
-      allowTraversal:
-        type: boolean
-        x-nullable: true
       appData:
         $ref: '#/definitions/tags'
       cost:
@@ -11496,6 +11493,9 @@ definitions:
         type: boolean
       name:
         type: string
+      noTraversal:
+        type: boolean
+        x-nullable: true
       supportedProtocols:
         type: object
         additionalProperties:
@@ -12042,9 +12042,6 @@ definitions:
     required:
     - name
     properties:
-      allowTraversal:
-        type: boolean
-        x-nullable: true
       appData:
         $ref: '#/definitions/tags'
       cost:
@@ -12056,6 +12053,9 @@ definitions:
         type: boolean
       name:
         type: string
+      noTraversal:
+        type: boolean
+        x-nullable: true
       roleAttributes:
         $ref: '#/definitions/attributes'
       tags:
@@ -12119,7 +12119,6 @@ definitions:
           href: ./edge-routers/b0766b8d-bd1a-4d28-8415-639b29d3c83d/edge-routers
         self:
           href: ./edge-routers/b0766b8d-bd1a-4d28-8415-639b29d3c83d
-      allowTraversal: true
       cost: 0
       createdAt: "2020-03-16T17:13:31.5807454Z"
       enrollmentCreatedAt: "2020-03-16T17:13:31.5777637Z"
@@ -12138,6 +12137,7 @@ definitions:
       isTunnelerEnabled: false
       isVerified: false
       name: TestRouter-e33c837f-3222-4b40-bcd6-b3458fd5156e
+      noTraversal: false
       roleAttributes:
       - eastCoast
       - sales
@@ -12154,9 +12154,6 @@ definitions:
     description: An edge router patch object
     type: object
     properties:
-      allowTraversal:
-        type: boolean
-        x-nullable: true
       appData:
         $ref: '#/definitions/tags'
       cost:
@@ -12168,6 +12165,9 @@ definitions:
         type: boolean
       name:
         type: string
+      noTraversal:
+        type: boolean
+        x-nullable: true
       roleAttributes:
         $ref: '#/definitions/attributes'
       tags:
@@ -12252,9 +12252,6 @@ definitions:
     required:
     - name
     properties:
-      allowTraversal:
-        type: boolean
-        x-nullable: true
       appData:
         $ref: '#/definitions/tags'
       cost:
@@ -12266,6 +12263,9 @@ definitions:
         type: boolean
       name:
         type: string
+      noTraversal:
+        type: boolean
+        x-nullable: true
       roleAttributes:
         $ref: '#/definitions/attributes'
       tags:
@@ -13849,9 +13849,6 @@ definitions:
     required:
     - name
     properties:
-      allowTraversal:
-        type: boolean
-        x-nullable: true
       cost:
         type: integer
         maximum: 65535
@@ -13859,6 +13856,9 @@ definitions:
         x-nullable: true
       name:
         type: string
+      noTraversal:
+        type: boolean
+        x-nullable: true
       tags:
         $ref: '#/definitions/tags'
   routerDetail:
@@ -13872,10 +13872,8 @@ definitions:
       - isOnline
       - fingerprint
       - cost
-      - allowTraversal
+      - noTraversal
       properties:
-        allowTraversal:
-          type: boolean
         cost:
           type: integer
           maximum: 65535
@@ -13902,6 +13900,8 @@ definitions:
           type: boolean
         name:
           type: string
+        noTraversal:
+          type: boolean
         unverifiedCertPem:
           type: string
           x-nullable: true
@@ -13927,9 +13927,6 @@ definitions:
   routerPatch:
     type: object
     properties:
-      allowTraversal:
-        type: boolean
-        x-nullable: true
       cost:
         type: integer
         maximum: 65535
@@ -13937,6 +13934,9 @@ definitions:
         x-nullable: true
       name:
         type: string
+      noTraversal:
+        type: boolean
+        x-nullable: true
       tags:
         $ref: '#/definitions/tags'
   routerUpdate:
@@ -13944,9 +13944,6 @@ definitions:
     required:
     - name
     properties:
-      allowTraversal:
-        type: boolean
-        x-nullable: true
       cost:
         type: integer
         maximum: 65535
@@ -13954,6 +13951,9 @@ definitions:
         x-nullable: true
       name:
         type: string
+      noTraversal:
+        type: boolean
+        x-nullable: true
       tags:
         $ref: '#/definitions/tags'
   sdkInfo:

@@ -43,9 +43,6 @@ import (
 // swagger:model edgeRouterPatch
 type EdgeRouterPatch struct {
 
-	// allow traversal
-	AllowTraversal *bool `json:"allowTraversal,omitempty"`
-
 	// app data
 	AppData *Tags `json:"appData,omitempty"`
 
@@ -59,6 +56,9 @@ type EdgeRouterPatch struct {
 
 	// name
 	Name string `json:"name,omitempty"`
+
+	// no traversal
+	NoTraversal *bool `json:"noTraversal,omitempty"`
 
 	// role attributes
 	RoleAttributes *Attributes `json:"roleAttributes,omitempty"`

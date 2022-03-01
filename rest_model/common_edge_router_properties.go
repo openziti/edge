@@ -43,10 +43,6 @@ import (
 // swagger:model commonEdgeRouterProperties
 type CommonEdgeRouterProperties struct {
 
-	// allow traversal
-	// Required: true
-	AllowTraversal *bool `json:"allowTraversal"`
-
 	// app data
 	AppData *Tags `json:"appData,omitempty"`
 
@@ -68,6 +64,10 @@ type CommonEdgeRouterProperties struct {
 	// Required: true
 	Name *string `json:"name"`
 
+	// no traversal
+	// Required: true
+	NoTraversal *bool `json:"noTraversal"`
+
 	// supported protocols
 	// Required: true
 	SupportedProtocols map[string]string `json:"supportedProtocols"`
@@ -80,10 +80,6 @@ type CommonEdgeRouterProperties struct {
 // Validate validates this common edge router properties
 func (m *CommonEdgeRouterProperties) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateAllowTraversal(formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.validateAppData(formats); err != nil {
 		res = append(res, err)
@@ -105,6 +101,10 @@ func (m *CommonEdgeRouterProperties) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateNoTraversal(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateSupportedProtocols(formats); err != nil {
 		res = append(res, err)
 	}
@@ -116,15 +116,6 @@ func (m *CommonEdgeRouterProperties) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *CommonEdgeRouterProperties) validateAllowTraversal(formats strfmt.Registry) error {
-
-	if err := validate.Required("allowTraversal", "body", m.AllowTraversal); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -185,6 +176,15 @@ func (m *CommonEdgeRouterProperties) validateIsOnline(formats strfmt.Registry) e
 func (m *CommonEdgeRouterProperties) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CommonEdgeRouterProperties) validateNoTraversal(formats strfmt.Registry) error {
+
+	if err := validate.Required("noTraversal", "body", m.NoTraversal); err != nil {
 		return err
 	}
 

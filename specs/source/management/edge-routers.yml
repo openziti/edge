@@ -273,7 +273,7 @@ definitions:
         x-nullable: true
         minimum: 0
         maximum: 65535
-      allowTraversal:
+      noTraversal:
         type: boolean
         x-nullable: true
       roleAttributes:
@@ -298,7 +298,7 @@ definitions:
         x-nullable: true
         minimum: 0
         maximum: 65535
-      allowTraversal:
+      noTraversal:
         type: boolean
         x-nullable: true
       roleAttributes:
@@ -321,7 +321,7 @@ definitions:
         x-nullable: true
         minimum: 0
         maximum: 65535
-      allowTraversal:
+      noTraversal:
         type: boolean
         x-nullable: true
       roleAttributes:
@@ -408,7 +408,7 @@ definitions:
       isOnline: false
       isTunnelerEnabled: false
       cost: 0
-      allowTraversal: true
+      noTraversal: false
       enrollmentToken: 30a1f0ea-d39b-4aae-b852-304cf1c30d1f
       enrollmentJwt: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbSI6ImVyb3R0IiwiZXhwIjoxNTg0Mzc5MTExLCJpc3MiOiJodHRwczovL
       2xvY2FsaG9zdDoxMjgwIiwianRpIjoiMzBhMWYwZWEtZDM5Yi00YWFlLWI4NTItMzA0Y2YxYzMwZDFmIiwic3ViIjoiYjA3NjZiOGQtYmQxYS00ZDI

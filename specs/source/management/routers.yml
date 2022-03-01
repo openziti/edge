@@ -300,7 +300,7 @@ definitions:
           - isOnline
           - fingerprint
           - cost
-          - allowTraversal
+          - noTraversal
         properties:
           name:
             type: string
@@ -336,7 +336,7 @@ definitions:
             type: integer
             minimum: 0
             maximum: 65535
-          allowTraversal:
+          noTraversal:
             type: boolean
   routerCreate:
     type: object
@@ -350,7 +350,7 @@ definitions:
         x-nullable: true
         minimum: 0
         maximum: 65535
-      allowTraversal:
+      noTraversal:
         type: boolean
         x-nullable: true
       tags:
@@ -367,7 +367,7 @@ definitions:
         x-nullable: true
         minimum: 0
         maximum: 65535
-      allowTraversal:
+      noTraversal:
         type: boolean
         x-nullable: true
       tags:
@@ -382,7 +382,7 @@ definitions:
         x-nullable: true
         minimum: 0
         maximum: 65535
-      allowTraversal:
+      noTraversal:
         type: boolean
         x-nullable: true
       tags:

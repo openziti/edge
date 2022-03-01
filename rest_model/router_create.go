@@ -43,9 +43,6 @@ import (
 // swagger:model routerCreate
 type RouterCreate struct {
 
-	// allow traversal
-	AllowTraversal *bool `json:"allowTraversal,omitempty"`
-
 	// cost
 	// Maximum: 65535
 	// Minimum: 0
@@ -54,6 +51,9 @@ type RouterCreate struct {
 	// name
 	// Required: true
 	Name *string `json:"name"`
+
+	// no traversal
+	NoTraversal *bool `json:"noTraversal,omitempty"`
 
 	// tags
 	Tags *Tags `json:"tags,omitempty"`

@@ -4003,13 +4003,9 @@ func init() {
         "syncStatus",
         "isOnline",
         "cost",
-        "allowTraversal"
+        "noTraversal"
       ],
       "properties": {
-        "allowTraversal": {
-          "type": "boolean",
-          "x-nullable": true
-        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -4026,6 +4022,10 @@ func init() {
         },
         "name": {
           "type": "string"
+        },
+        "noTraversal": {
+          "type": "boolean",
+          "x-nullable": true
         },
         "supportedProtocols": {
           "type": "object",
@@ -9727,13 +9727,9 @@ func init() {
         "syncStatus",
         "isOnline",
         "cost",
-        "allowTraversal"
+        "noTraversal"
       ],
       "properties": {
-        "allowTraversal": {
-          "type": "boolean",
-          "x-nullable": true
-        },
         "appData": {
           "$ref": "#/definitions/tags"
         },
@@ -9751,6 +9747,10 @@ func init() {
         },
         "name": {
           "type": "string"
+        },
+        "noTraversal": {
+          "type": "boolean",
+          "x-nullable": true
         },
         "supportedProtocols": {
           "type": "object",

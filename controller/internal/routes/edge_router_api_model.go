@@ -64,7 +64,7 @@ func MapCreateEdgeRouterToModel(router *rest_model.EdgeRouterCreate) *model.Edge
 		IsTunnelerEnabled: router.IsTunnelerEnabled,
 		AppData:           TagsOrDefault(router.AppData),
 		Cost:              uint16(Int64OrDefault(router.Cost)),
-		AllowTraversal:    BoolOrDefault(router.AllowTraversal),
+		NoTraversal:       BoolOrDefault(router.NoTraversal),
 	}
 
 	return ret
@@ -81,7 +81,7 @@ func MapUpdateEdgeRouterToModel(id string, router *rest_model.EdgeRouterUpdate) 
 		IsTunnelerEnabled: router.IsTunnelerEnabled,
 		AppData:           TagsOrDefault(router.AppData),
 		Cost:              uint16(Int64OrDefault(router.Cost)),
-		AllowTraversal:    BoolOrDefault(router.AllowTraversal),
+		NoTraversal:       BoolOrDefault(router.NoTraversal),
 	}
 
 	return ret
@@ -98,7 +98,7 @@ func MapPatchEdgeRouterToModel(id string, router *rest_model.EdgeRouterPatch) *m
 		IsTunnelerEnabled: router.IsTunnelerEnabled,
 		AppData:           TagsOrDefault(router.AppData),
 		Cost:              uint16(Int64OrDefault(router.Cost)),
-		AllowTraversal:    BoolOrDefault(router.AllowTraversal),
+		NoTraversal:       BoolOrDefault(router.NoTraversal),
 	}
 
 	return ret
@@ -162,7 +162,7 @@ func MapEdgeRouterToRestModel(ae *env.AppEnv, router *model.EdgeRouter) (*rest_m
 			SyncStatus:         &syncStatusStr,
 			AppData:            &appData,
 			Cost:               &cost,
-			AllowTraversal:     &router.AllowTraversal,
+			NoTraversal:        &router.NoTraversal,
 		},
 		RoleAttributes:        &roleAttributes,
 		EnrollmentToken:       nil,
