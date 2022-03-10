@@ -22,6 +22,7 @@ import (
 	"github.com/openziti/edge/tunnel"
 	"github.com/openziti/fabric/controller/xt"
 	"github.com/openziti/fabric/logcontext"
+	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
 	"github.com/openziti/foundation/identity/identity"
 	"github.com/openziti/sdk-golang/ziti/edge"
@@ -65,6 +66,8 @@ func (self *tunneler) Dial(destination string, circuitId *identity.TokenId, addr
 			peerData[edge.PublicKeyHeader] = publicKey
 		}
 	}
+
+	peerData[uint32(ctrl_pb.ContentType_TerminatorLocalAddressHeader)] = []byte(conn.LocalAddr().String())
 
 	x := xgress.NewXgress(circuitId, address, xgConn, xgress.Terminator, self.dialOptions.Options)
 	bindHandler.HandleXgressBind(x)

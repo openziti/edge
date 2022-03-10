@@ -22,6 +22,7 @@ import (
 	"github.com/openziti/edge/router/xgress_common"
 	"github.com/openziti/fabric/controller/xt"
 	"github.com/openziti/fabric/logcontext"
+	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
 	"github.com/openziti/foundation/identity/identity"
 	"github.com/openziti/foundation/transport"
@@ -72,6 +73,8 @@ func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address
 			peerData[edge.PublicKeyHeader] = publicKey
 		}
 	}
+
+	peerData[uint32(ctrl_pb.ContentType_TerminatorLocalAddressHeader)] = []byte(peer.Conn().LocalAddr().String())
 
 	x := xgress.NewXgress(circuitId, address, xgConn, xgress.Terminator, txd.options)
 	bindHandler.HandleXgressBind(x)
