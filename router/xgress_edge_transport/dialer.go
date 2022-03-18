@@ -59,7 +59,7 @@ func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address
 	log.Debug("dialing")
 	peer, err := txDestination.Dial("x/"+circuitId.Token, circuitId, txd.options.ConnectTimeout, nil)
 	if err != nil {
-		return nil, err
+		return nil, ctrl_pb.InvalidTerminatorError{InnerError: err}
 	}
 
 	log.Infof("successful connection to %v from %v (s/%v)", destination, peer.Conn().LocalAddr(), circuitId.Token)

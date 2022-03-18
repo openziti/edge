@@ -22,6 +22,7 @@ import (
 	"github.com/openziti/channel"
 	"github.com/openziti/fabric/controller/xt"
 	"github.com/openziti/fabric/logcontext"
+	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
 	"github.com/openziti/foundation/identity/identity"
 	"github.com/openziti/sdk-golang/ziti/edge"
@@ -124,7 +125,7 @@ func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, addr
 		if err != nil {
 			conn.close(false, err.Error())
 			x.Close()
-			return nil, err
+			return nil, ctrl_pb.InvalidTerminatorError{InnerError: err}
 		}
 		result, err := edge.UnmarshalDialResult(reply)
 
