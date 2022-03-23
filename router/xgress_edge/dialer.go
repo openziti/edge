@@ -18,17 +18,17 @@ package xgress_edge
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/channel"
 	"github.com/openziti/fabric/controller/xt"
 	"github.com/openziti/fabric/logcontext"
-	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
 	"github.com/openziti/foundation/identity/identity"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/pkg/errors"
-	"strings"
-	"time"
 )
 
 type dialer struct {
@@ -80,7 +80,7 @@ func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, addr
 	log.Debugf("looking up hosted service conn for token %v", token)
 	listenConn, found := dialer.factory.hostedServices.Get(token)
 	if !found {
-		return nil, fmt.Errorf("host for token '%v' not found", token)
+		return nil, xgress.InvalidTerminatorError{InnerError: fmt.Errorf("host for token '%v' not found", token)}
 	}
 	log = log.WithField("bindConnId", listenConn.Id())
 
@@ -125,7 +125,7 @@ func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, addr
 		if err != nil {
 			conn.close(false, err.Error())
 			x.Close()
-			return nil, ctrl_pb.InvalidTerminatorError{InnerError: err}
+			return nil, xgress.InvalidTerminatorError{InnerError: err}
 		}
 		result, err := edge.UnmarshalDialResult(reply)
 

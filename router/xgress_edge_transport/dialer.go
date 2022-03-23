@@ -18,6 +18,7 @@ package xgress_edge_transport
 
 import (
 	"fmt"
+
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/router/xgress_common"
 	"github.com/openziti/fabric/controller/xt"
@@ -53,13 +54,13 @@ func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address
 
 	txDestination, err := transport.ParseAddress(destination)
 	if err != nil {
-		return nil, fmt.Errorf("cannot dial on invalid address [%s] (%s)", destination, err)
+		return nil, xgress.InvalidTerminatorError{InnerError: fmt.Errorf("cannot dial on invalid address [%s] (%s)", destination, err)}
 	}
 
 	log.Debug("dialing")
 	peer, err := txDestination.Dial("x/"+circuitId.Token, circuitId, txd.options.ConnectTimeout, nil)
 	if err != nil {
-		return nil, ctrl_pb.InvalidTerminatorError{InnerError: err}
+		return nil, xgress.InvalidTerminatorError{InnerError: err}
 	}
 
 	log.Infof("successful connection to %v from %v (s/%v)", destination, peer.Conn().LocalAddr(), circuitId.Token)

@@ -41,7 +41,7 @@ func (self *tunneler) Dial(destination string, circuitId *identity.TokenId, addr
 
 	val, ok := self.terminators.Get(destination)
 	if !ok {
-		return nil, errors.Errorf("tunnel terminator for destination %v not found", destination)
+		return nil, xgress.InvalidTerminatorError{InnerError: errors.Errorf("tunnel terminator for destination %v not found", destination)}
 	}
 	terminator := val.(*tunnelTerminator)
 
@@ -52,7 +52,7 @@ func (self *tunneler) Dial(destination string, circuitId *identity.TokenId, addr
 
 	conn, halfClose, err := terminator.context.Dial(options)
 	if err != nil {
-		return nil, ctrl_pb.InvalidTerminatorError{InnerError: err}
+		return nil, xgress.InvalidTerminatorError{InnerError: err}
 	}
 
 	log.Infof("successful connection %v->%v for destination %v", conn.LocalAddr(), conn.RemoteAddr(), destination)
