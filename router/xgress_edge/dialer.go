@@ -125,7 +125,7 @@ func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, addr
 		if err != nil {
 			conn.close(false, err.Error())
 			x.Close()
-			return nil, xgress.InvalidTerminatorError{InnerError: err}
+			return nil, err
 		}
 		result, err := edge.UnmarshalDialResult(reply)
 

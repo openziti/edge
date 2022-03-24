@@ -60,7 +60,7 @@ func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address
 	log.Debug("dialing")
 	peer, err := txDestination.Dial("x/"+circuitId.Token, circuitId, txd.options.ConnectTimeout, nil)
 	if err != nil {
-		return nil, xgress.InvalidTerminatorError{InnerError: err}
+		return nil, err
 	}
 
 	log.Infof("successful connection to %v from %v (s/%v)", destination, peer.Conn().LocalAddr(), circuitId.Token)

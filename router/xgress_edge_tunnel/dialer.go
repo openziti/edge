@@ -52,7 +52,7 @@ func (self *tunneler) Dial(destination string, circuitId *identity.TokenId, addr
 
 	conn, halfClose, err := terminator.context.Dial(options)
 	if err != nil {
-		return nil, xgress.InvalidTerminatorError{InnerError: err}
+		return nil, err
 	}
 
 	log.Infof("successful connection %v->%v for destination %v", conn.LocalAddr(), conn.RemoteAddr(), destination)
