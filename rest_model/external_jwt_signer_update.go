@@ -38,18 +38,24 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ExternalJwtSignerUpdate external jwt signer update
+// ExternalJWTSignerUpdate external Jwt signer update
 //
 // swagger:model externalJwtSignerUpdate
-type ExternalJwtSignerUpdate struct {
+type ExternalJWTSignerUpdate struct {
 
 	// cert pem
 	// Required: true
 	CertPem *string `json:"certPem"`
 
+	// claims property
+	ClaimsProperty *string `json:"claimsProperty,omitempty"`
+
 	// enabled
 	// Required: true
 	Enabled *bool `json:"enabled"`
+
+	// external auth Url
+	ExternalAuthURL *string `json:"externalAuthUrl,omitempty"`
 
 	// name
 	// Example: MyApps Signer
@@ -58,10 +64,13 @@ type ExternalJwtSignerUpdate struct {
 
 	// tags
 	Tags *Tags `json:"tags,omitempty"`
+
+	// use external Id
+	UseExternalID *bool `json:"useExternalId,omitempty"`
 }
 
-// Validate validates this external jwt signer update
-func (m *ExternalJwtSignerUpdate) Validate(formats strfmt.Registry) error {
+// Validate validates this external Jwt signer update
+func (m *ExternalJWTSignerUpdate) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCertPem(formats); err != nil {
@@ -86,7 +95,7 @@ func (m *ExternalJwtSignerUpdate) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ExternalJwtSignerUpdate) validateCertPem(formats strfmt.Registry) error {
+func (m *ExternalJWTSignerUpdate) validateCertPem(formats strfmt.Registry) error {
 
 	if err := validate.Required("certPem", "body", m.CertPem); err != nil {
 		return err
@@ -95,7 +104,7 @@ func (m *ExternalJwtSignerUpdate) validateCertPem(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *ExternalJwtSignerUpdate) validateEnabled(formats strfmt.Registry) error {
+func (m *ExternalJWTSignerUpdate) validateEnabled(formats strfmt.Registry) error {
 
 	if err := validate.Required("enabled", "body", m.Enabled); err != nil {
 		return err
@@ -104,7 +113,7 @@ func (m *ExternalJwtSignerUpdate) validateEnabled(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *ExternalJwtSignerUpdate) validateName(formats strfmt.Registry) error {
+func (m *ExternalJWTSignerUpdate) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
 		return err
@@ -113,7 +122,7 @@ func (m *ExternalJwtSignerUpdate) validateName(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ExternalJwtSignerUpdate) validateTags(formats strfmt.Registry) error {
+func (m *ExternalJWTSignerUpdate) validateTags(formats strfmt.Registry) error {
 	if swag.IsZero(m.Tags) { // not required
 		return nil
 	}
@@ -132,8 +141,8 @@ func (m *ExternalJwtSignerUpdate) validateTags(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this external jwt signer update based on the context it is used
-func (m *ExternalJwtSignerUpdate) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this external Jwt signer update based on the context it is used
+func (m *ExternalJWTSignerUpdate) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateTags(ctx, formats); err != nil {
@@ -146,7 +155,7 @@ func (m *ExternalJwtSignerUpdate) ContextValidate(ctx context.Context, formats s
 	return nil
 }
 
-func (m *ExternalJwtSignerUpdate) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+func (m *ExternalJWTSignerUpdate) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Tags != nil {
 		if err := m.Tags.ContextValidate(ctx, formats); err != nil {
@@ -163,7 +172,7 @@ func (m *ExternalJwtSignerUpdate) contextValidateTags(ctx context.Context, forma
 }
 
 // MarshalBinary interface implementation
-func (m *ExternalJwtSignerUpdate) MarshalBinary() ([]byte, error) {
+func (m *ExternalJWTSignerUpdate) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -171,8 +180,8 @@ func (m *ExternalJwtSignerUpdate) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ExternalJwtSignerUpdate) UnmarshalBinary(b []byte) error {
-	var res ExternalJwtSignerUpdate
+func (m *ExternalJWTSignerUpdate) UnmarshalBinary(b []byte) error {
+	var res ExternalJWTSignerUpdate
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

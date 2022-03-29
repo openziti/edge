@@ -45,17 +45,23 @@ type IdentityPatch struct {
 	// app data
 	AppData *Tags `json:"appData,omitempty"`
 
+	// auth policy Id
+	AuthPolicyID *string `json:"authPolicyId,omitempty"`
+
 	// default hosting cost
 	DefaultHostingCost *TerminatorCost `json:"defaultHostingCost,omitempty"`
 
 	// default hosting precedence
 	DefaultHostingPrecedence TerminatorPrecedence `json:"defaultHostingPrecedence,omitempty"`
 
+	// external Id
+	ExternalID *string `json:"externalId,omitempty"`
+
 	// is admin
-	IsAdmin bool `json:"isAdmin,omitempty"`
+	IsAdmin *bool `json:"isAdmin,omitempty"`
 
 	// name
-	Name string `json:"name,omitempty"`
+	Name *string `json:"name,omitempty"`
 
 	// role attributes
 	RoleAttributes *Attributes `json:"roleAttributes,omitempty"`

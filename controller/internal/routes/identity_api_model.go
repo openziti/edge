@@ -59,6 +59,10 @@ func (factory *IdentityLinkFactoryImpl) Links(entity models.Entity) rest_model.L
 	links[EntityNameFailedServiceRequest] = factory.NewNestedLink(entity, EntityNameFailedServiceRequest)
 	links[EntityNameAuthenticator] = factory.NewNestedLink(entity, EntityNameAuthenticator)
 
+	if identity, ok := entity.(*model.Identity); ok && identity != nil {
+		links[EntityNameAuthPolicy] = AuthPolicyLinkFactory.SelfLinkFromId(identity.AuthPolicyId)
+	}
+
 	return links
 }
 
@@ -120,6 +124,8 @@ func MapCreateIdentityToModel(identity *rest_model.IdentityCreate, identityTypeI
 		ServiceHostingPrecedences: getServiceHostingPrecedences(identity.ServiceHostingPrecedences),
 		ServiceHostingCosts:       getServiceHostingCosts(identity.ServiceHostingCosts),
 		AppData:                   TagsOrDefault(identity.AppData),
+		AuthPolicyId:              stringz.OrEmpty(identity.AuthPolicyID),
+		ExternalId:                identity.ExternalID,
 	}
 
 	if identity.Enrollment != nil {
@@ -166,6 +172,7 @@ func MapUpdateIdentityToModel(id string, identity *rest_model.IdentityUpdate, id
 		ServiceHostingPrecedences: getServiceHostingPrecedences(identity.ServiceHostingPrecedences),
 		ServiceHostingCosts:       getServiceHostingCosts(identity.ServiceHostingCosts),
 		AppData:                   TagsOrDefault(identity.AppData),
+		AuthPolicyId:              *identity.AuthPolicyID,
 	}
 
 	return ret
@@ -177,15 +184,16 @@ func MapPatchIdentityToModel(id string, identity *rest_model.IdentityPatch, iden
 			Tags: TagsOrDefault(identity.Tags),
 			Id:   id,
 		},
-		Name:                      identity.Name,
+		Name:                      stringz.OrEmpty(identity.Name),
 		IdentityTypeId:            identityTypeId,
-		IsAdmin:                   identity.IsAdmin,
+		IsAdmin:                   BoolOrDefault(identity.IsAdmin),
 		RoleAttributes:            AttributesOrDefault(identity.RoleAttributes),
 		DefaultHostingPrecedence:  ziti.GetPrecedenceForLabel(string(identity.DefaultHostingPrecedence)),
 		DefaultHostingCost:        getDefaultHostingCost(identity.DefaultHostingCost),
 		ServiceHostingPrecedences: getServiceHostingPrecedences(identity.ServiceHostingPrecedences),
 		ServiceHostingCosts:       getServiceHostingCosts(identity.ServiceHostingCosts),
 		AppData:                   TagsOrDefault(identity.AppData),
+		AuthPolicyId:              stringz.OrEmpty(identity.AuthPolicyID),
 	}
 
 	return ret
@@ -262,6 +270,7 @@ func MapIdentityToRestModel(ae *env.AppEnv, identity *model.Identity) (*rest_mod
 		ServiceHostingCosts:       getRestServiceHostingCosts(identity.ServiceHostingCosts),
 		IsMfaEnabled:              &isMfaEnabled,
 		AppData:                   &appData,
+		AuthPolicyID:              &identity.AuthPolicyId,
 	}
 	fillInfo(ret, identity.EnvInfo, identity.SdkInfo)
 
@@ -294,7 +303,7 @@ func MapIdentityToRestModel(ae *env.AppEnv, identity *model.Identity) (*rest_mod
 
 			ret.Enrollment.Updb = &rest_model.IdentityEnrollmentsUpdb{
 				ID:        entity.Id,
-				Jwt:       entity.Jwt,
+				JWT:       entity.Jwt,
 				Token:     entity.Token,
 				ExpiresAt: expiresAt,
 			}
@@ -303,7 +312,7 @@ func MapIdentityToRestModel(ae *env.AppEnv, identity *model.Identity) (*rest_mod
 		if entity.Method == persistence.MethodEnrollOtt {
 			ret.Enrollment.Ott = &rest_model.IdentityEnrollmentsOtt{
 				ID:        entity.Id,
-				Jwt:       entity.Jwt,
+				JWT:       entity.Jwt,
 				Token:     entity.Token,
 				ExpiresAt: expiresAt,
 			}
@@ -315,7 +324,7 @@ func MapIdentityToRestModel(ae *env.AppEnv, identity *model.Identity) (*rest_mod
 					ID:        entity.Id,
 					Ca:        ToEntityRef(ca.Name, ca, CaLinkFactory),
 					CaID:      ca.Id,
-					Jwt:       entity.Jwt,
+					JWT:       entity.Jwt,
 					Token:     entity.Token,
 					ExpiresAt: expiresAt,
 				}

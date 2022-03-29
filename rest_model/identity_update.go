@@ -46,11 +46,17 @@ type IdentityUpdate struct {
 	// app data
 	AppData *Tags `json:"appData,omitempty"`
 
+	// auth policy Id
+	AuthPolicyID *string `json:"authPolicyId,omitempty"`
+
 	// default hosting cost
 	DefaultHostingCost *TerminatorCost `json:"defaultHostingCost,omitempty"`
 
 	// default hosting precedence
 	DefaultHostingPrecedence TerminatorPrecedence `json:"defaultHostingPrecedence,omitempty"`
+
+	// external Id
+	ExternalID *string `json:"externalId,omitempty"`
 
 	// is admin
 	// Required: true

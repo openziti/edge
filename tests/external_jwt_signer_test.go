@@ -26,6 +26,7 @@ import (
 	"crypto/rand"
 	"crypto/x509"
 	"crypto/x509/pkix"
+	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/edge/rest_model"
 	nfpem "github.com/openziti/foundation/util/pem"
 	"math/big"
@@ -34,7 +35,7 @@ import (
 	"time"
 )
 
-func Test_ExternalJwtSigner(t *testing.T) {
+func Test_ExternalJWTSigner(t *testing.T) {
 	ctx := NewTestContext(t)
 	defer ctx.Teardown()
 	ctx.StartServer()
@@ -49,10 +50,14 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		jwtSignerName := "Test JWT Signer"
 		jwtSignerEnabled := true
 
-		jwtSigner := &rest_model.ExternalJwtSignerCreate{
-			CertPem: &jwtSignerCertPem,
-			Enabled: &jwtSignerEnabled,
-			Name:    &jwtSignerName,
+		jwtSigner := &rest_model.ExternalJWTSignerCreate{
+			CertPem:         &jwtSignerCertPem,
+			ClaimsProperty:  S("someMadeUpClaim"),
+			Enabled:         &jwtSignerEnabled,
+			ExternalAuthURL: S("https://some-auth-url"),
+			Name:            &jwtSignerName,
+			Tags:            nil,
+			UseExternalID:   B(true),
 		}
 
 		createResponseEnv := &rest_model.CreateEnvelope{}
@@ -64,7 +69,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		t.Run("get after create returns 200 Ok", func(t *testing.T) {
 			ctx.testContextChanged(t)
 
-			jwtSignerDetailEnv := &rest_model.DetailExternalJwtSignerEnvelope{}
+			jwtSignerDetailEnv := &rest_model.DetailExternalJWTSignerEnvelope{}
 
 			resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetResult(jwtSignerDetailEnv).Get("/external-jwt-signers/" + createResponseEnv.Data.ID)
 			ctx.Req.NoError(err)
@@ -84,6 +89,9 @@ func Test_ExternalJwtSigner(t *testing.T) {
 				ctx.Req.Equal(jwtSignerCert.NotBefore, time.Time(*jwtSignerDetail.NotBefore))
 				ctx.Req.Equal(jwtSignerCert.NotAfter, time.Time(*jwtSignerDetail.NotAfter))
 				ctx.Req.Equal(fingerprint, *jwtSignerDetail.Fingerprint)
+				ctx.Req.Equal(*jwtSigner.UseExternalID, *jwtSignerDetail.UseExternalID)
+				ctx.Req.Equal(*jwtSigner.ClaimsProperty, *jwtSignerDetail.ClaimsProperty)
+				ctx.Req.Equal(*jwtSigner.ExternalAuthURL, *jwtSignerDetail.ExternalAuthURL)
 			})
 		})
 
@@ -113,7 +121,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			t.Run("patch after delete returns 404 not found", func(t *testing.T) {
 				ctx.testContextChanged(t)
 
-				patchBody := &rest_model.ExternalJwtSignerPatch{
+				patchBody := &rest_model.ExternalJWTSignerPatch{
 					CertPem: &jwtSignerCertPem,
 					Enabled: &jwtSignerEnabled,
 					Name:    &jwtSignerName,
@@ -127,7 +135,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			t.Run("put after delete returns 404 not found", func(t *testing.T) {
 				ctx.testContextChanged(t)
 
-				putBody := &rest_model.ExternalJwtSignerUpdate{
+				putBody := &rest_model.ExternalJWTSignerUpdate{
 					CertPem: &jwtSignerCertPem,
 					Enabled: &jwtSignerEnabled,
 					Name:    &jwtSignerName,
@@ -136,6 +144,57 @@ func Test_ExternalJwtSigner(t *testing.T) {
 				resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetBody(putBody).Put("/external-jwt-signers/" + createResponseEnv.Data.ID)
 				ctx.Req.NoError(err)
 				ctx.Req.Equal(resp.StatusCode(), http.StatusNotFound)
+			})
+		})
+	})
+
+	t.Run("create with only required values returns 200 Ok", func(t *testing.T) {
+		ctx.testContextChanged(t)
+
+		jwtSignerCommonName := "soCommon"
+		jwtSignerCert, _ := newSelfSignedCert(jwtSignerCommonName) // jwtSignerPrivKey
+		jwtSignerCertPem := nfpem.EncodeToString(jwtSignerCert)
+		jwtSignerName := "Test JWT Signer"
+		jwtSignerEnabled := true
+
+		jwtSigner := &rest_model.ExternalJWTSignerCreate{
+			CertPem: &jwtSignerCertPem,
+			Enabled: &jwtSignerEnabled,
+			Name:    &jwtSignerName,
+		}
+
+		createResponseEnv := &rest_model.CreateEnvelope{}
+
+		resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetBody(jwtSigner).SetResult(createResponseEnv).Post("/external-jwt-signers")
+		ctx.Req.NoError(err)
+		ctx.Req.Equal(http.StatusCreated, resp.StatusCode())
+
+		t.Run("get after create returns 200 Ok", func(t *testing.T) {
+			ctx.testContextChanged(t)
+
+			jwtSignerDetailEnv := &rest_model.DetailExternalJWTSignerEnvelope{}
+
+			resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetResult(jwtSignerDetailEnv).Get("/external-jwt-signers/" + createResponseEnv.Data.ID)
+			ctx.Req.NoError(err)
+			ctx.Req.Equal(http.StatusOK, resp.StatusCode())
+
+			jwtSignerDetail := jwtSignerDetailEnv.Data
+
+			t.Run("has the correct values and default values", func(t *testing.T) {
+				ctx.testContextChanged(t)
+
+				fingerprint := nfpem.FingerprintFromCertificate(jwtSignerCert)
+
+				ctx.Req.Equal(jwtSignerName, *jwtSignerDetail.Name)
+				ctx.Req.Equal(jwtSignerCommonName, *jwtSignerDetail.CommonName)
+				ctx.Req.Equal(jwtSignerCertPem, *jwtSignerDetail.CertPem)
+				ctx.Req.Equal(jwtSignerEnabled, *jwtSignerDetail.Enabled)
+				ctx.Req.Equal(jwtSignerCert.NotBefore, time.Time(*jwtSignerDetail.NotBefore))
+				ctx.Req.Equal(jwtSignerCert.NotAfter, time.Time(*jwtSignerDetail.NotAfter))
+				ctx.Req.Equal(fingerprint, *jwtSignerDetail.Fingerprint)
+				ctx.Req.False(*jwtSignerDetail.UseExternalID)
+				ctx.Req.Equal(persistence.DefaultClaimsProperty, *jwtSignerDetail.ClaimsProperty)
+				ctx.Req.Nil(jwtSignerDetail.ExternalAuthURL)
 			})
 		})
 	})
@@ -150,7 +209,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		jwtSignerEnabled := true
 
 		t.Run("missing cert pem", func(t *testing.T) {
-			jwtSigner := &rest_model.ExternalJwtSignerCreate{
+			jwtSigner := &rest_model.ExternalJWTSignerCreate{
 				Enabled: &jwtSignerEnabled,
 				Name:    &jwtSignerName,
 			}
@@ -163,7 +222,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		})
 
 		t.Run("missing enabled", func(t *testing.T) {
-			jwtSigner := &rest_model.ExternalJwtSignerCreate{
+			jwtSigner := &rest_model.ExternalJWTSignerCreate{
 				CertPem: &jwtSignerCertPem,
 				Name:    &jwtSignerName,
 			}
@@ -176,7 +235,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		})
 
 		t.Run("missing name", func(t *testing.T) {
-			jwtSigner := &rest_model.ExternalJwtSignerCreate{
+			jwtSigner := &rest_model.ExternalJWTSignerCreate{
 				CertPem: &jwtSignerCertPem,
 				Enabled: &jwtSignerEnabled,
 			}
@@ -197,7 +256,8 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		jwtSignerEnabled := true
 
 		t.Run("missing cert pem", func(t *testing.T) {
-			jwtSigner := &rest_model.ExternalJwtSignerCreate{
+			ctx.testContextChanged(t)
+			jwtSigner := &rest_model.ExternalJWTSignerCreate{
 				CertPem: &invalidCertPem,
 				Enabled: &jwtSignerEnabled,
 				Name:    &jwtSignerName,
@@ -211,7 +271,52 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		})
 	})
 
+	t.Run("create with re-used signing certificate returns 400 bad request", func(t *testing.T) {
+		ctx.testContextChanged(t)
+
+		jwtSignerCommonName := "soCommon-dupe1"
+		jwtSignerCert, _ := newSelfSignedCert(jwtSignerCommonName) // jwtSignerPrivKey
+		jwtSignerCertPem := nfpem.EncodeToString(jwtSignerCert)
+		jwtSignerName := "Test JWT Signer 05"
+		jwtSignerEnabled := true
+
+		jwtSigner := &rest_model.ExternalJWTSignerCreate{
+			CertPem:         &jwtSignerCertPem,
+			ClaimsProperty:  S("someMadeUpClaim"),
+			Enabled:         &jwtSignerEnabled,
+			ExternalAuthURL: S("https://some-auth-url"),
+			Name:            &jwtSignerName,
+			Tags:            nil,
+			UseExternalID:   B(true),
+		}
+
+		createResponseEnv := &rest_model.CreateEnvelope{}
+
+		resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetBody(jwtSigner).SetResult(createResponseEnv).Post("/external-jwt-signers")
+		ctx.Req.NoError(err)
+		ctx.Req.Equal(http.StatusCreated, resp.StatusCode())
+
+		t.Run("second create fails with 400 bad request", func(t *testing.T) {
+			ctx.testContextChanged(t)
+
+			jwtSignerReusedCert := &rest_model.ExternalJWTSignerCreate{
+				CertPem:         &jwtSignerCertPem,
+				ClaimsProperty:  S("whatever"),
+				Enabled:         &jwtSignerEnabled,
+				ExternalAuthURL: S("https://some-other-auth-url"),
+				Name:            S("dupe-should fail"),
+				Tags:            nil,
+				UseExternalID:   B(true),
+			}
+
+			resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetBody(jwtSignerReusedCert).SetResult(createResponseEnv).Post("/external-jwt-signers")
+			ctx.Req.NoError(err)
+			ctx.Req.Equal(http.StatusBadRequest, resp.StatusCode())
+		})
+	})
+
 	t.Run("update with all values succeeds", func(t *testing.T) {
+		ctx.testContextChanged(t)
 		jwtSignerCommonName := "soCommon2"
 		jwtSignerCommonNameUpdated := "soCommon2Updated"
 
@@ -221,13 +326,13 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		jwtSignerCertPem := nfpem.EncodeToString(jwtSignerCert)
 		jwtSignerCertPemUpdated := nfpem.EncodeToString(jwtSignerCertUpdated)
 
-		jwtSignerName := "Test JWT Signer"
-		jwtSignerNameUpdated := "Test JWT Signer Updated"
+		jwtSignerName := "Test JWT Signer 06"
+		jwtSignerNameUpdated := "Test JWT Signer 06 Updated"
 
 		jwtSignerEnabled := false
 		jwtSignerEnabledUpdated := true
 
-		jwtSigner := &rest_model.ExternalJwtSignerCreate{
+		jwtSigner := &rest_model.ExternalJWTSignerCreate{
 			CertPem: &jwtSignerCertPem,
 			Enabled: &jwtSignerEnabled,
 			Name:    &jwtSignerName,
@@ -239,7 +344,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		ctx.Req.NoError(err)
 		ctx.Req.Equal(http.StatusCreated, resp.StatusCode())
 
-		jwtSignerUpdate := &rest_model.ExternalJwtSignerUpdate{
+		jwtSignerUpdate := &rest_model.ExternalJWTSignerUpdate{
 			CertPem: &jwtSignerCertPemUpdated,
 			Enabled: &jwtSignerEnabledUpdated,
 			Name:    &jwtSignerNameUpdated,
@@ -252,7 +357,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 		t.Run("get after update returns 200 Ok", func(t *testing.T) {
 			ctx.testContextChanged(t)
 
-			jwtSignerDetailEnv := &rest_model.DetailExternalJwtSignerEnvelope{}
+			jwtSignerDetailEnv := &rest_model.DetailExternalJWTSignerEnvelope{}
 
 			resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetResult(jwtSignerDetailEnv).Get("/external-jwt-signers/" + createResponseEnv.Data.ID)
 			ctx.Req.NoError(err)
@@ -292,7 +397,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 
 			jwtSignerEnabled := true
 
-			jwtSigner := &rest_model.ExternalJwtSignerCreate{
+			jwtSigner := &rest_model.ExternalJWTSignerCreate{
 				CertPem: &jwtSignerCertPem,
 				Enabled: &jwtSignerEnabled,
 				Name:    &jwtSignerName,
@@ -304,7 +409,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			ctx.Req.NoError(err)
 			ctx.Req.Equal(http.StatusCreated, resp.StatusCode())
 
-			jwtSignerPatch := &rest_model.ExternalJwtSignerPatch{
+			jwtSignerPatch := &rest_model.ExternalJWTSignerPatch{
 				Name: &jwtSignerNamePatched,
 			}
 
@@ -317,7 +422,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			t.Run("get after patch returns 200 Ok", func(t *testing.T) {
 				ctx.testContextChanged(t)
 
-				jwtSignerDetailEnv := &rest_model.DetailExternalJwtSignerEnvelope{}
+				jwtSignerDetailEnv := &rest_model.DetailExternalJWTSignerEnvelope{}
 
 				resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetResult(jwtSignerDetailEnv).Get("/external-jwt-signers/" + createResponseEnv.Data.ID)
 				ctx.Req.NoError(err)
@@ -356,7 +461,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 
 			jwtSignerEnabled := true
 
-			jwtSigner := &rest_model.ExternalJwtSignerCreate{
+			jwtSigner := &rest_model.ExternalJWTSignerCreate{
 				CertPem: &jwtSignerCertPem,
 				Enabled: &jwtSignerEnabled,
 				Name:    &jwtSignerName,
@@ -368,7 +473,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			ctx.Req.NoError(err)
 			ctx.Req.Equal(http.StatusCreated, resp.StatusCode())
 
-			jwtSignerPatch := &rest_model.ExternalJwtSignerPatch{
+			jwtSignerPatch := &rest_model.ExternalJWTSignerPatch{
 				CertPem: &jwtSignerCertPemPatched,
 			}
 
@@ -381,7 +486,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			t.Run("get after patch returns 200 Ok", func(t *testing.T) {
 				ctx.testContextChanged(t)
 
-				jwtSignerDetailEnv := &rest_model.DetailExternalJwtSignerEnvelope{}
+				jwtSignerDetailEnv := &rest_model.DetailExternalJWTSignerEnvelope{}
 
 				resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetResult(jwtSignerDetailEnv).Get("/external-jwt-signers/" + createResponseEnv.Data.ID)
 				ctx.Req.NoError(err)
@@ -418,7 +523,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			jwtSignerEnabled := true
 			jwtSignerEnabledPatched := false
 
-			jwtSigner := &rest_model.ExternalJwtSignerCreate{
+			jwtSigner := &rest_model.ExternalJWTSignerCreate{
 				CertPem: &jwtSignerCertPem,
 				Enabled: &jwtSignerEnabled,
 				Name:    &jwtSignerName,
@@ -430,7 +535,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			ctx.Req.NoError(err)
 			ctx.Req.Equal(http.StatusCreated, resp.StatusCode())
 
-			jwtSignerPatch := &rest_model.ExternalJwtSignerPatch{
+			jwtSignerPatch := &rest_model.ExternalJWTSignerPatch{
 				Enabled: &jwtSignerEnabledPatched,
 			}
 
@@ -443,7 +548,7 @@ func Test_ExternalJwtSigner(t *testing.T) {
 			t.Run("get after patch returns 200 Ok", func(t *testing.T) {
 				ctx.testContextChanged(t)
 
-				jwtSignerDetailEnv := &rest_model.DetailExternalJwtSignerEnvelope{}
+				jwtSignerDetailEnv := &rest_model.DetailExternalJWTSignerEnvelope{}
 
 				resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetResult(jwtSignerDetailEnv).Get("/external-jwt-signers/" + createResponseEnv.Data.ID)
 				ctx.Req.NoError(err)

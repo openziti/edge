@@ -19,6 +19,7 @@ package routes
 import (
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
+	edgeApiError "github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/env"
 	"github.com/openziti/edge/controller/response"
 	"github.com/openziti/edge/rest_model"
@@ -177,6 +178,15 @@ func CreateWithResponder(rc *response.RequestContext, rsp response.Responder, li
 			return
 		}
 
+		if uie, ok := err.(*boltz.UniqueIndexDuplicateError); ok {
+			rc.RespondWithFieldError(&errorz.FieldError{
+				Reason:     uie.Error(),
+				FieldName:  uie.Field,
+				FieldValue: uie.Value,
+			})
+			return
+		}
+
 		rc.RespondWithError(err)
 		return
 	}
@@ -248,6 +258,8 @@ func Delete(rc *response.RequestContext, deleteF ModelDeleteF) {
 	if err != nil {
 		if boltz.IsErrNotFoundErr(err) {
 			rc.RespondWithNotFoundWithCause(err)
+		} else if refErr, ok := err.(*boltz.ReferenceExistsError); ok {
+			rc.RespondWithApiError(edgeApiError.NewCanNotDeleteReferencedEntity(refErr.LocalType, refErr.RemoteType, refErr.RemoteIds, refErr.RemoteField))
 		} else {
 			rc.RespondWithError(err)
 		}

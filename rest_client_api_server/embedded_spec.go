@@ -3767,7 +3767,7 @@ func init() {
           "type": "string"
         },
         "value": {
-          "type": "string"
+          "description": "can be any value - string, number, boolean, array or object"
         }
       }
     },
@@ -4623,11 +4623,16 @@ func init() {
             "isMfaEnabled",
             "serviceHostingPrecedences",
             "serviceHostingCosts",
-            "defaultHostingCost"
+            "defaultHostingCost",
+            "authPolicyId",
+            "externalId"
           ],
           "properties": {
             "appData": {
               "$ref": "#/definitions/tags"
+            },
+            "authPolicyId": {
+              "type": "string"
             },
             "authenticators": {
               "$ref": "#/definitions/identityAuthenticators"
@@ -4643,6 +4648,9 @@ func init() {
             },
             "envInfo": {
               "$ref": "#/definitions/envInfo"
+            },
+            "externalId": {
+              "type": "string"
             },
             "hasApiSession": {
               "type": "boolean"
@@ -5017,7 +5025,8 @@ func init() {
     "mfaProviders": {
       "type": "string",
       "enum": [
-        "ziti"
+        "ziti",
+        "url"
       ]
     },
     "osType": {
@@ -9576,7 +9585,7 @@ func init() {
           "type": "string"
         },
         "value": {
-          "type": "string"
+          "description": "can be any value - string, number, boolean, array or object"
         }
       }
     },
@@ -10433,11 +10442,16 @@ func init() {
             "isMfaEnabled",
             "serviceHostingPrecedences",
             "serviceHostingCosts",
-            "defaultHostingCost"
+            "defaultHostingCost",
+            "authPolicyId",
+            "externalId"
           ],
           "properties": {
             "appData": {
               "$ref": "#/definitions/tags"
+            },
+            "authPolicyId": {
+              "type": "string"
             },
             "authenticators": {
               "$ref": "#/definitions/identityAuthenticators"
@@ -10453,6 +10467,9 @@ func init() {
             },
             "envInfo": {
               "$ref": "#/definitions/envInfo"
+            },
+            "externalId": {
+              "type": "string"
             },
             "hasApiSession": {
               "type": "boolean"
@@ -10827,7 +10844,8 @@ func init() {
     "mfaProviders": {
       "type": "string",
       "enum": [
-        "ziti"
+        "ziti",
+        "url"
       ]
     },
     "osType": {

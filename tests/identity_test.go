@@ -22,7 +22,9 @@ package tests
 import (
 	"github.com/Jeffail/gabs"
 	"github.com/google/uuid"
+	"github.com/openziti/edge/controller/persistence"
 	"github.com/openziti/edge/eid"
+	"github.com/openziti/edge/rest_model"
 	"github.com/openziti/foundation/util/stringz"
 	"net/http"
 	"net/url"
@@ -44,6 +46,31 @@ func Test_Identity(t *testing.T) {
 		identity.Id = ctx.AdminManagementSession.requireCreateEntity(identity)
 		ctx.AdminManagementSession.validateEntityWithQuery(identity)
 		ctx.AdminManagementSession.validateEntityWithLookup(identity)
+	})
+
+	t.Run("auth policy should default", func(t *testing.T) {
+		ctx.testContextChanged(t)
+		identityType := rest_model.IdentityTypeUser
+		identityCreate := &rest_model.IdentityCreate{
+			Type:    &identityType,
+			Name:    S("identity-name-default-auth-policy"),
+			IsAdmin: B(false),
+		}
+
+		createResponse := &rest_model.CreateEnvelope{}
+		resp, err := ctx.AdminManagementSession.newAuthenticatedRequest().SetBody(identityCreate).SetResult(createResponse).Post("/identities")
+
+		ctx.Req.NoError(err)
+		ctx.Req.Equal(http.StatusCreated, resp.StatusCode(), "expected 201 CREATED")
+		ctx.Req.NotEmpty(createResponse.Data.ID)
+
+		getResponse := &rest_model.DetailIdentityEnvelope{}
+
+		resp, err = ctx.AdminManagementSession.newAuthenticatedRequest().SetResult(getResponse).Get("/identities/" + createResponse.Data.ID)
+		ctx.Req.NoError(err)
+		ctx.Req.Equal(http.StatusOK, resp.StatusCode())
+		ctx.Req.Equal(persistence.DefaultAuthPolicyId, *getResponse.Data.AuthPolicyID)
+
 	})
 
 	t.Run("service hosting values should be set", func(t *testing.T) {
@@ -198,6 +225,7 @@ func Test_Identity(t *testing.T) {
 			_, _ = updateContent.SetP("Device", "type")
 			_, _ = updateContent.SetP(map[string]interface{}{}, "tags")
 			_, _ = updateContent.SetP(false, "isAdmin")
+			_, _ = updateContent.SetP("", "authPolicyId")
 
 			resp := ctx.AdminManagementSession.updateEntityOfType(enrolledId, "identities", updateContent.String(), false)
 			ctx.Req.Equal(http.StatusOK, resp.StatusCode())
@@ -220,6 +248,7 @@ func Test_Identity(t *testing.T) {
 			_, _ = updateContent.SetP("Device", "type")
 			_, _ = updateContent.SetP(map[string]interface{}{}, "tags")
 			_, _ = updateContent.SetP(false, "isAdmin")
+			_, _ = updateContent.SetP("", "authPolicyId")
 
 			resp := ctx.AdminManagementSession.updateEntityOfType(unenrolledId, "identities", updateContent.String(), false)
 			ctx.Req.Equal(http.StatusOK, resp.StatusCode())
@@ -245,6 +274,7 @@ func Test_Identity(t *testing.T) {
 			_, _ = updateContent.SetP(map[string]interface{}{}, "tags")
 			_, _ = updateContent.SetP(true, "isAdmin")
 			_, _ = updateContent.SetP(true, "isDefaultAdmin")
+			_, _ = updateContent.SetP("", "authPolicyId")
 
 			resp := ctx.AdminManagementSession.updateEntityOfType(identityId, "identities", updateContent.String(), false)
 			ctx.Req.Equal(http.StatusOK, resp.StatusCode())
@@ -266,6 +296,7 @@ func Test_Identity(t *testing.T) {
 			_, _ = updateContent.SetP("Device", "type")
 			_, _ = updateContent.SetP(map[string]interface{}{}, "tags")
 			_, _ = updateContent.SetP(false, "isAdmin")
+			_, _ = updateContent.SetP("", "authPolicyId")
 
 			resp := ctx.AdminManagementSession.updateEntityOfType(identityId, "identities", updateContent.String(), false)
 			ctx.Req.Equal(http.StatusOK, resp.StatusCode())
