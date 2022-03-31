@@ -44,7 +44,7 @@ require (
 	github.com/miekg/dns v1.1.47
 	github.com/mitchellh/mapstructure v1.4.3
 	github.com/netfoundry/secretstream v0.1.2
-	github.com/openziti/channel v0.18.18
+	github.com/openziti/channel v0.18.19
 	github.com/openziti/fabric v0.17.82
 	github.com/openziti/foundation v0.17.20
 	github.com/openziti/sdk-golang v0.16.36
@@ -102,6 +102,7 @@ require (
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
+	github.com/openziti/transport v0.1.0 // indirect
 	github.com/parallaxsecond/parsec-client-go v0.0.0-20220111122524-cb78842db373 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/shirou/gopsutil v2.21.11+incompatible // indirect
