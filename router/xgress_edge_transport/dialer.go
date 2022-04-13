@@ -25,9 +25,10 @@ import (
 	"github.com/openziti/fabric/logcontext"
 	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
+	"github.com/openziti/fabric/utils"
 	"github.com/openziti/foundation/identity/identity"
-	"github.com/openziti/transport"
 	"github.com/openziti/sdk-golang/ziti/edge"
+	"github.com/openziti/transport"
 )
 
 type dialer struct {
@@ -47,7 +48,7 @@ func newDialer(ctrl xgress.CtrlChannel, options *xgress.Options) (xgress.Dialer,
 	return txd, nil
 }
 
-func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address xgress.Address, bindHandler xgress.BindHandler, ctx logcontext.Context) (xt.PeerData, error) {
+func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address xgress.Address, bindHandler xgress.BindHandler, ctx logcontext.Context, timeout *utils.TimeoutWithStart) (xt.PeerData, error) {
 	log := pfxlog.ChannelLogger(logcontext.EstablishPath).Wire(ctx).
 		WithField("binding", "edge_transport").
 		WithField("destination", destination)
@@ -58,7 +59,11 @@ func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address
 	}
 
 	log.Debug("dialing")
-	peer, err := txDestination.Dial("x/"+circuitId.Token, circuitId, txd.options.ConnectTimeout, nil)
+	to := txd.options.ConnectTimeout
+	if timeout.Remaining() < to {
+		to = timeout.Remaining()
+	}
+	peer, err := txDestination.Dial("x/"+circuitId.Token, circuitId, to, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -24,6 +24,7 @@ import (
 	"github.com/openziti/fabric/logcontext"
 	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
+	"github.com/openziti/fabric/utils"
 	"github.com/openziti/foundation/identity/identity"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/pkg/errors"
@@ -34,7 +35,7 @@ func (self *tunneler) IsTerminatorValid(_ string, destination string) bool {
 	return found
 }
 
-func (self *tunneler) Dial(destination string, circuitId *identity.TokenId, address xgress.Address, bindHandler xgress.BindHandler, ctx logcontext.Context) (xt.PeerData, error) {
+func (self *tunneler) Dial(destination string, circuitId *identity.TokenId, address xgress.Address, bindHandler xgress.BindHandler, ctx logcontext.Context, timeout *utils.TimeoutWithStart) (xt.PeerData, error) {
 	log := pfxlog.ChannelLogger(logcontext.EstablishPath).Wire(ctx).
 		WithField("binding", "edge").
 		WithField("destination", destination)
@@ -50,6 +51,7 @@ func (self *tunneler) Dial(destination string, circuitId *identity.TokenId, addr
 		return nil, err
 	}
 
+	//TODO: Figure out timeout
 	conn, halfClose, err := terminator.context.Dial(options)
 	if err != nil {
 		return nil, err
