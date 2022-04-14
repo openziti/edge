@@ -47,7 +47,7 @@ require (
 	github.com/openziti/channel v0.18.27
 	github.com/openziti/fabric v0.17.102
 	github.com/openziti/foundation v0.17.22
-	github.com/openziti/sdk-golang v0.16.47
+	github.com/openziti/sdk-golang v0.16.50
 	github.com/openziti/storage v0.1.4
 	github.com/openziti/transport v0.1.5
 	github.com/orcaman/concurrent-map v0.0.0-20210106121528-16402b402231
