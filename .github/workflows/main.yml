@@ -28,7 +28,26 @@ jobs:
         uses: netfoundry/ziti-ci@v1
 
       - name: Build and Test
-        run: go test ./... --tags apitests
+        run: |
+          go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest
+          set -euo pipefail
+          go mod download
+          go test -json -v ./... --tags apitests 2>&1 | tee /tmp/test.json | gotestfmt -hide empty-packages
+
+      - name: Annotate tests
+        if: always()
+        uses: guyarb/golang-test-annotations@v0.5.1
+        with:
+          test-results: /tmp/test.json
+
+      # Upload the original go test log as an artifact for later review.
+      - name: Upload test log
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-log
+          path: /tmp/test.json
+          if-no-files-found: error
 
       - name: Release
         env:
