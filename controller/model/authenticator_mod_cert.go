@@ -27,6 +27,7 @@ import (
 	"github.com/openziti/foundation/util/errorz"
 	nfpem "github.com/openziti/foundation/util/pem"
 	cmap "github.com/orcaman/concurrent-map"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
@@ -72,71 +73,121 @@ func (module *AuthModuleCert) Process(context AuthContext) (string, string, stri
 
 	for fingerprint, authCert := range fingerprints {
 		logger := pfxlog.Logger().WithField("authMethod", module.method)
-		authenticator, err := module.env.GetHandlers().Authenticator.ReadByFingerprint(fingerprint)
-
-		if err != nil {
-			logger.WithError(err).Errorf("error during cert auth read by fingerprint %s", fingerprint)
-		}
+		authenticator, _ := module.env.GetHandlers().Authenticator.ReadByFingerprint(fingerprint)
 
 		if authenticator != nil {
-			logger = logger.
-				WithField("authenticatorId", authenticator.Id).
-				WithField("identityId", authenticator.IdentityId)
+			identityId, externalId, authenticatorId, err := module.handleNonSPIFFECert(logger, authenticator, authCert)
 
-			authPolicy, identity, err := getAuthPolicyByIdentityId(module.env, module.method, authenticator.Id, authenticator.IdentityId)
-
-			if err != nil {
-				logger.WithError(err).Error("could not lookup identity and auth policy for cert authentication")
-				return "", "", "", apierror.NewInvalidAuth()
+			if err == nil {
+				return identityId, externalId, authenticatorId, nil
 			}
+		} else if spiffeId, ok := module.getSPIFFEId(authCert); ok {
+			identityId, externalId, authenticatorId, err := module.handleSPIFFECert(logger, spiffeId, authCert)
 
-			logger = logger.WithField("authPolicyId", authPolicy.Id)
-
-			if identity.Disabled {
-				logger.
-					WithField("disabledAt", identity.DisabledAt).
-					WithField("disabledUntil", identity.DisabledUntil).
-					Error("authentication failed, identity is disabled")
-				return "", "", "", apierror.NewInvalidAuth()
-			}
-
-			if !authPolicy.Primary.Cert.Allowed {
-				logger.Error("invalid certificate authentication, not allowed by auth policy")
-				return "", "", "", apierror.NewInvalidAuth()
-			}
-
-			curCert := fingerprints[fingerprint]
-			if authCert, ok := authenticator.SubType.(*AuthenticatorCert); ok {
-				if authCert.Pem == "" {
-					certPem := pem.EncodeToMemory(&pem.Block{
-						Type:  "CERTIFICATE",
-						Bytes: curCert.Raw,
-					})
-
-					authCert.Pem = string(certPem)
-					if err = module.env.GetHandlers().Authenticator.Update(authenticator); err != nil {
-						pfxlog.Logger().WithError(err).Errorf("error during cert auth attempting to update PEM, fingerprint: %s", fingerprint)
-					}
-				}
-			}
-
-			if authPolicy.Primary.Cert.AllowExpiredCerts {
-				authCert.NotBefore = time.Now().Add(-1 * time.Hour)
-				authCert.NotAfter = time.Now().Add(1 * time.Hour)
-			}
-
-			opts := x509.VerifyOptions{
-				Roots:         module.getRootPool(),
-				Intermediates: x509.NewCertPool(),
-				KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
-			}
-
-			if _, err := authCert.Verify(opts); err == nil {
-				return authenticator.IdentityId, "", authenticator.Id, nil
-			} else {
-				pfxlog.Logger().Tracef("error verifying client certificate [%s] did not verify: %v", fingerprint, err)
+			if err == nil {
+				return identityId, externalId, authenticatorId, nil
 			}
 		}
+	}
+
+	return "", "", "", apierror.NewInvalidAuth()
+}
+
+func (module *AuthModuleCert) handleSPIFFECert(logger *logrus.Entry, spiffeId string, authCert *x509.Certificate) (string, string, string, error) {
+	identity, err := module.env.GetHandlers().Identity.ReadByExternalId(spiffeId)
+
+	if err != nil {
+		return "", "", "", err
+	}
+
+	authPolicy, err := module.env.GetHandlers().AuthPolicy.Read(identity.AuthPolicyId)
+
+	if err != nil {
+		return "", "", "", err
+	}
+
+	if identity == nil {
+		return "", "", "", apierror.NewInvalidAuth()
+	}
+
+	if authPolicy.Primary.Cert.AllowExpiredCerts {
+		authCert.NotBefore = time.Now().Add(-1 * time.Hour)
+		authCert.NotAfter = time.Now().Add(1 * time.Hour)
+	}
+
+	opts := x509.VerifyOptions{
+		Roots:         module.getRootPool(),
+		Intermediates: x509.NewCertPool(),
+		KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
+	}
+
+	if _, err := authCert.Verify(opts); err == nil {
+		return identity.Id, spiffeId, "", nil
+	} else {
+		logger.Tracef("error verifying client certificate [%s] did not verify: %v", spiffeId, err)
+	}
+
+	return "", "", "", apierror.NewInvalidAuth()
+}
+
+func (module *AuthModuleCert) handleNonSPIFFECert(logger *logrus.Entry, authenticator *Authenticator, cert *x509.Certificate) (string, string, string, error) {
+	fingerprint := module.env.GetFingerprintGenerator().FromCert(cert)
+
+	logger = logger.
+		WithField("authenticatorId", authenticator.Id).
+		WithField("identityId", authenticator.IdentityId)
+
+	authPolicy, identity, err := getAuthPolicyByIdentityId(module.env, module.method, authenticator.Id, authenticator.IdentityId)
+
+	if err != nil {
+		logger.WithError(err).Error("could not lookup identity and auth policy for cert authentication")
+		return "", "", "", apierror.NewInvalidAuth()
+	}
+
+	logger = logger.WithField("authPolicyId", authPolicy.Id)
+
+	if identity.Disabled {
+		logger.
+			WithField("disabledAt", identity.DisabledAt).
+			WithField("disabledUntil", identity.DisabledUntil).
+			Error("authentication failed, identity is disabled")
+		return "", "", "", apierror.NewInvalidAuth()
+	}
+
+	if !authPolicy.Primary.Cert.Allowed {
+		logger.Error("invalid certificate authentication, not allowed by auth policy")
+		return "", "", "", apierror.NewInvalidAuth()
+	}
+
+	if authCert, ok := authenticator.SubType.(*AuthenticatorCert); ok {
+		if authCert.Pem == "" {
+			certPem := pem.EncodeToMemory(&pem.Block{
+				Type:  "CERTIFICATE",
+				Bytes: cert.Raw,
+			})
+
+			authCert.Pem = string(certPem)
+			if err = module.env.GetHandlers().Authenticator.Update(authenticator); err != nil {
+				logger.WithError(err).Errorf("error during cert auth attempting to update PEM, fingerprint: %s", fingerprint)
+			}
+		}
+	}
+
+	if authPolicy.Primary.Cert.AllowExpiredCerts {
+		cert.NotBefore = time.Now().Add(-1 * time.Hour)
+		cert.NotAfter = time.Now().Add(1 * time.Hour)
+	}
+
+	opts := x509.VerifyOptions{
+		Roots:         module.getRootPool(),
+		Intermediates: x509.NewCertPool(),
+		KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
+	}
+
+	if _, err := cert.Verify(opts); err == nil {
+		return authenticator.IdentityId, "", authenticator.Id, nil
+	} else {
+		logger.Tracef("error verifying client certificate [%s] did not verify: %v", fingerprint, err)
 	}
 
 	return "", "", "", apierror.NewInvalidAuth()
@@ -145,8 +196,30 @@ func (module *AuthModuleCert) Process(context AuthContext) (string, string, stri
 func (module *AuthModuleCert) getRootPool() *x509.CertPool {
 	roots := x509.NewCertPool()
 
+	for _, ca := range module.getCACerts() {
+		roots.AddCert(ca)
+	}
+
+	return roots
+}
+
+func (module *AuthModuleCert) getSPIFFECertPool() *x509.CertPool {
+	roots := x509.NewCertPool()
+
+	for _, ca := range module.getCACerts() {
+		if _, ok := module.getSPIFFEId(ca); ok {
+			roots.AddCert(ca)
+		}
+	}
+
+	return roots
+}
+
+func (module *AuthModuleCert) getCACerts() []*x509.Certificate {
+	var result []*x509.Certificate
+
 	for _, caCert := range module.staticCaCerts {
-		roots.AddCert(caCert)
+		result = append(result, caCert)
 	}
 
 	err := module.env.GetHandlers().Ca.Stream("isAuthEnabled = true and isVerified = true", func(ca *Ca, err error) error {
@@ -163,14 +236,14 @@ func (module *AuthModuleCert) getRootPool() *x509.CertPool {
 		if val, ok := module.dynamicCaCache.Get(ca.Id); ok {
 			if caCerts, ok := val.([]*x509.Certificate); ok {
 				for _, caCert := range caCerts {
-					roots.AddCert(caCert)
+					result = append(result, caCert)
 				}
 			}
 		} else {
 			caCerts := nfpem.PemStringToCertificates(ca.CertPem)
 			module.dynamicCaCache.Set(ca.Id, caCerts)
 			for _, caCert := range caCerts {
-				roots.AddCert(caCert)
+				result = append(result, caCert)
 			}
 		}
 
@@ -181,7 +254,7 @@ func (module *AuthModuleCert) getRootPool() *x509.CertPool {
 		return nil
 	}
 
-	return roots
+	return result
 }
 
 func (module *AuthModuleCert) isEdgeRouter(certs []*x509.Certificate) bool {
@@ -256,6 +329,18 @@ func (module *AuthModuleCert) GetFingerprints(ctx AuthContext) (cert.Fingerprint
 	}
 
 	return module.fingerprintGenerator.FromCerts(authCerts), nil
+}
+
+// getSPIFFEId returns the embedded SPIFFE Id and true, or empty string and false if
+// no SPIFFE ID is present
+func (module *AuthModuleCert) getSPIFFEId(cert *x509.Certificate) (string, bool) {
+	for _, uri := range cert.URIs {
+		if uri.Scheme == "spiffe:" {
+			return uri.String(), true
+		}
+	}
+
+	return "", false
 }
 
 func getAuthPolicyByIdentityId(env Env, authMethod string, authenticatorId string, identityId string) (*AuthPolicy, *Identity, error) {
