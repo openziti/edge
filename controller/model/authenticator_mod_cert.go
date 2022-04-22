@@ -82,7 +82,7 @@ func (module *AuthModuleCert) Process(context AuthContext) (string, string, stri
 				return identityId, externalId, authenticatorId, nil
 			}
 		} else if spiffeId, ok := module.getSPIFFEId(authCert); ok {
-			identityId, externalId, authenticatorId, err := module.handleSPIFFECert(logger, spiffeId, authCert)
+			identityId, externalId, authenticatorId, err := module.handleSPIFFECert(logger, spiffeId, authCert, context.GetCerts())
 
 			if err == nil {
 				return identityId, externalId, authenticatorId, nil
@@ -93,14 +93,8 @@ func (module *AuthModuleCert) Process(context AuthContext) (string, string, stri
 	return "", "", "", apierror.NewInvalidAuth()
 }
 
-func (module *AuthModuleCert) handleSPIFFECert(logger *logrus.Entry, spiffeId string, authCert *x509.Certificate) (string, string, string, error) {
+func (module *AuthModuleCert) handleSPIFFECert(logger *logrus.Entry, spiffeId string, authCert *x509.Certificate, allCerts []*x509.Certificate) (string, string, string, error) {
 	identity, err := module.env.GetHandlers().Identity.ReadByExternalId(spiffeId)
-
-	if err != nil {
-		return "", "", "", err
-	}
-
-	authPolicy, err := module.env.GetHandlers().AuthPolicy.Read(identity.AuthPolicyId)
 
 	if err != nil {
 		return "", "", "", err
@@ -110,21 +104,32 @@ func (module *AuthModuleCert) handleSPIFFECert(logger *logrus.Entry, spiffeId st
 		return "", "", "", apierror.NewInvalidAuth()
 	}
 
+	authPolicy, err := module.env.GetHandlers().AuthPolicy.Read(identity.AuthPolicyId)
+
+	if err != nil {
+		return "", "", "", err
+	}
+
 	if authPolicy.Primary.Cert.AllowExpiredCerts {
 		authCert.NotBefore = time.Now().Add(-1 * time.Hour)
 		authCert.NotAfter = time.Now().Add(1 * time.Hour)
 	}
 
+	intermediatePool := x509.NewCertPool()
+	for _, cert := range allCerts {
+		intermediatePool.AddCert(cert)
+	}
+
 	opts := x509.VerifyOptions{
-		Roots:         module.getRootPool(),
-		Intermediates: x509.NewCertPool(),
+		Roots:         module.getSPIFFECertPool(),
+		Intermediates: intermediatePool,
 		KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
 	}
 
-	if _, err := authCert.Verify(opts); err == nil {
+	if chains, err := authCert.Verify(opts); err == nil || len(chains) > 0 {
 		return identity.Id, spiffeId, "", nil
 	} else {
-		logger.Tracef("error verifying client certificate [%s] did not verify: %v", spiffeId, err)
+		logger.Errorf("error verifying client certificate [%s] did not verify: %v", spiffeId, err)
 	}
 
 	return "", "", "", apierror.NewInvalidAuth()
@@ -208,9 +213,21 @@ func (module *AuthModuleCert) getSPIFFECertPool() *x509.CertPool {
 
 	for _, ca := range module.getCACerts() {
 		if _, ok := module.getSPIFFEId(ca); ok {
+			println(ca.Subject.String() + " - " + module.env.GetFingerprintGenerator().FromCert(ca))
 			roots.AddCert(ca)
 		}
 	}
+	//serverNew := "-----BEGIN CERTIFICATE-----\nMIIB3zCCAWagAwIBAgIQURV7XtWIdQA207RjqBx7+TAKBggqhkjOPQQDAzAeMQsw\nCQYDVQQGEwJVUzEPMA0GA1UECgwGU1BJRkZFMB4XDTIyMDQyMjA0MTczN1oXDTIy\nMDQyMzA0MTc0N1owHjELMAkGA1UEBhMCVVMxDzANBgNVBAoTBlNQSUZGRTBZMBMG\nByqGSM49AgEGCCqGSM49AwEHA0IABFp9hZWBaxuotxLbwVJ1vbwN62Ku9FJY/i5h\nioUaSqR5XEVYy+G+HD0JUm4WPLow2nrLn1spwFcqBboX0um6f6mjgYUwgYIwDgYD\nVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFDnwegIpJQX4\nOcb69A+e8Gy47X7OMB8GA1UdIwQYMBaAFIel81ei8DWswPhkxFTnbtO6OcjoMB8G\nA1UdEQQYMBaGFHNwaWZmZTovL2V4YW1wbGUub3JnMAoGCCqGSM49BAMDA2cAMGQC\nMGi0d0pMHPtCvoCcRRdnHF4EqRbl9W8iDS0kgTJAqqLFVIQoflGE831aiWXqfolv\nIAIwPVgkTJNH1yvZvgw2TJM6b0JjVBmdtyjdWkq1hwn+ruumdLAfymXguyw4dRc3\n6m+u\n-----END CERTIFICATE-----"
+	//var certs []*x509.Certificate
+	//certs = append(certs, nfpem.PemStringToCertificates(serverNew)...)
+	//
+	//for _, cert := range certs {
+	//	//println(cert.Subject.String() + " - " + module.env.GetFingerprintGenerator().FromCert(cert))
+	//	//
+	//	//cert.NotBefore = time.Now().Add(-1 * time.Hour)
+	//	//cert.NotAfter = time.Now().Add(1 * time.Hour)
+	//	roots.AddCert(cert)
+	//}
 
 	return roots
 }
@@ -335,7 +352,7 @@ func (module *AuthModuleCert) GetFingerprints(ctx AuthContext) (cert.Fingerprint
 // no SPIFFE ID is present
 func (module *AuthModuleCert) getSPIFFEId(cert *x509.Certificate) (string, bool) {
 	for _, uri := range cert.URIs {
-		if uri.Scheme == "spiffe:" {
+		if uri.Scheme == "spiffe" {
 			return uri.String(), true
 		}
 	}
