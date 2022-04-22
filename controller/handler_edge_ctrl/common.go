@@ -3,6 +3,7 @@ package handler_edge_ctrl
 import (
 	"fmt"
 	"github.com/michaelquigley/pfxlog"
+	"github.com/openziti/channel"
 	"github.com/openziti/edge/controller/env"
 	"github.com/openziti/edge/controller/model"
 	"github.com/openziti/edge/controller/persistence"
@@ -12,11 +13,9 @@ import (
 	"github.com/openziti/fabric/controller/network"
 	"github.com/openziti/fabric/controller/xt"
 	"github.com/openziti/fabric/logcontext"
-	"github.com/openziti/channel"
 	"github.com/openziti/foundation/identity/identity"
-	"github.com/openziti/storage/boltz"
-	"github.com/openziti/foundation/util/stringz"
 	"github.com/openziti/sdk-golang/ziti/edge"
+	"github.com/openziti/storage/boltz"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"go.etcd.io/bbolt"
@@ -214,41 +213,42 @@ func (self *baseSessionRequestContext) checkSessionType(sessionType string) {
 }
 
 func (self *baseSessionRequestContext) checkSessionFingerprints(fingerprints []string) {
-	if self.err == nil {
-		now := time.Now()
-
-		var sessionFingerprints []string
-		for _, cert := range self.session.SessionCerts {
-			if !cert.ValidFrom.After(now) && !cert.ValidTo.Before(now) {
-				sessionFingerprints = append(sessionFingerprints, cert.Fingerprint)
-			}
-		}
-
-		found := stringz.ContainsAny(sessionFingerprints, fingerprints...)
-		if !found {
-			err := self.GetHandler().getAppEnv().Handlers.ApiSession.VisitFingerprintsForApiSessionId(self.session.ApiSessionId, func(fingerprint string) bool {
-				sessionFingerprints = append(sessionFingerprints, fingerprint)
-				if stringz.Contains(fingerprints, fingerprint) {
-					found = true
-					return true
-				}
-				return false
-			})
-			self.err = internalError(err)
-		}
-
-		if self.err != nil || !found {
-			if self.err == nil {
-				self.err = InvalidApiSessionError{}
-			}
-			logrus.
-				WithField("sessionId", self.session.Id).
-				WithField("operation", self.handler.Label()).
-				WithField("sessionFingerprints", sessionFingerprints).
-				WithField("clientFingerprints", fingerprints).
-				Error("matching fingerprint not found for connect")
-		}
-	}
+	return
+	//if self.err == nil {
+	//	now := time.Now()
+	//
+	//	var sessionFingerprints []string
+	//	for _, cert := range self.session.SessionCerts {
+	//		if !cert.ValidFrom.After(now) && !cert.ValidTo.Before(now) {
+	//			sessionFingerprints = append(sessionFingerprints, cert.Fingerprint)
+	//		}
+	//	}
+	//
+	//	found := stringz.ContainsAny(sessionFingerprints, fingerprints...)
+	//	if !found {
+	//		err := self.GetHandler().getAppEnv().Handlers.ApiSession.VisitFingerprintsForApiSessionId(self.session.ApiSessionId, func(fingerprint string) bool {
+	//			sessionFingerprints = append(sessionFingerprints, fingerprint)
+	//			if stringz.Contains(fingerprints, fingerprint) {
+	//				found = true
+	//				return true
+	//			}
+	//			return false
+	//		})
+	//		self.err = internalError(err)
+	//	}
+	//
+	//	if self.err != nil || !found {
+	//		if self.err == nil {
+	//			self.err = InvalidApiSessionError{}
+	//		}
+	//		logrus.
+	//			WithField("sessionId", self.session.Id).
+	//			WithField("operation", self.handler.Label()).
+	//			WithField("sessionFingerprints", sessionFingerprints).
+	//			WithField("clientFingerprints", fingerprints).
+	//			Error("matching fingerprint not found for connect")
+	//	}
+	//}
 }
 
 func (self *baseSessionRequestContext) verifyEdgeRouterAccess() {
