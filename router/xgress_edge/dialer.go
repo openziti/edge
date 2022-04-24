@@ -26,7 +26,6 @@ import (
 	"github.com/openziti/fabric/controller/xt"
 	"github.com/openziti/fabric/logcontext"
 	"github.com/openziti/fabric/router/xgress"
-	"github.com/openziti/fabric/utils"
 	"github.com/openziti/foundation/identity/identity"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/pkg/errors"
@@ -62,7 +61,7 @@ func newDialer(factory *Factory, options *Options) xgress.Dialer {
 	return txd
 }
 
-func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, address xgress.Address, bindHandler xgress.BindHandler, ctx logcontext.Context, timeout *utils.TimeoutWithStart) (xt.PeerData, error) {
+func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, address xgress.Address, bindHandler xgress.BindHandler, ctx logcontext.Context, deadline time.Time) (xt.PeerData, error) {
 	log := pfxlog.ChannelLogger(logcontext.EstablishPath).Wire(ctx).
 		WithField("binding", "edge").
 		WithField("destination", destination)
@@ -123,8 +122,9 @@ func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, addr
 
 		log.Debug("xgress start, sending dial to SDK")
 		to := 5 * time.Second
-		if timeout.Remaining() < to {
-			to = timeout.Remaining()
+		timeToDeadline := time.Now().UTC().Sub(deadline)
+		if timeToDeadline < to {
+			to = timeToDeadline
 		}
 		reply, err := dialRequest.WithPriority(channel.Highest).WithTimeout(to).SendForReply(listenConn.Channel)
 		if err != nil {

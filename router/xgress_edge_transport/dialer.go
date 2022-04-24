@@ -18,6 +18,7 @@ package xgress_edge_transport
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/router/xgress_common"
@@ -25,7 +26,6 @@ import (
 	"github.com/openziti/fabric/logcontext"
 	"github.com/openziti/fabric/pb/ctrl_pb"
 	"github.com/openziti/fabric/router/xgress"
-	"github.com/openziti/fabric/utils"
 	"github.com/openziti/foundation/identity/identity"
 	"github.com/openziti/sdk-golang/ziti/edge"
 	"github.com/openziti/transport"
@@ -48,7 +48,7 @@ func newDialer(ctrl xgress.CtrlChannel, options *xgress.Options) (xgress.Dialer,
 	return txd, nil
 }
 
-func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address xgress.Address, bindHandler xgress.BindHandler, ctx logcontext.Context, timeout *utils.TimeoutWithStart) (xt.PeerData, error) {
+func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address xgress.Address, bindHandler xgress.BindHandler, ctx logcontext.Context, deadline time.Time) (xt.PeerData, error) {
 	log := pfxlog.ChannelLogger(logcontext.EstablishPath).Wire(ctx).
 		WithField("binding", "edge_transport").
 		WithField("destination", destination)
@@ -60,8 +60,9 @@ func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address
 
 	log.Debug("dialing")
 	to := txd.options.ConnectTimeout
-	if timeout.Remaining() < to {
-		to = timeout.Remaining()
+	timeToDeadline := time.Now().UTC().Sub(deadline)
+	if timeToDeadline < to {
+		to = timeToDeadline
 	}
 	peer, err := txDestination.Dial("x/"+circuitId.Token, circuitId, to, nil)
 	if err != nil {

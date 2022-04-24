@@ -17,7 +17,6 @@ import (
 	"github.com/openziti/fabric/controller/network"
 	"github.com/openziti/fabric/controller/xt"
 	"github.com/openziti/fabric/logcontext"
-	"github.com/openziti/fabric/utils"
 	"github.com/openziti/foundation/identity/identity"
 	"github.com/openziti/foundation/util/stringz"
 	"github.com/openziti/sdk-golang/ziti/edge"
@@ -481,7 +480,7 @@ func (self *baseSessionRequestContext) createCircuit(terminatorIdentity string, 
 
 		n := self.handler.getAppEnv().GetHostController().GetNetwork()
 		var err error
-		circuit, err = n.CreateCircuit(self.sourceRouter, clientId, serviceId, self.logContext, utils.NewTimeoutWithStart(network.DefaultTimeout))
+		circuit, err = n.CreateCircuit(self.sourceRouter, clientId, serviceId, self.logContext, time.Now().UTC().Add(network.DefaultTimeout))
 		if err != nil {
 			self.err = internalError(err)
 		}
