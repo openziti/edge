@@ -63,83 +63,94 @@ func (module *AuthModuleCert) CanHandle(method string) bool {
 	return method == module.method
 }
 
-func (module *AuthModuleCert) Process(context AuthContext) (string, string, string, error) {
-	fingerprints, err := module.GetFingerprints(context)
+func (module *AuthModuleCert) Process(context AuthContext) (AuthResult, error) {
+	certs := context.GetCerts()
+
+	if len(certs) == 0 {
+		return nil, apierror.NewInvalidAuth()
+	}
+
+	clientCert := certs[0]
+
+	fingerprint := module.env.GetFingerprintGenerator().FromCert(clientCert)
+
+	logger := pfxlog.Logger().WithField("authMethod", module.method)
+	authenticator, err := module.env.GetHandlers().Authenticator.ReadByFingerprint(fingerprint)
 
 	if err != nil {
-		return "", "", "", err
+		logger.WithError(err).Errorf("error during cert auth read by fingerprint %s", fingerprint)
 	}
 
-	for fingerprint, authCert := range fingerprints {
-		logger := pfxlog.Logger().WithField("authMethod", module.method)
-		authenticator, err := module.env.GetHandlers().Authenticator.ReadByFingerprint(fingerprint)
+	if authenticator != nil {
+		logger = logger.
+			WithField("authenticatorId", authenticator.Id).
+			WithField("identityId", authenticator.IdentityId)
+
+		authPolicy, identity, err := getAuthPolicyByIdentityId(module.env, module.method, authenticator.Id, authenticator.IdentityId)
 
 		if err != nil {
-			logger.WithError(err).Errorf("error during cert auth read by fingerprint %s", fingerprint)
+			logger.WithError(err).Error("could not lookup identity and auth policy for cert authentication")
+			return nil, apierror.NewInvalidAuth()
 		}
 
-		if authenticator != nil {
-			logger = logger.
-				WithField("authenticatorId", authenticator.Id).
-				WithField("identityId", authenticator.IdentityId)
+		logger = logger.WithField("authPolicyId", authPolicy.Id)
 
-			authPolicy, identity, err := getAuthPolicyByIdentityId(module.env, module.method, authenticator.Id, authenticator.IdentityId)
+		if identity.Disabled {
+			logger.
+				WithField("disabledAt", identity.DisabledAt).
+				WithField("disabledUntil", identity.DisabledUntil).
+				Error("authentication failed, identity is disabled")
+			return nil, apierror.NewInvalidAuth()
+		}
 
-			if err != nil {
-				logger.WithError(err).Error("could not lookup identity and auth policy for cert authentication")
-				return "", "", "", apierror.NewInvalidAuth()
-			}
+		if !authPolicy.Primary.Cert.Allowed {
+			logger.Error("invalid certificate authentication, not allowed by auth policy")
+			return nil, apierror.NewInvalidAuth()
+		}
 
-			logger = logger.WithField("authPolicyId", authPolicy.Id)
+		if authCert, ok := authenticator.SubType.(*AuthenticatorCert); ok {
+			if authCert.Pem == "" {
+				certPem := pem.EncodeToMemory(&pem.Block{
+					Type:  "CERTIFICATE",
+					Bytes: clientCert.Raw,
+				})
 
-			if identity.Disabled {
-				logger.
-					WithField("disabledAt", identity.DisabledAt).
-					WithField("disabledUntil", identity.DisabledUntil).
-					Error("authentication failed, identity is disabled")
-				return "", "", "", apierror.NewInvalidAuth()
-			}
-
-			if !authPolicy.Primary.Cert.Allowed {
-				logger.Error("invalid certificate authentication, not allowed by auth policy")
-				return "", "", "", apierror.NewInvalidAuth()
-			}
-
-			curCert := fingerprints[fingerprint]
-			if authCert, ok := authenticator.SubType.(*AuthenticatorCert); ok {
-				if authCert.Pem == "" {
-					certPem := pem.EncodeToMemory(&pem.Block{
-						Type:  "CERTIFICATE",
-						Bytes: curCert.Raw,
-					})
-
-					authCert.Pem = string(certPem)
-					if err = module.env.GetHandlers().Authenticator.Update(authenticator); err != nil {
-						pfxlog.Logger().WithError(err).Errorf("error during cert auth attempting to update PEM, fingerprint: %s", fingerprint)
-					}
+				authCert.Pem = string(certPem)
+				if err = module.env.GetHandlers().Authenticator.Update(authenticator); err != nil {
+					pfxlog.Logger().WithError(err).Errorf("error during cert auth attempting to update PEM, fingerprint: %s", fingerprint)
 				}
 			}
+		}
 
-			if authPolicy.Primary.Cert.AllowExpiredCerts {
-				authCert.NotBefore = time.Now().Add(-1 * time.Hour)
-				authCert.NotAfter = time.Now().Add(1 * time.Hour)
-			}
+		if authPolicy.Primary.Cert.AllowExpiredCerts {
+			clientCert.NotBefore = time.Now().Add(-1 * time.Hour)
+			clientCert.NotAfter = time.Now().Add(1 * time.Hour)
+		}
 
-			opts := x509.VerifyOptions{
-				Roots:         module.getRootPool(),
-				Intermediates: x509.NewCertPool(),
-				KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
-			}
+		intermediates := x509.NewCertPool()
+		for _, curCert := range certs[1:] {
+			intermediates.AddCert(curCert)
+		}
 
-			if _, err := authCert.Verify(opts); err == nil {
-				return authenticator.IdentityId, "", authenticator.Id, nil
-			} else {
-				pfxlog.Logger().Tracef("error verifying client certificate [%s] did not verify: %v", fingerprint, err)
-			}
+		opts := x509.VerifyOptions{
+			Roots:         module.getRootPool(),
+			Intermediates: intermediates,
+			KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
+		}
+
+		if _, err := clientCert.Verify(opts); err == nil {
+			return &AuthResultBase{
+				env:             module.env,
+				identityId:      authenticator.IdentityId,
+				authenticatorId: authenticator.Id,
+				authenticator:   authenticator,
+			}, nil
+		} else {
+			pfxlog.Logger().Tracef("error verifying client certificate [%s] did not verify: %v", fingerprint, err)
 		}
 	}
 
-	return "", "", "", apierror.NewInvalidAuth()
+	return nil, apierror.NewInvalidAuth()
 }
 
 func (module *AuthModuleCert) getRootPool() *x509.CertPool {
