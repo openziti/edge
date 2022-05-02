@@ -19,7 +19,7 @@ require (
 	github.com/go-openapi/validate v0.21.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/protobuf v1.5.2
-	github.com/google/go-cmp v0.5.7
+	github.com/google/go-cmp v0.5.8
 	github.com/google/gopacket v1.1.19
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/golang-lru v0.5.4
@@ -33,7 +33,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/netfoundry/secretstream v0.1.2
 	github.com/openziti/channel v0.18.28
-	github.com/openziti/fabric v0.17.106
+	github.com/openziti/fabric v0.17.114
 	github.com/openziti/foundation v0.17.22
 	github.com/openziti/sdk-golang v0.16.54
 	github.com/openziti/storage v0.1.4
