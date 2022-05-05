@@ -480,7 +480,7 @@ func (self *baseSessionRequestContext) createCircuit(terminatorIdentity string, 
 
 		n := self.handler.getAppEnv().GetHostController().GetNetwork()
 		var err error
-		circuit, err = n.CreateCircuit(self.sourceRouter, clientId, serviceId, self.logContext, time.Now().UTC().Add(network.DefaultTimeout))
+		circuit, err = n.CreateCircuit(self.sourceRouter, clientId, serviceId, self.logContext, time.Now().Add(network.DefaultNetworkOptionsRouteTimeout))
 		if err != nil {
 			self.err = internalError(err)
 		}

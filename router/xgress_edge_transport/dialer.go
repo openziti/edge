@@ -60,7 +60,7 @@ func (txd *dialer) Dial(destination string, circuitId *identity.TokenId, address
 
 	log.Debug("dialing")
 	to := txd.options.ConnectTimeout
-	timeToDeadline := deadline.Sub(time.Now().UTC())
+	timeToDeadline := deadline.Sub(time.Now())
 	if timeToDeadline < to {
 		to = timeToDeadline
 	}

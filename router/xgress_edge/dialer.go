@@ -122,7 +122,7 @@ func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, addr
 
 		log.Debug("xgress start, sending dial to SDK")
 		to := 5 * time.Second
-		timeToDeadline := deadline.Sub(time.Now().UTC())
+		timeToDeadline := deadline.Sub(time.Now())
 		if timeToDeadline < to {
 			to = timeToDeadline
 		}
