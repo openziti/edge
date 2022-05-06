@@ -99,7 +99,7 @@ func (self *edgeClientConn) HandleClose(_ channel.Channel) {
 		if err := self.removeTerminator(terminator); err != nil {
 			log.Warnf("failed to remove terminator %v for session with token %v on channel close", terminator.terminatorId, terminator.token)
 		} else {
-			log.Infof("successfully removed terminator %v for session with token %v on channel close", terminator.terminatorId, terminator.token)
+			log.WithField("terminatorId", terminator.terminatorId).WithField("token", terminator.token).Info("Successfully removed terminator on channel close")
 		}
 	}
 	self.msgMux.Close()
