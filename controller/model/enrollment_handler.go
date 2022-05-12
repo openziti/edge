@@ -19,8 +19,10 @@ package model
 import (
 	"github.com/openziti/edge/controller/apierror"
 	"github.com/openziti/edge/controller/persistence"
+	"github.com/openziti/foundation/util/errorz"
 	"github.com/openziti/storage/boltz"
 	"go.etcd.io/bbolt"
+	"time"
 )
 
 type EnrollmentHandler struct {
@@ -140,4 +142,36 @@ func (handler *EnrollmentHandler) Read(id string) (*Enrollment, error) {
 		return nil, err
 	}
 	return entity, nil
+}
+
+func (handler *EnrollmentHandler) RefreshJwt(id string, expiresAt time.Time) error {
+	enrollment, err := handler.Read(id)
+
+	if err != nil {
+		if boltz.IsErrNotFoundErr(err) {
+			return errorz.NewNotFound()
+		}
+
+		return err
+	}
+
+	if enrollment.Jwt == "" {
+		return apierror.NewInvalidEnrollMethod()
+	}
+
+	if expiresAt.Before(time.Now()) {
+		return errorz.NewFieldError("must be after the current date and time", "expiresAt", expiresAt)
+	}
+
+	if err := enrollment.FillJwtInfoWithExpiresAt(handler.env, *enrollment.IdentityId, expiresAt); err != nil {
+		return err
+	}
+
+	err = handler.patchEntity(enrollment, boltz.MapFieldChecker{
+		persistence.FieldEnrollmentJwt:       struct{}{},
+		persistence.FieldEnrollmentExpiresAt: struct{}{},
+		persistence.FieldEnrollmentIssuedAt:  struct{}{},
+	})
+
+	return err
 }

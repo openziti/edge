@@ -55,7 +55,7 @@ func init() {
   "info": {
     "title": "Ziti Edge Client",
     "contact": {},
-    "version": "0.19.12"
+    "version": "0.25.5"
   },
   "host": "demo.ziti.dev",
   "basePath": "/edge/client/v1",
@@ -4719,12 +4719,18 @@ func init() {
           "properties": {
             "fingerprint": {
               "type": "string"
+            },
+            "id": {
+              "type": "string"
             }
           }
         },
         "updb": {
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string"
+            },
             "username": {
               "type": "string"
             }
@@ -5960,7 +5966,7 @@ func init() {
   "info": {
     "title": "Ziti Edge Client",
     "contact": {},
-    "version": "0.19.12"
+    "version": "0.25.5"
   },
   "host": "demo.ziti.dev",
   "basePath": "/edge/client/v1",
@@ -9705,12 +9711,18 @@ func init() {
       "properties": {
         "fingerprint": {
           "type": "string"
+        },
+        "id": {
+          "type": "string"
         }
       }
     },
     "IdentityAuthenticatorsUpdb": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "username": {
           "type": "string"
         }
@@ -10701,12 +10713,18 @@ func init() {
           "properties": {
             "fingerprint": {
               "type": "string"
+            },
+            "id": {
+              "type": "string"
             }
           }
         },
         "updb": {
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string"
+            },
             "username": {
               "type": "string"
             }

@@ -38,10 +38,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// EnrollmentRefresh enrollment refresh
+// ReEnroll re enroll
 //
-// swagger:model enrollmentRefresh
-type EnrollmentRefresh struct {
+// swagger:model reEnroll
+type ReEnroll struct {
 
 	// expires at
 	// Required: true
@@ -49,8 +49,8 @@ type EnrollmentRefresh struct {
 	ExpiresAt *strfmt.DateTime `json:"expiresAt"`
 }
 
-// Validate validates this enrollment refresh
-func (m *EnrollmentRefresh) Validate(formats strfmt.Registry) error {
+// Validate validates this re enroll
+func (m *ReEnroll) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateExpiresAt(formats); err != nil {
@@ -63,7 +63,7 @@ func (m *EnrollmentRefresh) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EnrollmentRefresh) validateExpiresAt(formats strfmt.Registry) error {
+func (m *ReEnroll) validateExpiresAt(formats strfmt.Registry) error {
 
 	if err := validate.Required("expiresAt", "body", m.ExpiresAt); err != nil {
 		return err
@@ -76,13 +76,13 @@ func (m *EnrollmentRefresh) validateExpiresAt(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this enrollment refresh based on context it is used
-func (m *EnrollmentRefresh) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this re enroll based on context it is used
+func (m *ReEnroll) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *EnrollmentRefresh) MarshalBinary() ([]byte, error) {
+func (m *ReEnroll) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -90,8 +90,8 @@ func (m *EnrollmentRefresh) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *EnrollmentRefresh) UnmarshalBinary(b []byte) error {
-	var res EnrollmentRefresh
+func (m *ReEnroll) UnmarshalBinary(b []byte) error {
+	var res ReEnroll
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

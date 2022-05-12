@@ -61,9 +61,7 @@ paths:
       summary: Refreshes an enrollment record's expiration window
       description: >-
           For expired or unexpired enrollments, reset the expiration window. A new JWT will be generated
-          and must be used for the enrollment. If the `validFrom` value is not provided it will default to
-          now. If the `validTo` value is not provided it will default to `validFrom`  the controller's
-          configured enrollment timeout.
+          and must be used for the enrollment.
       security:
         - ztSession: [ ]
       tags:
@@ -77,7 +75,7 @@ paths:
           schema:
             $ref: '#/definitions/enrollmentRefresh'
       responses:
-        '201':
+        '200':
           $ref: '../shared/standard-responses.yml#/responses/createResponse'
         '400':
           $ref: '../shared/standard-responses.yml#/responses/badRequestResponse'
@@ -122,7 +120,7 @@ definitions:
   enrollmentDetail:
     type: object
     description: |
-      An enrollment object. Enrollments are tied to identities and portentially a CA. Depending on the
+      An enrollment object. Enrollments are tied to identities and potentially a CA. Depending on the
       method, different fields are utilized. For example ottca enrollments use the `ca` field and updb enrollments
       use the username field, but not vice versa.
     allOf:
@@ -155,6 +153,8 @@ definitions:
             $ref: '../shared/base-entity.yml#/definitions/entityRef'
           username:
             type: string
+          jwt:
+            type: string
           details:
             type: object
             additionalProperties:
@@ -182,10 +182,9 @@ definitions:
 
   enrollmentRefresh:
     type: object
+    required:
+      - expiresAt
     properties:
-      validFrom:
-        type: string
-        format: date-time
-      validTo:
+      expiresAt:
         type: string
         format: date-time
