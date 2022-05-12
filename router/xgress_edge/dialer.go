@@ -124,7 +124,7 @@ func (dialer *dialer) Dial(destination string, circuitId *identity.TokenId, addr
 		to := 5 * time.Second
 
 		timeToDeadline := time.Until(deadline)
-		if timeToDeadline < to {
+		if timeToDeadline > 0 && timeToDeadline < to {
 			to = timeToDeadline
 		}
 		reply, err := dialRequest.WithPriority(channel.Highest).WithTimeout(to).SendForReply(listenConn.Channel)
