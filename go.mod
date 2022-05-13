@@ -1,6 +1,6 @@
 module github.com/openziti/edge
 
-go 1.17
+go 1.18
 
 require (
 	github.com/AppsFlyer/go-sundheit v0.5.0
@@ -31,10 +31,10 @@ require (
 	github.com/miekg/dns v1.1.48
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/netfoundry/secretstream v0.1.2
-	github.com/openziti/channel v0.18.33
+	github.com/openziti/channel v0.18.34
 	github.com/openziti/fabric v0.17.126
 	github.com/openziti/foundation v0.17.24
-	github.com/openziti/sdk-golang v0.16.64
+	github.com/openziti/sdk-golang v0.16.65
 	github.com/openziti/storage v0.1.5
 	github.com/openziti/transport/v2 v2.0.0
 	github.com/orcaman/concurrent-map v0.0.0-20210106121528-16402b402231
