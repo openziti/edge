@@ -17,6 +17,8 @@ package model
 
 import (
 	"crypto/x509"
+	"strings"
+
 	"github.com/golang-jwt/jwt"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/controller/apierror"
@@ -25,7 +27,6 @@ import (
 	"github.com/openziti/storage/boltz"
 	cmap "github.com/orcaman/concurrent-map/v2"
 	"go.etcd.io/bbolt"
-	"strings"
 )
 
 var _ AuthProcessor = &AuthModuleExtJwt{}
@@ -112,7 +113,7 @@ type AuthResultJwt struct {
 }
 
 func (a *AuthResultJwt) IsSuccessful() bool {
-	return a.externalJwtSignerId != "" && a.AuthResultBase.identityId != ""
+	return a.externalJwtSignerId != "" && a.AuthResultBase.externalId != ""
 }
 
 func (a *AuthModuleExtJwt) process(context AuthContext, isPrimary bool) (AuthResult, error) {
