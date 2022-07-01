@@ -33,11 +33,11 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/netfoundry/secretstream v0.1.2
 	github.com/openziti/channel v0.18.46
-	github.com/openziti/fabric v0.19.9
+	github.com/openziti/fabric v0.19.10
 	github.com/openziti/foundation v0.17.31
 	github.com/openziti/jwks v1.0.1
 	github.com/openziti/sdk-golang v0.16.89
-	github.com/openziti/storage v0.1.12
+	github.com/openziti/storage v0.1.13
 	github.com/openziti/transport/v2 v2.0.10
 	github.com/openziti/x509-claims v1.0.2
 	github.com/openziti/xweb/v2 v2.0.0
@@ -105,6 +105,7 @@ require (
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
+	github.com/openziti/foundation/v2 v2.0.0 // indirect
 	github.com/parallaxsecond/parsec-client-go v0.0.0-20220111122524-cb78842db373 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
