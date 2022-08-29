@@ -32,7 +32,7 @@ require (
 	github.com/miekg/dns v1.1.50
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/netfoundry/secretstream v0.1.2
-	github.com/openziti/channel v0.18.66
+	github.com/openziti/channel v1.0.0
 	github.com/openziti/fabric v0.19.52
 	github.com/openziti/foundation/v2 v2.0.3
 	github.com/openziti/identity v1.0.9
