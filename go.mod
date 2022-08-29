@@ -34,7 +34,7 @@ require (
 	github.com/netfoundry/secretstream v0.1.2
 	github.com/openziti/channel v0.18.66
 	github.com/openziti/fabric v0.19.52
-	github.com/openziti/foundation/v2 v2.0.3
+	github.com/openziti/foundation/v2 v2.0.4
 	github.com/openziti/identity v1.0.9
 	github.com/openziti/jwks v1.0.1
 	github.com/openziti/metrics v1.0.5
