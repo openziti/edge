@@ -22,7 +22,6 @@ require (
 	github.com/google/go-cmp v0.5.9
 	github.com/google/gopacket v1.1.19
 	github.com/google/uuid v1.3.0
-	github.com/hashicorp/golang-lru v0.5.4
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/jinzhu/copier v0.3.5
 	github.com/kataras/go-events v0.0.3-0.20201007151548-c411dc70c0a6
