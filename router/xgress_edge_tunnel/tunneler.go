@@ -21,6 +21,7 @@ import (
 	"github.com/openziti/edge/router/fabric"
 	"github.com/openziti/edge/tunnel/dns"
 	"github.com/openziti/edge/tunnel/intercept"
+	"github.com/openziti/edge/tunnel/intercept/ebpf"
 	"github.com/openziti/edge/tunnel/intercept/host"
 	"github.com/openziti/edge/tunnel/intercept/proxy"
 	"github.com/openziti/edge/tunnel/intercept/tproxy"
@@ -66,6 +67,10 @@ func (self *tunneler) Start(notifyClose <-chan struct{}) error {
 
 	if self.listenOptions.mode == "tproxy" {
 		if self.interceptor, err = tproxy.New(self.listenOptions.lanIf); err != nil {
+			return errors.Wrap(err, "failed to initialize tproxy interceptor")
+		}
+	} else if self.listenOptions.mode == "ebpf" {
+		if self.interceptor, err = ebpf.New(self.listenOptions.lanIf); err != nil {
 			return errors.Wrap(err, "failed to initialize tproxy interceptor")
 		}
 	} else if self.listenOptions.mode == "host" {

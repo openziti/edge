@@ -166,10 +166,10 @@ func (options *Options) load(data xgress.OptionsData) error {
 		}
 
 		if value, found := data["mode"]; found {
-			if strVal, ok := value.(string); ok && stringz.Contains([]string{"tproxy", "host", "proxy"}, strVal) {
+			if strVal, ok := value.(string); ok && stringz.Contains([]string{"tproxy", "host", "proxy","ebpf"}, strVal) {
 				options.mode = strVal
 			} else {
-				return errors.Errorf(`invalid value '%v' for mode, must be one of ["tproxy", "host", "proxy"']`, value)
+				return errors.Errorf(`invalid value '%v' for mode, must be one of ["tproxy", "host", "proxy","ebpf"']`, value)
 			}
 		}
 
