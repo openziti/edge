@@ -16,8 +16,6 @@
 
 package ebpf
 
-import "C"
-
 import (
 	"context"
 	"fmt"
@@ -484,12 +482,12 @@ func (self *eBpf) StopIntercepting(tracker intercept.AddressTracker) error {
 		if addr.Proto() == "udp" {
 			ipNetList := strings.Split(addr.IpNet().String(), "/")
 			log.Infof("removing service entry from ebpf zt_tproxy_map: dst_prefix: %v dest mask: %v low-port: %v, high-port: %v", ipNetList[0], ipNetList[1], addr.LowPort(), addr.HighPort())
-			cmd := exec.Command("map_delete_elem", ipNetList[0], ipNetList[1], strconv.Itoa(int(addr.LowPort())), "17")
+			cmd := exec.Command("map_delete", ipNetList[0], ipNetList[1], strconv.Itoa(int(addr.LowPort())), "17")
 			out, err := cmd.CombinedOutput()
 			if err != nil {
 				pfxlog.Logger().Infof("Failed to remove entry from ebpf hash table for %v port: %v Protocol: %v", addr.IpNet().String(), addr.LowPort(), "17")
 			} else {
-				pfxlog.Logger().Infof("Updated ebpf zt_tproxy_map: map_delete_elem %v %v %v %v", ipNetList[0], ipNetList[1], addr.LowPort(), "17")
+				pfxlog.Logger().Infof("Updated ebpf zt_tproxy_map: map_delete %v %v %v %v", ipNetList[0], ipNetList[1], addr.LowPort(), "17")
 			}
 			pfxlog.Logger().Infof("%v\n", out)
 		} else if addr.Proto() == "tcp" {
