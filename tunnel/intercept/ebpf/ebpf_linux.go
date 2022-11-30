@@ -70,9 +70,8 @@ var listenConfig = net.ListenConfig{
 	},
 }
 
-func New(lanIf string) (intercept.Interceptor, error) {
+func New() (intercept.Interceptor, error) {
 	return &interceptor{
-		lanIf:          lanIf,
 		serviceProxies: cmap.New[*eBpf](),
 	}, nil
 }
@@ -86,7 +85,6 @@ func (a alwaysRemoveAddressTracker) RemoveAddress(string) bool {
 }
 
 type interceptor struct {
-	lanIf          string
 	serviceProxies cmap.ConcurrentMap[*eBpf]
 }
 
@@ -152,15 +150,6 @@ func (self *interceptor) newEbpf(service *entities.Service, resolver dns.Resolve
 
 	if t.tcpLn == nil && t.udpLn == nil {
 		return nil, errors.Errorf("service %v has no supported protocols (tcp, udp). Serivce protocols: %+v", service.Name, config.Protocols)
-	}
-
-	if self.lanIf != "" {
-		_, err := net.InterfaceByName(self.lanIf)
-		if err != nil {
-			return nil, fmt.Errorf("invalid lanIf '%s'", self.lanIf)
-		}
-	} else {
-		logrus.Infof("no lan interface specified with '-lanIf'. please ensure firewall accepts intercepted service addresses")
 	}
 
 	if t.tcpLn != nil {

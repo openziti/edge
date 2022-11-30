@@ -70,7 +70,7 @@ func (self *tunneler) Start(notifyClose <-chan struct{}) error {
 			return errors.Wrap(err, "failed to initialize tproxy interceptor")
 		}
 	} else if self.listenOptions.mode == "ebpf" {
-		if self.interceptor, err = ebpf.New(self.listenOptions.lanIf); err != nil {
+		if self.interceptor, err = ebpf.New(); err != nil {
 			return errors.Wrap(err, "failed to initialize ebpf interceptor")
 		}
 	} else if self.listenOptions.mode == "host" {
