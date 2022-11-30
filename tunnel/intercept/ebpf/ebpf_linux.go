@@ -19,7 +19,6 @@ package ebpf
 import (
 	"context"
 	"fmt"
-	"github.com/coreos/go-iptables/iptables"
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/tunnel"
 	"github.com/openziti/edge/tunnel/dns"
@@ -111,7 +110,6 @@ func (self *interceptor) StopIntercepting(serviceName string, tracker intercept.
 	if proxy, found := self.serviceProxies.Get(serviceName); found {
 		proxy.Stop(tracker)
 		self.serviceProxies.Remove(serviceName)
-		//self.cleanupChains()
 	}
 	return nil
 }
@@ -292,11 +290,6 @@ func getOriginalDest(oob []byte) (*net.UDPAddr, error) {
 	return nil, fmt.Errorf("original destination not found in out of band data")
 }
 
-func deleteIptablesChain(ipt *iptables.IPTables, table, srcChain, dstChain string) {
-	log := pfxlog.Logger().WithField("chain", dstChain)
-	log.Infof("removing iptables '%v' link '%v' --> '%v'", table, srcChain, dstChain)
-}
-
 func (self *eBpf) Stop(tracker intercept.AddressTracker) {
 	log := pfxlog.Logger().WithField("service", self.service.Name)
 	if self.tcpLn != nil {
@@ -410,11 +403,6 @@ func (self *eBpf) addInterceptAddr(interceptAddr *intercept.InterceptAddress, se
 		fmt.Sprintf("--on-port=%d", port.GetPort()),
 	}
 
-	/*pfxlog.Logger().Infof("Adding rule iptables -t %v -A %v %v", mangleTable, dstChain, interceptAddr.TproxySpec)
-	if err := self.interceptor.ipt.Insert(mangleTable, dstChain, 1, interceptAddr.TproxySpec...); err != nil {
-		return errors.Wrap(err, "failed to insert rule")
-	}*/
-
 	if interceptAddr.Proto() == "udp" {
 		pfxlog.Logger().Infof("dst_ip=%v", ipNet.String())
 		pfxlog.Logger().Infof("protocol=%v", interceptAddr.Proto())
@@ -454,21 +442,6 @@ func (self *eBpf) addInterceptAddr(interceptAddr *intercept.InterceptAddress, se
 		}
 		fmt.Printf("%s\n", out)
 	}
-
-	/*if self.interceptor.lanIf != "" {
-		interceptAddr.AcceptSpec = []string{
-			"-i", self.interceptor.lanIf,
-			"-m", "comment", "--comment", service.Name,
-			"-d", ipNet.String(),
-			"-p", interceptAddr.Proto(),
-			"--dport", fmt.Sprintf("%v:%v", interceptAddr.LowPort(), interceptAddr.HighPort()),
-			"-j", "ACCEPT",
-		}
-		pfxlog.Logger().Infof("Adding rule iptables -t %v -A %v %v", filterTable, dstChain, interceptAddr.AcceptSpec)
-		if err := self.interceptor.ipt.Insert(filterTable, dstChain, 1, interceptAddr.AcceptSpec...); err != nil {
-			return errors.Wrap(err, "failed to insert rule")
-		}
-	}*/
 
 	return nil
 }
