@@ -35,6 +35,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/sys/unix"
 	"net"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -71,6 +72,21 @@ var listenConfig = net.ListenConfig{
 }
 
 func New() (intercept.Interceptor, error) {
+	cmd := exec.Command("map_update", "-V")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, errors.Wrap(err, "ebpf: failed to verify map_update binary")
+	}
+	pfxlog.Logger().Infof("%v", string(out))
+	_, err = os.Stat("/sys/fs/bpf/tc/globals/zt_tproxy_map")
+	if err != nil {
+		return nil, errors.Wrap(err, "ebpf: failed to verify hash map zt_tproxy_map exists")
+	}
+	_, err = os.Stat("/sys/fs/bpf/tc/globals/ifindex_ip_map")
+	if err != nil {
+		return nil, errors.Wrap(err, "ebpf: failed to verify array map ifindex_ip_map exists")
+	}
+
 	return &interceptor{
 		serviceProxies: cmap.New[*eBpf](),
 	}, nil
@@ -96,11 +112,11 @@ func (self *interceptor) Stop() {
 }
 
 func (self *interceptor) Intercept(service *entities.Service, resolver dns.Resolver, tracker intercept.AddressTracker) error {
-	tproxy, err := self.newEbpf(service, resolver, tracker)
+	ebpf, err := self.newEbpf(service, resolver, tracker)
 	if err != nil {
 		return err
 	}
-	self.serviceProxies.Set(service.Name, tproxy)
+	self.serviceProxies.Set(service.Name, ebpf)
 	return nil
 }
 
@@ -380,60 +396,22 @@ func (self *eBpf) addInterceptAddr(interceptAddr *intercept.InterceptAddress, se
 	}
 	tracker.AddAddress(ipNet.String())
 	self.addresses = append(self.addresses, interceptAddr)
-
-	interceptAddr.TproxySpec = []string{
-		"-m", "comment", "--comment", service.Name,
-		"-d", ipNet.String(),
-		"-p", interceptAddr.Proto(),
-		"--dport", fmt.Sprintf("%v:%v", interceptAddr.LowPort(), interceptAddr.HighPort()),
-		"-j", "TPROXY",
-		"--tproxy-mark", "0x1/0x1",
-		fmt.Sprintf("--on-ip=%s", port.GetIP().String()),
-		fmt.Sprintf("--on-port=%d", port.GetPort()),
-	}
-
-	if interceptAddr.Proto() == "udp" {
-		pfxlog.Logger().Infof("dst_ip=%v", ipNet.String())
-		pfxlog.Logger().Infof("protocol=%v", interceptAddr.Proto())
-		pfxlog.Logger().Infof("low port=%v, highport=%v", interceptAddr.LowPort(), interceptAddr.HighPort())
-		pfxlog.Logger().Infof("tproxy_ip=%v", port.GetIP().String())
-		pfxlog.Logger().Infof("tproxy_port=%v", port.GetPort())
-		ipNetList := strings.Split(ipNet.String(), "/")
-		pfxlog.Logger().Infof("dst_prefix=%v", ipNetList[0])
-		low_port := strconv.Itoa(int(interceptAddr.LowPort()))
-		high_port := strconv.Itoa(int(interceptAddr.HighPort()))
-		tproxy_port := strconv.Itoa(int(port.GetPort()))
-		cmd := exec.Command("map_update", "-I", "-c", ipNetList[0], "-m", ipNetList[1], "-l", low_port, "-h",
-			high_port, "-t", tproxy_port, "-p", "udp")
-		out, err := cmd.CombinedOutput()
-		if err != nil {
-			pfxlog.Logger().Infof("Failed to insert entry to ebpf hash table for %v", ipNet.String())
-		} else {
-			pfxlog.Logger().Infof("Updated ebpf zt_tproxy_map: map_update -I -c %v -m %v -l %v -h %v -t %v -p %v", ipNetList[0], ipNetList[1], low_port, high_port, tproxy_port, "udp")
-		}
-		fmt.Printf("%s\n", out)
+	ipNetList := strings.Split(ipNet.String(), "/")
+	low_port := strconv.Itoa(int(interceptAddr.LowPort()))
+	high_port := strconv.Itoa(int(interceptAddr.HighPort()))
+	tproxy_port := strconv.Itoa(int(port.GetPort()))
+	pfxlog.Logger().WithField("dst_ip", ipNet).WithField("protocol", interceptAddr.Proto()).WithField("low-port",
+		interceptAddr.LowPort()).WithField("high-port", interceptAddr.HighPort()).WithField("tproxy-ip",
+		port.GetIP()).WithField("tproxy-port", port.GetPort()).Info("setting up intercept: ", interceptAddr.Proto())
+	cmd := exec.Command("map_update", "-I", "-c", ipNetList[0], "-m", ipNetList[1], "-l", low_port, "-h",
+		high_port, "-t", tproxy_port, "-p", interceptAddr.Proto())
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		pfxlog.Logger().Infof("Failed to insert entry to ebpf hash table for %v : %v", ipNet.String(), string(out))
 	} else {
-		pfxlog.Logger().Infof("dst_ip=%v", ipNet.String())
-		pfxlog.Logger().Infof("protocol=%v", interceptAddr.Proto())
-		pfxlog.Logger().Infof("low port=%v, highport=%v", interceptAddr.LowPort(), interceptAddr.HighPort())
-		pfxlog.Logger().Infof("tproxy_ip=%v", port.GetIP().String())
-		pfxlog.Logger().Infof("tproxy_port=%v", port.GetPort())
-		ipNetList := strings.Split(ipNet.String(), "/")
-		pfxlog.Logger().Infof("dst_prefix=%v", ipNetList[0])
-		low_port := strconv.Itoa(int(interceptAddr.LowPort()))
-		high_port := strconv.Itoa(int(interceptAddr.HighPort()))
-		tproxy_port := strconv.Itoa(int(port.GetPort()))
-		cmd := exec.Command("map_update", "-I", "-c", ipNetList[0], "-m", ipNetList[1], "-l", low_port, "-h",
-			high_port, "-t", tproxy_port, "-p", "tcp")
-		out, err := cmd.CombinedOutput()
-		if err != nil {
-			pfxlog.Logger().Infof("Failed to insert entry to ebpf hash table for %v", ipNet.String())
-		} else {
-			pfxlog.Logger().Infof("Updated ebpf zt_tproxy_map: map_update -I -c %v -m %v -l %v -h %v -t %v -p %v", ipNetList[0], ipNetList[1], low_port, high_port, tproxy_port, "tcp")
-		}
-		fmt.Printf("%s\n", out)
+		pfxlog.Logger().Infof("Updated ebpf zt_tproxy_map: map_update -I -c %v -m %v -l %v -h %v -t %v -p %v",
+			ipNetList[0], ipNetList[1], low_port, high_port, tproxy_port, interceptAddr.Proto())
 	}
-
 	return nil
 }
 
@@ -443,31 +421,15 @@ func (self *eBpf) StopIntercepting(tracker intercept.AddressTracker) error {
 	log := pfxlog.Logger().WithField("sevice", self.service.Name)
 
 	for _, addr := range self.addresses {
-		if addr.Proto() == "udp" {
-			ipNetList := strings.Split(addr.IpNet().String(), "/")
-			log.Infof("removing service entry from ebpf zt_tproxy_map: dst_prefix: %v dest mask: %v low-port: %v, high-port: %v", ipNetList[0], ipNetList[1], addr.LowPort(), addr.HighPort())
-			cmd := exec.Command("map_update", "-D", "-c", ipNetList[0], "-m", ipNetList[1], "-l", strconv.Itoa(int(addr.LowPort())), "-p", "udp")
-			out, err := cmd.CombinedOutput()
-			if err != nil {
-				pfxlog.Logger().Infof("Failed to remove entry from ebpf hash table for %v port: %v Protocol: %v", addr.IpNet().String(), addr.LowPort(), "udp")
-			} else {
-				pfxlog.Logger().Infof("Updated ebpf zt_tproxy_map: map_update -D -c %v -m %v -l %v -p %v", ipNetList[0], ipNetList[1], addr.LowPort(), "udp")
-			}
-			pfxlog.Logger().Infof("%v\n", out)
-		} else if addr.Proto() == "tcp" {
-			ipNetList := strings.Split(addr.IpNet().String(), "/")
-			log.Infof("removing service entry from ebpf zt_tproxy_map: dst_prefix: %v dest mask: %v low-port: %v, high-port: %v", ipNetList[0], ipNetList[1], addr.LowPort(), addr.HighPort())
-			cmd := exec.Command("map_update", "-D", "-c", ipNetList[0], "-m", ipNetList[1], "-l", strconv.Itoa(int(addr.LowPort())), "-p", "tcp")
-			out, err := cmd.CombinedOutput()
-			if err != nil {
-				pfxlog.Logger().Infof("Failed to remove entry from ebpf hash table for %v port: %v, Protocol: %v ", addr.IpNet().String(), addr.LowPort(), "tcp")
-			} else {
-				pfxlog.Logger().Infof("Updated ebpf zt_tproxy_map: map_update -D -c %v -m %v - l %v -p %v", ipNetList[0], ipNetList[1], addr.LowPort(), "tcp")
-			}
-			pfxlog.Logger().Infof("%v\n", out)
-
+		ipNetList := strings.Split(addr.IpNet().String(), "/")
+		log.Infof("removing service entry from ebpf zt_tproxy_map: dst_prefix: %v dest mask: %v low-port: %v, high-port: %v", ipNetList[0], ipNetList[1], addr.LowPort(), addr.HighPort())
+		cmd := exec.Command("map_update", "-D", "-c", ipNetList[0], "-m", ipNetList[1], "-l", strconv.Itoa(int(addr.LowPort())), "-p", addr.Proto())
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			pfxlog.Logger().Infof("Failed to remove entry from ebpf hash table for %v port: %v Protocol: %v : %v", addr.IpNet().String(), addr.LowPort(), addr.Proto(), string(out))
+		} else {
+			pfxlog.Logger().Infof("Updated ebpf zt_tproxy_map: map_update -D -c %v -m %v -l %v -p %v", ipNetList[0], ipNetList[1], addr.LowPort(), addr.Proto())
 		}
-
 		ipNet := addr.IpNet()
 		if tracker.RemoveAddress(ipNet.String()) {
 			err := router.RemoveLocalAddress(ipNet, "lo")
@@ -477,7 +439,6 @@ func (self *eBpf) StopIntercepting(tracker intercept.AddressTracker) error {
 			}
 		}
 	}
-
 	if len(errorList) == 0 {
 		return nil
 	}
