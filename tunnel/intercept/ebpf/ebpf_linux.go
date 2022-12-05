@@ -101,7 +101,7 @@ func (a alwaysRemoveAddressTracker) RemoveAddress(string) bool {
 }
 
 type interceptor struct {
-	serviceProxies cmap.ConcurrentMap[*eBpf]
+	serviceProxies cmap.ConcurrentMap[string, *eBpf]
 }
 
 func (self *interceptor) Stop() {
