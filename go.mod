@@ -55,7 +55,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	go.etcd.io/bbolt v1.3.6
 	golang.org/x/crypto v0.3.0
-	golang.org/x/net v0.2.0
+	golang.org/x/net v0.3.0
 	golang.org/x/sync v0.1.0
 	golang.org/x/sys v0.3.0
 	google.golang.org/protobuf v1.28.1
@@ -124,6 +124,6 @@ require (
 	go.opentelemetry.io/otel/trace v1.11.1 // indirect
 	golang.org/x/exp v0.0.0-20221126150942-6ab00d035af9 // indirect
 	golang.org/x/mod v0.6.0 // indirect
-	golang.org/x/term v0.2.0 // indirect
+	golang.org/x/term v0.3.0 // indirect
 	golang.org/x/tools v0.2.0 // indirect
 )
