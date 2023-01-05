@@ -17,6 +17,8 @@
 package persistence
 
 import (
+	"testing"
+
 	"github.com/michaelquigley/pfxlog"
 	"github.com/openziti/edge/eid"
 	"github.com/openziti/fabric/controller/command"
@@ -33,7 +35,6 @@ import (
 	"github.com/openziti/storage/boltz"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
-	"testing"
 )
 
 func newTestConfig(ctx *TestContext) *testConfig {
@@ -179,7 +180,7 @@ func (ctx *TestContext) InitWithDbFile(path string) {
 	dbProvider := ctx.GetDbProvider()
 
 	config := newTestConfig(ctx)
-	ctx.n, err = network.NewNetwork(config)
+	ctx.n, err = network.NewNetwork(config, nil)
 	ctx.NoError(err)
 
 	// TODO: setup up single node raft cluster or mock?
