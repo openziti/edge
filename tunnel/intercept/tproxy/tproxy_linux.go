@@ -101,14 +101,14 @@ func NewWithDiverter(lanIf, diverter string) (intercept.Interceptor, error) {
 	}
 	self.ipt = ipt
 	if err := self.addIptablesChain(self.ipt, mangleTable, "PREROUTING", dstChain); err != nil {
-			return nil, err
-		}
+		return nil, err
+	}
 
 	if self.lanIf != "" {
 		_, err := net.InterfaceByName(self.lanIf)
 		if err != nil {
-				return nil, fmt.Errorf("invalid lanIf '%s'", self.lanIf)
-			}
+			return nil, fmt.Errorf("invalid lanIf '%s'", self.lanIf)
+		}
 		err = self.addIptablesChain(self.ipt, filterTable, "INPUT", dstChain)
 		if err != nil {
 			return nil, err
@@ -499,7 +499,7 @@ func (self *tProxy) addInterceptAddr(interceptAddr *intercept.InterceptAddress, 
 	case "tcp":
 		tproxyAddr = self.tcpLn.Addr().(*net.TCPAddr).AddrPort()
 	case "udp":
-		tproxyAddr = self.tcpLn.Addr().(*net.UDPAddr).AddrPort()
+		tproxyAddr = self.udpLn.LocalAddr().(*net.UDPAddr).AddrPort()
 	default:
 		return errors.Errorf("unknown protocol %s for service %s", interceptAddr.Proto(), service.Name)
 	}
