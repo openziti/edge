@@ -494,6 +494,9 @@ func (self *tProxy) addInterceptAddr(interceptAddr *intercept.InterceptAddress, 
 
 	if self.interceptor.diverter != "" {
 		cidr := strings.Split(ipNet.String(), "/")
+		if len(cidr) != 2 {
+			return errors.Errorf("failed parsing '%s' as cidr", ipNet.String())
+		}
 		cmd := exec.Command(self.interceptor.diverter, "-I",
 			"-c", cidr[0], "-m", cidr[1], "-p", interceptAddr.Proto(),
 			"-l", fmt.Sprintf("%d", interceptAddr.LowPort()), "-h", fmt.Sprintf("%d", interceptAddr.HighPort()),
@@ -553,6 +556,9 @@ func (self *tProxy) StopIntercepting(tracker intercept.AddressTracker) error {
 
 		if self.interceptor.diverter != "" {
 			cidr := strings.Split(addr.IpNet().String(), "/")
+			if len(cidr) != 2 {
+				return errors.Errorf("failed parsing '%s' as cidr", addr.IpNet().String())
+			}
 			cmd := exec.Command(self.interceptor.diverter, "-D",
 				"-c", cidr[0], "-m", cidr[1], "-p", addr.Proto(),
 				"-l", fmt.Sprintf("%d", addr.LowPort()), "-h", fmt.Sprintf("%d", addr.HighPort()))
