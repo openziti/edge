@@ -504,7 +504,7 @@ func (self *tProxy) addInterceptAddr(interceptAddr *intercept.InterceptAddress, 
 		if err != nil {
 			return errors.Errorf("diverter command failed. output: %s", out)
 		} else {
-			cmdLogger.Debugf("diverter command succeeded. output: %s", out)
+			cmdLogger.Infof("diverter command succeeded. output: %s", out)
 		}
 	} else {
 		interceptAddr.TproxySpec = []string{
@@ -563,7 +563,7 @@ func (self *tProxy) StopIntercepting(tracker intercept.AddressTracker) error {
 				errorList = append(errorList, err)
 				cmdLogger.Errorf("diverter command failed. output: %s", out)
 			} else {
-				cmdLogger.Debugf("diverter command succeeded. output: %s", out)
+				cmdLogger.Infof("diverter command succeeded. output: %s", out)
 			}
 		} else {
 			log.Infof("Removing rule iptables -t %v -A %v %v", mangleTable, dstChain, addr.TproxySpec)
