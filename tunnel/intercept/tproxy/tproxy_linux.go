@@ -36,7 +36,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/sys/unix"
 	"net"
-	"net/netip"
 	"os/exec"
 	"strings"
 	"syscall"
@@ -493,23 +492,12 @@ func (self *tProxy) addInterceptAddr(interceptAddr *intercept.InterceptAddress, 
 	tracker.AddAddress(ipNet.String())
 	self.addresses = append(self.addresses, interceptAddr)
 
-	var tproxyAddr netip.AddrPort
-
-	switch interceptAddr.Proto() {
-	case "tcp":
-		tproxyAddr = self.tcpLn.Addr().(*net.TCPAddr).AddrPort()
-	case "udp":
-		tproxyAddr = self.udpLn.LocalAddr().(*net.UDPAddr).AddrPort()
-	default:
-		return errors.Errorf("unknown protocol %s for service %s", interceptAddr.Proto(), service.Name)
-	}
-
 	if self.interceptor.diverter != "" {
 		cidr := strings.Split(ipNet.String(), "/")
 		cmd := exec.Command(self.interceptor.diverter, "-I",
 			"-c", cidr[0], "-m", cidr[1], "-p", interceptAddr.Proto(),
 			"-l", fmt.Sprintf("%d", interceptAddr.LowPort()), "-h", fmt.Sprintf("%d", interceptAddr.HighPort()),
-			"-t", fmt.Sprintf("%d", tproxyAddr.Port()))
+			"-t", fmt.Sprintf("%d", port.GetPort()))
 		cmdLogger := pfxlog.Logger().WithField("command", cmd.String())
 		cmdLogger.Debug("running external diverter")
 		out, err := cmd.CombinedOutput()
