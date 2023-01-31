@@ -50,7 +50,7 @@ require (
 	github.com/stretchr/testify v1.8.1
 	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
 	github.com/xeipuuv/gojsonschema v1.2.0
-	go.etcd.io/bbolt v1.3.6
+	go.etcd.io/bbolt v1.3.7
 	golang.org/x/crypto v0.5.0
 	golang.org/x/sync v0.1.0
 	golang.org/x/sys v0.4.0
