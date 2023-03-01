@@ -30,13 +30,13 @@ require (
 	github.com/netfoundry/secretstream v0.1.4
 	github.com/openziti/channel/v2 v2.0.38
 	github.com/openziti/edge-api v0.25.6
-	github.com/openziti/fabric v0.22.40
+	github.com/openziti/fabric v0.22.47
 	github.com/openziti/foundation/v2 v2.0.14
 	github.com/openziti/identity v1.0.34
 	github.com/openziti/jwks v1.0.2
 	github.com/openziti/metrics v1.2.8
 	github.com/openziti/sdk-golang v0.18.49
-	github.com/openziti/storage v0.1.36
+	github.com/openziti/storage v0.1.38
 	github.com/openziti/transport/v2 v2.0.58
 	github.com/openziti/x509-claims v1.0.3
 	github.com/openziti/xweb/v2 v2.0.2
@@ -61,7 +61,7 @@ require (
 )
 
 require (
-	github.com/andybalholm/brotli v1.0.4 // indirect
+	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20211106181442-e4c1a74c66bd // indirect
 	github.com/armon/go-metrics v0.3.10 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
