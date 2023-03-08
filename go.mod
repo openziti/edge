@@ -24,7 +24,7 @@ require (
 	github.com/kataras/go-events v0.0.3
 	github.com/lucsky/cuid v1.2.1
 	github.com/mdlayher/netlink v1.7.1
-	github.com/michaelquigley/pfxlog v0.6.9
+	github.com/michaelquigley/pfxlog v0.6.10
 	github.com/miekg/dns v1.1.51
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/netfoundry/secretstream v0.1.5
