@@ -32,12 +32,12 @@ require (
 	github.com/openziti/edge-api v0.25.11
 	github.com/openziti/fabric v0.22.90
 	github.com/openziti/foundation/v2 v2.0.21
-	github.com/openziti/identity v1.0.45
+	github.com/openziti/identity v1.0.46
 	github.com/openziti/jwks v1.0.3
 	github.com/openziti/metrics v1.2.19
 	github.com/openziti/sdk-golang v0.18.76
 	github.com/openziti/storage v0.1.49
-	github.com/openziti/transport/v2 v2.0.72
+	github.com/openziti/transport/v2 v2.0.73
 	github.com/openziti/x509-claims v1.0.3
 	github.com/openziti/xweb/v2 v2.0.2
 	github.com/orcaman/concurrent-map/v2 v2.0.1
