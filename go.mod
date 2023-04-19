@@ -32,7 +32,7 @@ require (
 	github.com/openziti/edge-api v0.25.11
 	github.com/openziti/fabric v0.22.92
 	github.com/openziti/foundation/v2 v2.0.21
-	github.com/openziti/identity v1.0.45
+	github.com/openziti/identity v1.0.46
 	github.com/openziti/jwks v1.0.3
 	github.com/openziti/metrics v1.2.19
 	github.com/openziti/sdk-golang v0.18.76
