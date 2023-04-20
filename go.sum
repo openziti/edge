@@ -461,8 +461,8 @@ github.com/openziti/fabric v0.22.92 h1:jmOIOfqap7FzgC/z7Sk7zkoqoAaHSyApWWL36Yn4L
 github.com/openziti/fabric v0.22.92/go.mod h1:W6s3s05CgAfDcoXeEdeYQMmIw5aE7pS5wHtpaYHsdJo=
 github.com/openziti/foundation/v2 v2.0.21 h1:3EDDmSunsbd2DlULuY/vqj12LHRZOknH/m3lf6Ws5Nw=
 github.com/openziti/foundation/v2 v2.0.21/go.mod h1:02GW3jFSSlfLwYwuTIldP/S4w7eCKqlzL6ajFSGHNPA=
-github.com/openziti/identity v1.0.45 h1:e2kXoMCPcaUXy+k6GwasuKeGSJwavFEr+eOvUA228UY=
-github.com/openziti/identity v1.0.45/go.mod h1:fQ5bjNu4L1Yqk011xNB1QXvsmBRHnm5d498fi1bhl24=
+github.com/openziti/identity v1.0.47 h1:Zc1wL4yMq6hcmbgNR6d3gSkGCiK3IJYd9i4obBNBMPw=
+github.com/openziti/identity v1.0.47/go.mod h1:fQ5bjNu4L1Yqk011xNB1QXvsmBRHnm5d498fi1bhl24=
 github.com/openziti/jwks v1.0.3 h1:hf8wkb+Cg4nH/HM0KROFd7u+C3DkRVcFZJ7tDV+4icc=
 github.com/openziti/jwks v1.0.3/go.mod h1:t4xxq8vlXGsPn29kiQVnZBBDDnEoOFqtJoHibkJunQQ=
 github.com/openziti/metrics v1.2.19 h1:gQO3e2lUotRHBdGUXYBPWMIErIyyF5hw0EakwQbJzuM=
@@ -471,8 +471,8 @@ github.com/openziti/sdk-golang v0.18.76 h1:D+UW1lpGHBBgfVrObpauq9RvJV/TFPdEEshfu
 github.com/openziti/sdk-golang v0.18.76/go.mod h1:kw/5rWDLwx52iwW/4a0VRQMUi7GPSI3aETx+G5TvdFQ=
 github.com/openziti/storage v0.1.49 h1:luRsssYlGhpiJxjgc+FWF/yd2JLs9IKfeKID/5Hknrg=
 github.com/openziti/storage v0.1.49/go.mod h1:Le2VFNL67YewLtaCnGNXPLH18Yrh/EMxeJ/eXxTOwak=
-github.com/openziti/transport/v2 v2.0.72 h1:yjJtxy3Ckx5I4pDicmxILTdqQB6D18LSg2Zvsde0T00=
-github.com/openziti/transport/v2 v2.0.72/go.mod h1:YuDvm+syZc9nfdhbdPZdtuL1Dfw+bELWhWVYAg73ups=
+github.com/openziti/transport/v2 v2.0.74 h1:sFy395WPYWedArh4mBXtNb+FGR3gymk8cR/b6rCUltQ=
+github.com/openziti/transport/v2 v2.0.74/go.mod h1:xMoDhxk9FFQoVyh4YL2h1hOshE5Aqlabd4mctmK1TWU=
 github.com/openziti/x509-claims v1.0.3 h1:HNdQ8Nf1agB3lBs1gahcO6zfkeS4S5xoQ2/PkY4HRX0=
 github.com/openziti/x509-claims v1.0.3/go.mod h1:Z0WIpBm6c4ecrpRKrou6Gk2wrLWxJO/+tuUwKh8VewE=
 github.com/openziti/xweb/v2 v2.0.2 h1:XYlVFriTq/U1wcUrc+XPnWJGhXh9NJPhtQ7+r3aC0cU=
