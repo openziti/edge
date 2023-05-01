@@ -453,8 +453,8 @@ github.com/onsi/gomega v1.10.5/go.mod h1:gza4q3jKQJijlu05nKWRCW/GavJumGt8aNRxWg7
 github.com/onsi/gomega v1.13.0 h1:7lLHu94wT9Ij0o6EWWclhu0aOh32VxhkwEJvzuWPeak=
 github.com/opentracing/opentracing-go v1.2.0 h1:uEJPy/1a5RIPAJ0Ov+OIO8OxWu77jEv+1B0VhjKrZUs=
 github.com/opentracing/opentracing-go v1.2.0/go.mod h1:GxEUsuufX4nBwe+T+Wl9TAgYrxe9dPLANfrWvHYVTgc=
-github.com/openziti/channel/v2 v2.0.62 h1:WmNYAugoyQ2HFu2VEhOH4WExzXsX6+dzSQDzNfHf5M8=
-github.com/openziti/channel/v2 v2.0.62/go.mod h1:TS2FJs1GuCZXUfSFfptrNWKeTuQRO7YJ9K7C2jWMznA=
+github.com/openziti/channel/v2 v2.0.63 h1:RQ1yD1ugSVjBgLzkmcgA3p9w3IM5/PLl5pvfdhbKnhE=
+github.com/openziti/channel/v2 v2.0.63/go.mod h1:WXnFG8QT5UgU6cgOQtzZEGPWeqTrgeukUA0iQUq1Mxw=
 github.com/openziti/edge-api v0.25.17 h1:SLmcI2bPg9ZK+HgJy9Jr2D6iYx+rvK/kWl3aN1ITg8c=
 github.com/openziti/edge-api v0.25.17/go.mod h1:TC+hI2eI9X5PvqT0UtnOpEDQBkMK5yUEc8BtDJhyCCE=
 github.com/openziti/fabric v0.23.1 h1:9RFRmApJ9EGUNNwIP4OSZcgFmiBdVLTvLfYsYRID8ws=
@@ -473,8 +473,8 @@ github.com/openziti/secretstream v0.1.6 h1:TbpTwW/lc/0kuvaoRNjpiyebxh2Hyx8XSTB26
 github.com/openziti/secretstream v0.1.6/go.mod h1:Gc6fhaDC46UUvwJD4ogbYji22YSdz3fe8bno+BFIpcE=
 github.com/openziti/storage v0.2.0 h1:uwSoZQEZCzxp4+KZEi7fOWezbm0knmcCbRhni/DGHSo=
 github.com/openziti/storage v0.2.0/go.mod h1:rJjLObUtJBNcm7MvnTr4DHCXZ+ppg0OMeoJ5tfi1aJI=
-github.com/openziti/transport/v2 v2.0.75 h1:KZmnyRH1SOXSI6DXqDRsbRxRJE2cWv5EDCiQqC+R+hQ=
-github.com/openziti/transport/v2 v2.0.75/go.mod h1:xMoDhxk9FFQoVyh4YL2h1hOshE5Aqlabd4mctmK1TWU=
+github.com/openziti/transport/v2 v2.0.76 h1:MTe9FxVB2N8jlVuacIhQYgt2n4d7Ic1ODpvQH9B0k+w=
+github.com/openziti/transport/v2 v2.0.76/go.mod h1:xMoDhxk9FFQoVyh4YL2h1hOshE5Aqlabd4mctmK1TWU=
 github.com/openziti/x509-claims v1.0.3 h1:HNdQ8Nf1agB3lBs1gahcO6zfkeS4S5xoQ2/PkY4HRX0=
 github.com/openziti/x509-claims v1.0.3/go.mod h1:Z0WIpBm6c4ecrpRKrou6Gk2wrLWxJO/+tuUwKh8VewE=
 github.com/openziti/xweb/v2 v2.0.2 h1:XYlVFriTq/U1wcUrc+XPnWJGhXh9NJPhtQ7+r3aC0cU=
