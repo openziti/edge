@@ -20,7 +20,6 @@
 package tests
 
 import (
-	"fmt"
 	"github.com/Jeffail/gabs"
 	"github.com/openziti/edge/controller/env"
 	"github.com/stretchr/testify/require"

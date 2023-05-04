@@ -76,7 +76,10 @@ func Test_HSDataflow(t *testing.T) {
 
 	clientIdentity := ctx.AdminManagementSession.RequireNewIdentityWithOtt(false)
 	clientConfig := ctx.EnrollIdentity(clientIdentity.Id)
-	clientContext := ziti.NewContext(clientConfig)
+	clientContext, err := ziti.NewContext(clientConfig)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	for i := 0; i < 100; i++ {
 		conn := ctx.WrapConn(clientContext.Dial(service.Name))

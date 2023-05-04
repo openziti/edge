@@ -142,7 +142,10 @@ func Test_AddressableTerminatorSameIdentity(t *testing.T) {
 	listener.(edge.SessionListener).SetErrorEventHandler(errorHandler)
 	defer func() { _ = listener.Close() }()
 
-	context2 := ziti.NewContext(identity.config)
+	context2, err := ziti.NewContext(identity.config)
+	if err != nil {
+		panic(err)
+	}
 	listener2, err := context2.ListenWithOptions(service.Name, &ziti.ListenOptions{
 		BindUsingEdgeIdentity: true,
 		ConnectTimeout:        5 * time.Second,

@@ -275,8 +275,9 @@ func Test_CA_Auth_Two_Identities_Diff_Certs(t *testing.T) {
 					ConfigTypes: nil,
 				}
 				client1Context, err := ziti.NewContext(client1Config)
-				ctx.Req.NoError(err)
-
+				if err != nil {
+					panic(err)
+				}
 				err = client1Context.Authenticate()
 				ctx.Req.NoError(err)
 
@@ -312,8 +313,9 @@ func Test_CA_Auth_Two_Identities_Diff_Certs(t *testing.T) {
 				}
 
 				client2Context, err := ziti.NewContext(client2Config)
-				ctx.Req.NoError(err)
-
+				if err != nil {
+					panic(err)
+				}
 				err = client2Context.Authenticate()
 				ctx.Req.NoError(err)
 

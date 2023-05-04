@@ -26,7 +26,6 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"fmt"
 	"github.com/Jeffail/gabs"
 	"github.com/openziti/edge-api/rest_model"
 	"github.com/openziti/edge/controller/env"

@@ -42,7 +42,6 @@ import (
 	"google.golang.org/protobuf/proto"
 	"math"
 	"net"
-	"runtime"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -110,7 +109,7 @@ func (self *fabricProvider) updateApiSession(ctrlId string, resp *edge_ctrl_pb.C
 	}
 
 	for k, v := range resp.ServicePrecedences {
-		self.currentIdentity.ServiceHostingPrecedences[k] = v.GetZitiLabel()
+		self.currentIdentity.ServiceHostingPrecedences[k] = rest_model.TerminatorPrecedence(v.GetZitiLabel())
 	}
 
 	for k, v := range resp.ServiceCosts {
@@ -132,23 +131,13 @@ func (self *fabricProvider) updateApiSession(ctrlId string, resp *edge_ctrl_pb.C
 func (self *fabricProvider) authenticate() error {
 	envInfo, _ := sdkinfo.GetSdkInfo()
 	buildInfo := build.GetBuildInfo()
-	osVersion := "unknown"
-	osRelease := "unknown"
-
-	if envInfo.OsVersion != "" {
-		osVersion = envInfo.OsVersion
-	}
-
-	if envInfo.OsRelease != "" {
-		osRelease = envInfo.OsRelease
-	}
 
 	request := &edge_ctrl_pb.CreateApiSessionRequest{
 		EnvInfo: &edge_ctrl_pb.EnvInfo{
-			Os:        runtime.GOOS,
-			Arch:      runtime.GOARCH,
-			OsVersion: osVersion,
-			OsRelease: osRelease,
+			Os:        envInfo.Os,
+			Arch:      envInfo.Arch,
+			OsVersion: envInfo.OsVersion,
+			OsRelease: envInfo.OsRelease,
 		},
 		SdkInfo: &edge_ctrl_pb.SdkInfo{
 			AppId:      "ziti-router",
