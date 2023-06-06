@@ -9,6 +9,9 @@
           "$ref": "#/$defs/hostname"
         },
         {
+          "$ref": "#/$defs/wildcardDomain"
+        },
+        {
           "$ref": "#/$defs/cidr"
         }
       ]
@@ -30,6 +33,13 @@
         "$ref": "#/$defs/ipAddressFormat"
       },
       "type": "string"
+    },
+    "wildcardDomain": {          
+      "type": "string",
+      "not": {
+        "$ref": "#/$defs/hostname"
+      },
+      "pattern": "\\*\\..*$"
     },
     "inhabitedSet": {
       "minItems": 1,
