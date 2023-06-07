@@ -142,7 +142,7 @@ func (m *Migrations) migrate(step *boltz.MigrationStep) int {
 		step.SetError(m.stores.ConfigType.Update(step.Ctx, hostV2ConfigType, nil))
 	}
 
-	if step.CurrentVersion < 31 {
+	if step.CurrentVersion < 32 {
 		step.SetError(m.stores.ConfigType.Update(step.Ctx, interceptV1ConfigType, nil))
 	}
 
