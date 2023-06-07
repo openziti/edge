@@ -248,9 +248,10 @@ var tunnelDefinitions = map[string]interface{}{
 		"format": "idn-hostname",
 		"not":    map[string]interface{}{"$ref": "#/definitions/ipAddressFormat"},
 	},
-	"wildcardDomain": map[string]interface{}{
+	"hostnameOrWildcardDomain": map[string]interface{}{
 		"type":    "string",
-		"pattern": "^\\*\\.(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+		"pattern": "^(^(\\*\\.)?(([a-zA-Z0-9_]|[a-zA-Z0-9_][a-zA-Z0-9\\-_]*[a-zA-Z0-9_])\\.)*([A-Za-z0-9_]|[A-Za-z0-9_][A-Za-z0-9\\-_]*[A-Za-z0-9_])\\.?$",
+		"not":     map[string]interface{}{"$ref": "#/definitions/ipAddressFormat"},
 	},
 	"cidr": map[string]interface{}{
 		"type": "string",
@@ -272,8 +273,7 @@ var tunnelDefinitions = map[string]interface{}{
 	"listenAddress": map[string]interface{}{
 		"oneOf": []interface{}{
 			map[string]interface{}{"$ref": "#/definitions/ipAddress"},
-			map[string]interface{}{"$ref": "#/definitions/hostname"},
-			map[string]interface{}{"$ref": "#/definitions/wildcardDomain"},
+			map[string]interface{}{"$ref": "#/definitions/hostnameOrWildcardDomain"},
 			map[string]interface{}{"$ref": "#/definitions/cidr"},
 		},
 	},

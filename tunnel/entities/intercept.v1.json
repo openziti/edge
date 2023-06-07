@@ -6,10 +6,7 @@
           "$ref": "#/$defs/ipAddress"
         },
         {
-          "$ref": "#/$defs/hostname"
-        },
-        {
-          "$ref": "#/$defs/wildcardDomain"
+          "$ref": "#/$defs/hostnameOrWildcardDomain"
         },
         {
           "$ref": "#/$defs/cidr"
@@ -34,12 +31,12 @@
       },
       "type": "string"
     },
-    "wildcardDomain": {          
+    "hostnameOrWildcardDomain": {
       "type": "string",
       "not": {
-        "$ref": "#/$defs/hostname"
+        "$ref": "#/$defs/ipAddressFormat"
       },
-      "pattern": "\\*\\..*$"
+      "pattern": "^(\\*\\.)?(([a-zA-Z0-9_]|[a-zA-Z0-9_][a-zA-Z0-9\\-_]*[a-zA-Z0-9_])\\.)*([A-Za-z0-9_]|[A-Za-z0-9_][A-Za-z0-9\\-_]*[A-Za-z0-9_])\\.?$"
     },
     "inhabitedSet": {
       "minItems": 1,
