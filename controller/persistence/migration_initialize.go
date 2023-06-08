@@ -236,10 +236,12 @@ var tunnelDefinitions = map[string]interface{}{
 	"dialAddress": map[string]interface{}{
 		"type":   "string",
 		"format": "idn-hostname",
+		"not":    map[string]interface{}{"pattern": "^$"},
 	},
 	"listenAddress": map[string]interface{}{
 		"type":        "string",
 		"format":      "idn-hostname",
+		"not":         map[string]interface{}{"pattern": "^$"},
 		"description": "idn-hostname allows ipv4 and ipv6 addresses, as well as hostnames that might happen to contain '*' and/or '/'. so idn-hostname allows every supported intercept address, although ip addresses, wildcards and cidrs are only being validated as hostnames by this format. client applications will need to look for _valid_ ips, cidrs, and wildcards when parsing intercept addresses and treat them accordingly. anything else should be interpreted as a dns label. this means e.g. that '1.2.3.4/56' should be treated as a dns label, since it is not a valid cidr",
 	},
 	"inhabitedSet": map[string]interface{}{
