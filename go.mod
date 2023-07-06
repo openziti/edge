@@ -51,7 +51,7 @@ require (
 	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
 	github.com/xeipuuv/gojsonschema v1.2.0
 	go.etcd.io/bbolt v1.3.7
-	golang.org/x/crypto v0.10.0
+	golang.org/x/crypto v0.11.0
 	golang.org/x/sync v0.3.0
 	golang.org/x/sys v0.10.0
 	google.golang.org/protobuf v1.31.0
@@ -130,7 +130,7 @@ require (
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 // indirect
 	golang.org/x/mod v0.7.0 // indirect
 	golang.org/x/net v0.11.0 // indirect
-	golang.org/x/term v0.9.0 // indirect
+	golang.org/x/term v0.10.0 // indirect
 	golang.org/x/tools v0.3.0 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
 )
