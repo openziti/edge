@@ -138,7 +138,9 @@ func MapCreateIdentityToModel(identity *rest_model.IdentityCreate, identityTypeI
 				Method:     persistence.MethodEnrollOtt,
 				Token:      uuid.New().String(),
 			})
-		} else if identity.Enrollment.Ottca != "" {
+		}
+
+		if identity.Enrollment.Ottca != "" {
 			caId := identity.Enrollment.Ottca
 			enrollments = append(enrollments, &model.Enrollment{
 				BaseEntity: models.BaseEntity{},
@@ -146,7 +148,9 @@ func MapCreateIdentityToModel(identity *rest_model.IdentityCreate, identityTypeI
 				Token:      uuid.New().String(),
 				CaId:       &caId,
 			})
-		} else if identity.Enrollment.Updb != "" {
+		}
+
+		if identity.Enrollment.Updb != "" {
 			username := identity.Enrollment.Updb
 			enrollments = append(enrollments, &model.Enrollment{
 				BaseEntity: models.BaseEntity{},
