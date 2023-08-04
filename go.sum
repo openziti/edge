@@ -490,8 +490,8 @@ github.com/onsi/gomega v1.10.5/go.mod h1:gza4q3jKQJijlu05nKWRCW/GavJumGt8aNRxWg7
 github.com/onsi/gomega v1.13.0 h1:7lLHu94wT9Ij0o6EWWclhu0aOh32VxhkwEJvzuWPeak=
 github.com/opentracing/opentracing-go v1.2.0 h1:uEJPy/1a5RIPAJ0Ov+OIO8OxWu77jEv+1B0VhjKrZUs=
 github.com/opentracing/opentracing-go v1.2.0/go.mod h1:GxEUsuufX4nBwe+T+Wl9TAgYrxe9dPLANfrWvHYVTgc=
-github.com/openziti/channel/v2 v2.0.87 h1:+54diAb1NjwnQ3qADptq76gq3IFF+hW+uLD5st5ULAo=
-github.com/openziti/channel/v2 v2.0.87/go.mod h1:GggAVKAlOf2ezo8VvgQ2yRK5Gokp6wlvS4kBhmoKn1g=
+github.com/openziti/channel/v2 v2.0.89 h1:L6Efndhsb0YgvD5LkU6QAB6si2VP4h0Kn0BmY2iBfjQ=
+github.com/openziti/channel/v2 v2.0.89/go.mod h1:O7wkSjV7CuebQQKLHYUL/wPL+8RuZkGQDzd1L7/+8qk=
 github.com/openziti/edge-api v0.25.31 h1:KiM4pQVIqy/0CN/FW2AgoN7PcejB+y8FdgjN86Jn83Q=
 github.com/openziti/edge-api v0.25.31/go.mod h1:7fyXLqNcyC5IG29GuI8danhhppAaxRV6HiCLwN1Kk64=
 github.com/openziti/fabric v0.23.52 h1:8F4jt00RDrZJz6YiKliJ8UGnknE3jSuWwxsK3641ehE=
@@ -510,8 +510,8 @@ github.com/openziti/secretstream v0.1.10 h1:aLheoP6vVAv96mItwkXxWr9Ym0tTooJ5o9H1
 github.com/openziti/secretstream v0.1.10/go.mod h1:HrS6P9G0jjHNHuKESMaybNdxBHjD1b0SzxSi0rDzshY=
 github.com/openziti/storage v0.2.11 h1:Ws23any7NtbEKQroFJt6DJmeEFGMPjZqjAK2/Re9LIE=
 github.com/openziti/storage v0.2.11/go.mod h1:M46XIxPYwTDTgaamI6o9cyEJkYvUYfhJjwvZtQu4tUQ=
-github.com/openziti/transport/v2 v2.0.96 h1:onLHb0oNS+xzmqnAVYHDGb00qtLODzyPVubq+2h5SoY=
-github.com/openziti/transport/v2 v2.0.96/go.mod h1:L0MZ3LZsJ9Jheg05Bp6QYJBfuq4fDtjoL9stcTSmtko=
+github.com/openziti/transport/v2 v2.0.97 h1:BgsxDYdyzBf6sIIicT6X7WV1S2HMXQA1upmo5UFNYfU=
+github.com/openziti/transport/v2 v2.0.97/go.mod h1:zXB5jNtmTIe3gMCgLuk2RUEsvc8ysVLExnfrRdSg11M=
 github.com/openziti/x509-claims v1.0.3 h1:HNdQ8Nf1agB3lBs1gahcO6zfkeS4S5xoQ2/PkY4HRX0=
 github.com/openziti/x509-claims v1.0.3/go.mod h1:Z0WIpBm6c4ecrpRKrou6Gk2wrLWxJO/+tuUwKh8VewE=
 github.com/openziti/xweb/v2 v2.1.0 h1:Xhh3C2pZkq/Prr65V+SfFSibLDYteoc4f62KQCcTZF4=
@@ -788,8 +788,8 @@ golang.org/x/net v0.0.0-20211029224645-99673261e6eb/go.mod h1:9nx3DQGgdP8bBQD5qx
 golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
 golang.org/x/net v0.0.0-20220722155237-a158d28d115b/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
 golang.org/x/net v0.1.0/go.mod h1:Cx3nUiGt4eDBEyega/BKRp+/AlGL8hYe7U9odMt2Cco=
-golang.org/x/net v0.12.0 h1:cfawfvKITfUsFCeJIHJrbSxpeu/E81khclypR0GVT50=
-golang.org/x/net v0.12.0/go.mod h1:zEVYFnQC7m/vmpQFELhcD1EWkZlX69l4oqgmer6hfKA=
+golang.org/x/net v0.13.0 h1:Nvo8UFsZ8X3BhAC9699Z1j7XQ3rsZnUUm7jfBEk1ueY=
+golang.org/x/net v0.13.0/go.mod h1:zEVYFnQC7m/vmpQFELhcD1EWkZlX69l4oqgmer6hfKA=
 golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
 golang.org/x/oauth2 v0.0.0-20190226205417-e64efc72b421/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
 golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
