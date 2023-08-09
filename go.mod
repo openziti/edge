@@ -30,14 +30,14 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/openziti/channel/v2 v2.0.91
 	github.com/openziti/edge-api v0.25.31
-	github.com/openziti/fabric v0.23.54
+	github.com/openziti/fabric v0.24.1
 	github.com/openziti/foundation/v2 v2.0.29
 	github.com/openziti/identity v1.0.60
 	github.com/openziti/jwks v1.0.3
 	github.com/openziti/metrics v1.2.31
 	github.com/openziti/sdk-golang v0.20.90
 	github.com/openziti/secretstream v0.1.10
-	github.com/openziti/storage v0.2.11
+	github.com/openziti/storage v0.2.12
 	github.com/openziti/transport/v2 v2.0.99
 	github.com/openziti/x509-claims v1.0.3
 	github.com/openziti/xweb/v2 v2.1.0
