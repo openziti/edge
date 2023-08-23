@@ -18,7 +18,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/go-cmp v0.5.9
 	github.com/google/gopacket v1.1.19
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.3.1
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/golang-lru/v2 v2.0.4
 	github.com/jinzhu/copier v0.3.5
@@ -30,7 +30,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/openziti/channel/v2 v2.0.92
 	github.com/openziti/edge-api v0.25.33
-	github.com/openziti/fabric v0.24.2
+	github.com/openziti/fabric v0.24.14
 	github.com/openziti/foundation/v2 v2.0.29
 	github.com/openziti/identity v1.0.60
 	github.com/openziti/jwks v1.0.3
