@@ -509,6 +509,7 @@ var interceptV1ConfigType = &ConfigType{
 					map[string]interface{}{"$ref": "#/definitions/inhabitedSet"},
 					map[string]interface{}{"items": map[string]interface{}{"$ref": "#/definitions/listenAddress"}},
 				},
+				"description": "white list of source ips/cidrs that can be intercepted. all ips can be intercepted if this is not set.",
 			},
 		},
 		"required": []interface{}{
