@@ -349,11 +349,12 @@ type PortRange struct {
 }
 
 type InterceptV1Config struct {
-	Addresses   []string
-	PortRanges  []*PortRange
-	Protocols   []string
-	SourceIp    *string
-	DialOptions *DialOptions
+	Addresses              []string
+	PortRanges             []*PortRange
+	Protocols              []string
+	SourceIp               *string  // source ip[:port] to bind on outbound connections from hosting tunneler/ERT
+	AllowedSourceAddresses []string // white list for source IPs/CIDRs that will be intercepted
+	DialOptions            *DialOptions
 }
 
 type TemplateFunc func(sourceAddr net.Addr, destAddr net.Addr) string

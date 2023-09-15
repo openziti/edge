@@ -528,16 +528,23 @@ func (self *tProxy) addInterceptAddr(interceptAddr *intercept.InterceptAddress, 
 			cmdLogger.Infof("diverter command succeeded. output: %s", out)
 		}
 	} else {
-		interceptAddr.TproxySpec = []string{
+		baseSpec := []string{
 			"-m", "comment", "--comment", *service.Name,
 			"-d", ipNet.String(),
 			"-p", interceptAddr.Proto(),
 			"--dport", fmt.Sprintf("%v:%v", interceptAddr.LowPort(), interceptAddr.HighPort()),
+		}
+
+		if service.InterceptV1Config.AllowedSourceAddresses != nil {
+			baseSpec = append(baseSpec, "-s", strings.Join(service.InterceptV1Config.AllowedSourceAddresses, ","))
+		}
+
+		interceptAddr.TproxySpec = append(baseSpec,
 			"-j", "TPROXY",
 			"--tproxy-mark", "0x1/0x1",
 			fmt.Sprintf("--on-ip=%s", port.GetIP().String()),
 			fmt.Sprintf("--on-port=%d", port.GetPort()),
-		}
+		)
 
 		pfxlog.Logger().Infof("Adding rule iptables -t %v -A %v %v", mangleTable, dstChain, interceptAddr.TproxySpec)
 		if err := self.interceptor.ipt.Insert(mangleTable, dstChain, 1, interceptAddr.TproxySpec...); err != nil {
@@ -545,14 +552,10 @@ func (self *tProxy) addInterceptAddr(interceptAddr *intercept.InterceptAddress, 
 		}
 
 		if self.interceptor.lanIf != "" {
-			interceptAddr.AcceptSpec = []string{
+			interceptAddr.AcceptSpec = append(baseSpec,
 				"-i", self.interceptor.lanIf,
-				"-m", "comment", "--comment", *service.Name,
-				"-d", ipNet.String(),
-				"-p", interceptAddr.Proto(),
-				"--dport", fmt.Sprintf("%v:%v", interceptAddr.LowPort(), interceptAddr.HighPort()),
 				"-j", "ACCEPT",
-			}
+			)
 			pfxlog.Logger().Infof("Adding rule iptables -t %v -A %v %v", filterTable, dstChain, interceptAddr.AcceptSpec)
 			if err := self.interceptor.ipt.Insert(filterTable, dstChain, 1, interceptAddr.AcceptSpec...); err != nil {
 				return errors.Wrap(err, "failed to insert rule")
