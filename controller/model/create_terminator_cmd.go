@@ -5,10 +5,10 @@ import (
 	"github.com/openziti/edge/common"
 	"github.com/openziti/edge/common/pb/edge_cmd_pb"
 	"github.com/openziti/edge/controller/persistence"
+	"github.com/openziti/fabric/common/pb/cmd_pb"
 	"github.com/openziti/fabric/controller/change"
 	"github.com/openziti/fabric/controller/command"
 	"github.com/openziti/fabric/controller/network"
-	"github.com/openziti/fabric/common/pb/cmd_pb"
 	"github.com/openziti/storage/boltz"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -34,10 +34,6 @@ func (self *CreateEdgeTerminatorCmd) Apply(ctx boltz.MutateContext) error {
 
 func (self *CreateEdgeTerminatorCmd) validateTerminatorIdentity(ctx boltz.MutateContext, terminator *network.Terminator) error {
 	tx := ctx.Tx()
-	session, err := self.getTerminatorSession(tx, terminator, "")
-	if err != nil {
-		return err
-	}
 
 	if terminator.GetInstanceId() == "" {
 		return nil
@@ -49,21 +45,15 @@ func (self *CreateEdgeTerminatorCmd) validateTerminatorIdentity(ctx boltz.Mutate
 	}
 
 	for _, otherTerminator := range identityTerminators {
-		otherSession, err := self.getTerminatorSession(tx, otherTerminator, "sibling ")
-		if err != nil {
-			return err
-		}
-		if otherSession != nil {
-			if otherSession.ApiSession.IdentityId != session.ApiSession.IdentityId {
-				pfxlog.Logger().WithFields(logrus.Fields{
-					"terminatorId":       terminator.GetId(),
-					"siblingId":          otherTerminator.GetId(),
-					"instanceId":         terminator.InstanceId,
-					"terminatorIdentity": session.ApiSession.IdentityId,
-					"existingIdentity":   otherSession.ApiSession.IdentityId,
-				}).Warn("validation of terminator failed, shared identity belongs to different identity")
-				return errors.Errorf("sibling terminator %v with shared identity %v belongs to different identity", otherTerminator.GetId(), terminator.GetInstanceId())
-			}
+		if otherTerminator.HostId != terminator.HostId {
+			pfxlog.Logger().WithFields(logrus.Fields{
+				"terminatorId":       terminator.GetId(),
+				"siblingId":          otherTerminator.GetId(),
+				"instanceId":         terminator.InstanceId,
+				"terminatorIdentity": terminator.HostId,
+				"existingIdentity":   otherTerminator.HostId,
+			}).Warn("validation of terminator failed, shared identity belongs to different identity")
+			return errors.Errorf("sibling terminator %v with shared identity %v belongs to different identity", otherTerminator.GetId(), terminator.GetInstanceId())
 		}
 	}
 
