@@ -29,7 +29,7 @@ require (
 	github.com/miekg/dns v1.1.56
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/openziti/channel/v2 v2.0.100
-	github.com/openziti/edge-api v0.25.37
+	github.com/openziti/edge-api v0.25.38
 	github.com/openziti/fabric v0.24.38
 	github.com/openziti/foundation/v2 v2.0.33
 	github.com/openziti/identity v1.0.64
@@ -53,7 +53,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v2 v2.7.0
 	go.etcd.io/bbolt v1.3.7
-	golang.org/x/crypto v0.13.0
+	golang.org/x/crypto v0.14.0
 	golang.org/x/sync v0.3.0
 	golang.org/x/sys v0.13.0
 	golang.org/x/text v0.13.0
@@ -136,7 +136,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.18.0 // indirect
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63 // indirect
 	golang.org/x/mod v0.12.0 // indirect
-	golang.org/x/net v0.15.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/oauth2 v0.10.0 // indirect
 	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
