@@ -30,14 +30,14 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/openziti/channel/v2 v2.0.99
 	github.com/openziti/edge-api v0.25.37
-	github.com/openziti/fabric v0.24.36
-	github.com/openziti/foundation/v2 v2.0.32
+	github.com/openziti/fabric v0.24.37
+	github.com/openziti/foundation/v2 v2.0.33
 	github.com/openziti/identity v1.0.63
 	github.com/openziti/jwks v1.0.3
-	github.com/openziti/metrics v1.2.35
+	github.com/openziti/metrics v1.2.36
 	github.com/openziti/sdk-golang v0.20.115
 	github.com/openziti/secretstream v0.1.12
-	github.com/openziti/storage v0.2.18
+	github.com/openziti/storage v0.2.19
 	github.com/openziti/transport/v2 v2.0.107
 	github.com/openziti/x509-claims v1.0.3
 	github.com/openziti/xweb/v2 v2.1.0
@@ -55,7 +55,7 @@ require (
 	go.etcd.io/bbolt v1.3.7
 	golang.org/x/crypto v0.13.0
 	golang.org/x/sync v0.3.0
-	golang.org/x/sys v0.12.0
+	golang.org/x/sys v0.13.0
 	golang.org/x/text v0.13.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/resty.v1 v1.12.0
@@ -138,7 +138,7 @@ require (
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/net v0.15.0 // indirect
 	golang.org/x/oauth2 v0.10.0 // indirect
-	golang.org/x/term v0.12.0 // indirect
+	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
