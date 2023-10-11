@@ -16,7 +16,7 @@ require (
 	github.com/go-openapi/runtime v0.26.0
 	github.com/go-openapi/strfmt v0.21.7
 	github.com/golang-jwt/jwt/v5 v5.0.0
-	github.com/google/go-cmp v0.5.9
+	github.com/google/go-cmp v0.6.0
 	github.com/google/gopacket v1.1.19
 	github.com/google/uuid v1.3.1
 	github.com/gorilla/mux v1.8.0
