@@ -28,9 +28,9 @@ require (
 	github.com/michaelquigley/pfxlog v0.6.10
 	github.com/miekg/dns v1.1.56
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/openziti/channel/v2 v2.0.103
+	github.com/openziti/channel/v2 v2.0.105
 	github.com/openziti/edge-api v0.26.0
-	github.com/openziti/fabric v0.24.42
+	github.com/openziti/fabric v0.24.43
 	github.com/openziti/foundation/v2 v2.0.33
 	github.com/openziti/identity v1.0.66
 	github.com/openziti/jwks v1.0.3
@@ -38,7 +38,7 @@ require (
 	github.com/openziti/sdk-golang v0.20.115
 	github.com/openziti/secretstream v0.1.12
 	github.com/openziti/storage v0.2.23
-	github.com/openziti/transport/v2 v2.0.111
+	github.com/openziti/transport/v2 v2.0.113
 	github.com/openziti/x509-claims v1.0.3
 	github.com/openziti/xweb/v2 v2.1.0
 	github.com/orcaman/concurrent-map/v2 v2.0.1
@@ -103,7 +103,6 @@ require (
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/josharian/native v1.1.0 // indirect
-	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/lufia/plan9stats v0.0.0-20230326075908-cb1d2100619a // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -141,5 +140,5 @@ require (
 	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	nhooyr.io/websocket v1.8.7 // indirect
+	nhooyr.io/websocket v1.8.10 // indirect
 )
