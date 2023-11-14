@@ -36,7 +36,7 @@ require (
 	github.com/openziti/jwks v1.0.3
 	github.com/openziti/metrics v1.2.39
 	github.com/openziti/sdk-golang v0.20.115
-	github.com/openziti/secretstream v0.1.12
+	github.com/openziti/secretstream v0.1.13
 	github.com/openziti/storage v0.2.24
 	github.com/openziti/transport/v2 v2.0.113
 	github.com/openziti/x509-claims v1.0.3
