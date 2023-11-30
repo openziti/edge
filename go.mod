@@ -36,7 +36,7 @@ require (
 	github.com/openziti/jwks v1.0.3
 	github.com/openziti/metrics v1.2.39
 	github.com/openziti/sdk-golang v0.20.115
-	github.com/openziti/secretstream v0.1.12
+	github.com/openziti/secretstream v0.1.14
 	github.com/openziti/storage v0.2.24
 	github.com/openziti/transport/v2 v2.0.113
 	github.com/openziti/x509-claims v1.0.3
@@ -53,9 +53,9 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v2 v2.7.0
 	go.etcd.io/bbolt v1.3.8
-	golang.org/x/crypto v0.15.0
+	golang.org/x/crypto v0.16.0
 	golang.org/x/sync v0.3.0
-	golang.org/x/sys v0.14.0
+	golang.org/x/sys v0.15.0
 	golang.org/x/text v0.14.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/resty.v1 v1.12.0
@@ -137,7 +137,7 @@ require (
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/net v0.18.0 // indirect
 	golang.org/x/oauth2 v0.10.0 // indirect
-	golang.org/x/term v0.14.0 // indirect
+	golang.org/x/term v0.15.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	nhooyr.io/websocket v1.8.10 // indirect
