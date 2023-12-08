@@ -35,7 +35,7 @@ require (
 	github.com/openziti/identity v1.0.66
 	github.com/openziti/jwks v1.0.3
 	github.com/openziti/metrics v1.2.39
-	github.com/openziti/sdk-golang v0.20.115
+	github.com/openziti/sdk-golang v0.21.1
 	github.com/openziti/secretstream v0.1.12
 	github.com/openziti/storage v0.2.24
 	github.com/openziti/transport/v2 v2.0.113
@@ -120,7 +120,7 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
 	github.com/rabbitmq/amqp091-go v1.8.1 // indirect
 	github.com/rs/cors v1.9.0 // indirect
-	github.com/shirou/gopsutil/v3 v3.23.8 // indirect
+	github.com/shirou/gopsutil/v3 v3.23.9 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/speps/go-hashids v2.0.0+incompatible // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
