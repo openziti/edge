@@ -29,7 +29,7 @@ require (
 	github.com/miekg/dns v1.1.56
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/openziti/channel/v2 v2.0.105
-	github.com/openziti/edge-api v0.26.4
+	github.com/openziti/edge-api v0.26.5
 	github.com/openziti/fabric v0.24.46
 	github.com/openziti/foundation/v2 v2.0.34
 	github.com/openziti/identity v1.0.66
@@ -85,7 +85,7 @@ require (
 	github.com/go-openapi/analysis v0.21.4 // indirect
 	github.com/go-openapi/jsonpointer v0.20.0 // indirect
 	github.com/go-openapi/jsonreference v0.20.2 // indirect
-	github.com/go-openapi/spec v0.20.9 // indirect
+	github.com/go-openapi/spec v0.20.11 // indirect
 	github.com/go-openapi/swag v0.22.4 // indirect
 	github.com/go-openapi/validate v0.22.3 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
