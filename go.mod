@@ -31,7 +31,7 @@ require (
 	github.com/openziti/channel/v2 v2.0.105
 	github.com/openziti/edge-api v0.26.6
 	github.com/openziti/fabric v0.24.46
-	github.com/openziti/foundation/v2 v2.0.34
+	github.com/openziti/foundation/v2 v2.0.35
 	github.com/openziti/identity v1.0.66
 	github.com/openziti/jwks v1.0.3
 	github.com/openziti/metrics v1.2.39
